@@ -1,0 +1,55 @@
+---
+interface Props {
+  date: string;
+  href?: string;
+  isNew?: boolean;
+}
+
+const { date, href, isNew = false } = Astro.props;
+const Tag = href ? "a" : "div";
+---
+
+<Tag class="news-item" href={href}>
+  <span class="date num">{date}</span>
+  {isNew && <span class="new">NEW</span>}
+  <span class="title"><slot /></span>
+</Tag>
+
+<style>
+  .news-item {
+    display: flex;
+    gap: 12px;
+    align-items: baseline;
+    padding: 12px 4px;
+    border-bottom: 2px dashed #bbb;
+    text-align: left;
+    font-size: 13.5px;
+  }
+  .date {
+    font-weight: 800;
+    color: var(--blue);
+    white-space: nowrap;
+    font-size: 12px;
+  }
+  .new {
+    position: relative;
+    z-index: 0;
+    color: #fff;
+    font-size: 9.5px;
+    font-weight: 800;
+    padding: 2px 7px;
+    transform: rotate(-3deg);
+    white-space: nowrap;
+  }
+  .new::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--red);
+    filter: url(#tape-edge);
+  }
+  .title {
+    color: var(--ink);
+  }
+</style>

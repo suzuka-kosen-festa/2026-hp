@@ -1,0 +1,299 @@
+---
+import { Image } from "astro:assets";
+import themeLogo from "../../assets/logo/theme-logo.png";
+import heroCroud from "../../assets/hero/hero-croud.png";
+import Tape from "../ui/Tape.astro";
+import Star from "../ui/Star.astro";
+import site from "../../data/site.json";
+---
+
+<section class="hero">
+  <div class="hero-fg">
+    <Tape color="black" rotate={-2.5} class="hero-banner">{site.eventNameEn}</Tape>
+
+    <Image
+      id="hero-logo-replay"
+      src={themeLogo}
+      alt={`${site.theme} 2026`}
+      class="hero-logo"
+      loading="eager"
+      fetchpriority="high"
+      widths={[400, 800, 1200]}
+      sizes="(min-width: 900px) 900px, 90vw"
+    />
+
+    <p class="hero-name">
+      {site.eventName}<span class="theme-highlight">{site.theme}</span><span class="theme-yomi">({site.themeYomi})</span>
+    </p>
+
+    <div class="hero-lower">
+      <div class="hero-date-block">
+        <p class="hero-date num">
+          <span class="year">2026.</span>
+          <span class="day-block">
+            10/31<span class="day sat">SAT</span>
+          </span>
+          <span class="sep">・</span>
+          <span class="day-block">
+            11/1<span class="day sun">SUN</span>
+          </span>
+        </p>
+        <p class="hero-venue">{site.venue}</p>
+      </div>
+
+      <div class="hero-right-wrap">
+        <span class="hc-tape hc-tape--blue" aria-hidden="true"></span>
+        <span class="hc-tape hc-tape--yellow" aria-hidden="true"></span>
+        <Star class="hc-star" color="var(--red)" size="22px" rotate={14} />
+        <div class="hc-frame">
+          <Image src={heroCroud} alt="集まった観客が手を挙げて盛り上がっている様子" loading="lazy" class="hc-photo" width={245} height={168} />
+          <svg class="hc-pattern" width="52" height="52" aria-hidden="true">
+            <rect width="52" height="52" fill="url(#dots-black)" filter="url(#torn-edge)"></rect>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 40px 20px 32px;
+    text-align: center;
+    animation: hero-in 0.6s ease-out both;
+  }
+
+  @keyframes hero-in {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero {
+      animation: none;
+    }
+  }
+
+  .hero-fg {
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-banner {
+    font-size: clamp(13px, 3.6vw, 17px);
+    letter-spacing: 0.06em;
+    margin-bottom: 18px;
+  }
+
+  .hero-logo {
+    width: 100%;
+    max-width: 460px;
+    height: auto;
+    filter: drop-shadow(0 2px 0 rgba(17, 17, 17, 0.12));
+    cursor: pointer;
+    transition: transform 0.2s ease;
+  }
+
+  .hero-logo:hover {
+    transform: scale(1.01);
+  }
+
+  .hero-logo:active {
+    transform: scale(0.99);
+  }
+
+  .hero-name {
+    margin-top: 6px;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: clamp(20px, 6vw, 32px);
+  }
+
+  .theme-highlight {
+    color: var(--red);
+    font-style: italic;
+  }
+
+  .theme-yomi {
+    font-size: 0.55em;
+    font-weight: 700;
+    color: var(--ink);
+    margin-left: 0.1em;
+  }
+
+  .hero-lower {
+    margin-top: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .hero-date {
+    line-height: 1;
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0.15em;
+    flex-wrap: wrap;
+  }
+
+  .year {
+    font-size: clamp(20px, 6vw, 30px);
+  }
+
+  .day-block {
+    position: relative;
+    font-size: clamp(38px, 13vw, 64px);
+    letter-spacing: -0.02em;
+    margin-right: 0.55em;
+  }
+
+  .sep {
+    font-size: clamp(20px, 6vw, 28px);
+    align-self: center;
+  }
+
+  /* rotate(90deg)はtransform-originを支点に「幅方向→下向き／高さ方向→左向き」に
+     スイングするため、支点そのものを日付の右端ギリギリに置くと数字と重なる。
+     左スイング分(自身のfont-size=line-height分、つまり1em)を見込んでmargin-leftで
+     支点を右へ逃がす。margin-leftは.day自身のfont-size(0.3em)基準になる点に注意 */
+  .day {
+    position: absolute;
+    left: 100%;
+    top: 0.05em;
+    margin-left: 1.2em;
+    display: inline-block;
+    font-family: var(--font-day);
+    font-weight: 700;
+    font-size: 0.3em;
+    line-height: 1;
+    transform: rotate(90deg);
+    transform-origin: 0 0;
+    white-space: nowrap;
+  }
+
+  .day.sat {
+    color: var(--blue);
+  }
+
+  .day.sun {
+    color: var(--red);
+  }
+
+  .hero-venue {
+    margin-top: 10px;
+    font-weight: 700;
+    font-size: clamp(14px, 4vw, 18px);
+    color: var(--ink);
+  }
+
+  .hero-right-wrap {
+    display: none;
+  }
+
+  .hc-frame {
+    position: relative;
+    background: var(--ink);
+    padding: 10px;
+    transform: rotate(2deg);
+    box-shadow: 5px 5px 0 var(--blue);
+  }
+
+  .hc-photo {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .hc-pattern {
+    position: absolute;
+    right: 4px;
+    bottom: 4px;
+    opacity: 0.85;
+    pointer-events: none;
+  }
+
+  .hc-tape {
+    position: absolute;
+    z-index: 2;
+    filter: url(#tape-edge);
+  }
+
+  .hc-tape--blue {
+    top: 0;
+    left: 14%;
+    width: 40%;
+    height: 15px;
+    background: var(--blue);
+    transform: rotate(-6deg);
+  }
+
+  .hc-tape--yellow {
+    top: 20px;
+    left: 0;
+    width: 15px;
+    height: 30px;
+    background: var(--yellow);
+    transform: rotate(-4deg);
+  }
+
+  .hc-star {
+    position: absolute;
+    z-index: 2;
+    top: -6px;
+    right: 12%;
+  }
+
+  @media (min-width: 900px) {
+    .hero {
+      max-width: 1100px;
+      padding: 56px 24px 48px;
+    }
+
+    .hero-logo {
+      max-width: 760px;
+    }
+
+    .hero-lower {
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      gap: 60px;
+      margin-top: 24px;
+    }
+
+    .hero-date-block {
+      text-align: left;
+    }
+
+    .hero-date {
+      justify-content: flex-start;
+    }
+
+    .hero-right-wrap {
+      display: block;
+      position: relative;
+      width: 320px;
+      max-width: 320px;
+      padding-top: 16px;
+      padding-left: 12px;
+    }
+  }
+</style>
+
+<script>
+  // ロゴをクリックするとOPムービーを再生できる（OpSplash.tsxのOP_REPLAY_EVENTと一致させること）
+  document.getElementById("hero-logo-replay")?.addEventListener("click", () => {
+    window.dispatchEvent(new CustomEvent("op:replay"));
+  });
+</script>

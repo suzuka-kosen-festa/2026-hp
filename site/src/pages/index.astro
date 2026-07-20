@@ -1,0 +1,37 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Hero from "../components/sections/Hero.astro";
+import NewsPreview from "../components/sections/NewsPreview.astro";
+import About from "../components/sections/About.astro";
+import ContentsCards from "../components/sections/ContentsCards.astro";
+import SponsorsSection from "../components/sections/SponsorsSection.astro";
+import Divider from "../components/ui/Divider.astro";
+import OpSplash from "../components/motion/OpSplash";
+---
+
+<BaseLayout title="collage 2026 | 第61回鈴鹿高専祭">
+  <div id="op-cover" aria-hidden="true"></div>
+  <script is:inline>
+    // 再訪問者はOpSplash(Reactアイランド)を待たずに即カバーを外す。
+    // 初回訪問者はOpSplashのマウント時に自分でこのカバーを外す
+    (function () {
+      try {
+        if (sessionStorage.getItem("op-seen")) {
+          document.getElementById("op-cover")?.remove();
+        }
+      } catch (e) {
+        /* noop */
+      }
+    })();
+  </script>
+  <OpSplash client:load />
+  <Hero />
+  <Divider color="red" />
+  <NewsPreview />
+  <Divider color="blue" />
+  <About />
+  <Divider color="red" />
+  <ContentsCards />
+  <Divider color="blue" />
+  <SponsorsSection />
+</BaseLayout>

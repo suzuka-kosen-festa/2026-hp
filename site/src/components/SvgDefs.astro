@@ -1,0 +1,48 @@
+---
+---
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <!-- テープの端のちぎれ -->
+    <filter id="tape-edge" x="-10%" y="-30%" width="120%" height="160%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.045 0.28" numOctaves="3" seed="7" result="n" />
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="7" />
+    </filter>
+    <!-- 紙の破れ（より荒い） -->
+    <filter id="torn-edge" x="-15%" y="-15%" width="130%" height="130%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="4" seed="3" result="n" />
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="14" />
+    </filter>
+
+    <!-- ハーフトーンドット -->
+    <pattern id="dots-blue" width="12" height="12" patternUnits="userSpaceOnUse">
+      <rect width="12" height="12" fill="white" />
+      <circle cx="6" cy="6" r="3" fill="#1A33D6" />
+    </pattern>
+    <pattern id="dots-black" width="14" height="14" patternUnits="userSpaceOnUse">
+      <rect width="14" height="14" fill="white" />
+      <circle cx="7" cy="7" r="2.6" fill="#111" />
+    </pattern>
+
+    <!-- 市松 -->
+    <pattern id="check-blue" width="16" height="16" patternUnits="userSpaceOnUse">
+      <rect width="16" height="16" fill="#1A33D6" />
+      <rect width="8" height="8" fill="white" />
+      <rect x="8" y="8" width="8" height="8" fill="white" />
+    </pattern>
+    <pattern id="check-black" width="14" height="14" patternUnits="userSpaceOnUse">
+      <rect width="14" height="14" fill="#111" />
+      <rect width="7" height="7" fill="white" />
+      <rect x="7" y="7" width="7" height="7" fill="white" />
+    </pattern>
+
+    <!-- ストライプ -->
+    <pattern id="stripe-black" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(0)">
+      <rect width="12" height="12" fill="white" />
+      <rect width="12" height="5" fill="#111" />
+    </pattern>
+    <pattern id="stripe-red" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="10" height="10" fill="white" />
+      <rect width="10" height="4.5" fill="#E31B23" />
+    </pattern>
+  </defs>
+</svg>

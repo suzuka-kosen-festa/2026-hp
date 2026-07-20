@@ -1,0 +1,158 @@
+---
+import { Image } from "astro:assets";
+import Reveal from "../motion/Reveal";
+import Tape from "../ui/Tape.astro";
+import Card from "../ui/Card.astro";
+import timetablePhoto from "../../assets/cards/timetable.png";
+import mapPhoto from "../../assets/cards/map.png";
+import boothPhoto from "../../assets/cards/booth.png";
+import accessPhoto from "../../assets/cards/access.png";
+
+const items = [
+  {
+    title: "timetable",
+    sublabel: "タイムテーブル",
+    href: "/timetable/",
+    icon: "/icons/time-outline.svg",
+    photo: timetablePhoto,
+    rotate: -0.8,
+  },
+  {
+    title: "map",
+    sublabel: "マップ",
+    href: "/map/",
+    icon: "/icons/location-outline.svg",
+    photo: mapPhoto,
+    rotate: 0.9,
+  },
+  {
+    title: "booth",
+    sublabel: "出店",
+    href: "/booth/",
+    icon: "/icons/storefront-outline.svg",
+    photo: boothPhoto,
+    rotate: -0.9,
+  },
+  {
+    title: "access",
+    sublabel: "アクセス",
+    href: "/access/",
+    icon: "/icons/rocket-outline.svg",
+    photo: accessPhoto,
+    rotate: 0.8,
+  },
+];
+---
+
+<section class="contents-cards">
+  <Reveal client:visible rotate={-1.5}>
+    <Tape color="black" rotate={-1.5} as="h2" class="sec-title">CONTENTS</Tape>
+  </Reveal>
+
+  <div class="grid">
+    {
+      items.map((item, i) => (
+        <Reveal client:visible delay={i * 0.08} rotate={item.rotate}>
+          <a href={item.href} class="card-link">
+            <Card rotate={item.rotate} attach="none" class="card">
+              <img src={item.icon} alt="" class="icon" />
+              <h3 class="title num">{item.title}</h3>
+              <p class="sublabel">{item.sublabel}</p>
+              <div class="photo">
+                <Image src={item.photo} alt="" loading="lazy" width={280} height={221} />
+              </div>
+            </Card>
+          </a>
+        </Reveal>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .contents-cards {
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 32px 20px;
+  }
+
+  .sec-title {
+    margin-bottom: 22px;
+    font-size: 17px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px 12px;
+  }
+
+  .card-link {
+    display: block;
+  }
+
+  .card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 2px;
+    padding: 12px 10px 10px;
+  }
+
+  .icon {
+    width: 26px;
+    height: 26px;
+    color: var(--ink);
+  }
+
+  .title {
+    font-size: 17px;
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+  }
+
+  .sublabel {
+    font-size: 10px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .photo {
+    width: 100%;
+    aspect-ratio: 280 / 221;
+    overflow: hidden;
+  }
+
+  .photo :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  @media (min-width: 900px) {
+    .contents-cards {
+      max-width: 1200px;
+    }
+    .grid {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+    }
+    .card {
+      gap: 4px;
+      padding: 18px 16px 14px;
+    }
+    .icon {
+      width: 44px;
+      height: 44px;
+    }
+    .title {
+      font-size: 34px;
+      white-space: normal;
+    }
+    .sublabel {
+      font-size: 13px;
+      margin-bottom: 10px;
+    }
+  }
+</style>

@@ -1,0 +1,23 @@
+---
+interface Props {
+  color?: string;
+  size?: string;
+  rotate?: number;
+  class?: string;
+}
+
+const { color = "var(--red)", size = "32px", rotate = 0, class: className } = Astro.props;
+---
+
+<span
+  class:list={["star num", className]}
+  style={{ color, fontSize: size, transform: `rotate(${rotate}deg)` }}
+  aria-hidden="true">★</span
+>
+
+<style>
+  .star {
+    display: inline-block;
+    line-height: 1;
+  }
+</style>

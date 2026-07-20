@@ -1,0 +1,48 @@
+---
+interface Props {
+  href: string;
+  color?: "black" | "yellow";
+  rotate?: number;
+  class?: string;
+}
+
+const { href, color = "black", rotate = -1.5, class: className } = Astro.props;
+---
+
+<a href={href} class:list={["btn", color, className]} style={{ transform: `rotate(${rotate}deg)` }}>
+  <slot />
+</a>
+
+<style>
+  .btn {
+    display: inline-block;
+    position: relative;
+    z-index: 0;
+    color: #fff;
+    font-weight: 800;
+    font-size: 14px;
+    padding: 12px 34px;
+    text-decoration: none;
+    transition: transform 0.15s;
+  }
+  .btn::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--tape-bg, var(--ink));
+    filter: url(#tape-edge);
+  }
+  .btn.yellow {
+    --tape-bg: var(--yellow);
+    color: var(--ink);
+  }
+  .btn:hover {
+    transform: rotate(1deg) scale(1.04) !important;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .btn {
+      transition: none;
+    }
+  }
+</style>

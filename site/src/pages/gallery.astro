@@ -1,0 +1,154 @@
+---
+// 開発用コンポーネントギャラリー。design-demo/demo.html の後継。
+// 本番サイトの導線には含めない（サイトマップ・ナビからリンクしない）。
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Tape from "../components/ui/Tape.astro";
+import Chip from "../components/ui/Chip.astro";
+import Card from "../components/ui/Card.astro";
+import Button from "../components/ui/Button.astro";
+import NewsItem from "../components/ui/NewsItem.astro";
+import Divider from "../components/ui/Divider.astro";
+import Star from "../components/ui/Star.astro";
+import Reveal from "../components/motion/Reveal";
+---
+
+<BaseLayout title="部品ギャラリー（開発用）" noindex>
+  <section class="gallery">
+    <h1 class="page-title">部品ギャラリー</h1>
+    <p class="note">実装済みコンポーネントの一覧です。デザイン確認・調整用（本番導線には含まれません）。</p>
+
+    <div class="part">
+      <h2>Tape</h2>
+      <div class="row">
+        <Tape color="black">black</Tape>
+        <Tape color="red" rotate={2}>red</Tape>
+        <Tape color="blue" rotate={-2}>blue</Tape>
+        <Tape color="yellow" rotate={1.5}>yellow</Tape>
+      </div>
+    </div>
+
+    <div class="part">
+      <h2>Chip</h2>
+      <div class="row">
+        <Chip color="red">飲食</Chip>
+        <Chip color="blue">物販</Chip>
+      </div>
+    </div>
+
+    <div class="part">
+      <h2>Button</h2>
+      <div class="row">
+        <Button href="#">view all →</Button>
+        <Button href="#" color="yellow">場内マップを見る</Button>
+      </div>
+    </div>
+
+    <div class="part">
+      <h2>Star</h2>
+      <div class="row">
+        <Star color="var(--red)" size="40px" rotate={12} />
+        <Star color="var(--yellow)" size="28px" rotate={-15} />
+        <Star color="var(--blue)" size="34px" />
+      </div>
+    </div>
+
+    <div class="part">
+      <h2>Divider</h2>
+      <Divider color="red" />
+      <Divider color="blue" />
+    </div>
+
+    <div class="part">
+      <h2>NewsItem</h2>
+      <div style="max-width:420px">
+        <NewsItem date="2026.09.15" isNew href="#">ステージ企画の出演者を発表しました</NewsItem>
+        <NewsItem date="2026.09.01" href="#">模擬店の出店一覧を公開しました</NewsItem>
+      </div>
+    </div>
+
+    <div class="part">
+      <h2>Card — attach: tape / pin / none</h2>
+      <div class="row">
+        <Card rotate={-1}>
+          <p style="font-weight:800;">やきそば屋台</p>
+          <p style="font-size:13px;margin-top:6px;">3年電気電子工学科。鉄板で焼き上げるソース焼きそば。</p>
+        </Card>
+        <Card rotate={1} cornerColor="blue">
+          <p style="font-weight:800;">カフェ企画</p>
+          <p style="font-size:13px;margin-top:6px;">1年一般教養。焼き菓子とドリンクの販売。</p>
+        </Card>
+        <Card rotate={-1.2} attach="pin">
+          <p style="font-weight:800;">画鋲どめver</p>
+          <p style="font-size:13px;margin-top:6px;">掲示板に留めたような見た目。</p>
+        </Card>
+        <Card rotate={1.2} attach="pin" cornerColor="blue">
+          <p style="font-weight:800;">画鋲どめver（青）</p>
+          <p style="font-size:13px;margin-top:6px;">色違いも用意。</p>
+        </Card>
+        <Card rotate={0.6} attach="none">
+          <p style="font-weight:800;">留め具なしver</p>
+          <p style="font-size:13px;margin-top:6px;">カードだけを並べたい場合に。</p>
+        </Card>
+      </div>
+    </div>
+
+    <div class="part">
+      <h2>Card — texture: 紙っぽい質感ver</h2>
+      <p class="note">背景(body)の繊維ノイズとは粒度を変えたクラフト紙風のムラ。テープ/画鋲とも組み合わせ可能。</p>
+      <div class="row">
+        <Card rotate={-1} texture>
+          <p style="font-weight:800;">紙質感 + テープ</p>
+          <p style="font-size:13px;margin-top:6px;">クラフト紙っぽい色味とムラ。</p>
+        </Card>
+        <Card rotate={1} texture attach="pin" cornerColor="red">
+          <p style="font-weight:800;">紙質感 + 画鋲</p>
+          <p style="font-size:13px;margin-top:6px;">組み合わせ例。</p>
+        </Card>
+      </div>
+    </div>
+
+    <div class="part">
+      <h2>Reveal（Framer Motion, スクロールで発火）</h2>
+      <Reveal client:visible>
+        <Card rotate={-0.8}>
+          <p style="font-weight:800;">スクロールで登場</p>
+        </Card>
+      </Reveal>
+    </div>
+  </section>
+
+  <style>
+    .gallery {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 32px 20px 80px;
+    }
+    .page-title {
+      font-size: 22px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+    .note {
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 32px;
+    }
+    .part {
+      margin-bottom: 40px;
+    }
+    .part h2 {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: #666;
+      margin-bottom: 14px;
+      text-transform: uppercase;
+    }
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+    }
+  </style>
+</BaseLayout>

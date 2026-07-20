@@ -1,0 +1,48 @@
+.op-splash {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.op-video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.op-skip {
+  position: absolute;
+  right: 18px;
+  bottom: 18px;
+  z-index: 1;
+  padding: 8px 18px;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 14px;
+  color: #fff;
+  transform: rotate(-2deg);
+}
+
+.op-skip::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--ink);
+  filter: url(#tape-edge);
+}
+
+.op-skip:hover {
+  transform: rotate(2deg) scale(1.05);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .op-skip {
+    transition: none;
+  }
+}

@@ -1,0 +1,103 @@
+---
+interface Props {
+  rotate?: number;
+  attach?: "tape" | "pin" | "none";
+  cornerColor?: "yellow" | "red" | "blue";
+  texture?: boolean;
+  class?: string;
+}
+
+const { rotate = -0.8, attach = "tape", cornerColor = "yellow", texture = false, class: className } = Astro.props;
+---
+
+<div
+  class:list={["card", { texture }, className]}
+  style={{ transform: `rotate(${rotate}deg)` }}
+>
+  {attach === "tape" && <div class:list={["corner-tape", cornerColor]} />}
+  {attach === "pin" && <div class:list={["pushpin", cornerColor]} />}
+  <slot />
+</div>
+
+<style>
+  .card {
+    position: relative;
+    z-index: 0;
+    background: #fff;
+    border: 2px solid var(--ink);
+    box-shadow: 5px 5px 0 var(--ink);
+    padding: 18px 16px 14px;
+    text-align: left;
+  }
+
+  .corner-tape {
+    position: absolute;
+    top: -10px;
+    left: 14px;
+    width: 74px;
+    height: 20px;
+    transform: rotate(-4deg);
+    filter: url(#tape-edge);
+  }
+  .corner-tape.yellow {
+    background: var(--yellow);
+  }
+  .corner-tape.red {
+    background: var(--red);
+  }
+  .corner-tape.blue {
+    background: var(--blue);
+  }
+
+  /* 画鋲どめ: 上端をわずかに突き破るように見せる丸いピン */
+  .pushpin {
+    position: absolute;
+    top: -9px;
+    left: 50%;
+    z-index: 1;
+    width: 18px;
+    height: 18px;
+    transform: translateX(-50%);
+    border-radius: 50%;
+    box-shadow:
+      2px 3px 3px rgba(17, 17, 17, 0.4),
+      inset -2px -2px 3px rgba(17, 17, 17, 0.25);
+  }
+  .pushpin::after {
+    content: "";
+    position: absolute;
+    top: 3px;
+    left: 3.5px;
+    width: 6px;
+    height: 5px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.6);
+    filter: blur(0.3px);
+  }
+  .pushpin.yellow {
+    background: radial-gradient(circle at 35% 30%, #fff3a0, var(--yellow) 65%, #a68b09 100%);
+  }
+  .pushpin.red {
+    background: radial-gradient(circle at 35% 30%, #ff8f8f, var(--red) 65%, #950e14 100%);
+  }
+  .pushpin.blue {
+    background: radial-gradient(circle at 35% 30%, #7c8fff, var(--blue) 65%, #0d1a80 100%);
+  }
+
+  /* 紙っぽい質感バリエーション。背景(body::after)の細かい繊維ノイズとは
+     周波数・粒度を変え、クラフト紙のようなムラ・フレック感を出す */
+  .card.texture {
+    background: #f3ebd9;
+  }
+  .card.texture::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160"><filter id="p"><feTurbulence type="fractalNoise" baseFrequency="0.16" numOctaves="2" seed="4"/><feColorMatrix type="saturate" values="0"/></filter><rect width="160" height="160" filter="url(#p)"/></svg>');
+    background-size: 160px 160px;
+    opacity: 0.4;
+    mix-blend-mode: multiply;
+  }
+</style>

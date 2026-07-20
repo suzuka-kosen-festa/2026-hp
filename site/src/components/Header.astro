@@ -1,0 +1,178 @@
+---
+import HamburgerMenu from "./motion/HamburgerMenu";
+
+const navItems = [
+  { label: "HOME", href: "/" },
+  { label: "TIMETABLE", href: "/timetable/" },
+  { label: "MAP", href: "/map/" },
+  { label: "BOOTH", href: "/booth/" },
+  { label: "ACCESS", href: "/access/" },
+  { label: "SPONSORS", href: "/sponsors/" },
+  { label: "NEWS", href: "/news/" },
+];
+
+const currentPath = Astro.url.pathname;
+
+function isActive(href: string) {
+  if (href === "/") return currentPath === "/";
+  return currentPath.startsWith(href);
+}
+---
+
+<header class="site-header">
+  <!-- ===== PC ===== -->
+  <div class="header-pc">
+    <a href="/" class="logo">
+      <span>SUZUKA</span>
+      <span>KOSEN</span>
+      <span>FESTIVAL</span>
+    </a>
+    <nav aria-label="メインナビゲーション">
+      <ul>
+        {
+          navItems.map((item, i) => (
+            <li>
+              {i > 0 && <span class="tick" aria-hidden="true" />}
+              <a href={item.href} aria-current={isActive(item.href) ? "page" : undefined}>
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+
+  <!-- ===== SP ===== -->
+  <div class="header-sp">
+    <a href="/" class="logo-sp">SUZUKA KOSEN FESTIVAL</a>
+    <HamburgerMenu client:idle navItems={navItems} currentPath={currentPath} />
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: relative;
+    z-index: 100;
+  }
+
+  /* ===== PC ===== */
+  .header-pc {
+    display: none;
+  }
+
+  @media (min-width: 900px) {
+    .header-pc {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      max-width: 1325px;
+      margin: 0 auto;
+      padding: 18px 24px 0;
+    }
+  }
+
+  .logo {
+    display: flex;
+    flex-direction: column;
+    font-family: var(--font-logo);
+    font-weight: 700;
+    font-size: 28px;
+    line-height: 1.05;
+    color: var(--ink);
+  }
+
+  nav ul {
+    display: flex;
+    list-style: none;
+    align-items: center;
+  }
+
+  nav li {
+    display: flex;
+    align-items: center;
+  }
+
+  nav a {
+    display: block;
+    position: relative;
+    padding: 12px 14px;
+    font-family: var(--font-num);
+    font-size: 19px;
+    letter-spacing: 0.02em;
+    color: var(--ink);
+  }
+
+  nav a::after {
+    content: "";
+    position: absolute;
+    left: 18%;
+    right: 18%;
+    bottom: 6px;
+    height: 6px;
+    background: var(--red);
+    filter: url(#tape-edge);
+    opacity: 0;
+    transform: scaleX(0.8);
+    transition:
+      opacity 0.15s,
+      transform 0.15s;
+  }
+
+  nav a:hover::after,
+  nav a[aria-current="page"]::after {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    nav a::after {
+      transition: none;
+    }
+  }
+
+  .tick {
+    width: 1px;
+    height: 14px;
+    background: #ccc;
+  }
+
+  /* ===== SP ===== */
+  .header-sp {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    height: var(--header-height-sp);
+    padding: 0 16px;
+    background: var(--paper);
+    border-bottom: 2px solid var(--ink);
+    box-sizing: border-box;
+  }
+
+  .logo-sp {
+    flex: 1 1 auto;
+    min-width: 0;
+    font-family: var(--font-logo);
+    font-weight: 700;
+    font-size: 13px;
+    line-height: 1.1;
+    color: var(--ink);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* PC切り替え時にSPバーを隠す。.header-spの基本定義より後ろに置くことで
+     ソース順で確実に上書きする */
+  @media (min-width: 900px) {
+    .header-sp {
+      display: none;
+    }
+  }
+</style>

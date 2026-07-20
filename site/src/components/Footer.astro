@@ -1,0 +1,100 @@
+---
+import site from "../data/site.json";
+import sponsors from "../data/sponsors.json";
+import Tape from "./ui/Tape.astro";
+---
+
+<footer class="site-footer">
+  <div class="inner">
+    <Tape color="yellow" rotate={-1.5} as="p" class="footer-title">{site.eventNameEn}</Tape>
+
+    <div class="sponsors-line">
+      <span class="label">主要協賛</span>
+      <ul>
+        {sponsors.map((s: { name: string; url: string | null }) => <li>{s.url ? <a href={s.url}>{s.name}</a> : <span>{s.name}</span>}</li>)}
+      </ul>
+    </div>
+
+    <div class="contact">
+      {site.sns.instagram && (
+        <a href={site.sns.instagram} class="sns" aria-label="Instagram">
+          Instagram
+        </a>
+      )}
+      {site.sns.x && (
+        <a href={site.sns.x} class="sns" aria-label="X">
+          X
+        </a>
+      )}
+      {site.phone && <span class="phone num">{site.phone}</span>}
+      <a href={`mailto:${site.contactEmail}`} class="email">{site.contactEmail}</a>
+    </div>
+
+    <p class="copyright">{site.eventName}「{site.theme}」実行委員会</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--ink);
+    color: #fff;
+    text-align: center;
+    padding: 40px 20px 32px;
+    margin-top: 40px;
+  }
+
+  .inner {
+    max-width: 640px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .footer-title {
+    font-size: 14px;
+    letter-spacing: 0.08em;
+  }
+
+  .sponsors-line {
+    width: 100%;
+  }
+
+  .sponsors-line .label {
+    display: block;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    opacity: 0.7;
+    margin-bottom: 10px;
+  }
+
+  .sponsors-line ul {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px 18px;
+    font-size: 12.5px;
+  }
+
+  .contact {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    font-size: 12.5px;
+  }
+
+  .sns,
+  .email {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .copyright {
+    font-size: 11px;
+    opacity: 0.6;
+  }
+</style>
