@@ -1,0 +1,49 @@
+---
+interface Props {
+  color?: "black" | "red" | "blue" | "yellow";
+  rotate?: number;
+  as?: string;
+  class?: string;
+}
+
+const { color = "black", rotate = 0, as = "span", class: className } = Astro.props;
+const Tag = as;
+---
+
+<Tag class:list={["tape", color, className]} style={{ transform: `rotate(${rotate}deg)` }}>
+  <slot />
+</Tag>
+
+<style>
+  .tape {
+    display: inline-block;
+    position: relative;
+    padding: 6px 22px;
+    font-weight: 800;
+    z-index: 0;
+  }
+  .tape::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--tape-bg, var(--ink));
+    filter: url(#tape-edge);
+  }
+  .tape.black {
+    --tape-bg: var(--ink);
+    color: #fff;
+  }
+  .tape.red {
+    --tape-bg: var(--red);
+    color: #fff;
+  }
+  .tape.blue {
+    --tape-bg: var(--blue);
+    color: #fff;
+  }
+  .tape.yellow {
+    --tape-bg: var(--yellow);
+    color: var(--ink);
+  }
+</style>

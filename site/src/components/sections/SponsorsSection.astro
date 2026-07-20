@@ -1,0 +1,135 @@
+---
+import Reveal from "../motion/Reveal";
+import Tape from "../ui/Tape.astro";
+import Star from "../ui/Star.astro";
+import sponsors from "../../data/sponsors.json";
+---
+
+<section class="sponsors">
+  <!-- Figma書き出しのテクスチャ画像ではなく、コードファーストのSVGパターンで
+       左右それぞれ違う組み合わせのコラージュ角飾りを表現する -->
+  <div class="deco-layer" aria-hidden="true">
+    <div class="deco-stack bl">
+      <svg class="swatch s1" width="88" height="64"><rect width="88" height="64" fill="url(#check-blue)" filter="url(#torn-edge)"></rect></svg>
+      <svg class="swatch s2" width="64" height="90"><rect width="64" height="90" fill="url(#stripe-red)" filter="url(#torn-edge)"></rect></svg>
+      <Star class="star" color="var(--yellow)" size="26px" rotate={-10} />
+    </div>
+    <div class="deco-stack br">
+      <svg class="swatch s1" width="70" height="98"><rect width="70" height="98" fill="url(#dots-black)" filter="url(#torn-edge)"></rect></svg>
+      <svg class="swatch s2" width="80" height="56"><rect width="80" height="56" fill="url(#stripe-black)" filter="url(#torn-edge)"></rect></svg>
+      <Star class="star" color="var(--red)" size="22px" rotate={16} />
+    </div>
+  </div>
+
+  <Reveal client:visible>
+    <Tape color="black" rotate={-1.2} as="h2" class="sec-title">SPONSORS</Tape>
+
+    <ul class="grid">
+      {
+        sponsors.map((s: { name: string; url: string | null }) => (
+          <li class="slot">{s.url ? <a href={s.url}>{s.name}</a> : <span>{s.name}</span>}</li>
+        ))
+      }
+    </ul>
+  </Reveal>
+</section>
+
+<style>
+  .sponsors {
+    position: relative;
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 32px 20px 60px;
+    overflow: hidden;
+  }
+
+  .deco-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .deco-stack {
+    position: absolute;
+    bottom: 6%;
+  }
+  .deco-stack.bl {
+    left: -6px;
+  }
+  .deco-stack.br {
+    right: -6px;
+  }
+
+  .deco-stack .swatch {
+    position: absolute;
+    filter: drop-shadow(3px 3px 0 var(--ink));
+  }
+  .deco-stack.bl .s1 {
+    left: 0;
+    bottom: 30px;
+    transform: rotate(-6deg);
+  }
+  .deco-stack.bl .s2 {
+    left: 46px;
+    bottom: 0;
+    transform: rotate(5deg);
+  }
+  .deco-stack.br .s1 {
+    right: 0;
+    bottom: 20px;
+    transform: rotate(6deg);
+  }
+  .deco-stack.br .s2 {
+    right: 50px;
+    bottom: -10px;
+    transform: rotate(-5deg);
+  }
+
+  .deco-stack .star {
+    position: absolute;
+  }
+  .deco-stack.bl .star {
+    left: 18px;
+    bottom: 96px;
+  }
+  .deco-stack.br .star {
+    right: 24px;
+    bottom: 88px;
+  }
+
+  .sec-title {
+    position: relative;
+    z-index: 1;
+    margin-bottom: 22px;
+    font-size: 17px;
+  }
+
+  .grid {
+    position: relative;
+    z-index: 1;
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+
+  .slot {
+    background: #fff;
+    border: 2px solid var(--ink);
+    padding: 18px 10px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  @media (min-width: 900px) {
+    .sponsors {
+      max-width: 1200px;
+      padding: 40px 24px 100px;
+    }
+    .grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+</style>

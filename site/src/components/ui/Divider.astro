@@ -1,0 +1,25 @@
+---
+interface Props {
+  color?: "red" | "blue";
+  rotate?: number;
+}
+
+const { color = "red", rotate = color === "red" ? -1.2 : 0.8 } = Astro.props;
+---
+
+<div class:list={["divider", color]} style={{ transform: `rotate(${rotate}deg) scaleX(1.05)` }}>
+</div>
+
+<style>
+  .divider {
+    height: 16px;
+    filter: url(#tape-edge);
+    margin: 8px -10px;
+  }
+  .divider.red {
+    background: var(--red);
+  }
+  .divider.blue {
+    background: var(--blue);
+  }
+</style>

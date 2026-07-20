@@ -1,0 +1,47 @@
+---
+import Reveal from "../motion/Reveal";
+import Tape from "../ui/Tape.astro";
+import NewsItem from "../ui/NewsItem.astro";
+import Button from "../ui/Button.astro";
+import newsData from "../../data/news.json";
+
+const latest = newsData.slice(0, 3);
+---
+
+<section class="news-preview">
+  <Reveal client:visible>
+    <Tape color="blue" rotate={-1.5} as="h2" class="sec-title">NEWS</Tape>
+    <div class="list">
+      {latest.map((n) => <NewsItem date={n.date} href={n.href} isNew={n.isNew}>{n.title}</NewsItem>)}
+    </div>
+    <Button href="/news/" class="view-all">view all →</Button>
+  </Reveal>
+</section>
+
+<style>
+  .news-preview {
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 32px 20px;
+  }
+
+  .sec-title {
+    margin-bottom: 20px;
+    font-size: 17px;
+  }
+
+  .list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .view-all {
+    margin-top: 22px;
+  }
+
+  @media (min-width: 900px) {
+    .news-preview {
+      max-width: 700px;
+    }
+  }
+</style>

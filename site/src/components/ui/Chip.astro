@@ -1,0 +1,38 @@
+---
+interface Props {
+  color?: "red" | "blue";
+  rotate?: number;
+  class?: string;
+}
+
+const { color = "red", rotate = color === "red" ? -2 : 1.5, class: className } = Astro.props;
+---
+
+<span class:list={["chip", color, className]} style={{ transform: `rotate(${rotate}deg)` }}>
+  <slot />
+</span>
+
+<style>
+  .chip {
+    position: relative;
+    z-index: 0;
+    display: inline-block;
+    font-size: 10.5px;
+    font-weight: 800;
+    color: #fff;
+    padding: 3px 10px;
+  }
+  .chip::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    filter: url(#tape-edge);
+  }
+  .chip.red::before {
+    background: var(--red);
+  }
+  .chip.blue::before {
+    background: var(--blue);
+  }
+</style>

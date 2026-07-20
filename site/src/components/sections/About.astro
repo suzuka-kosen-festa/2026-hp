@@ -1,0 +1,44 @@
+---
+import Reveal from "../motion/Reveal";
+import Tape from "../ui/Tape.astro";
+---
+
+<section class="about">
+  <Reveal client:visible>
+    <Tape color="yellow" rotate={-1.5} as="h2" class="sec-title">ABOUT</Tape>
+    <p class="lead">
+      今年のテーマは「collage(コラージュ)」。<br />
+      個性も、アイデアも、技術も、想いも、<br />
+      全部重なってひとつの"最高"を作る。
+    </p>
+  </Reveal>
+</section>
+
+<style>
+  .about {
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 32px 20px;
+  }
+
+  .sec-title {
+    margin-bottom: 20px;
+    font-size: 17px;
+  }
+
+  .lead {
+    font-size: 15px;
+    line-height: 2;
+    font-weight: 700;
+  }
+
+  @media (min-width: 900px) {
+    .about {
+      max-width: 700px;
+      text-align: center;
+    }
+    .lead {
+      font-size: 18px;
+    }
+  }
+</style>
