@@ -11,6 +11,7 @@ jobs:
     permissions:
       contents: read
       deployments: write
+      pull-requests: write
     defaults:
       run:
         working-directory: site
@@ -39,9 +40,21 @@ jobs:
           command: pages project create snct-fes-2026 --production-branch=main
 
       - name: Deploy to Cloudflare Pages
+        id: deploy
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           workingDirectory: site
           command: pages deploy dist --project-name=snct-fes-2026
+
+      - name: Comment preview URL on PR
+        if: github.event_name == 'pull_request'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PREVIEW_URL: ${{ steps.deploy.outputs.deployment-url }}
+        run: |
+          gh pr comment "${{ github.event.pull_request.number }}" \
+            --repo "${{ github.repository }}" \
+            --edit-last --create-if-none \
+            --body "🔗 Preview: ${PREVIEW_URL}"
