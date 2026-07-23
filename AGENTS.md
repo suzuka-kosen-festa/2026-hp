@@ -36,3 +36,5 @@
 - Header/Footer/`ui/`配下・`global.css`・データファイルのスキーマなど**共通部品への変更はPR前にDiscordで一声かける**（衝突しやすいため）
 - `/gallery` はUI実験用ページとして維持しつつ、実験は各自のfeatureブランチ内で行う（gallery専用ブランチの乱立や非追跡化はしない。差分として残し、Discordへのスクショ共有はレビュー依頼の補助として使う）
 - コミットメッセージは「何を・なぜ」が一言でわかれば十分（日本語可、Conventional Commits等の厳密なフォーマットは求めない）
+- タスク管理はGitHub Projects「2026-hp」を使用。PRの本文には対応するIssue番号を`Closes #N`のように明記し、マージで自動クローズ＋Projectステータスが自動で`Done`になるようにする（本リポジトリは`delete_branch_on_merge: false`のため、マージ後もブランチは残り、同じブランチで作業を継続できる）
+- `In Review`へのステータス移動はGitHub Projectsの組み込みワークフローでは自動化されないため、PRを開いた時点で手動でカードを`In Review`に動かす
