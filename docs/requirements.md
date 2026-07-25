@@ -56,10 +56,11 @@
 - 第2層＝タグ絞り込み（複数選択・OR条件）。タブごとに意味の異なるタグセットを表示。**絞り込みバーはスクロール時も画面上部にsticky固定**
   - 出店タブ: 飲食(フード/スイーツ) / レク / 物販 / 展示
   - 学科展示タブ: M科 / E科 / I科 / C科 / S科（1学科あたり約6件、計30件規模）
-  - イベントタブ / ライブタブ: 下記`entries.json`のうち`category`が「イベント」「ライブ」のエントリをカード化（timetableページとデータソース共通）
+  - イベントタブ / ライブタブ: 下記`entries/`（結合後のEntry[]）のうち`category`が「イベント」「ライブ」のエントリをカード化（timetableページとデータソース共通）
 
-**データ（`entries.json`）**
-- 「出店」「学科展示」「イベント」「ライブ」を**1本の`entries.json`に統合**する（当初`booths.json`/`timetable.json`の2ファイル案だったが、性質の異なるエントリを無理に2ファイルへ振り分けるより、共通の型で統一した方が扱いやすいため統合。timetableページは、この中から時間軸を持つエントリだけを参照して配置する）
+**データ（`site/src/data/entries/`）**
+- 「出店」「学科展示」「イベント」「ライブ」は**同じ型（`Entry`）に統一**する（当初`booths.json`/`timetable.json`の2ファイル案だったが、性質の異なるエントリを無理に2ファイルへ振り分けるより、共通の型で統一した方が扱いやすいため統合。timetableページは、この中から時間軸を持つエントリだけを参照して配置する）
+- ただし**物理ファイルは担当ごとに分割**する: `entries/booth.json`（出店）/ `entries/department.json`（学科展示）/ `entries/program.json`（イベント・ライブ）。1本のJSONに統合すると複数人が同時に編集してコンフリクトしやすいため（CLAUDE.mdの「同一ファイルへの同時編集を避ける」）。消費側は`loadEntries.ts`が3ファイルを結合した`Entry[]`を返すので、ページ側は分割を意識しなくてよい
 - フィールド:
   - `id` / `category`（出店 / 学科展示 / イベント / ライブ） / `name` / `group`（団体名・学科名・出演者名、任意） / `description`（任意。文字数上限あり、超過分はCSS `line-clamp`で省略。アコーディオン展開はなし）
   - `tags`（タブごとの第2層タグ。出店:飲食-フード等 / 学科展示:M科等 / イベント:day1,day2,常設 / ライブ:day1,day2,中夜祭,決勝バンド）
@@ -79,7 +80,7 @@
 - テーマ「collage」を体現する目玉企画のため、他の常設企画と同列ではなく**特別扱い**とする:
   - `/booth` 常設セクションの最上部に固定表示。紹介用サンプル画像＋概要文＋Webアプリへのリンクボタンのみ（お題の内容はサイト側に出さず、アプリ内で見せる）
   - home にも「contentsカード4枚」直後に**横長プロモーションバナー**を追加設置（3.1参照）。サンプル画像＋短い紹介文＋リンクボタンの横長版
-- `entries.json`に`category: "イベント"` / `tags: ["常設"]` / `location: null` / `featured: true`の1エントリとして登録する。他のエントリと型が同じなので、home側もboothの特別カードも同じデータを参照するだけでよく、専用のハードコードは不要
+- `entries/program.json`に`category: "イベント"` / `tags: ["常設"]` / `location: null` / `featured: true`の1エントリとして登録する。他のエントリと型が同じなので、home側もboothの特別カードも同じデータを参照するだけでよく、専用のハードコードは不要
 
 ### 3.4 map 詳細仕様（booth連携含む）
 
@@ -121,11 +122,11 @@
 - 現在時刻に対応する企画には**「NOW」バッジ**を表示（自動スクロールはなし）
 
 **データ**
-- 専用の`timetable.json`は作らず、`entries.json`のうち`category`が「イベント」「ライブ」で`day`＋`start_time`＋`end_time`が揃っているエントリを`day`＋`location`でグルーピング・時刻順ソートして表示する（出店・学科展示にも営業時間として`start_time`/`end_time`を持たせられるが、`category`で除外されるためtimetableには載らない）
-- 「常設」セクションは、`entries.json`のうち`tags`に`"常設"`を含み`start_time`が`null`のエントリを表示する
+- 専用の`timetable.json`は作らず、結合後の`entries/`のうち`category`が「イベント」「ライブ」で`day`＋`start_time`＋`end_time`が揃っているエントリを`day`＋`location`でグルーピング・時刻順ソートして表示する（出店・学科展示にも営業時間として`start_time`/`end_time`を持たせられるが、`category`で除外されるためtimetableには載らない）
+- 「常設」セクションは、結合後の`entries/`のうち`tags`に`"常設"`を含み`start_time`が`null`のエントリを表示する
 - 決勝バンドは`location: "MainStage"` / `day: "day2"` / `tags: ["決勝バンド", "day2"]`（MainStageのDay2セクションに掲載）
-- 中夜祭は`day1`とは並列の特別枠として扱う。通常の日タブ（Day1/Day2）には表示せず、`day: null`とする（`location: "LiveStage"` / `tags: ["中夜祭"]`、`start_time`/`end_time`は情報として保持）。在校生限定・非公開の可能性があるため、公開する場合は`entries.json`にエントリを追加するタイミング自体で管理する（専用の公開制御フラグは作らない）
-- `/booth`のイベント/ライブタブは、同じ`entries.json`を`category`で絞り込んだ上で、`tags`（day1/day2/常設/中夜祭/決勝バンド）を絞り込みタグとして使う
+- 中夜祭は`day1`とは並列の特別枠として扱う。通常の日タブ（Day1/Day2）には表示せず、`day: null`とする（`location: "LiveStage"` / `tags: ["中夜祭"]`、`start_time`/`end_time`は情報として保持）。在校生限定・非公開の可能性があるため、公開する場合は`entries/program.json`にエントリを追加するタイミング自体で管理する（専用の公開制御フラグは作らない）
+- `/booth`のイベント/ライブタブは、同じ`entries/`を`category`で絞り込んだ上で、`tags`（day1/day2/常設/中夜祭/決勝バンド）を絞り込みタグとして使う
 
 ### 3.6 access 詳細仕様
 
@@ -195,7 +196,7 @@
 | データ | 形式 | 更新頻度 |
 |---|---|---|
 | news | JSON（リンク集ベース。`body`があれば記事ページ自動生成。詳細は3.7） | 開催前〜当日 高 |
-| entries.json | JSON（出店・学科展示・イベント・ライブを統合。boothの全タブとtimetableで共用。詳細は3.3, 3.5） | 確定後ほぼ固定 |
+| entries/booth.json, entries/department.json, entries/program.json | JSON（出店・学科展示・イベント/ライブを担当ごとに別ファイルで管理し`loadEntries.ts`で結合。boothの全タブとtimetableで共用。詳細は3.3, 3.5） | 確定後ほぼ固定 |
 | sponsors.json | JSON（名称・type・featured・logo。詳細は3.8） | 随時追加 |
 | access.json | JSON（駐車場情報・`updated_at`。詳細は3.6） | 変更時のみ（高頻度ではないが重要） |
 
