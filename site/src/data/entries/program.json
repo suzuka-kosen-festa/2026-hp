@@ -11,7 +11,8 @@
     "day": null,
     "start_time": null,
     "end_time": null,
-    "featured": true
+    "featured": true,
+    "link": null
   },
   {
     "id": "event-mainstage-open",
