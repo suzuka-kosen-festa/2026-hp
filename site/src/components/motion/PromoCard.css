@@ -1,4 +1,4 @@
-/* 広告カード本体（現行 CollageCameraBanner と同じ作り）。
+/* 広告カード本体（旧 CollageCameraBanner と同じ作り）。
    PromoStack / PromoWallet / PromoCarousel の3方式で共通して読み込む */
 .pc {
   background: #fff;
@@ -145,4 +145,16 @@
   color: var(--blue);
   border-bottom: 2px solid var(--blue);
   line-height: 1.1;
+}
+
+/* compact時の要約。2行で打ち切って行の高さが暴れないようにする */
+.pc--compact .pc__summary {
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: #444;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
 }

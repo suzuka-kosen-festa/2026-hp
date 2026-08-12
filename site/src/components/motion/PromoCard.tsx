@@ -28,6 +28,8 @@ export default function PromoCard({ entry, interactive = false, compact = false,
         <div className="pc__body">
           <p className="pc__label">{label}</p>
           <p className="pc__name">{entry.name}</p>
+          {/* 説明は summary の1行だけ。詳しくは詳細ページに送る */}
+          {entry.summary && <p className="pc__summary">{entry.summary}</p>}
           {entry.location && <p className="pc__place">{entry.location}</p>}
           {/* 行全体がリンクなので、これ自体は押せる要素ではなく誘導の合図 */}
           {more && (

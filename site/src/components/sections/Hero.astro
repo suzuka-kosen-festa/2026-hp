@@ -90,7 +90,7 @@ import site from "../../data/site.json";
 
   /* Tape/Star等にpropsで渡したclassは、子コンポーネント側のスコープを持つ要素に付く。
      親のスコープ付きセレクタ（.hero-banner[親cid]）では一致しないため、
-     祖先で絞ったうえで :global() を使う（Card用に CollageCameraBanner が使っているのと同じ手法） */
+     祖先で絞ったうえで :global() を使う（同じ手法を FeaturedPromos でも使用） */
   .hero :global(.hero-banner) {
     font-size: clamp(13px, 3.6vw, 17px);
     letter-spacing: 0.06em;
