@@ -92,7 +92,7 @@ const displayTags = entry.tags.filter((tag) => tag !== "day1" && tag !== "day2")
                 <ul class="days">
                   {dayGroups.map((group) => (
                     <li>
-                      <span class="day num">{DAY_LABEL[group.day]}</span>
+                      <span class:list={["day", "num", group.day]}>{DAY_LABEL[group.day]}</span>
                       <span class="times">
                         {group.items.map((o) => (
                           <span class="slot">
@@ -274,8 +274,16 @@ const displayTags = entry.tags.filter((tag) => tag !== "day1" && tag !== "day2")
     gap: 4px 12px;
   }
 
+  /* 曜日色はポスター準拠の慣例に合わせる（SAT=青 / SUN=赤。design-system.md §1） */
   .day {
     font-size: 17px;
+  }
+
+  .day.day1 {
+    color: var(--blue);
+  }
+
+  .day.day2 {
     color: var(--red);
   }
 
