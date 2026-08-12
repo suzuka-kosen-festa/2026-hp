@@ -8,9 +8,10 @@
     "tags": ["M科"],
     "location": "学科展示",
     "image": null,
-    "day": null,
-    "start_time": "09:00",
-    "end_time": "15:00",
+    "occurrences": [
+      { "day": "day1", "start_time": "09:00", "end_time": "15:00" },
+      { "day": "day2", "start_time": "09:00", "end_time": "15:00" }
+    ],
     "featured": false
   },
   {
@@ -22,9 +23,7 @@
     "tags": ["E科"],
     "location": "学科展示",
     "image": null,
-    "day": null,
-    "start_time": null,
-    "end_time": null,
+    "occurrences": [],
     "featured": false
   },
   {
@@ -36,9 +35,7 @@
     "tags": ["I科"],
     "location": "学科展示",
     "image": null,
-    "day": null,
-    "start_time": null,
-    "end_time": null,
+    "occurrences": [],
     "featured": false
   },
   {
@@ -50,9 +47,7 @@
     "tags": ["C科"],
     "location": "学科展示",
     "image": null,
-    "day": null,
-    "start_time": null,
-    "end_time": null,
+    "occurrences": [],
     "featured": false
   },
   {
@@ -64,9 +59,7 @@
     "tags": ["S科"],
     "location": "学科展示",
     "image": null,
-    "day": null,
-    "start_time": null,
-    "end_time": null,
+    "occurrences": [],
     "featured": false
   }
 ]

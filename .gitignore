@@ -1,4 +1,4 @@
 .DS_Store
 
-# サブエージェント用の一時worktree（Claude Codeが作る）
+# エージェント用の一時worktree（コミットしない）
 .claude/worktrees/
