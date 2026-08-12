@@ -76,7 +76,8 @@ const items = [
     padding: 32px 20px;
   }
 
-  .sec-title {
+  /* Tape/Cardにpropsで渡したclassは子コンポーネント側のスコープになるため :global() が要る */
+  .contents-cards :global(.sec-title) {
     margin-bottom: 22px;
     font-size: 17px;
   }
@@ -91,7 +92,7 @@ const items = [
     display: block;
   }
 
-  .card {
+  .contents-cards :global(.card) {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -140,7 +141,7 @@ const items = [
       grid-template-columns: repeat(4, 1fr);
       gap: 24px;
     }
-    .card {
+    .contents-cards :global(.card) {
       gap: 4px;
       padding: 18px 16px 14px;
     }

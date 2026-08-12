@@ -52,7 +52,8 @@ import Tape from "./ui/Tape.astro";
     gap: 20px;
   }
 
-  .footer-title {
+  /* Tapeにpropsで渡したclassは子コンポーネント側のスコープになるため :global() が要る */
+  .site-footer :global(.footer-title) {
     font-size: 14px;
     letter-spacing: 0.08em;
   }

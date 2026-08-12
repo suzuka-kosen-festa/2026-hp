@@ -88,7 +88,10 @@ import site from "../../data/site.json";
     z-index: 1;
   }
 
-  .hero-banner {
+  /* Tape/Star等にpropsで渡したclassは、子コンポーネント側のスコープを持つ要素に付く。
+     親のスコープ付きセレクタ（.hero-banner[親cid]）では一致しないため、
+     祖先で絞ったうえで :global() を使う（Card用に CollageCameraBanner が使っているのと同じ手法） */
+  .hero :global(.hero-banner) {
     font-size: clamp(13px, 3.6vw, 17px);
     letter-spacing: 0.06em;
     margin-bottom: 18px;
@@ -250,7 +253,7 @@ import site from "../../data/site.json";
     transform: rotate(-4deg);
   }
 
-  .hc-star {
+  .hero-right-wrap :global(.hc-star) {
     position: absolute;
     z-index: 2;
     top: -6px;

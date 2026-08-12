@@ -25,7 +25,8 @@ const latest = newsData.slice(0, 3);
     padding: 32px 20px;
   }
 
-  .sec-title {
+  /* Tape/Buttonにpropsで渡したclassは子コンポーネント側のスコープになるため :global() が要る */
+  .news-preview :global(.sec-title) {
     margin-bottom: 20px;
     font-size: 17px;
   }
@@ -35,7 +36,7 @@ const latest = newsData.slice(0, 3);
     flex-direction: column;
   }
 
-  .view-all {
+  .news-preview :global(.view-all) {
     margin-top: 22px;
   }
 

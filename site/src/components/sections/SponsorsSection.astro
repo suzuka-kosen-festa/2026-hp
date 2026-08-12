@@ -86,19 +86,20 @@ import sponsors from "../../data/sponsors.json";
     transform: rotate(-5deg);
   }
 
-  .deco-stack .star {
+  .deco-stack :global(.star) {
     position: absolute;
   }
-  .deco-stack.bl .star {
+  .deco-stack.bl :global(.star) {
     left: 18px;
     bottom: 96px;
   }
-  .deco-stack.br .star {
+  .deco-stack.br :global(.star) {
     right: 24px;
     bottom: 88px;
   }
 
-  .sec-title {
+  /* Tape/Starにpropsで渡したclassは子コンポーネント側のスコープになるため :global() が要る */
+  .sponsors :global(.sec-title) {
     position: relative;
     z-index: 1;
     margin-bottom: 22px;

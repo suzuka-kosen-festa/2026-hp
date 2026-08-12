@@ -21,7 +21,8 @@ import Tape from "../ui/Tape.astro";
     padding: 32px 20px;
   }
 
-  .sec-title {
+  /* Tapeにpropsで渡したclassは子コンポーネント側のスコープになるため :global() が要る */
+  .about :global(.sec-title) {
     margin-bottom: 20px;
     font-size: 17px;
   }
