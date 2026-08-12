@@ -1,0 +1,152 @@
+.pcar {
+  /* --peek: 両隣が覗く幅。左右のパディングを peek+gap にし、
+     スライド幅をコンテンツ幅ちょうど(100%)にすると、
+     どのスライドも中央スナップ位置にぴったり止まる（端の1枚も含めて） */
+  --peek: 30px;
+  --gap: 14px;
+  max-width: 520px;
+  margin-inline: auto;
+}
+
+/* 横スクロールはCSSのscroll-snapに任せる。
+   左右のパディングは「端のスライドも中央にスナップできるようにする」ための余白で、
+   同時に両隣が覗く量（＝まだ他にもある、の合図）にもなっている */
+.pcar__track {
+  position: relative;
+  display: flex;
+  gap: var(--gap);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+  /* 上下: 影(5px)と傾きで切れないための余白 / 左右: 覗き代 */
+  padding: 10px calc(var(--peek) + var(--gap)) 18px;
+}
+
+.pcar__track:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pcar__track {
+    scroll-behavior: auto;
+  }
+}
+
+.pcar__slide {
+  /* コンテンツ幅ちょうど＝トラック幅 -(覗き代+gap)×2 */
+  flex: 0 0 100%;
+  scroll-snap-align: center;
+  /* 文章量が違ってもカードの高さを揃える（A/B/C と同じ見え方にする） */
+  display: flex;
+}
+
+.pcar__slide > * {
+  flex: 1;
+}
+
+/* 貼り付けた紙片らしく、隣り合うスライドで傾きを変える */
+.pcar__slide:nth-child(odd) {
+  rotate: -0.8deg;
+}
+
+.pcar__slide:nth-child(even) {
+  rotate: 0.7deg;
+}
+
+/* ── 操作部（すべて44px以上） ────────────────── */
+.pcar__nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.pcar__arrow {
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  background: #fff;
+  border: 2px solid var(--ink);
+  box-shadow: 3px 3px 0 var(--ink);
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.pcar__arrow:disabled {
+  cursor: default;
+  box-shadow: none;
+  color: #aaa;
+  border-color: #bbb;
+}
+
+.pcar__dots {
+  display: flex;
+  align-items: center;
+}
+
+/* 見た目のドットは小さいが、当たり判定は44×44を確保する */
+.pcar__dot {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.pcar__dot:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: -3px;
+}
+
+.pcar__dot-mark {
+  width: 13px;
+  height: 13px;
+  background: #fff;
+  border: 2px solid var(--ink);
+  rotate: 8deg;
+}
+
+.pcar__dot.is-active .pcar__dot-mark {
+  background: var(--ink);
+}
+
+/* 現在位置を示す赤テープ。ドット間をスライドして移動する */
+.pcar__marker {
+  position: absolute;
+  bottom: 7px;
+  left: 50%;
+  width: 26px;
+  height: 7px;
+  margin-left: -13px;
+  background: var(--red);
+  filter: url(#tape-edge);
+}
+
+.pcar__status {
+  margin-top: 2px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: #555;
+}
+
+/* ── 1件だけのとき ───────────────────────────── */
+.pcar--single {
+  padding: 2px;
+}
+
+/* ── タップ領域の可視化（検証用） ────────────── */
+.pcar--hit .pcar__track,
+.pcar--hit .pcar__arrow,
+.pcar--hit .pcar__dot {
+  outline: 2px dashed var(--red);
+  outline-offset: -2px;
+}

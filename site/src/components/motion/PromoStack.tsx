@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import type { Entry } from "../../types/content";
+import PromoCard from "./PromoCard";
 import "./PromoStack.css";
 
 /** 操作方法の比較用。edge=覗いている端を直接タップ / tabs=テープタブで選ぶ */
@@ -79,27 +80,6 @@ export default function PromoStack({ entries, control = "tabs", showHitArea = fa
           ))}
         </div>
       )}
-    </div>
-  );
-}
-
-function PromoCard({ entry, interactive }: { entry: Entry; interactive: boolean }) {
-  return (
-    <div className="pc">
-      <div className="pc__photo">
-        {entry.image ? <img src={entry.image} alt="" loading="lazy" /> : <span className="pc__noimg num">NO IMAGE</span>}
-      </div>
-      <div className="pc__body">
-        <p className="pc__label">{entry.tags.includes("常設") ? "常設企画" : "イベント"}</p>
-        <h3 className="pc__name">{entry.name}</h3>
-        {entry.location && <p className="pc__place">{entry.location}</p>}
-        {entry.description && <p className="pc__desc">{entry.description}</p>}
-        {entry.link && interactive && (
-          <a className="pc__cta" href={entry.link}>
-            やってみる
-          </a>
-        )}
-      </div>
     </div>
   );
 }
