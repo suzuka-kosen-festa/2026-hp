@@ -1,1 +1,4 @@
 .DS_Store
+
+# サブエージェント用の一時worktree（Claude Codeが作る）
+.claude/worktrees/
