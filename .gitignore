@@ -1,1 +1,4 @@
 .DS_Store
+
+# エージェント用の一時worktree（コミットしない）
+.claude/worktrees/

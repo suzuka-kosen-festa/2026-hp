@@ -48,4 +48,6 @@ export interface Entry {
   notes?: string[];
   /** true: home等での特別扱い（バナー表示）対象 */
   featured?: boolean;
+  /** 外部Webアプリ等へのリンク（コラージュカメラ等）。未提供の間はnull */
+  link?: string | null;
 }

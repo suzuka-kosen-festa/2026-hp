@@ -11,7 +11,8 @@
     "image": null,
     "occurrences": [],
     "isPermanent": true,
-    "featured": true
+    "featured": true,
+    "link": null
   },
   {
     "id": "workshop-ai-sorting-robot",
@@ -32,7 +33,8 @@
     "audience": "小学生(中学年〜高学年)と保護者",
     "capacity": "各回10組",
     "notes": ["事前応募者のみ", "参加者は校門から実験室まで学生がご案内します"],
-    "featured": true
+    "featured": true,
+    "link": null
   },
   {
     "id": "event-mainstage-open",
