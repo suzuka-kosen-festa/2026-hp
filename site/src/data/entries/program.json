@@ -4,13 +4,34 @@
     "category": "イベント",
     "name": "コラージュカメラ(仮)",
     "group": "実行委員会 システム班",
+    "summary": "お題の写真を撮って、あなただけのフォトコラージュを作ろう。",
     "description": "お題の写真を撮って、あなただけのフォトコラージュを作ろう。",
     "tags": ["常設"],
     "location": null,
     "image": null,
-    "day": null,
-    "start_time": null,
-    "end_time": null,
+    "occurrences": [],
+    "isPermanent": true,
+    "featured": true
+  },
+  {
+    "id": "workshop-ai-sorting-robot",
+    "category": "イベント",
+    "name": "親子で挑戦！AI×工作ワークショップ",
+    "group": "電子情報工学科(I科)",
+    "summary": "AIに学習させて、カメラで見たものを左右に仕分けるロボットを作ろう。",
+    "description": "講座名：自動仕分けロボットを作ろう\n\n小さな小物やお菓子などをうまく判断できるようにAIを学習し、カメラで見たものをAIが判断して、左右に仕分ける仕組みを作ります。",
+    "tags": ["day1", "day2"],
+    "location": "電子情報工学実験室",
+    "image": null,
+    "occurrences": [
+      { "day": "day1", "start_time": "10:00", "end_time": "11:30" },
+      { "day": "day1", "start_time": "13:00", "end_time": "14:30" },
+      { "day": "day2", "start_time": "10:00", "end_time": "11:30" },
+      { "day": "day2", "start_time": "13:00", "end_time": "14:30" }
+    ],
+    "audience": "小学生(中学年〜高学年)と保護者",
+    "capacity": "各回10組",
+    "notes": ["事前応募者のみ", "参加者は校門から実験室まで学生がご案内します"],
     "featured": true
   },
   {
@@ -22,9 +43,7 @@
     "tags": ["day1"],
     "location": "MainStage",
     "image": null,
-    "day": "day1",
-    "start_time": "09:30",
-    "end_time": "10:00",
+    "occurrences": [{ "day": "day1", "start_time": "09:30", "end_time": "10:00" }],
     "featured": false
   },
   {
@@ -36,9 +55,7 @@
     "tags": ["day2"],
     "location": "MainStage",
     "image": null,
-    "day": "day2",
-    "start_time": "16:00",
-    "end_time": "16:30",
+    "occurrences": [{ "day": "day2", "start_time": "16:00", "end_time": "16:30" }],
     "featured": false
   },
   {
@@ -50,9 +67,7 @@
     "tags": ["day1"],
     "location": "LiveStage",
     "image": null,
-    "day": "day1",
-    "start_time": "11:00",
-    "end_time": "11:30",
+    "occurrences": [{ "day": "day1", "start_time": "11:00", "end_time": "11:30" }],
     "featured": false
   },
   {
@@ -64,9 +79,7 @@
     "tags": ["中夜祭"],
     "location": "LiveStage",
     "image": null,
-    "day": null,
-    "start_time": "18:00",
-    "end_time": "19:00",
+    "occurrences": [{ "day": "day1", "start_time": "18:00", "end_time": "19:00" }],
     "featured": false
   },
   {
@@ -78,9 +91,7 @@
     "tags": ["day2"],
     "location": "LiveStage",
     "image": null,
-    "day": "day2",
-    "start_time": "11:00",
-    "end_time": "11:30",
+    "occurrences": [{ "day": "day2", "start_time": "11:00", "end_time": "11:30" }],
     "featured": false
   },
   {
@@ -92,9 +103,7 @@
     "tags": ["決勝バンド", "day2"],
     "location": "MainStage",
     "image": null,
-    "day": "day2",
-    "start_time": "13:00",
-    "end_time": "14:00",
+    "occurrences": [{ "day": "day2", "start_time": "13:00", "end_time": "14:00" }],
     "featured": false
   }
 ]

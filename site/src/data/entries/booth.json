@@ -8,9 +8,10 @@
     "tags": ["飲食-フード"],
     "location": "飲食バザー Aブロック1番",
     "image": null,
-    "day": null,
-    "start_time": "10:00",
-    "end_time": "16:00",
+    "occurrences": [
+      { "day": "day1", "start_time": "10:00", "end_time": "16:00" },
+      { "day": "day2", "start_time": "10:00", "end_time": "16:00" }
+    ],
     "featured": false
   },
   {
@@ -22,9 +23,7 @@
     "tags": ["飲食-スイーツ"],
     "location": "飲食バザー Aブロック2番",
     "image": null,
-    "day": null,
-    "start_time": null,
-    "end_time": null,
+    "occurrences": [],
     "featured": false
   },
   {
@@ -36,9 +35,7 @@
     "tags": ["飲食-フード"],
     "location": "飲食バザー Aブロック3番",
     "image": null,
-    "day": null,
-    "start_time": null,
-    "end_time": null,
+    "occurrences": [],
     "featured": false
   },
   {
@@ -50,9 +47,7 @@
     "tags": ["物販"],
     "location": "展示・レク Bブロック1番",
     "image": null,
-    "day": null,
-    "start_time": null,
-    "end_time": null,
+    "occurrences": [],
     "featured": false
   },
   {
@@ -64,9 +59,7 @@
     "tags": ["レク"],
     "location": "ゲームイベント",
     "image": null,
-    "day": null,
-    "start_time": null,
-    "end_time": null,
+    "occurrences": [],
     "featured": false
   },
   {
@@ -78,9 +71,7 @@
     "tags": ["展示"],
     "location": "展示・レク Bブロック2番",
     "image": null,
-    "day": null,
-    "start_time": null,
-    "end_time": null,
+    "occurrences": [],
     "featured": false
   }
 ]
