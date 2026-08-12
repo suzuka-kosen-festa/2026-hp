@@ -15,6 +15,21 @@
     "link": null
   },
   {
+    "id": "workshop-ai-sorting-robot",
+    "category": "イベント",
+    "name": "親子で挑戦！AI×工作ワークショップ",
+    "group": "電子情報工学科(I科)",
+    "description": "講座名：自動仕分けロボットを作ろう\n\n小さな小物やお菓子などをうまく判断できるようにAIを学習し、カメラで見たものをAIが判断して、左右に仕分ける仕組みを作ります。\n\n開催日：10/31(土)・11/1(日)\n開催時間：各日 10:00-11:30 ／ 13:00-14:30\n対象：小学生(中学年〜高学年)と保護者\n定員：各回10組\n\n※事前応募者のみ\n※参加者は校門から実験室まで学生がご案内します",
+    "tags": ["day1", "day2"],
+    "location": "電子情報工学実験室",
+    "image": null,
+    "day": null,
+    "start_time": null,
+    "end_time": null,
+    "featured": true,
+    "link": null
+  },
+  {
     "id": "event-mainstage-open",
     "category": "イベント",
     "name": "開会式",

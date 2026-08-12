@@ -10,6 +10,13 @@ import NewsItem from "../components/ui/NewsItem.astro";
 import Divider from "../components/ui/Divider.astro";
 import Star from "../components/ui/Star.astro";
 import Reveal from "../components/motion/Reveal";
+import PromoStack from "../components/motion/PromoStack";
+import { getFeaturedEntries } from "../lib/entries";
+import { entries } from "../lib/loadEntries";
+
+const featured = getFeaturedEntries(entries);
+/** PromoStack.tsx の LAYERS[1].x と揃えること（覗いている端の幅＝edge方式の実質タップ幅） */
+const PEEK_PX = 16;
 ---
 
 <BaseLayout title="部品ギャラリー（開発用）" noindex>
@@ -115,7 +122,51 @@ import Reveal from "../components/motion/Reveal";
         </Card>
       </Reveal>
     </div>
+
+    <div class="part">
+      <h2>PromoStack — 複数広告の切り替え方式の比較</h2>
+      <p class="sub">
+        同じ「重ね貼り」の見た目で、操作方法だけを変えた2案。<strong>「タップ領域を表示」を押すと押せる範囲が赤破線で出る</strong>ので、
+        指で押せるかを実機で確かめてください。参考値: WCAG 2.5.8(AA)の最小は24×24px、Apple HIGの推奨は44×44px。
+      </p>
+
+      <label class="hit-toggle">
+        <input type="checkbox" id="hit-toggle" />
+        タップ領域を表示
+      </label>
+
+      <h3>A: 覗いている端を直接タップ</h3>
+      <p class="sub">
+        背面カードそのものがボタン。ただし前面カードに覆われているので、実際に押せるのは右側に覗いた
+        <strong>約{PEEK_PX}px幅の帯だけ</strong>になる。
+      </p>
+      <div class="promo-slot" data-promo>
+        <PromoStack client:visible entries={featured} control="edge" />
+      </div>
+
+      <h3>B: スタックは見せるだけ、選択はテープタブ</h3>
+      <p class="sub">
+        重なりは「まだ他にもある」を伝える役だけを担い、切り替えは下のタブで行う。タブは最小44px確保。
+      </p>
+      <div class="promo-slot" data-promo>
+        <PromoStack client:visible entries={featured} control="tabs" />
+      </div>
+
+      <h3>参考: 広告が1件のとき</h3>
+      <p class="sub">重なりも切り替えUIも出さず、現行バナーと同じ1枚として表示される。</p>
+      <div class="promo-slot" data-promo>
+        <PromoStack client:visible entries={featured.slice(0, 1)} control="tabs" />
+      </div>
+    </div>
   </section>
+
+  <script>
+    // タップ領域の可視化トグル（ギャラリー内の全PromoStackに一括適用）
+    document.getElementById("hit-toggle")?.addEventListener("change", (e) => {
+      const on = (e.target as HTMLInputElement).checked;
+      document.querySelectorAll(".ps").forEach((el) => el.classList.toggle("ps--hit", on));
+    });
+  </script>
 
   <style>
     .gallery {
@@ -127,6 +178,28 @@ import Reveal from "../components/motion/Reveal";
       font-size: 22px;
       font-weight: 800;
       margin-bottom: 8px;
+    }
+    .sub {
+      font-size: 13px;
+      line-height: 1.7;
+      color: #555;
+      margin-bottom: 12px;
+    }
+    h3 {
+      font-size: 14px;
+      margin: 28px 0 6px;
+    }
+    .hit-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 44px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    /* 背面カードが右にはみ出すので、比較用スロットは余白を確保して切らずに見せる */
+    .promo-slot {
+      padding: 8px 40px 8px 8px;
     }
     .note {
       font-size: 13px;
