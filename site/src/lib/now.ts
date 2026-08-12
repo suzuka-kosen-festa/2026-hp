@@ -17,8 +17,13 @@ function toDate(day: Day, time: string): Date | null {
   return new Date(`${DAY_DATES[day]}T${time}:00+09:00`);
 }
 
-/** その回が「現在進行中」かどうか（時刻を持たない回・不正な時刻は常にfalse） */
-function isOccurrenceNow(occurrence: Occurrence, now: Date): boolean {
+/**
+ * その回が「現在進行中」かどうか（時刻を持たない回・不正な時刻は常にfalse）。
+ * timetableは1行 = 1 occurrence なので、NOWバッジの判定にはエントリ単位の
+ * isEntryNow() ではなくこちらを使うこと。化学マジックのように1日に複数公演ある企画で
+ * isEntryNow() を使うと、進行中でない回の行にまでバッジが点いてしまう。
+ */
+export function isOccurrenceNow(occurrence: Occurrence, now: Date = new Date()): boolean {
   if (!occurrence.start_time || !occurrence.end_time) return false;
   const start = toDate(occurrence.day, occurrence.start_time);
   const end = toDate(occurrence.day, occurrence.end_time);
