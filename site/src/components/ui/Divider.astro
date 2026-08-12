@@ -7,10 +7,19 @@ interface Props {
 const { color = "red", rotate = color === "red" ? -1.2 : 0.8 } = Astro.props;
 ---
 
-<div class:list={["divider", color]} style={{ transform: `rotate(${rotate}deg) scaleX(1.05)` }}>
+<div class="divider-clip">
+  <div class:list={["divider", color]} style={{ transform: `rotate(${rotate}deg) scaleX(1.05)` }}>
+  </div>
 </div>
 
 <style>
+  /* 回転 + scaleX のはみ出しをここで閉じる。body側で overflow-x を塞ぐと
+     body がスクロールコンテナ化してスクロール駆動アニメーションが死ぬため。
+     `clip` は `hidden` と違い overflow-y を auto にしないので縦は影響を受けない */
+  .divider-clip {
+    overflow-x: clip;
+  }
+
   .divider {
     height: 16px;
     filter: url(#tape-edge);

@@ -19,6 +19,12 @@
 
   --header-height-sp: 56px;
   --breakpoint-pc: 900px;
+
+  /* PCのコンテンツ幅は2段階に統一する。セクションごとに個別の数値を書かない
+     narrow: 読み物系（news / about / footer）。1行が長くなりすぎない幅
+     wide:   一覧・グリッド系（hero / contents / sponsors / バナー） */
+  --content-narrow: 700px;
+  --content-wide: 1200px;
 }
 
 * {
@@ -38,11 +44,14 @@ html {
   }
 }
 
+/* overflow-x はここで塞がない。`overflow-x: hidden` は overflow-y を auto に
+   計算させて body 自身をスクロールコンテナ化するため、CSSスクロール駆動
+   アニメーション（animation-timeline: view()/scroll()）のタイムラインが
+   常に進捗0で固定される。はみ出しは原因側の要素（回転テープ等）で閉じる */
 body {
   background: var(--paper);
   color: var(--ink);
   font-family: var(--font-body);
-  overflow-x: hidden;
   position: relative;
 }
 
