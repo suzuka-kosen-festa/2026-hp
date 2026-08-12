@@ -132,7 +132,9 @@ const items = [
 
   @media (min-width: 900px) {
     .contents-cards {
-      max-width: 1200px;
+      max-width: var(--content-wide);
+      /* 左右の余白を他のwideセクション（hero / sponsors）と揃える */
+      padding: 40px 24px;
     }
     .grid {
       grid-template-columns: repeat(4, 1fr);

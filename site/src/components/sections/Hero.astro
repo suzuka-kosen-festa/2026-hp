@@ -94,10 +94,13 @@ import site from "../../data/site.json";
     margin-bottom: 18px;
   }
 
+  /* global.css の `img { display: block }` によりブロック要素になるため、
+     親の text-align: center では中央に来ない。margin-inline で明示的に中央寄せる */
   .hero-logo {
     width: 100%;
     max-width: 460px;
     height: auto;
+    margin-inline: auto;
     filter: drop-shadow(0 2px 0 rgba(17, 17, 17, 0.12));
     cursor: pointer;
     transition: transform 0.2s ease;
@@ -256,7 +259,7 @@ import site from "../../data/site.json";
 
   @media (min-width: 900px) {
     .hero {
-      max-width: 1100px;
+      max-width: var(--content-wide);
       padding: 56px 24px 48px;
     }
 
