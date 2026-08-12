@@ -135,3 +135,14 @@
   padding: 4px 12px;
   font-size: 10px;
 }
+
+/* compact時の詳細ページ誘導。行全体がリンクなので、これ自体は飾り */
+.pc--compact .pc__more {
+  align-self: flex-start;
+  margin-top: 2px;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  color: var(--blue);
+  border-bottom: 2px solid var(--blue);
+  line-height: 1.1;
+}

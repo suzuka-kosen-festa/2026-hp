@@ -1,0 +1,57 @@
+/* PromoCard.css と同じく素のグローバルCSS（CSS Modulesではないので :global() は使わない） */
+.pl {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.pl__item {
+  /* 角度は PromoList.tsx 側から rotate で当てる（Framer Motion が transform を
+     インラインで管理するため、CSS の transform と取り合いにならないようにする） */
+  min-width: 0;
+}
+
+.pl__link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+/* カードのハードシャドウを押し込む＝「押した」感触。:active はモバイルのタップでも効く */
+.pl__link .pc {
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.12s ease;
+}
+
+.pl__link:active .pc {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 var(--ink);
+}
+
+@media (hover: hover) {
+  .pl__link:hover .pc {
+    transform: translate(-1px, -1px);
+    box-shadow: 6px 6px 0 var(--ink);
+  }
+}
+
+.pl__link:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pl__link .pc {
+    transition: none;
+  }
+}
+
+/* 検証用: タップ領域の可視化 */
+.pl--hit .pl__link {
+  outline: 2px dashed var(--red);
+  outline-offset: 2px;
+}

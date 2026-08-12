@@ -11,7 +11,7 @@ import Divider from "../components/ui/Divider.astro";
 import Star from "../components/ui/Star.astro";
 import Reveal from "../components/motion/Reveal";
 import PromoStack from "../components/motion/PromoStack";
-import PromoWallet from "../components/motion/PromoWallet";
+import PromoList from "../components/motion/PromoList";
 import PromoCarousel from "../components/motion/PromoCarousel";
 import { getFeaturedEntries } from "../lib/entries";
 import { entries } from "../lib/loadEntries";
@@ -157,14 +157,15 @@ const PEEK_PX = 16;
         <PromoStack client:visible entries={featured} control="tabs" />
       </div>
 
-      <h3>C: Wallet型（スタック全体をタップ→一覧に展開）</h3>
+      <h3>C: 全件を常時表示（採用）</h3>
       <p class="sub">
-        Apple WalletやiOSの通知グループと同じ考え方。覗いている端は<strong>「まだある」の合図に徹し、タップ対象にしない</strong>。
-        畳んだ状態はカード全面が1つのボタンで、押すと一覧に開き、選ぶとその1件が前面に来て畳まれる。
-        トレードオフ: 誤タップしにくく件数が増えても破綻しないが、<strong>2手かかる</strong>のと、展開時に縦の場所を食う。
+        広告は多くても4件程度と分かったため、そもそも畳まない。Wallet型の弱点だった
+        <strong>「2手かかる」「展開すると畳んだ状態より情報が減る」が両方消える</strong>。
+        行全体が詳細ページへのリンクなので、タップ領域は行の全面。カード内にCTAリンクを置かないため
+        リンクの入れ子にもならない。<strong>home専用ではなくエントリ配列を受け取るだけなので、他ページの広告枠にも流用できる</strong>。
       </p>
       <div class="promo-slot" data-promo>
-        <PromoWallet client:visible entries={featured} />
+        <PromoList client:visible entries={featured} />
       </div>
 
       <h3>D: カルーセル（横スワイプ＋ドット）</h3>
@@ -189,7 +190,7 @@ const PEEK_PX = 16;
     // タップ領域の可視化トグル（A/B/C/D すべての候補に一括適用）
     const HIT_TARGETS: [string, string][] = [
       [".ps", "ps--hit"],
-      [".pw", "pw--hit"],
+      [".pl", "pl--hit"],
       [".pcar", "pcar--hit"],
     ];
     document.getElementById("hit-toggle")?.addEventListener("change", (e) => {
