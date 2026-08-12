@@ -1,0 +1,321 @@
+---
+// 企画の汎用詳細ページ。バナーやカードの「view more」の飛び先。
+// 当初は「個別詳細ページなし」の方針だったが、I科ワークショップのように
+// 開催回・対象・定員・注記まで持つ企画が出てきて、バナーやカードの
+// 限られた面積では情報を出しきれなくなったため追加した（requirements.md §3.3）。
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Tape from "../../components/ui/Tape.astro";
+import Chip from "../../components/ui/Chip.astro";
+import Button from "../../components/ui/Button.astro";
+import Star from "../../components/ui/Star.astro";
+import { entries } from "../../lib/loadEntries";
+import type { Day, Entry, Occurrence } from "../../types/content";
+import site from "../../data/site.json";
+
+export function getStaticPaths() {
+  return entries.map((entry) => ({ params: { id: entry.id }, props: { entry } }));
+}
+
+interface Props {
+  entry: Entry;
+}
+
+const { entry } = Astro.props;
+
+const DAY_LABEL: Record<Day, string> = {
+  day1: "10/31 SAT",
+  day2: "11/1 SUN",
+};
+
+/** 開催回を日ごとにまとめる。同じ日に複数公演ある企画（化学マジック等）を1行に畳むため */
+function groupByDay(occurrences: Occurrence[]) {
+  const order: Day[] = ["day1", "day2"];
+  return order
+    .map((day) => ({ day, items: occurrences.filter((o) => o.day === day) }))
+    .filter((group) => group.items.length > 0);
+}
+
+function formatTime(occurrence: Occurrence) {
+  if (!occurrence.start_time) return "時間未定";
+  return occurrence.end_time ? `${occurrence.start_time}-${occurrence.end_time}` : `${occurrence.start_time}〜`;
+}
+
+const dayGroups = groupByDay(entry.occurrences);
+const hasSchedule = entry.isPermanent || dayGroups.length > 0;
+// 表示用のタグからは日付タグを落とす（開催日は上の「開催」欄で正確に出しているため重複する）
+const displayTags = entry.tags.filter((tag) => tag !== "day1" && tag !== "day2");
+---
+
+<BaseLayout title={`${entry.name} | ${site.eventName}`} description={entry.summary ?? entry.description ?? undefined}>
+  <article class="entry">
+    <p class="crumb"><a href="/booth/">← 企画一覧へ</a></p>
+
+    <header class="head">
+      <Tape color="blue" rotate={-1.5} as="p" class="cat">{entry.category}</Tape>
+      <h1 class="name">{entry.name}</h1>
+      {entry.group && <p class="group">{entry.group}</p>}
+      {
+        displayTags.length > 0 && (
+          <ul class="tags">
+            {displayTags.map((tag, i) => (
+              <li>
+                <Chip color={i % 2 === 0 ? "red" : "blue"}>{tag}</Chip>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </header>
+
+    <div class="photo">
+      {
+        entry.image ? (
+          <img src={entry.image} alt="" loading="lazy" />
+        ) : (
+          <span class="no-image num">NO IMAGE</span>
+        )
+      }
+      <Star class="photo-star" color="var(--yellow)" size="30px" rotate={-12} />
+    </div>
+
+    {entry.description && <p class="desc">{entry.description}</p>}
+
+    <dl class="facts">
+      {
+        hasSchedule && (
+          <div class="fact">
+            <dt>開催</dt>
+            <dd>
+              {entry.isPermanent ? (
+                <span>会期中ずっと</span>
+              ) : (
+                <ul class="days">
+                  {dayGroups.map((group) => (
+                    <li>
+                      <span class="day num">{DAY_LABEL[group.day]}</span>
+                      <span class="times">
+                        {group.items.map((o) => (
+                          <span class="slot">
+                            <span class="num">{formatTime(o)}</span>
+                            {o.note && <span class="slot-note">（{o.note}）</span>}
+                          </span>
+                        ))}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </dd>
+          </div>
+        )
+      }
+      {
+        entry.location && (
+          <div class="fact">
+            <dt>場所</dt>
+            <dd>{entry.location}</dd>
+          </div>
+        )
+      }
+      {
+        entry.audience && (
+          <div class="fact">
+            <dt>対象</dt>
+            <dd>{entry.audience}</dd>
+          </div>
+        )
+      }
+      {
+        entry.capacity && (
+          <div class="fact">
+            <dt>定員</dt>
+            <dd>{entry.capacity}</dd>
+          </div>
+        )
+      }
+    </dl>
+
+    {
+      entry.notes && entry.notes.length > 0 && (
+        <ul class="notes">
+          {entry.notes.map((note) => (
+            <li>※{note}</li>
+          ))}
+        </ul>
+      )
+    }
+
+    {
+      entry.link && (
+        <div class="cta">
+          <Button href={entry.link} color="yellow" rotate={-1}>
+            やってみる →
+          </Button>
+        </div>
+      )
+    }
+  </article>
+</BaseLayout>
+
+<style>
+  .entry {
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 24px 20px 64px;
+  }
+
+  .crumb {
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+  .crumb a {
+    text-decoration: underline;
+  }
+
+  /* Tape/Chip/Star にpropsで渡したclassは子コンポーネント側のスコープになるため
+     :global() が要る（design-system.md §4 参照） */
+  .head :global(.cat) {
+    font-size: 11px;
+    margin-bottom: 12px;
+  }
+
+  .name {
+    font-size: clamp(22px, 6.5vw, 30px);
+    line-height: 1.35;
+  }
+
+  .group {
+    margin-top: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--blue);
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    list-style: none;
+    margin-top: 14px;
+  }
+
+  .photo {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 16 / 9;
+    margin-top: 22px;
+    background: #f3ebd9;
+    border: 2px solid var(--ink);
+    box-shadow: 5px 5px 0 var(--ink);
+    rotate: -0.8deg;
+  }
+  .photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .no-image {
+    font-size: 13px;
+    letter-spacing: 0.05em;
+    color: #999;
+  }
+  .photo :global(.photo-star) {
+    position: absolute;
+    top: -14px;
+    right: -10px;
+  }
+
+  .desc {
+    margin-top: 26px;
+    font-size: 14.5px;
+    line-height: 1.9;
+    /* データ側の改行をそのまま活かす */
+    white-space: pre-line;
+  }
+
+  .facts {
+    margin-top: 26px;
+    border-top: 2px dashed rgba(17, 17, 17, 0.25);
+  }
+
+  .fact {
+    display: flex;
+    gap: 14px;
+    padding: 12px 2px;
+    border-bottom: 2px dashed rgba(17, 17, 17, 0.25);
+    font-size: 14px;
+  }
+
+  .fact dt {
+    flex: 0 0 4.5em;
+    font-weight: 800;
+  }
+
+  .fact dd {
+    flex: 1;
+    min-width: 0;
+    line-height: 1.7;
+  }
+
+  .days {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .days > li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 12px;
+  }
+
+  .day {
+    font-size: 17px;
+    color: var(--red);
+  }
+
+  /* 1日に複数公演ある企画（化学マジック等）は回を横に並べる */
+  .times {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 14px;
+  }
+
+  .slot-note {
+    font-size: 12px;
+  }
+
+  .notes {
+    list-style: none;
+    margin-top: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 12.5px;
+    line-height: 1.7;
+    color: #444;
+  }
+
+  .cta {
+    margin-top: 28px;
+  }
+
+  @media (min-width: 900px) {
+    .entry {
+      /* --content-narrow はPR #27で追加。未マージのあいだはフォールバックで動く */
+      max-width: var(--content-narrow, 700px);
+      padding: 40px 24px 96px;
+    }
+    .desc {
+      font-size: 16px;
+    }
+    .fact {
+      font-size: 15px;
+    }
+  }
+</style>
