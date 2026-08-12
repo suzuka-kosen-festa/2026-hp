@@ -1,0 +1,46 @@
+---
+// home の注目企画枠。featured を全件そのまま並べる。
+// 1件だけを大きなカードで見せる形（旧 CollageCameraBanner）から、
+// 広告が複数になったため全件表示へ変更した。切り替えUIを検討した結果、
+// 広告は多くても4件程度なので畳まないのが最善と判断（比較は /gallery に残してある）。
+import Reveal from "../motion/Reveal";
+import Tape from "../ui/Tape.astro";
+import PromoList from "../motion/PromoList";
+import { getFeaturedEntries } from "../../lib/entries";
+import { entries } from "../../lib/loadEntries";
+
+const featured = getFeaturedEntries(entries);
+---
+
+{
+  featured.length > 0 && (
+    <section class="featured-promos">
+      <Reveal client:visible rotate={-1.2}>
+        <Tape color="red" rotate={-1.2} as="h2" class="sec-title">
+          PICK UP
+        </Tape>
+      </Reveal>
+      <PromoList client:visible entries={featured} />
+    </section>
+  )
+}
+
+<style>
+  .featured-promos {
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 32px 20px;
+  }
+
+  /* Tapeにpropsで渡したclassは子コンポーネント側のスコープになるため :global() が要る */
+  .featured-promos :global(.sec-title) {
+    margin-bottom: 22px;
+    font-size: 17px;
+  }
+
+  @media (min-width: 900px) {
+    .featured-promos {
+      max-width: var(--content-narrow);
+    }
+  }
+</style>
