@@ -1,10 +1,5 @@
-import site from "../data/site.json";
+import { DAY_DATES } from "./eventDate";
 import type { Day, Entry, Occurrence } from "../types/content";
-
-const DAY_DATES: Record<Day, string> = {
-  day1: site.day1Date,
-  day2: site.day2Date,
-};
 
 const TIME_PATTERN = /^([01]\d|2[0-3]):([0-5]\d)$/;
 

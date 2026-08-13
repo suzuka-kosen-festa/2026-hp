@@ -23,6 +23,8 @@
   /* PCのコンテンツ幅は2段階に統一する。セクションごとに個別の数値を書かない
      narrow: 読み物系（news / about / footer）。1行が長くなりすぎない幅
      wide:   一覧・グリッド系（hero / contents / sponsors / バナー） */
+  /* コンテンツ幅。SPは全セクション共通、PCは読み物系(narrow)と一覧系(wide)の2段階 */
+  --content-sp: 520px;
   --content-narrow: 700px;
   --content-wide: 1200px;
 }

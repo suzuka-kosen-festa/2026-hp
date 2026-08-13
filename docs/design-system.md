@@ -1,6 +1,6 @@
 # デザインシステム — collage 2026
 
-最終更新: 2026-07-17
+最終更新: 2026-08-13
 実装サンプル: [../design-demo/demo.html](../design-demo/demo.html)（ユーザー承認済み）。本実装後は `site/` の `/gallery` ページが実コンポーネントの一覧として最新
 
 ## 0. 世界観の原則
@@ -103,6 +103,22 @@
 回転やscaleではみ出す要素（テープ、Divider等）を閉じるとき、`overflow-x: hidden` を使うと **`overflow-y` が `auto` に計算されて、その要素がスクロールコンテナになる**。`body` にこれを付けると、CSSスクロール駆動アニメーション（`animation-timeline: view()` / `scroll()`）のタイムラインが「スクロールしないbody」に解決され、**進捗0のまま固定されて無言で死ぬ**。
 
 `overflow-x: clip` なら `overflow-y` は `visible` のままでスクロールコンテナを作らないため、この問題が起きない。はみ出しは原因側の要素で閉じ、`body` には何も指定しない。
+
+### コンテンツ幅とイベント日付は変数・データから引く
+
+セクションの `max-width` に生の数値を書かない。SP・PCとも変数を使う。
+
+```css
+.section { max-width: var(--content-sp); }          /* 520px（SP共通） */
+@media (min-width: 900px) {
+  .section { max-width: var(--content-narrow); }    /* 700px  読み物系（news / about / 詳細） */
+  .grid-section { max-width: var(--content-wide); } /* 1200px 一覧系（hero / contents / sponsors） */
+}
+```
+
+開催日も同様に、ラベルをハードコードせず `lib/eventDate.ts` から引く。`site.json` の `day1Date` / `day2Date` が唯一の情報源で、`formatDayLabel("day1")` が `"10/31 SAT"` を返す。
+
+**曜日の色（SAT=青 / SUN=赤）は `day1` / `day2` ではなく実際の曜日で決めること。** `dayColorClass()` を使う。`day1 = 土曜` を前提にCSSを書くと、日程が変わったときに色だけ嘘になる。
 
 ### Figma書き出し画像の扱い（実装時の学び）
 - Figmaの装飾用ラスター画像（背景テクスチャ、AI生成イラスト等）は**透過ではなく不透明な矩形パネル**として書き出されることが多い。透過前提で背景に溶け込ませようとすると不自然な黒い矩形が浮いて見える
