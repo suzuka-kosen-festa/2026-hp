@@ -18,9 +18,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Nodeのバージョンは .node-version を唯一の情報源にする（CIと手元がズレないように）
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version-file: .node-version
           cache: npm
           cache-dependency-path: site/package-lock.json
 
