@@ -15,11 +15,50 @@
 
 ## 開発環境の始め方
 
-**Node のバージョンは `.node-version`（24.19.0）に固定**しています。バージョン管理ツール（fnm / nodenv / mise / Volta 等）を使っていれば `cd` した時点で自動で切り替わります。nvm の場合は次のとおり。
+### 1. Node のバージョン管理ツールを入れる（初回のみ）
+
+このリポジトリは **Node のバージョンを `.node-version`（24.19.0）に固定**しています。システムに入れた Node を直接使うとバージョンがずれるため、切り替えツールを入れてください。すでに nvm 等を使っているならこの手順は不要です。
+
+未導入なら [fnm](https://github.com/Schniz/fnm) を勧めます。軽量で、`.node-version` をそのまま読んでくれます。
 
 ```sh
-nvm install $(cat .node-version) && nvm use $(cat .node-version)
+# macOS
+brew install fnm
+
+# Windows
+winget install Schniz.fnm
 ```
+
+インストール後、**シェルの設定ファイルに次の1行を追記**してください（`~/.zshrc` など）。これが無いとディレクトリ移動時の自動切り替えが働きません。
+
+```sh
+eval "$(fnm env --use-on-cd --shell zsh)"
+```
+
+追記したらターミナルを開き直します。
+
+### 2. クローンして Node を用意する
+
+```sh
+git clone https://github.com/suzuka-kosen-festa/2026-hp.git
+cd 2026-hp
+fnm install
+```
+
+`fnm install` は `.node-version` を読んで 24.19.0 を入れ、そのまま有効化します。確認：
+
+```sh
+node -v   # v24.19.0 と出れば OK
+```
+
+nvm を使っている場合はこちら（nvm は `.node-version` を読まないため、明示的に渡します）。
+
+```sh
+nvm install $(cat .node-version)
+nvm use $(cat .node-version)
+```
+
+### 3. 依存をインストールして起動する
 
 ```sh
 cd site
@@ -28,6 +67,8 @@ npm run dev
 ```
 
 `http://localhost:4321` で確認できます。
+
+`npm ci` が `EBADENGINE` で止まる場合は、Node のバージョンが合っていません。手順2に戻って `node -v` が `v24.19.0` になっているか確認してください。
 
 ### `npm install` と `npm ci` の使い分け
 
