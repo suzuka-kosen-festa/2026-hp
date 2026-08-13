@@ -40,6 +40,9 @@ npm run dev
 
 Node のバージョンが合っていない場合は `engine-strict` によりインストール時にエラーで止まります（黙ってロックが書き換わるのを防ぐため）。
 
+> [!IMPORTANT]
+> **npm コマンドは必ず `site/` に `cd` してから実行してください。** リポジトリルートから `npm ci --prefix site` のように実行すると `site/.npmrc` が読み込まれず、`engine-strict` によるバージョンチェックが効きません。
+
 ## デプロイ・プレビュー
 
 - `main` への push → 本番 (`snct-fes-2026.pages.dev`) に自動デプロイ
