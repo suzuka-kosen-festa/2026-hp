@@ -29,11 +29,17 @@ const SHARED = [
   /^site\/src\/data\//,
   /^site\/(package\.json|package-lock\.json|astro\.config\..*|playwright\.config\.ts)$/,
   /^site\/public\//,
-  /^site\/tests\//,
+  // テストの共通部分（_shared.ts 等）。個別の <page>.spec.ts はそのページ扱いにする
+  /^site\/tests\/_/,
 ];
 
-/** ページ固有のパス → ページ名 */
+/**
+ * ページ固有のパス → ページ名。
+ * page に関数を渡すとマッチ結果からページ名を作れる。
+ */
 const PAGE_RULES = [
+  // 自分のページのspecを足しただけで全ページ走らせない
+  { pattern: /^site\/tests\/([\w-]+)\.spec\.ts$/, page: (m) => m[1] },
   { pattern: /^site\/src\/pages\/index\.astro$/, page: "home" },
   // sections/ は現状すべて home の構成要素。他ページ専用のsectionを足すときはここを分ける
   { pattern: /^site\/src\/components\/sections\//, page: "home" },
@@ -61,7 +67,10 @@ try {
 }
 
 const specFor = (page) => `tests/${page}.spec.ts`;
-const allSpecs = () => [...new Set(PAGE_RULES.map((r) => r.page))].map(specFor).filter((f) => existsSync(`${SITE}${f}`));
+const allSpecs = () =>
+  [...new Set(PAGE_RULES.map((r) => r.page).filter((p) => typeof p === "string"))]
+    .map(specFor)
+    .filter((f) => existsSync(`${SITE}${f}`));
 
 let specs;
 const sharedHit = changed.find((f) => SHARED.some((re) => re.test(f)));
@@ -72,7 +81,8 @@ if (sharedHit) {
   const pages = new Set();
   for (const file of changed) {
     for (const { pattern, page } of PAGE_RULES) {
-      if (pattern.test(file)) pages.add(page);
+      const m = pattern.exec(file);
+      if (m) pages.add(typeof page === "function" ? page(m) : page);
     }
   }
   specs = [...pages].map(specFor).filter((f) => existsSync(`${SITE}${f}`));
