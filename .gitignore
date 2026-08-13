@@ -2,3 +2,6 @@
 
 # エージェント用の一時worktree（コミットしない）
 .claude/worktrees/
+
+# Playwright MCP の実行時ログ・スクショ置き場
+.playwright-mcp/

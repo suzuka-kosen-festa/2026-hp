@@ -152,4 +152,39 @@
 - 基本はAstro単体・素のCSS。スクロール登場演出やジェスチャー操作など複雑な動きが要る箇所のみ、React + Framer Motion（`motion`パッケージ）を「アイランド」として個別に読み込む（`client:visible` / `client:idle`）
 - ファーストビュー（ヒーロー）はLCP保護のためReactに依存しない素のCSSアニメーションのみとする
 - 共通のスクロール登場演出は `site/src/components/motion/Reveal.tsx`（`whileInView` + `useReducedMotion()`）を使う
-- `prefers-reduced-motion` はCSS側の `@media` とFramer Motion側の `useReducedMotion()` の両方で止める
+
+### `useReducedMotion()` でマークアップを分岐させない（重要）
+
+`useReducedMotion()` は**サーバーでは常に `false`** を返す。サーバーは端末の設定を知り得ないため。したがってこの値で描画結果を変えると、SSRとクライアントで別物を描くことになる。
+
+**やってはいけない例**（実際に事故った）:
+
+```tsx
+// ✗ 返す要素の種類を切り替える
+if (shouldReduceMotion) return <div className={className}>{children}</div>;
+return <motion.div initial={{ opacity: 0 }} ... />;
+```
+
+サーバーは必ず `motion.div` 側を描くので、HTMLには `style="opacity:0"` が焼き込まれる。低減設定の端末では、クライアントが素の `<div>` を返した結果**その `opacity:0` を消す担当が誰もいなくなり、セクションが丸ごと見えなくなった**。Reactはハイドレーション時にサーバー側のインラインstyleを消してくれない。
+
+`initial` だけを出し分ける形にしても、今度はハイドレーション不一致の警告が出る。
+
+**正しい形**: マークアップ（要素の種類・`initial`）は両者で完全に同一にし、`useReducedMotion()` は**描画結果に影響しないもの（`transition` の duration 等）にだけ**使う。低減設定時の見え方は下記のCSSで担保する。
+
+### 低減設定の保険は `global.css` に置く
+
+SSRでは必ず「アニメーション前」の状態がインラインstyleとして焼き込まれるため、それを打ち消すCSSが要る。
+
+```css
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: rotate(var(--reveal-rotate, 0deg)) !important;
+  }
+}
+```
+
+- **必ず `global.css` に置く。** コンポーネント側の `.css` に書くと `client:visible` のJSチャンクに同梱され、ハイドレーションが起きるまで読み込まれない。「ハイドレーション前でも効く保険」という目的を果たせなくなる（これも実際に踏んだ）
+- インラインstyleに勝つため `!important` が要る（作者スタイルシートの `!important` はインラインstyleより優先される）
+- `transform: none` にはしない。傾き（rotate）はアニメーションではなくコラージュの見た目そのものなので、低減設定でも維持する。最終角度は各コンポーネントが `--reveal-rotate` で渡す
+- 登場演出を持つコンポーネントには `data-reveal` を付ける（現在 `Reveal` と `PromoList`）

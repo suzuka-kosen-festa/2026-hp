@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import type { Entry } from "../../types/content";
 import PromoCard from "./PromoCard";
@@ -39,8 +40,12 @@ export default function PromoList({ entries, hrefFor = defaultHref, showHitArea 
         return (
           <motion.li
             key={entry.id}
+            data-reveal
             className="pl__item"
-            initial={shouldReduceMotion ? false : { opacity: 0, y: -14, scale: 0.96, rotate: tilt * 3 }}
+            style={{ "--reveal-rotate": `${tilt}deg` } as CSSProperties}
+            // initial はサーバーと完全に一致させる（低減設定で出し分けるとハイドレーション
+            // 不一致になる）。低減時の見え方は global.css の [data-reveal] が担保する
+            initial={{ opacity: 0, y: -14, scale: 0.96, rotate: tilt * 3 }}
             whileInView={{ opacity: 1, y: 0, scale: 1, rotate: tilt }}
             viewport={{ once: true, margin: "-40px" }}
             transition={
