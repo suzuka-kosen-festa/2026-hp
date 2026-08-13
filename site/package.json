@@ -9,6 +9,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
+    "check": "node scripts/check-motion-safety.mjs",
     "astro": "astro"
   },
   "dependencies": {

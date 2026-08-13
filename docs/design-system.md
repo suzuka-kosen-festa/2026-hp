@@ -188,3 +188,15 @@ SSRでは必ず「アニメーション前」の状態がインラインstyleと
 - インラインstyleに勝つため `!important` が要る（作者スタイルシートの `!important` はインラインstyleより優先される）
 - `transform: none` にはしない。傾き（rotate）はアニメーションではなくコラージュの見た目そのものなので、低減設定でも維持する。最終角度は各コンポーネントが `--reveal-rotate` で渡す
 - 登場演出を持つコンポーネントには `data-reveal` を付ける（現在 `Reveal` と `PromoList`）
+
+### CIで機械的に塞いでいること
+
+`site/scripts/check-motion-safety.mjs`（`npm run check`、CIで自動実行）が次を検査する。ブラウザ不要で数百ms。
+
+1. `useReducedMotion()` の値で**早期returnしてJSXを出し分けていない**こと
+2. `useReducedMotion()` の値が **`initial` / `animate` / `exit` / `variants` / `style` / `className`** に現れないこと（いずれもSSRされるHTMLに焼き付くため）
+3. `global.css` の `[data-reveal]` 保険ルールが**消えていない**こと
+
+`transition` での使用と、`useEffect` や イベントハンドラ内での使用は許可される（HTMLに焼き付かないため）。
+
+**この検査は既知の踏み方を塞ぐだけで、「低減設定で実際に見えるか」までは分からない。** 新しい登場演出を足したときは、ブラウザの低減設定を実際にONにして目視すること。
