@@ -50,7 +50,7 @@ export default function PromoList({ entries, hrefFor = defaultHref, showHitArea 
             }
           >
             <a className="pl__link" href={hrefFor(entry)} aria-label={`${entry.name} の詳細を見る`}>
-              <PromoCard entry={entry} compact more />
+              <PromoCard entry={entry} more />
             </a>
           </motion.li>
         );

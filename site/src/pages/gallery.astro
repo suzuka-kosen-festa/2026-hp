@@ -10,15 +10,11 @@ import NewsItem from "../components/ui/NewsItem.astro";
 import Divider from "../components/ui/Divider.astro";
 import Star from "../components/ui/Star.astro";
 import Reveal from "../components/motion/Reveal";
-import PromoStack from "../components/motion/PromoStack";
 import PromoList from "../components/motion/PromoList";
-import PromoCarousel from "../components/motion/PromoCarousel";
 import { getFeaturedEntries } from "../lib/entries";
 import { entries } from "../lib/loadEntries";
 
 const featured = getFeaturedEntries(entries);
-/** PromoStack.tsx の LAYERS[1].x と揃えること（覗いている端の幅＝edge方式の実質タップ幅） */
-const PEEK_PX = 16;
 ---
 
 <BaseLayout title="部品ギャラリー（開発用）" noindex>
@@ -126,11 +122,16 @@ const PEEK_PX = 16;
     </div>
 
     <div class="part">
-      <h2>複数広告の切り替え方式の比較（A/B/C/D）</h2>
+      <h2>広告一覧（PromoList）</h2>
       <p class="sub">
-        広告（featured企画）が2件以上になったときの見せ方の候補。カードの見た目は4案とも共通で、<strong>操作方法だけ</strong>が違います。
-        <strong>「タップ領域を表示」を押すと押せる範囲が赤破線で出る</strong>ので、指で押せるかを実機で確かめてください。
+        featured企画の一覧。home の PICK UP 枠で使用。行全体が詳細ページへのリンクで、タップ領域は行の全面。
+        <strong>home専用ではなくエントリ配列を受け取るだけなので、他ページの広告枠にも流用できる</strong>。
+        <strong>「タップ領域を表示」を押すと押せる範囲が赤破線で出ます</strong>。
         参考値: WCAG 2.5.8(AA)の最小は24×24px、Apple HIGの推奨は44×44px。
+      </p>
+      <p class="sub">
+        切り替えUI（重ねてタブで選ぶ・カルーセル）も検討したが、広告は多くても4件程度のため畳まないのが最善と判断した。
+        経緯は requirements.md §3.9 を参照。
       </p>
 
       <label class="hit-toggle">
@@ -138,66 +139,22 @@ const PEEK_PX = 16;
         タップ領域を表示
       </label>
 
-      <h3>A: 覗いている端を直接タップ</h3>
-      <p class="sub">
-        背面カードそのものがボタン。ただし前面カードに覆われているので、実際に押せるのは右側に覗いた
-        <strong>約{PEEK_PX}px幅の帯だけ</strong>になる。
-        トレードオフ: 見た目が一番シンプルで1手で切り替わるが、<strong>24pxにも届かず指では狙えない</strong>。
-      </p>
-      <div class="promo-slot" data-promo>
-        <PromoStack client:visible entries={featured} control="edge" />
-      </div>
-
-      <h3>B: スタックは見せるだけ、選択はテープタブ</h3>
-      <p class="sub">
-        重なりは「まだ他にもある」を伝える役だけを担い、切り替えは下のタブで行う。タブは最小44px確保。
-        トレードオフ: 1手で切り替わり企画名も読めるが、<strong>件数が増えるとタブが折り返して縦に伸びる</strong>。
-      </p>
-      <div class="promo-slot" data-promo>
-        <PromoStack client:visible entries={featured} control="tabs" />
-      </div>
-
-      <h3>C: 全件を常時表示（採用）</h3>
-      <p class="sub">
-        広告は多くても4件程度と分かったため、そもそも畳まない。Wallet型の弱点だった
-        <strong>「2手かかる」「展開すると畳んだ状態より情報が減る」が両方消える</strong>。
-        行全体が詳細ページへのリンクなので、タップ領域は行の全面。カード内にCTAリンクを置かないため
-        リンクの入れ子にもならない。<strong>home専用ではなくエントリ配列を受け取るだけなので、他ページの広告枠にも流用できる</strong>。
-      </p>
       <div class="promo-slot" data-promo>
         <PromoList client:visible entries={featured} />
       </div>
 
-      <h3>D: カルーセル（横スワイプ＋ドット）</h3>
-      <p class="sub">
-        横スクロールはCSSの scroll-snap に任せているので、指の慣性・キーボード・スクロールバーがネイティブのまま効く。
-        両隣が覗いているので「まだある」ことは見た目で分かる。矢印とドットはどちらも44×44px。
-        トレードオフ: <strong>1手で次に行ける</strong>反面、コラージュの「重ね貼り」感は薄く、横スクロール領域が縦スクロールと競合しやすい。
-      </p>
-      <div class="promo-slot promo-slot--wide" data-promo>
-        <PromoCarousel client:visible entries={featured} />
-      </div>
-
       <h3>参考: 広告が1件のとき</h3>
-      <p class="sub">重なりも切り替えUIも出さず、現行バナーと同じ1枚として表示される。</p>
       <div class="promo-slot" data-promo>
-        <PromoStack client:visible entries={featured.slice(0, 1)} control="tabs" />
+        <PromoList client:visible entries={featured.slice(0, 1)} />
       </div>
     </div>
   </section>
 
   <script>
-    // タップ領域の可視化トグル（A/B/C/D すべての候補に一括適用）
-    const HIT_TARGETS: [string, string][] = [
-      [".ps", "ps--hit"],
-      [".pl", "pl--hit"],
-      [".pcar", "pcar--hit"],
-    ];
+    // タップ領域の可視化トグル
     document.getElementById("hit-toggle")?.addEventListener("change", (e) => {
       const on = (e.target as HTMLInputElement).checked;
-      for (const [selector, modifier] of HIT_TARGETS) {
-        document.querySelectorAll(selector).forEach((el) => el.classList.toggle(modifier, on));
-      }
+      document.querySelectorAll(".pl").forEach((el) => el.classList.toggle("pl--hit", on));
     });
   </script>
 
@@ -230,13 +187,9 @@ const PEEK_PX = 16;
       font-size: 13px;
       font-weight: 700;
     }
-    /* 背面カードが右にはみ出すので、比較用スロットは余白を確保して切らずに見せる */
+    /* 回転したカードのハードシャドウが切れないよう余白を確保する */
     .promo-slot {
-      padding: 8px 40px 8px 8px;
-    }
-    /* カルーセルは自前で左右に覗き代を持つので、右の余白は要らない */
-    .promo-slot--wide {
-      padding: 8px 0;
+      padding: 8px;
     }
     .note {
       font-size: 13px;
