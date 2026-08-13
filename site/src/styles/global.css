@@ -124,3 +124,28 @@ button {
   white-space: nowrap;
   border: 0;
 }
+
+/* スクロール登場演出（Reveal / PromoList）の、アニメーション低減設定に対する保険。
+ *
+ * サーバーは prefers-reduced-motion を知り得ないため、SSRでは必ず「アニメーション前」の
+ * 状態（opacity:0 + ずらし）がインラインstyleとしてHTMLに焼き込まれる。
+ * 低減設定の端末ではJS側がその状態を解除しそこねると内容が永久に見えなくなるため、
+ * CSSでも打ち消す。
+ *
+ * この指定は必ずここ（global.css）に置くこと。コンポーネント側の .css に書くと
+ * client:visible のJSチャンクに同梱され、ハイドレーションが起きるまで読み込まれない。
+ * ＝「ハイドレーション前でも効く保険」という目的を果たせない。
+ *
+ * インラインstyleに勝つため !important が要る（作者スタイルシートの !important は
+ * インラインstyleより優先される）。
+ *
+ * transform は none にしない。傾き（rotate）はアニメーションではなくコラージュの
+ * 見た目そのものなので低減設定でも維持する。最終角度は各コンポーネントが
+ * --reveal-rotate で渡す。
+ */
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: rotate(var(--reveal-rotate, 0deg)) !important;
+  }
+}

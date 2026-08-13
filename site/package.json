@@ -10,6 +10,8 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
+    "check": "node scripts/check-motion-safety.mjs",
+    "test:e2e": "playwright test",
     "astro": "astro"
   },
   "dependencies": {
@@ -24,5 +26,8 @@
     "motion": "^12.42.2",
     "react": "^19.2.7",
     "react-dom": "^19.2.7"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.62.1"
   }
 }

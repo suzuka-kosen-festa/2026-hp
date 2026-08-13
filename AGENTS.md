@@ -28,6 +28,8 @@
 - ちぎれフィルタ（feTurbulence）は `::before` 背景レイヤーのみに適用し、**文字は絶対に歪ませない**
 - テープ・チップは**不透明**（半透明は色が薄くなるためNG — フィードバック済み）
 - コンテンツ（booth / news / timetable / sponsors）はデータファイルに分離し、非エンジニアでも更新できる形にする
+- **ページを追加したら `site/tests/<ページ名>.spec.ts`（2行）と `affected-pages.mjs` の `PAGE_RULES` を足す**。CIは変更されたページのE2Eだけを走らせるので、登録しないと自分のページが一生検査されない
+- **アニメーションを追加したら `npm run check` を通す**（CIでも自動実行）。`useReducedMotion()` をマークアップに影響する形で使うと、低減設定の端末で要素が丸ごと不可視になる事故が起きる。詳細は docs/design-system.md §7
 - コミットはユーザーの指示があったときのみ
 - **Nodeは `.node-version`（24.19.0）に固定**。CIも同ファイルを参照するので、バージョンを上げるときはこのファイルだけを変える
 - **npmコマンドは `site/` にcdしてから実行する**。ルートから `--prefix site` で叩くと `site/.npmrc` が読まれず `engine-strict` が効かない
