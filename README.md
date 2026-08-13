@@ -15,13 +15,30 @@
 
 ## 開発環境の始め方
 
+**Node のバージョンは `.node-version`（24.19.0）に固定**しています。バージョン管理ツール（fnm / nodenv / mise / Volta 等）を使っていれば `cd` した時点で自動で切り替わります。nvm の場合は次のとおり。
+
+```sh
+nvm install $(cat .node-version) && nvm use $(cat .node-version)
+```
+
 ```sh
 cd site
-npm install
+npm ci
 npm run dev
 ```
 
 `http://localhost:4321` で確認できます。
+
+### `npm install` と `npm ci` の使い分け
+
+| 目的 | コマンド |
+|---|---|
+| クローン直後・ブランチ切替後の環境構築 | `npm ci` |
+| パッケージを**追加・更新する**とき | `npm install <pkg>` |
+
+**依存を変えないときに `npm install` を使わないでください。** `npm install` は `package-lock.json` を書き換えるため、内容が同じでも npm のバージョン差でフォーマットの揺れが差分として出ます。`npm ci` はロックファイルを読むだけで書き換えないので、この事故が起きません。
+
+Node のバージョンが合っていない場合は `engine-strict` によりインストール時にエラーで止まります（黙ってロックが書き換わるのを防ぐため）。
 
 ## デプロイ・プレビュー
 
