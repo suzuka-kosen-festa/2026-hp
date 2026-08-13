@@ -1,6 +1,8 @@
 ---
-// ブース一覧ページ。実装手順1: タブ切り替えUIなしで「出店」タブ相当を静的に並べるだけの骨組み。
+// ブース一覧ページ。
 import BaseLayout from "../layouts/BaseLayout.astro";
+import Card from "../components/ui/Card.astro";
+import Chip from "../components/ui/Chip.astro";
 import { entries } from "../lib/loadEntries";
 import { getByCategory } from "../lib/entries";
 import site from "../data/site.json";
@@ -12,22 +14,37 @@ const boothEntries = getByCategory(entries, "出店");
   <section class="booth">
     <h1 class="page-title">BOOTH</h1>
 
-    <ul class="list">
+    <ul class="grid">
       {
-        boothEntries.map((entry) => (
-          <li class="item">
-            <p class="name">{entry.name}</p>
-            {entry.group && <p class="group">{entry.group}</p>}
-            {entry.summary && <p class="summary">{entry.summary}</p>}
-            {entry.tags.length > 0 && (
-              <ul class="tags">
-                {entry.tags.map((tag) => (
-                  <li>{tag}</li>
-                ))}
-              </ul>
-            )}
-            {entry.location && <p class="location">{entry.location}</p>}
-            <a href={`/entry/${entry.id}/`}>view more →</a>
+        boothEntries.map((entry, i) => (
+          <li>
+            <a class="card-link" href={`/entry/${entry.id}/`}>
+              <Card rotate={i % 2 === 0 ? -0.8 : 0.9} attach="none" class="booth-card">
+                <div class="photo">
+                  {entry.image ? (
+                    <img src={entry.image} alt="" loading="lazy" />
+                  ) : (
+                    <span class="no-image num">NO IMAGE</span>
+                  )}
+                </div>
+                <div class="body">
+                  <p class="name">{entry.name}</p>
+                  {entry.group && <p class="group">{entry.group}</p>}
+                  {entry.summary && <p class="summary">{entry.summary}</p>}
+                  {entry.tags.length > 0 && (
+                    <ul class="tags">
+                      {entry.tags.map((tag, ti) => (
+                        <li>
+                          <Chip color={ti % 2 === 0 ? "red" : "blue"}>{tag}</Chip>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                  {entry.location && <p class="location">{entry.location}</p>}
+                  <span class="more">view more →</span>
+                </div>
+              </Card>
+            </a>
           </li>
         ))
       }
@@ -48,31 +65,63 @@ const boothEntries = getByCategory(entries, "出店");
     margin-bottom: 20px;
   }
 
-  .list {
+  .grid {
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 20px;
   }
 
-  .item {
-    border: 2px solid var(--ink);
-    padding: 12px 14px;
+  .card-link {
+    display: block;
+  }
+
+  .booth :global(.booth-card) {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .photo {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 16 / 9;
+    background: #f3ebd9;
+    border-bottom: 2px solid var(--ink);
+  }
+  .photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .no-image {
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    color: #999;
+  }
+
+  .body {
+    padding: 14px 16px 16px;
   }
 
   .name {
     font-weight: 800;
+    font-size: 15.5px;
   }
 
   .group {
-    font-size: 13px;
+    font-size: 12.5px;
     color: var(--blue);
     margin-top: 4px;
   }
 
   .summary {
     font-size: 13px;
-    margin-top: 6px;
+    line-height: 1.6;
+    margin-top: 8px;
   }
 
   .tags {
@@ -80,26 +129,32 @@ const boothEntries = getByCategory(entries, "出店");
     flex-wrap: wrap;
     gap: 6px;
     list-style: none;
-    margin-top: 8px;
-    font-size: 11px;
-  }
-
-  .tags li {
-    border: 1px solid var(--ink);
-    padding: 2px 8px;
+    margin-top: 10px;
   }
 
   .location {
     font-size: 12px;
-    margin-top: 6px;
+    margin-top: 8px;
     color: #555;
   }
 
-  .item a {
+  .more {
     display: inline-block;
     margin-top: 10px;
     font-size: 13px;
     font-weight: 700;
     text-decoration: underline;
+  }
+
+  @media (min-width: 900px) {
+    .booth {
+      max-width: var(--content-wide);
+      padding: 40px 24px 96px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
   }
 </style>
