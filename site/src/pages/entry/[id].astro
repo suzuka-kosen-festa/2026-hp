@@ -9,6 +9,7 @@ import Chip from "../../components/ui/Chip.astro";
 import Button from "../../components/ui/Button.astro";
 import Star from "../../components/ui/Star.astro";
 import { entries } from "../../lib/loadEntries";
+import { dayColorClass, formatDayLabel } from "../../lib/eventDate";
 import type { Day, Entry, Occurrence } from "../../types/content";
 import site from "../../data/site.json";
 
@@ -21,11 +22,6 @@ interface Props {
 }
 
 const { entry } = Astro.props;
-
-const DAY_LABEL: Record<Day, string> = {
-  day1: "10/31 SAT",
-  day2: "11/1 SUN",
-};
 
 /** 開催回を日ごとにまとめる。同じ日に複数公演ある企画（化学マジック等）を1行に畳むため */
 function groupByDay(occurrences: Occurrence[]) {
@@ -70,7 +66,7 @@ const displayTags = entry.tags.filter((tag) => tag !== "day1" && tag !== "day2")
     <div class="photo">
       {
         entry.image ? (
-          <img src={entry.image} alt="" loading="lazy" />
+          <img src={entry.image} alt="" loading="eager" fetchpriority="high" />
         ) : (
           <span class="no-image num">NO IMAGE</span>
         )
@@ -92,7 +88,7 @@ const displayTags = entry.tags.filter((tag) => tag !== "day1" && tag !== "day2")
                 <ul class="days">
                   {dayGroups.map((group) => (
                     <li>
-                      <span class:list={["day", "num", group.day]}>{DAY_LABEL[group.day]}</span>
+                      <span class:list={["day", "num", dayColorClass(group.day)]}>{formatDayLabel(group.day)}</span>
                       <span class="times">
                         {group.items.map((o) => (
                           <span class="slot">
@@ -159,7 +155,7 @@ const displayTags = entry.tags.filter((tag) => tag !== "day1" && tag !== "day2")
 
 <style>
   .entry {
-    max-width: 520px;
+    max-width: var(--content-sp);
     margin: 0 auto;
     padding: 24px 20px 64px;
   }
@@ -279,11 +275,13 @@ const displayTags = entry.tags.filter((tag) => tag !== "day1" && tag !== "day2")
     font-size: 17px;
   }
 
-  .day.day1 {
+  /* ポスター準拠: SAT=青 / SUN=赤。day1/day2ではなく実際の曜日で決める
+     （site.json の日付を変えても色がずれない） */
+  .day.sat {
     color: var(--blue);
   }
 
-  .day.day2 {
+  .day.sun {
     color: var(--red);
   }
 

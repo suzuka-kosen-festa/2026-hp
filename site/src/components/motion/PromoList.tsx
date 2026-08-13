@@ -1,4 +1,3 @@
-import type { CSSProperties } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import type { Entry } from "../../types/content";
 import PromoCard from "./PromoCard";
@@ -49,7 +48,6 @@ export default function PromoList({ entries, hrefFor = defaultHref, showHitArea 
                 ? { duration: 0 }
                 : { type: "spring", stiffness: 320, damping: 28, delay: i * 0.06 }
             }
-            style={{ rotate: `${tilt}deg` } as CSSProperties}
           >
             <a className="pl__link" href={hrefFor(entry)} aria-label={`${entry.name} の詳細を見る`}>
               <PromoCard entry={entry} compact more />

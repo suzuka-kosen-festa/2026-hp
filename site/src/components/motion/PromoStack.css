@@ -1,5 +1,5 @@
 .ps {
-  max-width: 520px;
+  max-width: var(--content-sp);
   margin-inline: auto;
 }
 

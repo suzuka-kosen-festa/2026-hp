@@ -4,7 +4,7 @@
      どのスライドも中央スナップ位置にぴったり止まる（端の1枚も含めて） */
   --peek: 30px;
   --gap: 14px;
-  max-width: 520px;
+  max-width: var(--content-sp);
   margin-inline: auto;
 }
 
