@@ -1,0 +1,105 @@
+---
+// ブース一覧ページ。実装手順1: タブ切り替えUIなしで「出店」タブ相当を静的に並べるだけの骨組み。
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { entries } from "../lib/loadEntries";
+import { getByCategory } from "../lib/entries";
+import site from "../data/site.json";
+
+const boothEntries = getByCategory(entries, "出店");
+---
+
+<BaseLayout title={`BOOTH | ${site.eventName}`} description="出店・学科展示・イベント・ライブの一覧">
+  <section class="booth">
+    <h1 class="page-title">BOOTH</h1>
+
+    <ul class="list">
+      {
+        boothEntries.map((entry) => (
+          <li class="item">
+            <p class="name">{entry.name}</p>
+            {entry.group && <p class="group">{entry.group}</p>}
+            {entry.summary && <p class="summary">{entry.summary}</p>}
+            {entry.tags.length > 0 && (
+              <ul class="tags">
+                {entry.tags.map((tag) => (
+                  <li>{tag}</li>
+                ))}
+              </ul>
+            )}
+            {entry.location && <p class="location">{entry.location}</p>}
+            <a href={`/entry/${entry.id}/`}>view more →</a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</BaseLayout>
+
+<style>
+  .booth {
+    max-width: var(--content-sp);
+    margin: 0 auto;
+    padding: 24px 20px 64px;
+  }
+
+  .page-title {
+    font-size: 22px;
+    font-weight: 800;
+    margin-bottom: 20px;
+  }
+
+  .list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .item {
+    border: 2px solid var(--ink);
+    padding: 12px 14px;
+  }
+
+  .name {
+    font-weight: 800;
+  }
+
+  .group {
+    font-size: 13px;
+    color: var(--blue);
+    margin-top: 4px;
+  }
+
+  .summary {
+    font-size: 13px;
+    margin-top: 6px;
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    list-style: none;
+    margin-top: 8px;
+    font-size: 11px;
+  }
+
+  .tags li {
+    border: 1px solid var(--ink);
+    padding: 2px 8px;
+  }
+
+  .location {
+    font-size: 12px;
+    margin-top: 6px;
+    color: #555;
+  }
+
+  .item a {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: underline;
+  }
+</style>
