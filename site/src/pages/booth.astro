@@ -1,54 +1,64 @@
 ---
-// ブース一覧ページ。
+// ブース一覧ページ
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Card from "../components/ui/Card.astro";
 import Chip from "../components/ui/Chip.astro";
 import { entries } from "../lib/loadEntries";
 import { getByCategory } from "../lib/entries";
+import type { Category } from "../types/content";
 import site from "../data/site.json";
 
-const boothEntries = getByCategory(entries, "出店");
+const CATEGORIES: Category[] = ["出店", "学科展示", "イベント", "ライブ"];
+const sections = CATEGORIES.map((category) => ({
+  category,
+  items: getByCategory(entries, category),
+}));
 ---
 
 <BaseLayout title={`BOOTH | ${site.eventName}`} description="出店・学科展示・イベント・ライブの一覧">
   <section class="booth">
     <h1 class="page-title">BOOTH</h1>
 
-    <ul class="grid">
-      {
-        boothEntries.map((entry, i) => (
-          <li>
-            <a class="card-link" href={`/entry/${entry.id}/`}>
-              <Card rotate={i % 2 === 0 ? -0.8 : 0.9} attach="none" class="booth-card">
-                <div class="photo">
-                  {entry.image ? (
-                    <img src={entry.image} alt="" loading="lazy" />
-                  ) : (
-                    <span class="no-image num">NO IMAGE</span>
-                  )}
-                </div>
-                <div class="body">
-                  <p class="name">{entry.name}</p>
-                  {entry.group && <p class="group">{entry.group}</p>}
-                  {entry.summary && <p class="summary">{entry.summary}</p>}
-                  {entry.tags.length > 0 && (
-                    <ul class="tags">
-                      {entry.tags.map((tag, ti) => (
-                        <li>
-                          <Chip color={ti % 2 === 0 ? "red" : "blue"}>{tag}</Chip>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                  {entry.location && <p class="location">{entry.location}</p>}
-                  <span class="more">view more →</span>
-                </div>
-              </Card>
-            </a>
-          </li>
-        ))
-      }
-    </ul>
+    {
+      sections.map((section) => (
+        <div class="tab-section">
+          <h2 class="tab-title">{section.category}</h2>
+          <ul class="grid">
+            {section.items.map((entry, i) => (
+              <li>
+                <a class="card-link" href={`/entry/${entry.id}/`}>
+                  <Card rotate={i % 2 === 0 ? -0.8 : 0.9} attach="none" class="booth-card">
+                    <div class="photo">
+                      {entry.image ? (
+                        <img src={entry.image} alt="" loading="lazy" />
+                      ) : (
+                        <span class="no-image num">NO IMAGE</span>
+                      )}
+                    </div>
+                    <div class="body">
+                      <p class="name">{entry.name}</p>
+                      {entry.group && <p class="group">{entry.group}</p>}
+                      {entry.summary && <p class="summary">{entry.summary}</p>}
+                      {entry.tags.length > 0 && (
+                        <ul class="tags">
+                          {entry.tags.map((tag, ti) => (
+                            <li>
+                              <Chip color={ti % 2 === 0 ? "red" : "blue"}>{tag}</Chip>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                      {entry.location && <p class="location">{entry.location}</p>}
+                      <span class="more">view more →</span>
+                    </div>
+                  </Card>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))
+    }
   </section>
 </BaseLayout>
 
@@ -63,6 +73,18 @@ const boothEntries = getByCategory(entries, "出店");
     font-size: 22px;
     font-weight: 800;
     margin-bottom: 20px;
+  }
+
+  .tab-section + .tab-section {
+    margin-top: 40px;
+  }
+
+  .tab-title {
+    font-size: 15px;
+    font-weight: 800;
+    padding-bottom: 8px;
+    margin-bottom: 16px;
+    border-bottom: 2px solid var(--ink);
   }
 
   .grid {
