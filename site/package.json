@@ -3,12 +3,15 @@
   "type": "module",
   "version": "0.0.1",
   "engines": {
-    "node": ">=22.12.0"
+    "node": ">=24.0.0 <25.0.0",
+    "npm": ">=11.0.0 <12.0.0"
   },
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
+    "check": "node scripts/check-motion-safety.mjs",
+    "test:e2e": "playwright test",
     "astro": "astro"
   },
   "dependencies": {
@@ -23,5 +26,8 @@
     "motion": "^12.42.2",
     "react": "^19.2.7",
     "react-dom": "^19.2.7"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.62.1"
   }
 }
