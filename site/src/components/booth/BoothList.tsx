@@ -2,10 +2,23 @@ import { useEffect, useRef, useState } from "react";
 import TabTagFilter, { type TabConfig } from "../filter/TabTagFilter";
 import { getByCategory, getPermanentEntries } from "../../lib/entries";
 import { buildFilterUrl, parseFilterParams } from "../../lib/deepLink";
-import type { Category, Entry } from "../../types/content";
+import { dayColorClass, formatDayLabel } from "../../lib/eventDate";
+import type { Category, Day, Entry, Occurrence } from "../../types/content";
 
 interface Props {
   entries: Entry[];
+}
+
+function formatOccurrenceTimes(occurrences: Occurrence[]) {
+  const order: Day[] = ["day1", "day2"];
+  return order
+    .map((day) => {
+      const items = occurrences.filter((o) => o.day === day && o.start_time);
+      if (items.length === 0) return null;
+      const times = items.map((o) => (o.end_time ? `${o.start_time}-${o.end_time}` : `${o.start_time}〜`)).join("・");
+      return { day, times };
+    })
+    .filter((g): g is { day: Day; times: string } => g !== null);
 }
 
 // タブ・タグの定義。タブごとのタグセットに対応
@@ -75,8 +88,7 @@ export default function BoothList({ entries }: Props) {
   }, [activeTab, selectedTags]);
 
   const tabEntries = getByCategory(entries, activeTab as Category);
-  // 常設企画(isPermanent)はタグ絞り込みの対象から外し、常設セクションに固定表示する
-  const permanentEntries = getPermanentEntries(tabEntries);
+  const permanentEntries = getPermanentEntries(entries);
   const regularEntries = tabEntries.filter((entry) => !entry.isPermanent);
   const filtered =
     selectedTags.length === 0
@@ -85,14 +97,6 @@ export default function BoothList({ entries }: Props) {
 
   return (
     <div className="booth-list" id="list">
-      <TabTagFilter
-        tabs={TABS}
-        activeTab={activeTab}
-        onTabChange={setActiveTab}
-        selectedTags={selectedTags}
-        onTagsChange={setSelectedTags}
-      />
-
       {permanentEntries.length > 0 && (
         <div className="bl-permanent">
           <h2 className="bl-permanent-title">常設</h2>
@@ -125,6 +129,14 @@ export default function BoothList({ entries }: Props) {
         </div>
       )}
 
+      <TabTagFilter
+        tabs={TABS}
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
+        selectedTags={selectedTags}
+        onTagsChange={setSelectedTags}
+      />
+
       <ul className="bl-grid">
         {filtered.map((entry, i) => (
           <li key={entry.id}>
@@ -146,6 +158,16 @@ export default function BoothList({ entries }: Props) {
                       {entry.tags.map((tag, ti) => (
                         <li key={tag}>
                           <span className={`bl-chip ${ti % 2 === 0 ? "red" : "blue"}`}>{tag}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                  {entry.occurrences.length > 0 && (
+                    <ul className="bl-times">
+                      {formatOccurrenceTimes(entry.occurrences).map((g) => (
+                        <li key={g.day}>
+                          <span className={`bl-day num ${dayColorClass(g.day) ?? ""}`}>{formatDayLabel(g.day)}</span>
+                          <span className="bl-time num">{g.times}</span>
                         </li>
                       ))}
                     </ul>
@@ -179,6 +201,7 @@ export default function BoothList({ entries }: Props) {
         }
         .bl-permanent {
           margin-top: 20px;
+          margin-bottom: 20px;
         }
         .bl-permanent-title {
           display: inline-block;
@@ -236,6 +259,11 @@ export default function BoothList({ entries }: Props) {
           font-size: 12.5px;
           line-height: 1.6;
           margin-top: 4px;
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 2;
+          line-clamp: 2;
+          overflow: hidden;
         }
         .bl-permanent-cta {
           position: relative;
@@ -301,6 +329,11 @@ export default function BoothList({ entries }: Props) {
           font-size: 13px;
           line-height: 1.6;
           margin-top: 8px;
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 2;
+          line-clamp: 2;
+          overflow: hidden;
         }
         .bl-tags {
           display: flex;
@@ -330,6 +363,33 @@ export default function BoothList({ entries }: Props) {
         }
         .bl-chip.blue::before {
           background: var(--blue);
+        }
+        .bl-times {
+          list-style: none;
+          display: flex;
+          flex-direction: column;
+          gap: 2px;
+          margin-top: 10px;
+        }
+        .bl-times li {
+          display: flex;
+          flex-wrap: wrap;
+          align-items: baseline;
+          gap: 6px;
+          font-size: 12px;
+        }
+        .bl-day {
+          font-size: 13px;
+        }
+        /* 曜日色はポスター準拠(SAT=青/SUN=赤)。entry/[id].astroの.dayと同じ規則 */
+        .bl-day.sat {
+          color: var(--blue);
+        }
+        .bl-day.sun {
+          color: var(--red);
+        }
+        .bl-time {
+          color: #444;
         }
         .bl-location {
           font-size: 12px;
