@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import TabTagFilter, { type TabConfig } from "../filter/TabTagFilter";
-import { getByCategory } from "../../lib/entries";
+import { getByCategory, getPermanentEntries } from "../../lib/entries";
 import { buildFilterUrl, parseFilterParams } from "../../lib/deepLink";
 import type { Category, Entry } from "../../types/content";
 
@@ -38,7 +38,6 @@ const TABS: TabConfig[] = [
     tags: [
       { id: "day1", label: "day1" },
       { id: "day2", label: "day2" },
-      { id: "常設", label: "常設" },
     ],
   },
   {
@@ -65,7 +64,7 @@ export default function BoothList({ entries }: Props) {
     if (tags.length > 0) setSelectedTags(tags);
   }, []);
 
-  // タブ・タグの選択をURLに反映する（共有・ブラウザ操作向け。ページ遷移は起こさない）
+  // タブ・タグの選択をURLに反映する
   useEffect(() => {
     if (isFirstSync.current) {
       isFirstSync.current = false;
@@ -76,8 +75,13 @@ export default function BoothList({ entries }: Props) {
   }, [activeTab, selectedTags]);
 
   const tabEntries = getByCategory(entries, activeTab as Category);
+  // 常設企画(isPermanent)はタグ絞り込みの対象から外し、常設セクションに固定表示する
+  const permanentEntries = getPermanentEntries(tabEntries);
+  const regularEntries = tabEntries.filter((entry) => !entry.isPermanent);
   const filtered =
-    selectedTags.length === 0 ? tabEntries : tabEntries.filter((entry) => entry.tags.some((tag) => selectedTags.includes(tag)));
+    selectedTags.length === 0
+      ? regularEntries
+      : regularEntries.filter((entry) => entry.tags.some((tag) => selectedTags.includes(tag)));
 
   return (
     <div className="booth-list" id="list">
@@ -88,6 +92,38 @@ export default function BoothList({ entries }: Props) {
         selectedTags={selectedTags}
         onTagsChange={setSelectedTags}
       />
+
+      {permanentEntries.length > 0 && (
+        <div className="bl-permanent">
+          <h2 className="bl-permanent-title">常設</h2>
+          <ul className="bl-permanent-list">
+            {permanentEntries.map((entry) => (
+              <li key={entry.id} className="bl-permanent-card">
+                <div className="bl-permanent-photo">
+                  {entry.image ? (
+                    <img src={entry.image} alt="" loading="lazy" />
+                  ) : (
+                    <span className="bl-no-image num">NO IMAGE</span>
+                  )}
+                </div>
+                <div className="bl-permanent-body">
+                  <a className="bl-permanent-link" href={`/entry/${entry.id}/`}>
+                    <p className="bl-permanent-name">{entry.name}</p>
+                    {(entry.summary ?? entry.description) && (
+                      <p className="bl-permanent-summary">{entry.summary ?? entry.description}</p>
+                    )}
+                  </a>
+                  {entry.link && (
+                    <a className="bl-permanent-cta" href={entry.link}>
+                      やってみる →
+                    </a>
+                  )}
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       <ul className="bl-grid">
         {filtered.map((entry, i) => (
@@ -140,6 +176,83 @@ export default function BoothList({ entries }: Props) {
           color: #666;
           padding: 24px 0;
           text-align: center;
+        }
+        .bl-permanent {
+          margin-top: 20px;
+        }
+        .bl-permanent-title {
+          display: inline-block;
+          font-size: 12px;
+          font-weight: 800;
+          color: #fff;
+          background: var(--yellow);
+          padding: 3px 12px;
+          margin-bottom: 10px;
+        }
+        .bl-permanent-list {
+          list-style: none;
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+        }
+        .bl-permanent-card {
+          display: flex;
+          background: #fff;
+          border: 2px solid var(--ink);
+          box-shadow: 5px 5px 0 var(--ink);
+          overflow: hidden;
+        }
+        .bl-permanent-photo {
+          position: relative;
+          display: flex;
+          flex: 0 0 110px;
+          align-items: center;
+          justify-content: center;
+          background: #f3ebd9;
+          border-right: 2px solid var(--ink);
+        }
+        .bl-permanent-photo img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+        .bl-permanent-body {
+          flex: 1;
+          min-width: 0;
+          padding: 12px 14px;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 8px;
+        }
+        .bl-permanent-link {
+          display: block;
+        }
+        .bl-permanent-name {
+          font-weight: 800;
+          font-size: 15px;
+        }
+        .bl-permanent-summary {
+          font-size: 12.5px;
+          line-height: 1.6;
+          margin-top: 4px;
+        }
+        .bl-permanent-cta {
+          position: relative;
+          z-index: 0;
+          display: inline-block;
+          color: var(--ink);
+          font-weight: 800;
+          font-size: 12.5px;
+          padding: 8px 18px;
+        }
+        .bl-permanent-cta::before {
+          content: "";
+          position: absolute;
+          inset: 0;
+          z-index: -1;
+          background: var(--yellow);
+          filter: url(#tape-edge);
         }
         .bl-card-link {
           display: block;
