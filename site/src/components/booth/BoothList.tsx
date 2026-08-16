@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import TabTagFilter, { type TabConfig } from "../filter/TabTagFilter";
 import { getByCategory } from "../../lib/entries";
+import { buildFilterUrl, parseFilterParams } from "../../lib/deepLink";
 import type { Category, Entry } from "../../types/content";
 
 interface Props {
@@ -55,13 +56,31 @@ const TABS: TabConfig[] = [
 export default function BoothList({ entries }: Props) {
   const [activeTab, setActiveTab] = useState<string>(TABS[0].id);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const isFirstSync = useRef(true);
+
+  // マウント後にURL(?tab=&tags=)から初期状態を復元する。
+  useEffect(() => {
+    const { tab, tags } = parseFilterParams(window.location.search);
+    if (tab && TABS.some((t) => t.id === tab)) setActiveTab(tab);
+    if (tags.length > 0) setSelectedTags(tags);
+  }, []);
+
+  // タブ・タグの選択をURLに反映する（共有・ブラウザ操作向け。ページ遷移は起こさない）
+  useEffect(() => {
+    if (isFirstSync.current) {
+      isFirstSync.current = false;
+      return;
+    }
+    const url = buildFilterUrl("/booth/", { tab: activeTab, tags: selectedTags });
+    window.history.replaceState(null, "", url);
+  }, [activeTab, selectedTags]);
 
   const tabEntries = getByCategory(entries, activeTab as Category);
   const filtered =
     selectedTags.length === 0 ? tabEntries : tabEntries.filter((entry) => entry.tags.some((tag) => selectedTags.includes(tag)));
 
   return (
-    <div className="booth-list">
+    <div className="booth-list" id="list">
       <TabTagFilter
         tabs={TABS}
         activeTab={activeTab}
