@@ -59,12 +59,12 @@ const bodyLines = item.body?.split("\n") ?? [];
       {
         bodyLines.map((line) => {
         
-          if (line.startsWith("#### ")) {
+          {/*if (line.startsWith("#### ")) {
            return <Tape color="red" rotate={1.5} as="p">{line.slice(4)}</Tape>
-          }
+          }*/}
 
           if (line.startsWith("### ")) {
-           return <Tape color="blue" rotate={-1.5} as="p">{line.slice(4)}</Tape>
+            return <h3>{line.slice(4)}</h3>;
           }
 
           if (line.startsWith("## ")) {
@@ -92,7 +92,7 @@ const bodyLines = item.body?.split("\n") ?? [];
           if (line.startsWith("> ")) {
             return (
               <blockquote>
-                 <Card rotate={1} texture attach="pin" cornerColor="yellow">
+                <Card rotate={1} texture attach="pin" cornerColor="yellow">
                     <p style="font-weight:800;">{line.slice(2)}</p>
                 </Card>
               </blockquote>
@@ -154,8 +154,8 @@ const bodyLines = item.body?.split("\n") ?? [];
     font-size: 12px;
   }
 
-  .title {
-    line-height: 1.8;
+  .head h1 {
+    font-size: 24px;
   }
 
   @media (min-width: 900px) {
@@ -163,6 +163,10 @@ const bodyLines = item.body?.split("\n") ?? [];
       max-width: var(--content-narrow, 700px);
       padding: 40px 24px 96px;
     } 
+ 
+    .head h1 {
+      font-size: 36px;
+    }
   }
 
 /* マークダウン */
