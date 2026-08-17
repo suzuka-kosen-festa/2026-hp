@@ -3,8 +3,7 @@
   top: var(--header-height-sp);
   z-index: 50;
   background: var(--paper);
-  margin: 0 -10px;
-  padding: 10px 26px 12px;
+  padding: 10px 16px 12px;
   border-bottom: 2px solid var(--ink);
 }
 
