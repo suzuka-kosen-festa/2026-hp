@@ -3,7 +3,8 @@
   top: var(--header-height-sp);
   z-index: 50;
   background: var(--paper);
-  padding: 10px 16px 12px;
+  margin: 0 -10px;
+  padding: 10px 26px 12px;
   border-bottom: 2px solid var(--ink);
 }
 
@@ -24,7 +25,7 @@
   flex: 0 0 auto;
   font-family: var(--font-num);
   font-size: 15px;
-  padding: 8px 16px;
+  padding: 8px 10px;
   color: var(--ink);
   border-bottom: 3px solid transparent;
   white-space: nowrap;
