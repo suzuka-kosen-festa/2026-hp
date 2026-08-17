@@ -18,6 +18,10 @@
 .bl-permanent {
   margin-top: 20px;
   margin-bottom: 20px;
+  /* カードは rotate と box-shadow で外接矩形が広がる。TabTagFilter の枠から
+     はみ出さないよう、はみ出す側で余白を確保する（.bl-grid と同じ理由）。
+     「常設」ラベルもカードと一緒にずらすため、リストではなくこの階層に置く */
+  padding: 0 10px;
 }
 .bl-permanent-title {
   display: inline-block;
