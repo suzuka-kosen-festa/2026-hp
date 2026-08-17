@@ -39,11 +39,11 @@ const TABS: TabConfig[] = [
     id: "学科展示",
     label: "学科展示",
     tags: [
-      { id: "M科", label: "M科" },
-      { id: "E科", label: "E科" },
-      { id: "I科", label: "I科" },
-      { id: "C科", label: "C科" },
-      { id: "S科", label: "S科" },
+      { id: "M科", label: "機械" },
+      { id: "E科", label: "電気電子" },
+      { id: "I科", label: "電子情報" },
+      { id: "C科", label: "生物応用" },
+      { id: "S科", label: "材料" },
     ],
   },
   {
