@@ -12,6 +12,8 @@ jobs:
       contents: read
       deployments: write
       pull-requests: write
+      # プレビューURLをコミットステータスとして出すため
+      statuses: write
     defaults:
       run:
         working-directory: site
@@ -89,13 +91,34 @@ jobs:
           workingDirectory: site
           command: pages deploy dist --project-name=snct-fes-2026
 
+      # コメントは --edit-last で1本を使い回す（コミットごとに増やすとレビューが埋もれる）。
+      # 編集では通知が飛ばず、投稿時刻も最初のままなので「更新されていない」ように見える。
+      # どのコミットのプレビューかを本文に書いて、古いURLと見間違えないようにする
       - name: Comment preview URL on PR
         if: github.event_name == 'pull_request'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PREVIEW_URL: ${{ steps.deploy.outputs.deployment-url }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
+          body=$(printf '🔗 Preview: %s\n\ncommit `%s` / 更新 %s JST\n' \
+            "${PREVIEW_URL}" "${HEAD_SHA:0:7}" "$(TZ=Asia/Tokyo date '+%Y-%m-%d %H:%M')")
           gh pr comment "${{ github.event.pull_request.number }}" \
             --repo "${{ github.repository }}" \
             --edit-last --create-if-none \
-            --body "🔗 Preview: ${PREVIEW_URL}"
+            --body "${body}"
+
+      # 上のコメントは埋もれるうえ通知も飛ばないので、PR下部のチェック欄にも出す。
+      # ステータスはコミットに紐づくため、常に最新コミットのプレビューを指す
+      - name: プレビューURLをコミットステータスに出す
+        if: github.event_name == 'pull_request' && steps.deploy.outputs.deployment-url != ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PREVIEW_URL: ${{ steps.deploy.outputs.deployment-url }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          gh api --method POST "repos/${{ github.repository }}/statuses/${HEAD_SHA}" \
+            -f state=success \
+            -f context="Cloudflare Pages Preview" \
+            -f target_url="${PREVIEW_URL}" \
+            -f description="このコミットのプレビュー"
