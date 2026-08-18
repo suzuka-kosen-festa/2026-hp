@@ -51,9 +51,36 @@ function isActive(href: string) {
 </header>
 
 <style>
+  /* iOS Safari はスクロールに合わせてツールバーを伸縮させるが、その遷移中は
+     position:fixed の要素の再配置が遅れる。結果、ツールバーが空けた帯にページ本体が
+     見えたままヘッダーだけが下に取り残される（Issue #42）。sticky は通常フローに
+     参加するのでこの遅れが起きない */
   .site-header {
-    position: relative;
+    position: sticky;
+    top: 0;
     z-index: 100;
+  }
+
+  /* iOS Safari はツールバーを畳む遷移の途中で、レイアウトビューポートの上端より
+     さらに上の帯を可視領域に出す。そこにはヘッダーが居ないのでページ本文が覗く
+     （Issue #42）。原因の特定に依らず塞げるよう、ヘッダーの地を上方向へ伸ばす。
+     スクロール0のときは画面外なので見た目に影響しない */
+  .site-header::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 100%;
+    height: 240px;
+    background: var(--paper);
+    pointer-events: none;
+  }
+
+  /* PCで追従させるかは Issue #43 で検討中。決まるまで現状の見た目を変えない */
+  @media (min-width: 900px) {
+    .site-header {
+      position: relative;
+    }
   }
 
   /* ===== PC ===== */
@@ -138,18 +165,19 @@ function isActive(href: string) {
   }
 
   /* ===== SP ===== */
+  /* 位置決めは親の .site-header (sticky) が持つ。ここは中身の並びだけ */
   .header-sp {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 200;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 12px;
-    height: var(--header-height-sp);
-    padding: 0 16px;
+    /* 安全領域ぶんも自分の背景で塞ぐ。ここを空けるとステータスバーの裏に
+       本文が透けて見える（Issue #42） */
+    height: var(--header-offset-sp);
+    padding-top: var(--safe-top);
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-bottom: 0;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
     background: var(--paper);
     border-bottom: 2px solid var(--ink);
     box-sizing: border-box;

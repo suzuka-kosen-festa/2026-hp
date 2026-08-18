@@ -17,7 +17,10 @@ const { title, description = "第61回鈴鹿高専祭「collage」公式サイ�
 <html lang="ja">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- viewport-fit=cover: これが無いと env(safe-area-inset-*) が常に0を返す。
+      iOS26のSafariはページを画面端まで敷き、ツールバーやステータスバーが
+      コンテンツの上に浮くため、安全領域は各自で塞ぐ必要がある（Issue #42） -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <!-- public/ にあるのは .ico と .svg。png を指していて全ページ404していた -->
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
