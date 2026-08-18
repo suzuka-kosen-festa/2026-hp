@@ -1,0 +1,231 @@
+.booth-list {
+  margin-top: 20px;
+}
+.bl-grid {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 20px;
+  padding: 0 10px;
+}
+.bl-empty {
+  font-size: 13px;
+  color: #666;
+  padding: 24px 0;
+  text-align: center;
+}
+.bl-permanent {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  /* カードは rotate と box-shadow で外接矩形が広がる。TabTagFilter の枠から
+     はみ出さないよう、はみ出す側で余白を確保する（.bl-grid と同じ理由）。
+     「常設」ラベルもカードと一緒にずらすため、リストではなくこの階層に置く */
+  padding: 0 10px;
+}
+.bl-permanent-title {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 800;
+  color: #fff;
+  background: var(--yellow);
+  padding: 3px 12px;
+  margin-bottom: 10px;
+}
+.bl-permanent-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.bl-permanent-card {
+  display: flex;
+  background: #fff;
+  border: 2px solid var(--ink);
+  box-shadow: 5px 5px 0 var(--ink);
+  overflow: hidden;
+}
+.bl-permanent-photo {
+  position: relative;
+  display: flex;
+  flex: 0 0 110px;
+  align-items: center;
+  justify-content: center;
+  background: #f3ebd9;
+  border-right: 2px solid var(--ink);
+}
+.bl-permanent-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.bl-permanent-body {
+  flex: 1;
+  min-width: 0;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+.bl-permanent-link {
+  display: block;
+}
+.bl-permanent-name {
+  font-weight: 800;
+  font-size: 15px;
+}
+.bl-permanent-summary {
+  font-size: 12.5px;
+  line-height: 1.6;
+  margin-top: 4px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+}
+.bl-permanent-cta {
+  position: relative;
+  z-index: 0;
+  display: inline-block;
+  color: var(--ink);
+  font-weight: 800;
+  font-size: 12.5px;
+  padding: 8px 18px;
+}
+.bl-permanent-cta::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--yellow);
+  filter: url(#tape-edge);
+}
+.bl-card-link {
+  display: block;
+}
+.bl-card {
+  position: relative;
+  background: #fff;
+  border: 2px solid var(--ink);
+  box-shadow: 5px 5px 0 var(--ink);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.bl-photo {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 16 / 9;
+  background: #f3ebd9;
+  border-bottom: 2px solid var(--ink);
+}
+.bl-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.bl-no-image {
+  font-size: 12px;
+  letter-spacing: 0.05em;
+  color: #999;
+}
+.bl-body {
+  padding: 14px 16px 16px;
+}
+.bl-name {
+  font-weight: 800;
+  font-size: 15.5px;
+}
+.bl-group {
+  font-size: 12.5px;
+  color: var(--blue);
+  margin-top: 4px;
+}
+.bl-summary {
+  font-size: 13px;
+  line-height: 1.6;
+  margin-top: 8px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+}
+.bl-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  list-style: none;
+  margin-top: 10px;
+}
+.bl-chip {
+  position: relative;
+  z-index: 0;
+  display: inline-block;
+  font-size: 10.5px;
+  font-weight: 800;
+  color: #fff;
+  padding: 3px 10px;
+}
+.bl-chip::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  filter: url(#tape-edge);
+}
+.bl-chip.red::before {
+  background: var(--red);
+}
+.bl-chip.blue::before {
+  background: var(--blue);
+}
+.bl-times {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 10px;
+}
+.bl-times li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px;
+  font-size: 12px;
+}
+.bl-day {
+  font-size: 13px;
+}
+.bl-day.sat {
+  color: var(--blue);
+}
+.bl-day.sun {
+  color: var(--red);
+}
+.bl-time {
+  color: #444;
+}
+.bl-location {
+  font-size: 12px;
+  margin-top: 8px;
+  color: #555;
+}
+.bl-more {
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: underline;
+}
+@media (min-width: 900px) {
+  .bl-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+}

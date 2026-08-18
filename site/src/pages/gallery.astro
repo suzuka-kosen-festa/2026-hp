@@ -22,6 +22,15 @@ const featured = getFeaturedEntries(entries);
     <h1 class="page-title">部品ギャラリー</h1>
     <p class="note">実装済みコンポーネントの一覧です。デザイン確認・調整用（本番導線には含まれません）。</p>
 
+    <!-- 端末依存の不具合（Issue #42 等）を実機で切り分けるための計測値。
+         開発用ページなので本番導線には出ない -->
+    <div class="part">
+      <h2>端末情報（デバッグ用）</h2>
+      <p class="note">スマホ固有の不具合を追うとき、この値をDiscordに貼ってください。</p>
+      <div class="safe-probe" aria-hidden="true"></div>
+      <dl class="device-info"><dt>読み込み中…</dt><dd></dd></dl>
+    </div>
+
     <div class="part">
       <h2>Tape</h2>
       <div class="row">
@@ -213,7 +222,70 @@ const featured = getFeaturedEntries(entries);
       gap: 16px;
       align-items: center;
     }
-  </style>
-</BaseLayout>
+  
+  /* 端末情報（デバッグ用） */
+  .safe-probe {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-right: env(safe-area-inset-right, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    padding-left: env(safe-area-inset-left, 0px);
+    pointer-events: none;
+    visibility: hidden;
+  }
 
-// 動作確認用コメント
+  .device-info {
+    font-family: var(--font-day);
+    font-size: 12px;
+    line-height: 1.7;
+    background: #fff;
+    border: 2px solid var(--ink);
+    padding: 12px 14px;
+    overflow-wrap: anywhere;
+  }
+
+  .device-info dt {
+    font-weight: 700;
+    color: var(--blue);
+  }
+
+  .device-info dd {
+    margin: 0 0 6px;
+  }
+</style>
+</BaseLayout>
+<script>
+  // 安全領域は JS から直接読めないので、env() を padding に流した非表示要素を測る
+  const probe = document.querySelector(".safe-probe");
+  const dl = document.querySelector(".device-info");
+  if (probe && dl) {
+    const cs = getComputedStyle(probe);
+    const root = getComputedStyle(document.documentElement);
+    const vv = window.visualViewport;
+    const rows = {
+      "safe-area-inset (上/右/下/左)": [cs.paddingTop, cs.paddingRight, cs.paddingBottom, cs.paddingLeft].join(" / "),
+      "--safe-top": root.getPropertyValue("--safe-top").trim() || "(未定義)",
+      "--header-offset-sp": root.getPropertyValue("--header-offset-sp").trim() || "(未定義)",
+      "window.inner (W×H)": `${window.innerWidth} × ${window.innerHeight}`,
+      "documentElement.client (W×H)": `${document.documentElement.clientWidth} × ${document.documentElement.clientHeight}`,
+      "visualViewport (W×H)": vv ? `${Math.round(vv.width)} × ${Math.round(vv.height)}` : "(なし)",
+      "visualViewport offsetTop / pageTop": vv ? `${vv.offsetTop} / ${vv.pageTop}` : "(なし)",
+      "devicePixelRatio": String(window.devicePixelRatio),
+      "ヘッダー実測 top / height": (() => {
+        const h = document.querySelector(".site-header");
+        if (!h) return "(なし)";
+        const r = h.getBoundingClientRect();
+        return `${r.top.toFixed(1)} / ${r.height.toFixed(1)}`;
+      })(),
+      "userAgent": navigator.userAgent,
+    };
+    dl.innerHTML = Object.entries(rows)
+      .map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`)
+      .join("");
+  }
+</script>
+

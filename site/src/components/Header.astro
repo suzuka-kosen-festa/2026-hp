@@ -206,8 +206,13 @@ function isActive(href: string) {
     align-items: center;
     justify-content: space-between;
     gap: 12px;
-    height: var(--header-height-sp);
-    padding: 0 16px;
+    /* 安全領域ぶんも自分の背景で塞ぐ。ここを空けるとステータスバーの裏に
+       本文が透けて見える（Issue #42） */
+    height: var(--header-offset-sp);
+    padding-top: var(--safe-top);
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-bottom: 0;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
     background: var(--paper);
     border-bottom: 2px solid var(--ink);
     box-sizing: border-box;

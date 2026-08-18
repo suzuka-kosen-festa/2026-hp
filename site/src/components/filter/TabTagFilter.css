@@ -1,6 +1,6 @@
 .tab-tag-filter {
   position: sticky;
-  top: var(--header-height-sp);
+  top: var(--header-offset-sp);
   z-index: 50;
   background: var(--paper);
   padding: 10px 16px 12px;
@@ -26,7 +26,7 @@
   flex: 0 0 auto;
   font-family: var(--font-num);
   font-size: 15px;
-  padding: 8px 16px;
+  padding: 8px 10px;
   color: var(--ink);
   border-bottom: 3px solid transparent;
   white-space: nowrap;
