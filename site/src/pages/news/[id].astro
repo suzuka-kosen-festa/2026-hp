@@ -3,7 +3,6 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import Tape from "../../components/ui/Tape.astro";
 import Chip from "../../components/ui/Chip.astro";
 
-import Divider from "../../components/ui/Divider.astro";
 import Card from "../../components/ui/Card.astro";
 
 import site from "../../data/site.json";
@@ -28,7 +27,6 @@ interface Props {
 const { item } = Astro.props;
 const bodyLines = item.body?.split("\n") ?? [];
 
-{/*console.log(bodyLines);*/}
 ---
 
 <BaseLayout
@@ -36,7 +34,6 @@ const bodyLines = item.body?.split("\n") ?? [];
   description={item.title}
 >
 
-{/*<Divider color="red" />*/}
 
   <article class="news-detail">
     
@@ -46,7 +43,10 @@ const bodyLines = item.body?.split("\n") ?? [];
       <Tape color="blue" rotate={-3} as="p" class="cat">NEWS</Tape>
 
       <div class="time-row">
-        <time datetime={item.date} class="date">{item.date.replaceAll("-", ".")}</time>
+        <time datetime={item.date.replaceAll(".", "-")} class="date">
+          {item.date}
+        </time>
+        
         {isNew(item.date) && <Chip color="red">NEW</Chip>}
       </div>
 
@@ -59,9 +59,9 @@ const bodyLines = item.body?.split("\n") ?? [];
       {
         bodyLines.map((line) => {
         
-          {/*if (line.startsWith("#### ")) {
-           return <Tape color="red" rotate={1.5} as="p">{line.slice(4)}</Tape>
-          }*/}
+          if (line.startsWith("#### ")) {
+           return <h4>{line.slice(5)}</h4>;
+          }
 
           if (line.startsWith("### ")) {
             return <h3>{line.slice(4)}</h3>;
@@ -110,9 +110,6 @@ const bodyLines = item.body?.split("\n") ?? [];
   )
 }
   </article>
-
-{/*<Divider color="blue" />*/}
-
 </BaseLayout>
 
 <style>

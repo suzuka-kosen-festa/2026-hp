@@ -14,6 +14,22 @@ function parseDate(date: string) {
 }
 
 /**
+ * お知らせの日付を datetime 属性用の形式に変換。
+ *
+ * 表示用:
+ * 2026.08.15
+ *
+ * datetime用:
+ * 2026-08-15
+ *
+ * 使い方:
+ * formatNewsDate(item.date)
+ */
+export function formatNewsDate(date: string) {
+  return date.replaceAll(".", "-");
+}
+
+/**
  * お知らせを日付の新しい順に取得。
  *
  * 使い方:

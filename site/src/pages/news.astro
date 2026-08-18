@@ -3,37 +3,63 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import Tape from "../components/ui/Tape.astro";
 import Chip from "../components/ui/Chip.astro";
 import site from "../data/site.json";
-import { getNews }from "../lib/news.ts";
-import { isNew } from "../lib/news.ts";
-
+import { getNews, isNew } from "../lib/news.ts";
 
 const newsItems = getNews();
 ---
 
-<BaseLayout title={`お知らせ | ${site.eventName}`} description={`${site.eventName}のお知らせ`}>
-  
-
+<BaseLayout
+  title={`お知らせ | ${site.eventName}`}
+  description={`${site.eventName}のお知らせ`}
+>
   <main class="news">
-
-    <p class="crumb"><a href="/">← 戻る</a></p>
+    <p class="crumb">
+      <a href="/">← 戻る</a>
+    </p>
 
     <header class="head">
-      <Tape color="blue" rotate={-3} as="p" class="cat">NEWS</Tape>
-
+      <Tape color="blue" rotate={-3} as="p" class="cat">
+        NEWS
+      </Tape>
     </header>
-    
+
     <ul class="list">
       {
         newsItems.map((item) => (
           <li class="item">
-            <a href={item.href} class="link">
-              <div class="meta">
-                <time datetime={item.date} class="date">{item.date.replaceAll("-", ".")}</time>
-                {isNew(item.date) && <Chip color="red" rotate={-1.5}>NEW</Chip>}
-              </div>
+            {item.href ? (
+              <a href={item.href} class="link">
+                <div class="meta">
+                  <time datetime={item.date.replaceAll(".", "-")} class="date">
+                    {item.date}
+                  </time>
 
-              <h2 class="item-title">{item.title}</h2>
-            </a>
+                  {isNew(item.date) && (
+                    <Chip color="red" rotate={-1.5}>
+                      NEW
+                    </Chip>
+                  )}
+                </div>
+
+                <h2 class="item-title">{item.title}</h2>
+              </a>
+            ) : (
+              <div class="link">
+                <div class="meta">
+                  <time datetime={item.date.replaceAll(".", "-")} class="date">
+                    {item.date}
+                  </time>
+
+                  {isNew(item.date) && (
+                    <Chip color="red" rotate={-1.5}>
+                      NEW
+                    </Chip>
+                  )}
+                </div>
+
+                <h2 class="un-item-title">{item.title}</h2>
+              </div>
+            )}
           </li>
         ))
       }
@@ -49,31 +75,32 @@ const newsItems = getNews();
   }
 
   .crumb {
+    margin-bottom: 20px;
     font-size: 12px;
     font-weight: 700;
-    margin-bottom: 20px;
   }
 
   .crumb a {
     text-decoration: underline;
+    text-underline-offset: 3px;
   }
 
   .head {
     margin-bottom: 12px;
   }
 
-  .title {
-    font-size: clamp(26px, 7vw, 34px);
-    line-height: 1.35;
+  .head :global(.cat) {
+    font-size: 11px;
   }
 
   .list {
     list-style: none;
-
+    margin: 0;
+    padding: 0;
   }
 
   .item {
-    border-bottom: 2px dashed #bbb
+    border-bottom: 2px dashed #bbb;
   }
 
   .link {
@@ -94,20 +121,25 @@ const newsItems = getNews();
     gap: 8px;
   }
 
-  .meta time {
+  .date {
+    font-size: 12px;
     font-weight: 800;
     color: var(--blue);
     white-space: nowrap;
-    font-size: 12px;
   }
 
-
   .item-title {
-    margin-top: 7px;
+    margin: 7px 0 0;
     font-size: 15px;
     line-height: 1.6;
   }
-
+  
+  .un-item-title {
+    margin: 7px 0 0;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+  
   @media (min-width: 900px) {
     .news {
       max-width: var(--content-narrow);
