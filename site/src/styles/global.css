@@ -48,6 +48,9 @@
 html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
+  /* Safari26(Liquid Glass)は fixed/sticky 要素の背景を読んでツールバーを着色する。
+     root が透明だと白にフォールバックすることがあるため明示する（Issue #42） */
+  background: var(--paper);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -77,9 +80,12 @@ body {
 }
 
 /* 紙の質感（画用紙の繊維＋ムラ） */
+/* position:fixed で全画面に敷くと、Safari26 の合成・着色パス（fixed要素の背景を
+   読んでツールバーを塗る）に巻き込まれる。absolute でドキュメント全体に敷いても
+   見た目はほぼ同じなので、全画面 fixed レイヤーを持たない形にする（Issue #42） */
 body::after {
   content: "";
-  position: fixed;
+  position: absolute;
   inset: 0;
   background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.012 0.9" numOctaves="4" seed="11" result="fiber"/><feColorMatrix in="fiber" type="saturate" values="0"/></filter><rect width="240" height="240" filter="url(#n)"/></svg>');
   background-size: 240px 240px;

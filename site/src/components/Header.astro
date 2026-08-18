@@ -65,6 +65,23 @@ function isActive(href: string) {
     z-index: 100;
   }
 
+  /* iOS Safari はツールバーを畳む遷移の途中で、可視領域(ビジュアルビューポート)の
+     上端がレイアウトビューポートより上に出る（実機計測で visualViewport.offsetTop が
+     -46 まで振れた）。sticky の基準はレイアウトビューポートなのでヘッダーはそこに
+     届かず、帯にページ本文が覗く（Issue #42）。ヘッダーの地を上方向へ伸ばして塞ぐ。
+     見た目に何も描いていないように見えるが、消すと再発するので削除しないこと。
+     スクロール0のときは画面外に出るだけなので影響しない */
+  .site-header::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 100%;
+    height: 240px;
+    background: var(--paper);
+    pointer-events: none;
+  }
+
   .header-sentinel {
     position: absolute;
     top: 0;
