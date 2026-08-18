@@ -33,7 +33,7 @@
      スクロール中に値が変わる変数を top に入れると、
      「縮む→topが動く→レイアウトが変わる→スクロールアンカリングがscrollYを戻す→
      展開→…」のループになり、ゆっくりスクロールでガクガクする */
-  --header-height-pc-shrunk: 56px;
+  --header-height-pc-shrunk: 46px;
 
   --breakpoint-pc: 900px;
 

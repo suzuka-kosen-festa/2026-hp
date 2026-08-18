@@ -102,7 +102,7 @@ function isActive(href: string) {
     }
 
     /* ===== 縮小状態（Issue #43） =====
-       ロゴを3行組みから1行に畳んで 106px → 56px。高さは --header-height-pc-shrunk と
+       ロゴを3行組みから1行に畳んで 106.2px → 46px。高さは --header-height-pc-shrunk と
        必ず一致させること（TabTagFilter等がこの変数を sticky の top に使っている） */
     :global(html.is-header-shrunk) .header-pc {
       align-items: center;
@@ -119,8 +119,8 @@ function isActive(href: string) {
     }
 
     :global(html.is-header-shrunk) nav a {
-      padding-top: 8px;
-      padding-bottom: 8px;
+      padding-top: 6px;
+      padding-bottom: 6px;
     }
 
     .header-pc,
