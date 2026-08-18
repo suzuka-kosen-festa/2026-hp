@@ -79,16 +79,6 @@ body::after {
   z-index: 999;
 }
 
-main {
-  padding-top: var(--header-height-sp);
-}
-
-@media (min-width: 900px) {
-  main {
-    padding-top: 0;
-  }
-}
-
 img,
 svg {
   display: block;

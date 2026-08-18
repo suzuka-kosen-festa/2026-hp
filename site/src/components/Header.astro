@@ -51,9 +51,21 @@ function isActive(href: string) {
 </header>
 
 <style>
+  /* iOS Safari はスクロールに合わせてツールバーを伸縮させるが、その遷移中は
+     position:fixed の要素の再配置が遅れる。結果、ツールバーが空けた帯にページ本体が
+     見えたままヘッダーだけが下に取り残される（Issue #42）。sticky は通常フローに
+     参加するのでこの遅れが起きない */
   .site-header {
-    position: relative;
+    position: sticky;
+    top: 0;
     z-index: 100;
+  }
+
+  /* PCで追従させるかは Issue #43 で検討中。決まるまで現状の見た目を変えない */
+  @media (min-width: 900px) {
+    .site-header {
+      position: relative;
+    }
   }
 
   /* ===== PC ===== */
@@ -138,12 +150,8 @@ function isActive(href: string) {
   }
 
   /* ===== SP ===== */
+  /* 位置決めは親の .site-header (sticky) が持つ。ここは中身の並びだけ */
   .header-sp {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 200;
     display: flex;
     align-items: center;
     justify-content: space-between;
