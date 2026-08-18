@@ -61,6 +61,21 @@ function isActive(href: string) {
     z-index: 100;
   }
 
+  /* iOS Safari はツールバーを畳む遷移の途中で、レイアウトビューポートの上端より
+     さらに上の帯を可視領域に出す。そこにはヘッダーが居ないのでページ本文が覗く
+     （Issue #42）。原因の特定に依らず塞げるよう、ヘッダーの地を上方向へ伸ばす。
+     スクロール0のときは画面外なので見た目に影響しない */
+  .site-header::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 100%;
+    height: 240px;
+    background: var(--paper);
+    pointer-events: none;
+  }
+
   /* PCで追従させるかは Issue #43 で検討中。決まるまで現状の見た目を変えない */
   @media (min-width: 900px) {
     .site-header {

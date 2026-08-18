@@ -26,7 +26,11 @@ const featured = getFeaturedEntries(entries);
          開発用ページなので本番導線には出ない -->
     <div class="part">
       <h2>端末情報（デバッグ用）</h2>
-      <p class="note">スマホ固有の不具合を追うとき、この値をDiscordに貼ってください。</p>
+      <p class="note">
+        <strong>ページを一度大きく上下にスクロールしてから</strong>この値を読んでください。
+        iOS Safari はツールバーを畳む遷移中だけ値が変わるため、最上部で読むと変化を捉えられません。
+        min〜max は計測開始からの範囲です。値をDiscordに貼ってください。
+      </p>
       <div class="safe-probe" aria-hidden="true"></div>
       <dl class="device-info"><dt>読み込み中…</dt><dd></dd></dl>
     </div>
@@ -259,33 +263,85 @@ const featured = getFeaturedEntries(entries);
 </style>
 </BaseLayout>
 <script>
-  // 安全領域は JS から直接読めないので、env() を padding に流した非表示要素を測る
+  // 帯が出るのはツールバーの伸縮中だけなので、静止時に1回読んでも意味がない。
+  // scroll / resize / visualViewport のイベントごとにサンプルし、極値を残す
   const probe = document.querySelector(".safe-probe");
   const dl = document.querySelector(".device-info");
+
   if (probe && dl) {
-    const cs = getComputedStyle(probe);
-    const root = getComputedStyle(document.documentElement);
-    const vv = window.visualViewport;
-    const rows = {
-      "safe-area-inset (上/右/下/左)": [cs.paddingTop, cs.paddingRight, cs.paddingBottom, cs.paddingLeft].join(" / "),
-      "--safe-top": root.getPropertyValue("--safe-top").trim() || "(未定義)",
-      "--header-offset-sp": root.getPropertyValue("--header-offset-sp").trim() || "(未定義)",
-      "window.inner (W×H)": `${window.innerWidth} × ${window.innerHeight}`,
-      "documentElement.client (W×H)": `${document.documentElement.clientWidth} × ${document.documentElement.clientHeight}`,
-      "visualViewport (W×H)": vv ? `${Math.round(vv.width)} × ${Math.round(vv.height)}` : "(なし)",
-      "visualViewport offsetTop / pageTop": vv ? `${vv.offsetTop} / ${vv.pageTop}` : "(なし)",
-      "devicePixelRatio": String(window.devicePixelRatio),
-      "ヘッダー実測 top / height": (() => {
-        const h = document.querySelector(".site-header");
-        if (!h) return "(なし)";
-        const r = h.getBoundingClientRect();
-        return `${r.top.toFixed(1)} / ${r.height.toFixed(1)}`;
-      })(),
-      "userAgent": navigator.userAgent,
+    const range: Record<string, { min: number; max: number }> = {};
+    let count = 0;
+
+    const track = (key: string, value: number) => {
+      const r = (range[key] ??= { min: value, max: value });
+      if (value < r.min) r.min = value;
+      if (value > r.max) r.max = value;
     };
-    dl.innerHTML = Object.entries(rows)
-      .map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`)
-      .join("");
+
+    const fmt = (key: string) => {
+      const r = range[key];
+      if (!r) return "-";
+      const round = (n: number) => Math.round(n * 10) / 10;
+      return r.min === r.max ? String(round(r.min)) : `${round(r.min)} 〜 ${round(r.max)}`;
+    };
+
+    function sample() {
+      const cs = getComputedStyle(probe!);
+      track("safeTop", parseFloat(cs.paddingTop) || 0);
+      track("safeBottom", parseFloat(cs.paddingBottom) || 0);
+      track("innerH", window.innerHeight);
+      track("clientH", document.documentElement.clientHeight);
+      const vv = window.visualViewport;
+      if (vv) {
+        track("vvH", vv.height);
+        track("vvOffsetTop", vv.offsetTop);
+        track("vvPageTop", vv.pageTop);
+      }
+      const h = document.querySelector(".site-header");
+      if (h) {
+        const r = h.getBoundingClientRect();
+        track("headerTop", r.top);
+        track("headerH", r.height);
+      }
+    }
+
+    function render() {
+      const rows: Record<string, string> = {
+        "safe-area-inset-top": fmt("safeTop") + "px",
+        "safe-area-inset-bottom": fmt("safeBottom") + "px",
+        "window.innerHeight": fmt("innerH"),
+        "documentElement.clientHeight": fmt("clientH"),
+        "visualViewport.height": fmt("vvH"),
+        "visualViewport.offsetTop": fmt("vvOffsetTop"),
+        "visualViewport.pageTop": fmt("vvPageTop"),
+        "ヘッダー top": fmt("headerTop"),
+        "ヘッダー height": fmt("headerH"),
+        "innerWidth / dpr": `${window.innerWidth} / ${window.devicePixelRatio}`,
+        "サンプル数": String(count),
+        "userAgent": navigator.userAgent,
+      };
+      dl!.innerHTML = Object.entries(rows)
+        .map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`)
+        .join("");
+    }
+
+    let queued = false;
+    function onEvent() {
+      count++;
+      sample();
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(() => {
+        queued = false;
+        render();
+      });
+    }
+
+    sample();
+    render();
+    addEventListener("scroll", onEvent, { passive: true });
+    addEventListener("resize", onEvent);
+    window.visualViewport?.addEventListener("resize", onEvent);
+    window.visualViewport?.addEventListener("scroll", onEvent);
   }
 </script>
-
