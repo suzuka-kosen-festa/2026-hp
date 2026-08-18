@@ -24,9 +24,14 @@
   --safe-top: env(safe-area-inset-top, 0px);
   /* ヘッダーが実際に占める高さ。下に貼り付く sticky 要素はこちらを top に使う */
   --header-offset-sp: calc(var(--header-height-sp) + var(--safe-top));
-  /* PCヘッダーの高さ。スクロールすると縮むので値が変わる（Issue #43）。
-     sticky で下に貼り付く要素（TabTagFilter等）はこの変数を top に使うこと */
+  /* PCヘッダーの初期の高さ（ロゴ3行組み） */
   --header-height-pc: 106px;
+  /* スクロールで縮んだ後の高さ。
+     sticky で下に貼り付く要素（TabTagFilter等）の top は必ずこちらを使うこと。
+     スクロール中に値が変わる変数を top に入れると、
+     「縮む→topが動く→レイアウトが変わる→スクロールアンカリングがscrollYを戻す→
+     展開→…」のループになり、ゆっくりスクロールでガクガクする */
+  --header-height-pc-shrunk: 56px;
 
   --breakpoint-pc: 900px;
 
@@ -93,13 +98,6 @@ body::after {
   mix-blend-mode: multiply;
   pointer-events: none;
   z-index: 999;
-}
-
-/* スクロールでPCヘッダーが縮んだ状態。クラスは Header.astro が html に付ける */
-@media (min-width: 900px) {
-  :root.is-header-shrunk {
-    --header-height-pc: 56px;
-  }
 }
 
 img,

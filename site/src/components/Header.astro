@@ -19,10 +19,6 @@ function isActive(href: string) {
 }
 ---
 
-<!-- スクロール量の判定用。IntersectionObserverでこれが画面外に出たらヘッダーを縮める。
-     scrollイベントを毎フレーム拾うより安く、レイアウトにも影響しない -->
-<div class="header-sentinel" aria-hidden="true"></div>
-
 <header class="site-header">
   <!-- ===== PC ===== -->
   <div class="header-pc">
@@ -82,15 +78,6 @@ function isActive(href: string) {
     pointer-events: none;
   }
 
-  .header-sentinel {
-    position: absolute;
-    top: 0;
-    width: 1px;
-    /* この高さぶんスクロールしたら縮む */
-    height: 100px;
-    pointer-events: none;
-  }
-
   /* ===== PC ===== */
   .header-pc {
     display: none;
@@ -112,11 +99,11 @@ function isActive(href: string) {
     }
 
     /* ===== 縮小状態（Issue #43） =====
-       ロゴを3行組みから1行に畳んで 106px → 56px。高さは --header-height-pc と
-       対応させること（TabTagFilter等がこの変数を top に使っている） */
+       ロゴを3行組みから1行に畳んで 106px → 56px。高さは --header-height-pc-shrunk と
+       必ず一致させること（TabTagFilter等がこの変数を sticky の top に使っている） */
     :global(html.is-header-shrunk) .header-pc {
       align-items: center;
-      height: var(--header-height-pc);
+      height: var(--header-height-pc-shrunk);
       padding-top: 0;
       padding-bottom: 0;
     }
@@ -259,15 +246,38 @@ function isActive(href: string) {
 
 <script>
   // sentinel が画面外に出た＝100px以上スクロールした、とみなしてヘッダーを縮める。
-  // クラスは html に付ける。--header-height-pc を :root で切り替えるため
-  // （TabTagFilter の sticky top もこの変数を見ている）
-  const sentinel = document.querySelector(".header-sentinel");
-  if (sentinel) {
-    new IntersectionObserver(
-      ([entry]) => {
-        document.documentElement.classList.toggle("is-header-shrunk", !entry.isIntersecting);
-      },
-      { threshold: 0 },
-    ).observe(sentinel);
+  // クラスは html に付ける（PC限定のスタイルはCSS側の media query で絞る）
+  // 縮む/戻るの閾値をずらす（ヒステリシス）。
+  // ヘッダーが縮むとページ全体が50px詰まり、ブラウザのスクロールアンカリングが
+  // 見えている位置を保とうと scrollY を戻す。閾値が1点だとその戻りで判定が反転し、
+  // 「縮む→戻される→展開→…」を高速に往復してガクガクする（実測で確認）。
+  // 差(100px)をレイアウトのズレ(50px)より大きく取れば往復しない
+  const SHRINK_AT = 140;
+  const EXPAND_AT = 40;
+
+  let shrunk = false;
+  let ticking = false;
+
+  function updateHeaderState() {
+    const y = window.scrollY;
+    if (!shrunk && y > SHRINK_AT) {
+      shrunk = true;
+      document.documentElement.classList.add("is-header-shrunk");
+    } else if (shrunk && y < EXPAND_AT) {
+      shrunk = false;
+      document.documentElement.classList.remove("is-header-shrunk");
+    }
   }
+
+  function onScroll() {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      ticking = false;
+      updateHeaderState();
+    });
+  }
+
+  updateHeaderState();
+  addEventListener("scroll", onScroll, { passive: true });
 </script>
