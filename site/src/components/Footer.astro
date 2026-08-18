@@ -39,7 +39,8 @@ import Tape from "./ui/Tape.astro";
     background: var(--ink);
     color: #fff;
     text-align: center;
-    padding: 40px 20px 32px;
+    /* 下端はホームインジケータに潜らせない */
+    padding: 40px 20px calc(32px + env(safe-area-inset-bottom, 0px));
     margin-top: 40px;
   }
 

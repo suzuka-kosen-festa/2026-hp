@@ -17,7 +17,13 @@
   --font-logo: "Murecho", var(--font-body);
   --font-day: "Courier Prime", "Courier New", monospace;
 
+  /* SPヘッダーのバー本体の高さ（中身が収まる部分） */
   --header-height-sp: 56px;
+  /* ノッチ/Dynamic Island/浮いたツールバーに食われる上端の量。
+     viewport-fit=cover のときだけ0以外になる */
+  --safe-top: env(safe-area-inset-top, 0px);
+  /* ヘッダーが実際に占める高さ。下に貼り付く sticky 要素はこちらを top に使う */
+  --header-offset-sp: calc(var(--header-height-sp) + var(--safe-top));
   --breakpoint-pc: 900px;
 
   /* PCのコンテンツ幅は2段階に統一する。セクションごとに個別の数値を書かない
