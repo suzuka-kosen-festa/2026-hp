@@ -19,6 +19,10 @@ function isActive(href: string) {
 }
 ---
 
+<!-- スクロール量の判定用。IntersectionObserverでこれが画面外に出たらヘッダーを縮める。
+     scrollイベントを毎フレーム拾うより安く、レイアウトにも影響しない -->
+<div class="header-sentinel" aria-hidden="true"></div>
+
 <header class="site-header">
   <!-- ===== PC ===== -->
   <div class="header-pc">
@@ -61,11 +65,13 @@ function isActive(href: string) {
     z-index: 100;
   }
 
-  /* PCで追従させるかは Issue #43 で検討中。決まるまで現状の見た目を変えない */
-  @media (min-width: 900px) {
-    .site-header {
-      position: relative;
-    }
+  .header-sentinel {
+    position: absolute;
+    top: 0;
+    width: 1px;
+    /* この高さぶんスクロールしたら縮む */
+    height: 100px;
+    pointer-events: none;
   }
 
   /* ===== PC ===== */
@@ -81,6 +87,50 @@ function isActive(href: string) {
       max-width: 1325px;
       margin: 0 auto;
       padding: 18px 24px 0;
+    }
+
+    /* sticky で本文の上に乗るので、下のコンテンツが透けないよう地を敷く */
+    .site-header {
+      background: var(--paper);
+    }
+
+    /* ===== 縮小状態（Issue #43） =====
+       ロゴを3行組みから1行に畳んで 106px → 56px。高さは --header-height-pc と
+       対応させること（TabTagFilter等がこの変数を top に使っている） */
+    :global(html.is-header-shrunk) .header-pc {
+      align-items: center;
+      height: var(--header-height-pc);
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+
+    :global(html.is-header-shrunk) .logo {
+      flex-direction: row;
+      gap: 0.3em;
+      font-size: 20px;
+      line-height: 1;
+    }
+
+    :global(html.is-header-shrunk) nav a {
+      padding-top: 8px;
+      padding-bottom: 8px;
+    }
+
+    .header-pc,
+    .logo,
+    nav a {
+      transition:
+        height 0.18s ease,
+        padding 0.18s ease,
+        font-size 0.18s ease;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .header-pc,
+      .logo,
+      nav a {
+        transition: none;
+      }
     }
   }
 
@@ -184,3 +234,18 @@ function isActive(href: string) {
     }
   }
 </style>
+
+<script>
+  // sentinel が画面外に出た＝100px以上スクロールした、とみなしてヘッダーを縮める。
+  // クラスは html に付ける。--header-height-pc を :root で切り替えるため
+  // （TabTagFilter の sticky top もこの変数を見ている）
+  const sentinel = document.querySelector(".header-sentinel");
+  if (sentinel) {
+    new IntersectionObserver(
+      ([entry]) => {
+        document.documentElement.classList.toggle("is-header-shrunk", !entry.isIntersecting);
+      },
+      { threshold: 0 },
+    ).observe(sentinel);
+  }
+</script>

@@ -9,7 +9,9 @@
 
 @media (min-width: 900px) {
   .tab-tag-filter {
-    top: 0;
+    /* PCヘッダーは sticky で、スクロールに応じて高さが変わる。
+       0 固定だとヘッダーの下に潜るので変数に追従させる（Issue #43） */
+    top: var(--header-height-pc);
   }
 }
 

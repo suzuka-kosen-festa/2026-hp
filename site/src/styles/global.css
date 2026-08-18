@@ -18,6 +18,9 @@
   --font-day: "Courier Prime", "Courier New", monospace;
 
   --header-height-sp: 56px;
+  /* PCヘッダーの高さ。スクロールすると縮むので値が変わる（Issue #43）。
+     sticky で下に貼り付く要素（TabTagFilter等）はこの変数を top に使うこと */
+  --header-height-pc: 106px;
   --breakpoint-pc: 900px;
 
   /* PCのコンテンツ幅は2段階に統一する。セクションごとに個別の数値を書かない
@@ -77,6 +80,13 @@ body::after {
   mix-blend-mode: multiply;
   pointer-events: none;
   z-index: 999;
+}
+
+/* スクロールでPCヘッダーが縮んだ状態。クラスは Header.astro が html に付ける */
+@media (min-width: 900px) {
+  :root.is-header-shrunk {
+    --header-height-pc: 56px;
+  }
 }
 
 img,
