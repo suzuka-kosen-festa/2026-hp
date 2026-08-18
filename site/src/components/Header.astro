@@ -90,6 +90,9 @@ function isActive(href: string) {
       justify-content: space-between;
       max-width: 1325px;
       margin: 0 auto;
+      /* height を明示しないと auto になり、縮小時の height 遷移が補間されず
+         「文字だけ滑らかに縮んで箱は一瞬で飛ぶ」状態になる */
+      height: var(--header-height-pc);
       padding: 18px 24px 0;
     }
 
@@ -245,8 +248,8 @@ function isActive(href: string) {
 </style>
 
 <script>
-  // sentinel が画面外に出た＝100px以上スクロールした、とみなしてヘッダーを縮める。
-  // クラスは html に付ける（PC限定のスタイルはCSS側の media query で絞る）
+  // スクロール量でヘッダーの縮小を切り替える。
+  // クラスは html に付ける（PC限定のスタイルはCSS側の media query で絞る）。
   // 縮む/戻るの閾値をずらす（ヒステリシス）。
   // ヘッダーが縮むとページ全体が50px詰まり、ブラウザのスクロールアンカリングが
   // 見えている位置を保とうと scrollY を戻す。閾値が1点だとその戻りで判定が反転し、

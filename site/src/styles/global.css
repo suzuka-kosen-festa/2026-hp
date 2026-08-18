@@ -24,8 +24,10 @@
   --safe-top: env(safe-area-inset-top, 0px);
   /* ヘッダーが実際に占める高さ。下に貼り付く sticky 要素はこちらを top に使う */
   --header-offset-sp: calc(var(--header-height-sp) + var(--safe-top));
-  /* PCヘッダーの初期の高さ（ロゴ3行組み） */
-  --header-height-pc: 106px;
+  /* PCヘッダーの初期の高さ（ロゴ3行組み）。
+     内訳: .logo 28px × line-height 1.05 × 3行 = 88.2px + .header-pc の padding-top 18px。
+     ロゴのフォントサイズ・行間を変えたらこの値も直すこと（足りないと3行目が欠ける） */
+  --header-height-pc: 106.2px;
   /* スクロールで縮んだ後の高さ。
      sticky で下に貼り付く要素（TabTagFilter等）の top は必ずこちらを使うこと。
      スクロール中に値が変わる変数を top に入れると、
