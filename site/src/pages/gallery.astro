@@ -258,9 +258,6 @@ const featured = getFeaturedEntries(entries);
   }
 </style>
 </BaseLayout>
-
-// 動作確認用コメント
-
 <script>
   // 安全領域は JS から直接読めないので、env() を padding に流した非表示要素を測る
   const probe = document.querySelector(".safe-probe");
@@ -291,3 +288,4 @@ const featured = getFeaturedEntries(entries);
       .join("");
   }
 </script>
+
