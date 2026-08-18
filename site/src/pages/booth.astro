@@ -1,0 +1,37 @@
+---
+// ブース一覧ページ。
+// 手順4: TabTagFilterをislandとして接続。タブ切り替え・タグ絞り込みは
+// components/booth/BoothList.tsx（Reactアイランド）に状態ごと切り出した。
+import BaseLayout from "../layouts/BaseLayout.astro";
+import BoothList from "../components/booth/BoothList";
+import { entries } from "../lib/loadEntries";
+import site from "../data/site.json";
+---
+
+<BaseLayout title={`BOOTH | ${site.eventName}`} description="出店・学科展示・イベント・ライブの一覧">
+  <section class="booth">
+    <h1 class="page-title">BOOTH</h1>
+    <BoothList client:load entries={entries} />
+  </section>
+</BaseLayout>
+
+<style>
+  .booth {
+    max-width: var(--content-sp);
+    margin: 0 auto;
+    padding: 24px 20px 64px;
+  }
+
+  .page-title {
+    font-size: 22px;
+    font-weight: 800;
+    margin-bottom: 20px;
+  }
+
+  @media (min-width: 900px) {
+    .booth {
+      max-width: var(--content-wide);
+      padding: 40px 24px 96px;
+    }
+  }
+</style>
