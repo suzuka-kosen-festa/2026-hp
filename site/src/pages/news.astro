@@ -3,7 +3,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import Tape from "../components/ui/Tape.astro";
 import Chip from "../components/ui/Chip.astro";
 import site from "../data/site.json";
-import { getNews, isNew } from "../lib/news.ts";
+import {  formatNewsDate , getNews , isNew  } from "../lib/news";
 
 const newsItems = getNews();
 ---
@@ -12,7 +12,7 @@ const newsItems = getNews();
   title={`お知らせ | ${site.eventName}`}
   description={`${site.eventName}のお知らせ`}
 >
-  <main class="news">
+  <section class="news">
     <p class="crumb">
       <a href="/">← 戻る</a>
     </p>
@@ -30,7 +30,7 @@ const newsItems = getNews();
             {item.href ? (
               <a href={item.href} class="link">
                 <div class="meta">
-                  <time datetime={item.date.replaceAll(".", "-")} class="date">
+                  <time datetime={formatNewsDate ( item.date )} class="date">
                     {item.date}
                   </time>
 
@@ -46,7 +46,7 @@ const newsItems = getNews();
             ) : (
               <div class="link">
                 <div class="meta">
-                  <time datetime={item.date.replaceAll(".", "-")} class="date">
+                  <time datetime={formatNewsDate ( item.date )} class="date">
                     {item.date}
                   </time>
 
@@ -64,7 +64,7 @@ const newsItems = getNews();
         ))
       }
     </ul>
-  </main>
+  </section>
 </BaseLayout>
 
 <style>

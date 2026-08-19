@@ -6,7 +6,7 @@ import Chip from "../../components/ui/Chip.astro";
 import Card from "../../components/ui/Card.astro";
 
 import site from "../../data/site.json";
-import { isNew,getNewsPaths } from "../../lib/news.ts";
+import { formatNewsDate,isNew,getNewsPaths } from "../../lib/news.ts";
 
 export function getStaticPaths() {
     
@@ -43,7 +43,7 @@ const bodyLines = item.body?.split("\n") ?? [];
       <Tape color="blue" rotate={-3} as="p" class="cat">NEWS</Tape>
 
       <div class="time-row">
-        <time datetime={item.date.replaceAll(".", "-")} class="date">
+        <time datetime={formatNewsDate ( item.date )} class="date">
           {item.date}
         </time>
         

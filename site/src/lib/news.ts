@@ -8,7 +8,7 @@ import newsData from "../data/news.json";
 export const NEW_THRESHOLD_DAYS = 7;
 
 function parseDate(date: string) {
-  const [year, month, day] = date.split(".").map(Number);
+    const  [ year ,  month ,  day ]  = date.split (/[./-]/).map(Number) ;
 
   return new Date(year, month - 1, day);
 }
