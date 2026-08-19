@@ -43,21 +43,10 @@ const parkings = access.parkings;
 
   <!-- 駐車場案内 -->
   <div class="parking-intro">
-
     <div class="parking-description">
-      <p>
-        駐車場は3か所ございます。
-        ご利用いただく駐車場を選択すると、
-        詳しい場所やご案内をご確認いただけます。
-      </p>
-
-      <p>
-        <strong>
-          第二駐車場は、ワークショップ参加者専用・予約制です。
-        </strong>
-        一般の方はご利用いただけませんので、
-        あらかじめご了承ください。
-      </p>
+      {access.description.map((text) => (
+        <p>{text}</p>
+      ))}
     </div>
   </div>
 
