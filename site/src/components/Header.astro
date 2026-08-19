@@ -119,8 +119,7 @@ function isActive(href: string) {
     }
 
     :global(html.is-header-shrunk) nav a {
-      padding-top: 6px;
-      padding-bottom: 6px;
+      --nav-pad-y: 6px;
     }
 
     .header-pc,
@@ -165,7 +164,10 @@ function isActive(href: string) {
   nav a {
     display: block;
     position: relative;
-    padding: 12px 14px;
+    /* 赤テープの位置をこの値から導出するので、上下paddingは必ずこの変数で変えること
+       （直接 padding-top/bottom を書き換えるとテープが文字に被る） */
+    --nav-pad-y: 12px;
+    padding: var(--nav-pad-y) 14px;
     font-family: var(--font-num);
     font-size: 19px;
     letter-spacing: 0.02em;
@@ -177,7 +179,9 @@ function isActive(href: string) {
     position: absolute;
     left: 18%;
     right: 18%;
-    bottom: 6px;
+    /* 下paddingから自分の高さを引いた位置＝文字の行ボックス下端にちょうど接する。
+       padding を変えても文字との間隔が変わらない */
+    bottom: calc(var(--nav-pad-y) - 6px);
     height: 6px;
     background: var(--red);
     filter: url(#tape-edge);
