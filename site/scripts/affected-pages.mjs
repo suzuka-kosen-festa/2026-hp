@@ -45,6 +45,7 @@ const PAGE_RULES = [
   { pattern: /^site\/src\/components\/sections\//, page: "home" },
   { pattern: /^site\/src\/pages\/gallery\.astro$/, page: "gallery" },
   { pattern: /^site\/src\/pages\/entry\//, page: "entry" },
+  { pattern: /^site\/src\/components\/(booth|access)\//, page: (m) => m[1] },
   // 以降、ページを追加したらここに1行足して tests/<page>.spec.ts を作る
   { pattern: /^site\/src\/pages\/booth/, page: "booth" },
   { pattern: /^site\/src\/pages\/news/, page: "news" },

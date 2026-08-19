@@ -2,6 +2,9 @@
 import Card from "../ui/Card.astro";
 import Tape from "../ui/Tape.astro";
 import Button from "../ui/Button.astro";
+import TabTagFilter from "../filter/TabTagFilter.tsx";
+import { Image } from "astro:assets";
+
 
 import access from "../../data/access.json";
 
@@ -64,6 +67,7 @@ const parkings = access.parkings;
           "parking-tab",
           { "is-active": index === 0 },
         ]}
+        id={`parking-tab-${index}`}
         data-parking-tab={`parking-${index}`}
         role="tab"
         aria-selected={index === 0}
@@ -113,8 +117,8 @@ const parkings = access.parkings;
             texture
             class="parking-image-card"
           >
-            <img
-              src={image.src}
+            <Image
+              src={image}
               alt={
                 parking.imageAlt ??
                 `${parking.name}の案内図`
@@ -124,6 +128,7 @@ const parkings = access.parkings;
                 index === 0 ? "high" : undefined
               }
             />
+          
           </Card>
         )}
 
