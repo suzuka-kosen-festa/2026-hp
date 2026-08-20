@@ -1,0 +1,15 @@
+---
+// 協賛（Issue #18）の準備中ページ。
+// 実装するときはこのファイルごと置き換える。
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Placeholder from "../components/ui/Placeholder.astro";
+import site from "../data/site.json";
+---
+
+<BaseLayout title={`SPONSORS | ${site.eventName}`} description="第61回鈴鹿高専祭にご協賛いただいた企業・団体の紹介。現在準備中です。">
+  <Placeholder
+    label="COMING SOON"
+    heading="協賛のページは準備中です"
+    note="ご協賛いただいた企業・団体さまの紹介を掲載予定です。準備ができしだい、このページでお知らせします。"
+  />
+</BaseLayout>

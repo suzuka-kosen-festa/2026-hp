@@ -1,0 +1,62 @@
+---
+// 中身がまだ無いページ（準備中・404）の共通の見た目。
+// 実装済みのページと同じ器（Header/Footer付き）に収めることで、
+// 「壊れている」のか「これからなのか」が訪問者に伝わるようにする。
+import Tape from "./Tape.astro";
+import Button from "./Button.astro";
+
+interface Props {
+  /** テープに載せる短いラベル（COMING SOON / 404 など） */
+  label: string;
+  /** 何のページなのかを1行で */
+  heading: string;
+  /** 補足説明 */
+  note: string;
+}
+
+const { label, heading, note } = Astro.props;
+---
+
+<section class="placeholder">
+  <Tape color="red" rotate={-2} class="label">{label}</Tape>
+  <h1>{heading}</h1>
+  <p>{note}</p>
+  <Button href="/" color="yellow">トップへもどる</Button>
+</section>
+
+<style>
+  .placeholder {
+    max-width: var(--content-sp);
+    margin: 0 auto;
+    padding: 72px 20px 96px;
+    text-align: center;
+  }
+  .label {
+    font-family: var(--font-num);
+    font-size: 20px;
+    letter-spacing: 0.08em;
+  }
+  h1 {
+    margin: 28px 0 16px;
+    font-size: 22px;
+    font-weight: 900;
+    line-height: 1.5;
+  }
+  p {
+    margin-bottom: 36px;
+    font-size: 14px;
+    line-height: 1.9;
+  }
+  @media (min-width: 900px) {
+    .placeholder {
+      max-width: var(--content-narrow);
+      padding: 96px 20px 120px;
+    }
+    h1 {
+      font-size: 28px;
+    }
+    p {
+      font-size: 15px;
+    }
+  }
+</style>
