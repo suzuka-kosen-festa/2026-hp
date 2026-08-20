@@ -6,7 +6,7 @@
 // main への push のときだけ dist/index.html を上書きする形で行う。
 // プレビュー（PR）は素通しなので、各ページの動作確認は今までどおりできる。
 //
-// v1公開時は、このファイル・site/holding/_redirects・deploy.yml の
+// v1公開時は、このファイルと deploy.yml の
 // 「本番だけポスター表示に差し替える」ステップを消せば元に戻る。
 //
 // Header/Footer は未完成ページへのリンクを持っているので、あえて BaseLayout を使わない。
@@ -20,6 +20,8 @@ import site from "../data/site.json";
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- 本番では全URLがこのページを返すため、評価をトップに寄せる -->
+    <link rel="canonical" href="https://www.snct-fes.info/" />
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <title>{site.eventName}「{site.theme}」</title>

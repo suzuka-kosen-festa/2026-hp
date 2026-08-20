@@ -75,12 +75,22 @@ jobs:
 
       # 【暫定公開】v1公開までは本番だけポスター1枚にする。
       # プレビュー(PR)はこのステップを通らないので、各自のページの動作確認は
-      # 今までどおりできる。v1公開時はこのステップと site/holding/ を消せば戻る。
+      # 今までどおりできる。v1公開時はこのステップと holding.astro を消せば戻る。
+      #
+      # ページを名指しでリダイレクトするのではなく、トップ以外のHTMLを消す。
+      # 消えたURLには Cloudflare Pages が index.html を返すので、結果として
+      # 全URLがポスターになる。ページが増えても自動で対象になり、追記漏れが起きない。
       - name: 本番だけポスター表示に差し替える
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
-          cp holding/_redirects dist/_redirects
-          cp dist/holding/index.html dist/index.html
+          # 消す対象に自分自身が含まれるので、先に退避する
+          poster=$(mktemp)
+          cp dist/holding/index.html "$poster"
+          find dist -mindepth 2 -name '*.html' -delete
+          cp "$poster" dist/index.html
+          # 404.html があるとそちらが返ってしまうので、これもポスターにする
+          if [ -f dist/404.html ]; then cp "$poster" dist/404.html; fi
+          echo "残ったHTML:"; find dist -name '*.html'
 
       - name: Ensure Cloudflare Pages project exists
         uses: cloudflare/wrangler-action@v3
