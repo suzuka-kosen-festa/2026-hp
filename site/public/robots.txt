@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+# 開発用の部品ギャラリー（noindex 指定と揃える）
+Disallow: /gallery
+
+Sitemap: https://www.snct-fes.info/sitemap-index.xml

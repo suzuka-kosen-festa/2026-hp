@@ -44,6 +44,7 @@ const PAGE_RULES = [
   // sections/ は現状すべて home の構成要素。他ページ専用のsectionを足すときはここを分ける
   { pattern: /^site\/src\/components\/sections\//, page: "home" },
   { pattern: /^site\/src\/pages\/gallery\.astro$/, page: "gallery" },
+  { pattern: /^site\/src\/pages\/404\.astro$/, page: "404" },
   { pattern: /^site\/src\/pages\/holding\.astro$/, page: "holding" },
   { pattern: /^site\/src\/pages\/entry\//, page: "entry" },
   // 以降、ページを追加したらここに1行足して tests/<page>.spec.ts を作る
