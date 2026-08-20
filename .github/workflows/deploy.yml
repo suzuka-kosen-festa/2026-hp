@@ -73,6 +73,15 @@ jobs:
           path: site/playwright-report/
           retention-days: 7
 
+      # 【暫定公開】v1公開までは本番だけポスター1枚にする。
+      # プレビュー(PR)はこのステップを通らないので、各自のページの動作確認は
+      # 今までどおりできる。v1公開時はこのステップと site/holding/ を消せば戻る。
+      - name: 本番だけポスター表示に差し替える
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          cp holding/_redirects dist/_redirects
+          cp dist/holding/index.html dist/index.html
+
       - name: Ensure Cloudflare Pages project exists
         uses: cloudflare/wrangler-action@v3
         continue-on-error: true
