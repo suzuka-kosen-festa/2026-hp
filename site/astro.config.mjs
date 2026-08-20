@@ -12,7 +12,8 @@ export default defineConfig({
   site: 'https://www.snct-fes.info',
   integrations: [
     react(),
-    // /gallery は開発用（noindex）なので sitemap からも外す
-    sitemap({ filter: (page) => !page.includes('/gallery') }),
+    // /gallery は開発用（noindex）、/holding はv1公開までの暫定ページなので
+    // どちらも sitemap からは外す
+    sitemap({ filter: (page) => !page.includes('/gallery') && !page.includes('/holding') }),
   ],
 });

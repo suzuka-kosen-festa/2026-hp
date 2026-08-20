@@ -1,0 +1,64 @@
+---
+// 【暫定公開】v1公開までのあいだ、本番だけこのページを見せる。
+//
+// このファイル自体はどのデプロイにも含まれるが（/holding/ で見られる）、
+// トップに出るのは本番だけ。差し替えは .github/workflows/deploy.yml が
+// main への push のときだけ dist/index.html を上書きする形で行う。
+// プレビュー（PR）は素通しなので、各ページの動作確認は今までどおりできる。
+//
+// v1公開時は、このファイルと deploy.yml の
+// 「本番だけポスター表示に差し替える」ステップを消せば元に戻る。
+//
+// Header/Footer は未完成ページへのリンクを持っているので、あえて BaseLayout を使わない。
+import { Image } from "astro:assets";
+import poster from "../assets/poster.webp";
+import site from "../data/site.json";
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- 本番では全URLがこのページを返すため、評価をトップに寄せる -->
+    <link rel="canonical" href="https://www.snct-fes.info/" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <title>{site.eventName}「{site.theme}」</title>
+    <meta name="description" content={`${site.eventName}「${site.theme}」${site.dateLabel}`} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={`${site.eventName}「${site.theme}」`} />
+    <meta property="og:description" content={site.dateLabel} />
+  </head>
+  <body>
+    <main>
+      <Image src={poster} alt={`${site.eventName}「${site.theme}」ポスター　${site.dateLabel}`} widths={[600, 900, 1200, 1600]} sizes="(min-width: 900px) 70vh, 100vw" loading="eager" />
+    </main>
+  </body>
+</html>
+
+<style is:global>
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    background: #f8f8f8;
+  }
+  main {
+    min-height: 100svh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    box-sizing: border-box;
+  }
+  main img {
+    display: block;
+    width: auto;
+    max-width: 100%;
+    /* padding のぶんを引いて、縦にも必ず収まるようにする */
+    max-height: calc(100svh - 32px);
+    height: auto;
+    object-fit: contain;
+  }
+</style>
