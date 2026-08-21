@@ -11,49 +11,100 @@ interface Props {
   entries: Entry[];
 }
 
-const KNOWN_STAGES = ["LiveStage", "MainStage", "SubStage"] as const;
-type StageGroup = (typeof KNOWN_STAGES)[number] | "その他";
-const STAGE_ORDER: StageGroup[] = [...KNOWN_STAGES, "その他"];
+const STAGES = ["MainStage", "LiveStage", "SubStage"] as const;
+type Stage = (typeof STAGES)[number];
 
-function stageGroupOf(location: string | null): StageGroup {
-  return (KNOWN_STAGES as readonly string[]).includes(location ?? "") ? (location as StageGroup) : "その他";
+function isKnownStage(location: string | null): location is Stage {
+  return (STAGES as readonly string[]).includes(location ?? "");
 }
 
-const STAGE_TAGS = STAGE_ORDER.map((stage) => ({ id: stage, label: stage }));
-
 const DAYS: Day[] = ["day1", "day2"];
-const TABS: TabConfig[] = DAYS.map((day) => ({ id: day, label: formatDayLabel(day), tags: STAGE_TAGS }));
+const TABS: TabConfig[] = DAYS.map((day) => ({ id: day, label: formatDayLabel(day) }));
+
+const DESKTOP_QUERY = "(min-width: 900px)";
+const PX_PER_HOUR_SP = 360;
+const PX_PER_HOUR_PC = 440;
+const AXIS_MIN_START = 9 * 60;
+const AXIS_MAX_END = 17 * 60;
+const SAFETY_MIN_HEIGHT_SP = 78;
+const SAFETY_MIN_HEIGHT_PC = 96;
+
+function toMinutes(time: string): number {
+  const [h, m] = time.split(":").map(Number);
+  return h * 60 + m;
+}
+
+function formatHourLabel(minutes: number): string {
+  return `${String(Math.floor(minutes / 60)).padStart(2, "0")}:00`;
+}
 
 export default function TimetableList({ entries }: Props) {
   const [activeDay, setActiveDay] = useState<Day>(DAYS[0]);
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [isDesktop, setIsDesktop] = useState(false);
   const isFirstSync = useRef(true);
 
-  // マウント後にURL(?tab=&tags=)から初期状態を復元する。
   useEffect(() => {
-    const { tab, tags } = parseFilterParams(window.location.search);
+    const { tab } = parseFilterParams(window.location.search);
     if (tab && DAYS.includes(tab as Day)) setActiveDay(tab as Day);
-    if (tags.length > 0) setSelectedTags(tags);
   }, []);
 
-  // 日タブ・タグの選択をURLに反映する
+  useEffect(() => {
+    const mql = window.matchMedia(DESKTOP_QUERY);
+    const update = () => setIsDesktop(mql.matches);
+    update();
+    mql.addEventListener("change", update);
+    return () => mql.removeEventListener("change", update);
+  }, []);
+
+  const PX_PER_HOUR = isDesktop ? PX_PER_HOUR_PC : PX_PER_HOUR_SP;
+  const PX_PER_MINUTE = PX_PER_HOUR / 60;
+  const SAFETY_MIN_HEIGHT = isDesktop ? SAFETY_MIN_HEIGHT_PC : SAFETY_MIN_HEIGHT_SP;
+
   useEffect(() => {
     if (isFirstSync.current) {
       isFirstSync.current = false;
       return;
     }
-    const url = buildFilterUrl("/timetable/", { tab: activeDay, tags: selectedTags });
+    const url = buildFilterUrl("/timetable/", { tab: activeDay });
     window.history.replaceState(null, "", url);
-  }, [activeDay, selectedTags]);
+  }, [activeDay]);
 
   const permanentEntries = getPermanentEntries(entries);
-  const slots = getScheduledSlots(entries, activeDay);
-  const filtered =
-    selectedTags.length === 0 ? slots : slots.filter((slot) => selectedTags.includes(stageGroupOf(slot.entry.location)));
-  const grouped = STAGE_ORDER.map((stage) => ({
-    stage,
-    slots: filtered.filter((slot) => stageGroupOf(slot.entry.location) === stage),
-  })).filter((group) => group.slots.length > 0);
+  const slots = getScheduledSlots(entries, activeDay).filter((slot) => isKnownStage(slot.entry.location));
+
+  const starts = slots.map((slot) => toMinutes(slot.occurrence.start_time as string));
+  const ends = slots.map((slot) => toMinutes(slot.occurrence.end_time as string));
+  const axisStart = starts.length > 0 ? Math.min(AXIS_MIN_START, Math.floor(Math.min(...starts) / 60) * 60) : AXIS_MIN_START;
+  const axisEnd = ends.length > 0 ? Math.max(AXIS_MAX_END, Math.ceil(Math.max(...ends) / 60) * 60) : AXIS_MAX_END;
+
+  const hourMarks: number[] = [];
+  for (let t = axisStart; t <= axisEnd; t += 60) hourMarks.push(t);
+
+  const yFor = (minutes: number) => (minutes - axisStart) * PX_PER_MINUTE;
+  const totalHeight = yFor(axisEnd);
+
+  // .tl-blockのbox-shadowは(2px, 2px)なので、隙間がそれ以下だと次のカード(DOM順で後=描画も上)に
+  // 影が隠れてしまい、際どい丸め方次第で「影が出るカードと出ないカード」が混在してしまう。
+  // 影のオフセットより明確に広い隙間を確保する。
+  const CARD_GAP = 5;
+  // 実時間どおりの位置(naturalTop)を基本としつつ、すき間なく連続する短い企画では
+  // SAFETY_MIN_HEIGHTの確保によって前のカードと重なることがあるため、その場合だけ
+  // 前のカードの直後まで押し出す(通常は発動せず、衝突する箇所だけの補正)。
+  const columns = STAGES.map((stage) => {
+    let prevBottom = -Infinity;
+    const blocks = slots
+      .filter((slot) => slot.entry.location === stage)
+      .map((slot) => {
+        const start = toMinutes(slot.occurrence.start_time as string);
+        const end = toMinutes(slot.occurrence.end_time as string);
+        const naturalTop = yFor(start);
+        const height = Math.max(yFor(end) - naturalTop - CARD_GAP, SAFETY_MIN_HEIGHT);
+        const top = Math.max(naturalTop, prevBottom);
+        prevBottom = top + height + CARD_GAP;
+        return { slot, top, height };
+      });
+    return { stage, blocks };
+  });
 
   return (
     <div className="timetable-list" id="list">
@@ -91,39 +142,57 @@ export default function TimetableList({ entries }: Props) {
         tabs={TABS}
         activeTab={activeDay}
         onTabChange={(day) => setActiveDay(day as Day)}
-        selectedTags={selectedTags}
-        onTagsChange={setSelectedTags}
+        selectedTags={[]}
+        onTagsChange={() => {}}
       />
 
-      <div className="tl-schedule">
-        {grouped.length === 0 && <p className="tl-empty">該当する企画がありません</p>}
-        {grouped.map((group) => (
-          <section key={group.stage} id={group.stage} className="tl-stage">
-            <h2 className="tl-stage-title">{group.stage}</h2>
-            <ul className="tl-rows">
-              {group.slots.map(({ entry, occurrence }, i) => (
-                <li key={`${entry.id}-${occurrence.day}-${occurrence.start_time}-${i}`}>
-                  <a className="tl-row-link" href={`/entry/${entry.id}/`}>
-                    <div className="tl-time num">
-                      {occurrence.start_time}
-                      <span className="tl-time-sep">-</span>
-                      {occurrence.end_time}
-                    </div>
-                    <div className="tl-row-body">
-                      <p className="tl-name">
-                        {entry.name}
-                        {isOccurrenceNow(occurrence) && <span className="tl-now">NOW</span>}
-                      </p>
-                      {entry.group && <p className="tl-group">{entry.group}</p>}
-                      {group.stage === "その他" && entry.location && <p className="tl-location">{entry.location}</p>}
-                      {occurrence.note && <p className="tl-note">※{occurrence.note}</p>}
-                    </div>
-                  </a>
-                </li>
+      <div className="tl-grid-wrap">
+        <div className="tl-grid">
+          <div className="tl-corner" aria-hidden="true" />
+          {STAGES.map((stage) => (
+            <div key={stage} className="tl-col-header">
+              {stage}
+            </div>
+          ))}
+
+          <div className="tl-axis-body" style={{ height: `${totalHeight}px` }}>
+            {hourMarks.map((t) => (
+              <span key={t} className="tl-hour-label num" style={{ top: `${yFor(t)}px` }}>
+                {formatHourLabel(t)}
+              </span>
+            ))}
+          </div>
+
+          {columns.map(({ stage, blocks }) => (
+            <div key={stage} className="tl-col-body" style={{ height: `${totalHeight}px` }}>
+              {hourMarks.map((t) => (
+                <div key={t} className="tl-hour-line" style={{ top: `${yFor(t)}px` }} />
               ))}
-            </ul>
-          </section>
-        ))}
+              {blocks.map(({ slot: { entry, occurrence }, top, height }, i) => (
+                <a
+                  key={`${entry.id}-${occurrence.day}-${occurrence.start_time}-${i}`}
+                  className="tl-block"
+                  style={{ top: `${top}px`, height: `${height}px` }}
+                  href={`/entry/${entry.id}/`}
+                  title={entry.name}
+                >
+                  <span className="tl-block-time num">
+                    {occurrence.start_time}
+                    <span className="tl-time-sep">-</span>
+                    {occurrence.end_time}
+                  </span>
+                  <span className="tl-block-name">
+                    {entry.name}
+                    {isOccurrenceNow(occurrence) && <span className="tl-now">NOW</span>}
+                  </span>
+                  {entry.group && <span className="tl-block-group">{entry.group}</span>}
+                </a>
+              ))}
+            </div>
+          ))}
+        </div>
+
+        {slots.length === 0 && <p className="tl-empty">この日程の該当企画はまだありません</p>}
       </div>
     </div>
   );
