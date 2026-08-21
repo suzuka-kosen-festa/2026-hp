@@ -22,12 +22,14 @@ const DAYS: Day[] = ["day1", "day2"];
 const TABS: TabConfig[] = DAYS.map((day) => ({ id: day, label: formatDayLabel(day) }));
 
 const DESKTOP_QUERY = "(min-width: 900px)";
-const PX_PER_HOUR_SP = 360;
-const PX_PER_HOUR_PC = 440;
+const PX_PER_HOUR_SP = 280;
+const PX_PER_HOUR_PC = 340;
 const AXIS_MIN_START = 9 * 60;
 const AXIS_MAX_END = 17 * 60;
-const SAFETY_MIN_HEIGHT_SP = 78;
-const SAFETY_MIN_HEIGHT_PC = 96;
+// カードの最低保証高さ。時刻(1行)+企画名(最大2行)+padding+gapの実測合計を上回る値にする
+// (出演者/主催者名の表示をやめたぶん、以前より必要な高さが減っている)。
+const SAFETY_MIN_HEIGHT_SP = 50;
+const SAFETY_MIN_HEIGHT_PC = 60;
 
 function toMinutes(time: string): number {
   const [h, m] = time.split(":").map(Number);
@@ -83,13 +85,7 @@ export default function TimetableList({ entries }: Props) {
   const yFor = (minutes: number) => (minutes - axisStart) * PX_PER_MINUTE;
   const totalHeight = yFor(axisEnd);
 
-  // .tl-blockのbox-shadowは(2px, 2px)なので、隙間がそれ以下だと次のカード(DOM順で後=描画も上)に
-  // 影が隠れてしまい、際どい丸め方次第で「影が出るカードと出ないカード」が混在してしまう。
-  // 影のオフセットより明確に広い隙間を確保する。
   const CARD_GAP = 5;
-  // 実時間どおりの位置(naturalTop)を基本としつつ、すき間なく連続する短い企画では
-  // SAFETY_MIN_HEIGHTの確保によって前のカードと重なることがあるため、その場合だけ
-  // 前のカードの直後まで押し出す(通常は発動せず、衝突する箇所だけの補正)。
   const columns = STAGES.map((stage) => {
     let prevBottom = -Infinity;
     const blocks = slots
@@ -185,7 +181,6 @@ export default function TimetableList({ entries }: Props) {
                     {entry.name}
                     {isOccurrenceNow(occurrence) && <span className="tl-now">NOW</span>}
                   </span>
-                  {entry.group && <span className="tl-block-group">{entry.group}</span>}
                 </a>
               ))}
             </div>
