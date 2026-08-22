@@ -1,0 +1,32 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SponsorsSection from "../components/sections/SponsorsSection.astro";
+import Button from "../components/ui/Button.astro";
+---
+
+<BaseLayout title="協賛">
+  <section class="sponsors-page">
+    <SponsorsSection />
+
+    <Button
+      href="https://forms.gle/vgvRbGAmfEGoBbxBA"
+      target="_blank"
+      rel="noopener noreferrer"
+      color="yellow"
+    >
+      個人協賛リンク
+    </Button>
+  </section>
+</BaseLayout>
+
+<style>
+  .sponsors-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .sponsors-page :global(.button) {
+    margin-top: 24px;
+  }
+</style>
