@@ -1,0 +1,392 @@
+---
+import Card from "../ui/Card.astro";
+import Tape from "../ui/Tape.astro";
+import Button from "../ui/Button.astro";
+import TabTagFilter from "../filter/TabTagFilter.tsx";
+import { Image } from "astro:assets";
+
+
+import access from "../../data/access.json";
+
+/*
+ * 駐車場画像を自動取得
+ *
+ * JSONの image に書かれたファイル名から
+ * assets/access/ 内の画像を取得する
+ */
+const imageFiles = import.meta.glob(
+  "../../assets/access/*.{png,jpg,jpeg,webp}",
+  {
+    eager: true,
+    import: "default",
+  }
+);
+
+/*
+ * JSONで指定された画像を取得
+ */
+function getImage(filename?: string | null) {
+  if (!filename) return null;
+
+  const path = `../../assets/access/${filename}`;
+
+  return imageFiles[path] ?? null;
+}
+
+const parkings = access.parkings;
+---
+
+<section class="parking-section">
+
+  <!-- 見出し -->
+  <Tape color="red" rotate={3} as="p" class="cat">
+    駐車場
+  </Tape>
+
+
+  <!-- 駐車場案内 -->
+  <div class="parking-intro">
+    <div class="parking-description">
+      {access.description.map((text) => (
+        <p>{text}</p>
+      ))}
+    </div>
+  </div>
+
+
+  <!-- 駐車場タブ -->
+  <div
+    class="parking-tabs"
+    role="tablist"
+    aria-label="駐車場の選択"
+  >
+    {parkings.map((parking, index) => (
+      <button
+        type="button"
+        class:list={[
+          "parking-tab",
+          { "is-active": index === 0 },
+        ]}
+        id={`parking-tab-${index}`}
+        data-parking-tab={`parking-${index}`}
+        role="tab"
+        aria-selected={index === 0}
+        aria-controls={`parking-${index}`}
+      >
+        {parking.name}
+      </button>
+    ))}
+  </div>
+
+
+  <!-- 駐車場詳細 -->
+  {parkings.map((parking, index) => {
+    const panelId = `parking-${index}`;
+    const image = getImage(parking.image);
+
+    return (
+      <div
+        id={panelId}
+        class:list={[
+          "parking-panel",
+          { "is-active": index === 0 },
+        ]}
+        data-parking-panel={panelId}
+        role="tabpanel"
+        hidden={index !== 0}
+      >
+
+        <!-- 駐車場名 -->
+        <h3>
+          {parking.name}
+          {parking.label && `｜${parking.label}`}
+
+          {parking.location && (
+            <>
+              <br />
+              {parking.location}
+            </>
+          )}
+        </h3>
+
+
+        <!-- 駐車場画像 -->
+        {image && (
+          <Card
+            rotate={parking.rotate ?? 0}
+            texture
+            class="parking-image-card"
+          >
+            <Image
+              src={image}
+              alt={
+                parking.imageAlt ??
+                `${parking.name}の案内図`
+              }
+              loading={index === 0 ? "eager" : "lazy"}
+              fetchpriority={
+                index === 0 ? "high" : undefined
+              }
+            />
+          
+          </Card>
+        )}
+
+
+        <!-- 手順 -->
+        {parking.route &&
+          parking.route.length > 0 && (
+            <div class="route">
+
+              <p class="route-title">
+                駐車場までの手順
+              </p>
+
+              <ol>
+                {parking.route.map((step) => (
+                  <li>
+                    {step}
+                  </li>
+                ))}
+              </ol>
+
+            </div>
+        )}
+
+
+        <!-- 補足 -->
+        {parking.notes &&
+          parking.notes.length > 0 && (
+            <div class="notes">
+
+              {parking.notes.map((note) => (
+                <p>
+                  <strong>
+                    {note.title}
+                  </strong>
+                  <br />
+                  {note.text}
+                </p>
+              ))}
+
+            </div>
+        )}
+
+
+        <!-- Google Maps -->
+        {parking.mapUrl && (
+          <Button
+            href={parking.mapUrl}
+            class="map-button"
+            target="_blank"
+            rel="noopener noreferrer"
+            color="yellow"
+          >
+            Googleマップで開く →
+          </Button>
+        )}
+
+      </div>
+    );
+  })}
+
+
+  <!-- 最終更新日 -->
+  <p class="updated">
+    最終更新日：
+    <time datetime={access.updated_at}>
+      {access.updated_at.replaceAll("-", ".")}
+    </time>
+  </p>
+
+</section>
+
+
+<script>
+  const tabs =
+    document.querySelectorAll<HTMLButtonElement>(
+      "[data-parking-tab]"
+    );
+
+  const panels =
+    document.querySelectorAll<HTMLElement>(
+      "[data-parking-panel]"
+    );
+
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      const target = tab.dataset.parkingTab;
+
+      tabs.forEach((item) => {
+        const active = item === tab;
+
+        item.classList.toggle(
+          "is-active",
+          active
+        );
+
+        item.setAttribute(
+          "aria-selected",
+          String(active)
+        );
+      });
+
+      panels.forEach((panel) => {
+        const active =
+          panel.dataset.parkingPanel === target;
+
+        panel.classList.toggle(
+          "is-active",
+          active
+        );
+
+        panel.hidden = !active;
+      });
+    });
+  });
+</script>
+
+
+<style>
+  .parking-section {
+    margin-bottom: 56px;
+  }
+
+
+  /* 駐車場案内 */
+
+  .parking-intro {
+    margin-top: 24px;
+  }
+
+  .parking-description {
+    margin: 24px 0;
+    font-size: 14px;
+    line-height: 1.8;
+  }
+
+  .parking-description p {
+    margin-bottom: 14px;
+  }
+
+  .parking-description p:last-child {
+    margin-bottom: 0;
+  }
+
+  .parking-intro img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+
+  /* タブ */
+
+  .parking-tabs {
+    display: flex;
+    gap: 6px;
+    margin-top: 32px;
+    margin-bottom: 28px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-bottom: 2px solid var(--ink);
+  }
+
+  .parking-tab {
+    flex: 0 0 auto;
+    padding: 8px 16px;
+    color: var(--ink);
+    background: transparent;
+    border: 0;
+    border-bottom: 3px solid transparent;
+    font: inherit;
+    font-size: 15px;
+    font-weight: 400;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+
+  .parking-tab.is-active {
+    border-bottom-color: var(--red);
+    font-weight: 800;
+  }
+
+  .parking-tab:focus-visible {
+    outline: 2px solid var(--blue);
+    outline-offset: 2px;
+  }
+
+
+  /* 駐車場 */
+
+  .parking-panel h3 {
+    margin-bottom: 20px;
+    font-size: 18px;
+    line-height: 1.5;
+  }
+
+  .parking-panel img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+
+  /* Google Maps */
+
+  .parking-panel :global(.map-button) {
+    margin-top: 24px;
+  }
+
+
+  /* 手順 */
+
+  .route {
+    margin-top: 28px;
+    font-size: 14px;
+    line-height: 1.8;
+  }
+
+  .route-title {
+    margin-bottom: 16px;
+    font-weight: 800;
+  }
+
+  .route ol {
+    margin: 0;
+    padding-left: 1.5em;
+  }
+
+  .route li {
+    padding-left: 4px;
+    margin-bottom: 10px;
+  }
+
+
+  /* 補足 */
+
+  .notes {
+    margin-top: 28px;
+  }
+
+  .notes p {
+    margin-bottom: 18px;
+  }
+
+
+  /* 更新日 */
+
+  .updated {
+    margin-top: 32px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #666;
+  }
+
+
+  @media (min-width: 900px) {
+    .parking-panel h3 {
+      font-size: 20px;
+    }
+  }
+</style>

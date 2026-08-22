@@ -1,0 +1,45 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Tape from "../components/ui/Tape.astro";
+import Parking from "../components/access/Parking.astro";
+import AccessInfo from "../components/access/AccessInfo.astro";
+
+import site from "../data/site.json";
+---
+
+<BaseLayout
+  title={`アクセス | ${site.eventName}`}
+  description={`${site.eventName}へのアクセス方法と駐車場のご案内`}
+>
+  <section class="access">
+    <header class="head">
+      <Tape color="blue" rotate={-3} as="p">ACCESS</Tape>
+    </header>
+
+    <!-- 会場アクセス -->
+    <AccessInfo />
+
+    <!-- 駐車場 -->
+    <Parking />
+
+  </section>
+</BaseLayout>
+
+<style>
+  .access {
+    max-width: var(--content-sp);
+    margin: 0 auto;
+    padding: 24px 20px 64px;
+  }
+
+  .head {
+    margin-bottom: 40px;
+  }
+
+  @media (min-width: 900px) {
+    .access {
+      max-width: var(--content-narrow);
+      padding: 40px 24px 96px;
+    }
+  }
+</style>
