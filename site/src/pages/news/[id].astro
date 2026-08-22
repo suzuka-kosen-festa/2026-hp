@@ -1,0 +1,189 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Tape from "../../components/ui/Tape.astro";
+import Chip from "../../components/ui/Chip.astro";
+
+import Card from "../../components/ui/Card.astro";
+
+import site from "../../data/site.json";
+import { formatNewsDate,isNew,getNewsPaths } from "../../lib/news.ts";
+
+export function getStaticPaths() {
+    
+  return getNewsPaths();
+  
+}
+
+interface Props {
+  item: {
+    id: string;
+    date: string;
+    title: string;
+    href?: string;
+    body?: string;
+  };
+}
+
+const { item } = Astro.props;
+const bodyLines = item.body?.split("\n") ?? [];
+
+---
+
+<BaseLayout
+  title={`${item.title} | ${site.eventName}`}
+  description={item.title}
+>
+
+
+  <article class="news-detail">
+    
+    <p class="crumb"><a href="/news">← お知らせ一覧へ</a></p>
+    
+    <header class="head">
+      <Tape color="blue" rotate={-3} as="p" class="cat">NEWS</Tape>
+
+      <div class="time-row">
+        <time datetime={formatNewsDate ( item.date )} class="date">
+          {item.date}
+        </time>
+        
+        {isNew(item.date) && <Chip color="red">NEW</Chip>}
+      </div>
+
+      <h1 class="title">{item.title}</h1>
+    </header>
+
+{
+  item.body && (
+    <div class="markdown-body">
+      {
+        bodyLines.map((line) => {
+        
+          if (line.startsWith("#### ")) {
+           return <h4>{line.slice(5)}</h4>;
+          }
+
+          if (line.startsWith("### ")) {
+            return <h3>{line.slice(4)}</h3>;
+          }
+
+          if (line.startsWith("## ")) {
+            return <h2>{line.slice(3)}</h2>;
+          }
+
+          if (line.startsWith("# ")) {
+            return <h1>{line.slice(2)}</h1>;
+          }
+
+           if (line.startsWith("* ")) {
+            return <p><strong>{line.slice(2)}</strong></p>;
+          }
+
+
+          if (line.startsWith("- ")) {
+            return (
+              <p class="list-item">
+                <span class="bullet" aria-hidden="true">・</span>
+                <span>{line.slice(2)}</span>
+              </p>
+            );
+          }
+
+          if (line.startsWith("> ")) {
+            return (
+              <blockquote>
+                <Card rotate={1} texture attach="pin" cornerColor="yellow">
+                    <p style="font-weight:800;">{line.slice(2)}</p>
+                </Card>
+              </blockquote>
+            );
+          }
+
+          if (line.trim() === "") {
+            return <div class="spacer" aria-hidden="true" />;
+          }
+
+          return <p>{line}</p>;
+        })
+      }
+    </div>
+  )
+}
+  </article>
+</BaseLayout>
+
+<style>
+
+  .news-detail {
+    max-width: var(--content-sp);
+    margin: 0 auto;
+    padding: 24px 20px 64px;
+  }
+
+  .crumb {
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+
+  .crumb a {
+    text-decoration: underline;
+  }
+
+  .head {
+    margin-bottom: 28px;
+    padding-top:4px;
+    padding-bottom:8px;
+    border-bottom: 2px solid var(--ink);
+  }
+
+  .time-row {
+    display: flex;
+    align-items: center;
+    gap: 8px; 
+    margin-top:20px;
+  }
+
+  .date {
+    font-weight: 800;
+    color: var(--blue);
+    white-space: nowrap;
+    font-size: 12px;
+  }
+
+  .head h1 {
+    font-size: 24px;
+  }
+
+  @media (min-width: 900px) {
+    .news-detail {
+      max-width: var(--content-narrow, 700px);
+      padding: 40px 24px 96px;
+    } 
+ 
+    .head h1 {
+      font-size: 36px;
+    }
+  }
+
+/* マークダウン */
+/* リスト */
+
+.markdown-body .list-item {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.markdown-body .bullet {
+  flex: 0 0 auto;
+  font-weight: 700;
+}
+
+
+/* 空行 */
+
+.markdown-body .spacer {
+  height: 0.6em;
+}
+</style>
