@@ -1,0 +1,36 @@
+---
+// タイムテーブルページ。booth.astro/BoothListと同じ構成:
+// タブ切り替え・タグ絞り込みはcomponents/timetable/TimetableList.tsx(Reactアイランド)に切り出す。
+import BaseLayout from "../layouts/BaseLayout.astro";
+import TimetableList from "../components/timetable/TimetableList";
+import { entries } from "../lib/loadEntries";
+import site from "../data/site.json";
+---
+
+<BaseLayout title={`TIMETABLE | ${site.eventName}`} description="2日間のタイムスケジュール">
+  <section class="timetable">
+    <h1 class="page-title">TIMETABLE</h1>
+    <TimetableList client:load entries={entries} />
+  </section>
+</BaseLayout>
+
+<style>
+  .timetable {
+    max-width: var(--content-sp);
+    margin: 0 auto;
+    padding: 24px 20px 64px;
+  }
+
+  .page-title {
+    font-size: 22px;
+    font-weight: 800;
+    margin-bottom: 20px;
+  }
+
+  @media (min-width: 900px) {
+    .timetable {
+      max-width: var(--content-wide);
+      padding: 40px 24px 96px;
+    }
+  }
+</style>
