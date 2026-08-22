@@ -26,11 +26,8 @@ const PX_PER_HOUR_SP = 280;
 const PX_PER_HOUR_PC = 340;
 const AXIS_MIN_START = 9 * 60;
 const AXIS_MAX_END = 17 * 60;
-// カードの最低保証高さ。時刻(1行)+企画名(最大2行)+padding+gapの実測合計を上回る値にする
-// (出演者/主催者名の表示をやめたぶん、以前より必要な高さが減っている)。
-const SAFETY_MIN_HEIGHT_SP = 50;
-const SAFETY_MIN_HEIGHT_PC = 60;
-
+const SAFETY_MIN_HEIGHT_SP = 36;
+const SAFETY_MIN_HEIGHT_PC = 46;
 function toMinutes(time: string): number {
   const [h, m] = time.split(":").map(Number);
   return h * 60 + m;

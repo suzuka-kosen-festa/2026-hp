@@ -170,10 +170,9 @@
   font-size: 10.5px;
   font-weight: 800;
   line-height: 1.25;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
+  white-space: nowrap;
   overflow: hidden;
+  text-overflow: ellipsis;
 }
 .tl-now {
   position: relative;
