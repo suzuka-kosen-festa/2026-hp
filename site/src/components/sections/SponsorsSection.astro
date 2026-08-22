@@ -22,16 +22,32 @@ import sponsors from "../../data/sponsors.json";
   </div>
 
   <Reveal client:visible>
-    <Tape color="black" rotate={-1.2} as="h2" class="sec-title">SPONSORS</Tape>
+  <Tape color="black" rotate={-1.2} as="h2" class="sec-title">SPONSORS</Tape>
 
+  <div class="sponsor-group">
+    <h3>法人協賛</h3>
     <ul class="grid">
       {
-        sponsors.map((s: { name: string; url: string | null }) => (
-          <li class="slot">{s.url ? <a href={s.url}>{s.name}</a> : <span>{s.name}</span>}</li>
-        ))
+        sponsors
+          .filter((s) => s.type === "corporate")
+          .sort((a, b) => a.name.localeCompare(b.name, "ja"))
+          .map((s) => <li class="slot">{s.name}</li>)
       }
     </ul>
-  </Reveal>
+  </div>
+
+  <div class="sponsor-group">
+    <h3>個人協賛</h3>
+    <ul class="grid">
+      {
+        sponsors
+          .filter((s) => s.type === "individual")
+          .sort((a, b) => a.name.localeCompare(b.name, "ja"))
+          .map((s) => <li class="slot">{s.name}</li>)
+      }
+    </ul>
+  </div>
+</Reveal>
 </section>
 
 <style>
@@ -124,6 +140,13 @@ import sponsors from "../../data/sponsors.json";
     font-weight: 700;
   }
 
+  .sponsor-group {
+    position: relative;
+    z-index: 1;
+    margin-bottom: 32px;
+  }
+
+
   @media (min-width: 900px) {
     .sponsors {
       max-width: var(--content-wide);
@@ -133,4 +156,6 @@ import sponsors from "../../data/sponsors.json";
       grid-template-columns: repeat(4, 1fr);
     }
   }
+
+
 </style>

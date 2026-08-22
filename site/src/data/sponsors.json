@@ -1,5 +1,66 @@
 [
-  { "name": "協賛企業（プレースホルダー）A", "url": null, "logo": null },
-  { "name": "協賛企業（プレースホルダー）B", "url": null, "logo": null },
-  { "name": "協賛企業（プレースホルダー）C", "url": null, "logo": null }
+  {
+  "name": "企業名",
+  "type": "corporate",
+  "featured": true,
+  "logo": "test1.png"
+  },  
+    {
+  "name": "aest2",
+  "type": "corporate",
+  "featured": true,
+  "logo": "test2.png"
+  },    {
+  "name": "10文字ぐらいの写真のない会社",
+  "type": "corporate",
+  "featured": true,
+  "logo": "zest3.png"
+  },    {
+  "name": "z企業名3",
+  "type": "corporate",
+  "featured": true,
+  "logo": "test4.png"
+  },    {
+  "name": "a企業名4",
+  "type": "corporate",
+  "featured": true,
+  "logo": "test5.png"
+  },   {
+  "name": "30文字ぐらいの写真のない会社。30文字ぐらいの写真のない会社。テスト",
+  "type": "corporate",
+  "featured": true,
+  "logo": "test5.png"
+  },     
+  {
+  "name": "test",
+  "type": "corporate",
+  "featured": false,
+  "logo": "test1.png"
+  },  
+  {
+  "name": "個人",
+  "type": "individual",
+  "featured": false,
+  "logo": "test2.png"
+  },
+    {
+  "name": "個人",
+  "type": "individual",
+  "featured": true,
+  "logo": "test2.png"
+  },{
+  "name": "匿名",
+  "type": "individual",
+  "featured": false,
+  "logo": "test2.png"
+  },{
+  "name": "匿名",
+  "type": "individual",
+  "featured": true,
+  "logo": "test5.png"
+  },{
+  "name": "匿名",
+  "type": "individual",
+  "featured": true
+  }
 ]
