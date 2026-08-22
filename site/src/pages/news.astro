@@ -13,10 +13,6 @@ const newsItems = getNews();
   description={`${site.eventName}のお知らせ`}
 >
   <section class="news">
-    <p class="crumb">
-      <a href="/">← 戻る</a>
-    </p>
-
     <header class="head">
       <Tape color="blue" rotate={-3} as="p" class="cat">
         NEWS
@@ -72,17 +68,6 @@ const newsItems = getNews();
     max-width: var(--content-sp);
     margin: 0 auto;
     padding: 24px 20px 64px;
-  }
-
-  .crumb {
-    margin-bottom: 20px;
-    font-size: 12px;
-    font-weight: 700;
-  }
-
-  .crumb a {
-    text-decoration: underline;
-    text-underline-offset: 3px;
   }
 
   .head {
