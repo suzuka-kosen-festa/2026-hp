@@ -14,6 +14,13 @@ interface Props {
 const STAGES = ["MainStage", "LiveStage", "SubStage"] as const;
 type Stage = (typeof STAGES)[number];
 
+/**
+ * timetableに載せるのはこの3ステージの企画だけ（requirements.md §3.5）。
+ * 時刻を持っていてもステージ以外で開催する企画（ワークショップ等）は、
+ * ここで**意図的に**落としている。バグではないので、載っていない企画を見つけても
+ * このフィルタを緩めないこと。会場内の特定ステージに紐づかない企画は、
+ * トップのpickupやnewsで扱う方針。
+ */
 function isKnownStage(location: string | null): location is Stage {
   return (STAGES as readonly string[]).includes(location ?? "");
 }
