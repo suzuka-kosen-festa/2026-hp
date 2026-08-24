@@ -22,13 +22,24 @@ import site from "../data/site.json";
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- 本番では全URLがこのページを返すため、評価をトップに寄せる -->
     <link rel="canonical" href="https://www.snct-fes.info/" />
+    <!-- BaseLayout と同じ組。favicon.svg は削除済みなので参照しない -->
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-96.png" type="image/png" sizes="96x96" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <title>{site.eventName}「{site.theme}」</title>
     <meta name="description" content={`${site.eventName}「${site.theme}」${site.dateLabel}`} />
+    <!-- 本番では全URLがこのページを返すため、共有時のカードもここで完結させる -->
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="第61回鈴鹿高専祭「collage」" />
+    <meta property="og:locale" content="ja_JP" />
     <meta property="og:title" content={`${site.eventName}「${site.theme}」`} />
     <meta property="og:description" content={site.dateLabel} />
+    <meta property="og:url" content="https://www.snct-fes.info/" />
+    <meta property="og:image" content="https://www.snct-fes.info/ogp.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="第61回鈴鹿高専祭 テーマロゴ「collage 2026」" />
+    <meta name="twitter:card" content="summary_large_image" />
   </head>
   <body>
     <main>
