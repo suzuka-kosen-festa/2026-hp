@@ -2,7 +2,6 @@
 import Card from "../ui/Card.astro";
 import Tape from "../ui/Tape.astro";
 import Button from "../ui/Button.astro";
-import TabTagFilter from "../filter/TabTagFilter.tsx";
 import { Image } from "astro:assets";
 
 
@@ -93,6 +92,7 @@ const parkings = access.parkings;
         ]}
         data-parking-panel={panelId}
         role="tabpanel"
+        aria-labelledby={`parking-tab-${index}`}
         hidden={index !== 0}
       >
 
