@@ -11,6 +11,11 @@ interface Props {
 }
 
 const { title, description = "第61回鈴鹿高専祭「collage」公式サイト", noindex = false } = Astro.props;
+
+// 同じ中身が apex・pages.dev でも配信されるので、canonical で www に寄せて重複扱いを避ける。
+// Astro.site は astro.config.mjs の site。
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL("/ogp.png", Astro.site);
 ---
 
 <!doctype html>
@@ -21,11 +26,27 @@ const { title, description = "第61回鈴鹿高専祭「collage」公式サイ�
       iOS26のSafariはページを画面端まで敷き、ツールバーやステータスバーが
       コンテンツの上に浮くため、安全領域は各自で塞ぐ必要がある（Issue #42） -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <!-- public/ にあるのは .ico と .svg。png を指していて全ページ404していた -->
+    <!-- テーマロゴ（正方形版）から生成。元画像は src/assets/logo/theme-logo-square.png -->
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-96.png" type="image/png" sizes="96x96" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
     {noindex && <meta name="robots" content="noindex, nofollow" />}
+
+    <!-- OGP。画像は横長のテーマロゴを 1200x630 に組んだ public/ogp.png -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="第61回鈴鹿高専祭「collage」" />
+    <meta property="og:locale" content="ja_JP" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="第61回鈴鹿高専祭 テーマロゴ「collage 2026」" />
+    <meta name="twitter:card" content="summary_large_image" />
+
     <title>{title}</title>
   </head>
   <body>
