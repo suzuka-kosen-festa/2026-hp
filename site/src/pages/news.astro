@@ -1,4 +1,138 @@
 ---
-//Step 1: PR/CI/Preview flow check 
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Tape from "../components/ui/Tape.astro";
+import Chip from "../components/ui/Chip.astro";
+import site from "../data/site.json";
+import {  formatNewsDate , getNews , isNew  } from "../lib/news";
+
+const newsItems = getNews();
 ---
 
+<BaseLayout
+  title={`お知らせ | ${site.eventName}`}
+  description={`${site.eventName}のお知らせ`}
+>
+  <section class="news">
+    <header class="head">
+      <Tape color="blue" rotate={-3} as="p" class="cat">
+        NEWS
+      </Tape>
+    </header>
+
+    <ul class="list">
+      {
+        newsItems.map((item) => (
+          <li class="item">
+            {item.href ? (
+              <a href={item.href} class="link">
+                <div class="meta">
+                  <time datetime={formatNewsDate ( item.date )} class="date">
+                    {item.date}
+                  </time>
+
+                  {isNew(item.date) && (
+                    <Chip color="red" rotate={-1.5}>
+                      NEW
+                    </Chip>
+                  )}
+                </div>
+
+                <h2 class="item-title">{item.title}</h2>
+              </a>
+            ) : (
+              <div class="link">
+                <div class="meta">
+                  <time datetime={formatNewsDate ( item.date )} class="date">
+                    {item.date}
+                  </time>
+
+                  {isNew(item.date) && (
+                    <Chip color="red" rotate={-1.5}>
+                      NEW
+                    </Chip>
+                  )}
+                </div>
+
+                <h2 class="un-item-title">{item.title}</h2>
+              </div>
+            )}
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</BaseLayout>
+
+<style>
+  .news {
+    max-width: var(--content-sp);
+    margin: 0 auto;
+    padding: 24px 20px 64px;
+  }
+
+  .head {
+    margin-bottom: 12px;
+  }
+
+  .head :global(.cat) {
+    font-size: 11px;
+  }
+
+  .list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .item {
+    border-bottom: 2px dashed #bbb;
+  }
+
+  .link {
+    display: block;
+    padding: 18px 4px;
+    text-decoration: none;
+  }
+
+  .link:hover .item-title {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 3px;
+  }
+
+  .meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .date {
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--blue);
+    white-space: nowrap;
+  }
+
+  .item-title {
+    margin: 7px 0 0;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+  
+  .un-item-title {
+    margin: 7px 0 0;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+  
+  @media (min-width: 900px) {
+    .news {
+      max-width: var(--content-narrow);
+      padding: 40px 24px 96px;
+    }
+
+    .item-title {
+      font-size: 16px;
+    }
+  }
+</style>
