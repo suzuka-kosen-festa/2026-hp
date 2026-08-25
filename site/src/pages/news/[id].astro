@@ -6,7 +6,7 @@ import Chip from "../../components/ui/Chip.astro";
 import Card from "../../components/ui/Card.astro";
 
 import site from "../../data/site.json";
-import { formatNewsDate,isNew,getNewsPaths } from "../../lib/news.ts";
+import { formatNewsDate,isNew,getNewsPaths } from "../../lib/news";
 
 export function getStaticPaths() {
     
@@ -60,19 +60,19 @@ const bodyLines = item.body?.split("\n") ?? [];
         bodyLines.map((line) => {
         
           if (line.startsWith("#### ")) {
-           return <h4>{line.slice(5)}</h4>;
+           return <h5>{line.slice(5)}</h5>;
           }
 
           if (line.startsWith("### ")) {
-            return <h3>{line.slice(4)}</h3>;
+            return <h4>{line.slice(4)}</h4>;
           }
 
           if (line.startsWith("## ")) {
-            return <h2>{line.slice(3)}</h2>;
+            return <h3>{line.slice(3)}</h3>;
           }
 
           if (line.startsWith("# ")) {
-            return <h1>{line.slice(2)}</h1>;
+            return <h2>{line.slice(2)}</h2>;
           }
 
            if (line.startsWith("* ")) {
