@@ -19,6 +19,18 @@ const entries: { id: string; image?: string }[] = ["booth", "department", "progr
 const withoutImage = entries.find((entry) => !entry.image);
 const withImage = entries.find((entry) => entry.image);
 
+/**
+ * 画像ありも画像なしも見つからないと両方の describe が skip になり、
+ * 「常に緑だが何も検査していない」状態になる。データ側が空になったことに
+ * 気づけるよう、ここで明示的に落とす。
+ */
+test("画像まわりを検査できるデータがある", () => {
+  expect(
+    withoutImage ?? withImage,
+    "entries が空です。画像まわりの検査が1件も走っていません",
+  ).toBeTruthy();
+});
+
 test.describe("entry の画像", () => {
   test.skip(!withoutImage, "画像なしのエントリが無いため");
 
