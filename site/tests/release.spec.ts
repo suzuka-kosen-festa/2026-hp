@@ -49,6 +49,16 @@ test.describe(`公開制御（APPLY_RELEASE=${APPLY_RELEASE ? "1" : "未設定"}
     });
   }
 
+  test("開発用ページは本番の成果物に含まれない", async ({ request }) => {
+    test.skip(!APPLY_RELEASE, "本番モードのビルドでのみ検査できる");
+    // 「準備中」として残すと、永久に公開されないページを準備中と偽ることになる。
+    // 存在しないURLとして 404 を返すのが正しい
+    expect((await request.get("/gallery/")).status(), "/gallery/ が本番に残っています").toBe(404);
+    if (!isHolding) {
+      expect((await request.get("/holding/")).status(), "ポスターページがトップの複製として残っています").toBe(404);
+    }
+  });
+
   test("sitemap は本番に実在するURLだけを載せる", async ({ request }) => {
     const xml = await (await request.get("/sitemap-0.xml")).text();
     const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => new URL(m[1]).pathname);

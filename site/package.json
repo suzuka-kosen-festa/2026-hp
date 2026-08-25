@@ -8,8 +8,8 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
-    "build:release": "APPLY_RELEASE=1 astro build",
+    "build": "astro build && node scripts/strip-dev-pages.mjs",
+    "build:release": "APPLY_RELEASE=1 npm run build",
     "preview": "astro preview",
     "check": "node scripts/check-motion-safety.mjs",
     "test:e2e": "playwright test",
