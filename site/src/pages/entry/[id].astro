@@ -63,16 +63,16 @@ const displayTags = entry.tags.filter((tag) => tag !== "day1" && tag !== "day2")
       }
     </header>
 
-    <div class="photo">
-      {
-        entry.image ? (
+    {
+      /* 写真を用意できない企画は今後も存在するので、画像なしを正式なレイアウトとして扱う。
+         「NO IMAGE」の空枠を出すと、16:9ぶんの高さがそのまま無駄になる（Issue #56） */
+      entry.image && (
+        <div class="photo">
           <img src={entry.image} alt="" loading="eager" fetchpriority="high" />
-        ) : (
-          <span class="no-image num">NO IMAGE</span>
-        )
-      }
-      <Star class="photo-star" color="var(--yellow)" size="30px" rotate={-12} />
-    </div>
+          <Star class="photo-star" color="var(--yellow)" size="30px" rotate={-12} />
+        </div>
+      )
+    }
 
     {entry.description && <p class="desc">{entry.description}</p>}
 
@@ -212,11 +212,6 @@ const displayTags = entry.tags.filter((tag) => tag !== "day1" && tag !== "day2")
     width: 100%;
     height: 100%;
     object-fit: cover;
-  }
-  .no-image {
-    font-size: 13px;
-    letter-spacing: 0.05em;
-    color: #999;
   }
   .photo :global(.photo-star) {
     position: absolute;
