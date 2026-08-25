@@ -35,19 +35,16 @@ function getImage(filename?: string | null) {
         {
         sponsors
           .filter((s) => s.type === "corporate" && s.featured)
+          .map((s) => ({ ...s, image: getImage(s.logo) }))
+          /* フッターはロゴだけを並べる。ロゴが用意できていない協賛は、
+             名前だけの空きスロットを作らずここで外す */
+          .filter((s) => s.image)
           .sort((a, b) => a.name.localeCompare(b.name, "ja"))
-          .map((s) => {
-            const image = getImage(s.logo);
-            return (
-              <li class="slot">
-                {image ? (
-                  <Image src={image} alt={s.name} />
-                ) : (
-                  s.name
-                )}
-              </li>
-            );
-          })
+          .map((s) => (
+            <li class="slot">
+              <Image src={s.image} alt={s.name} />
+            </li>
+          ))
         }
         </ul>
       </div>

@@ -59,7 +59,14 @@ function ordered(type: string) {
       {
         ordered("corporate").map((s) => {
           const logo = getLogo(s.logo);
-          const body = logo ? <Image src={logo} alt={s.name} /> : <span>{s.name}</span>;
+          /* ロゴがあれば「ロゴ＋企業名」。alt を空にしているのは、
+             すぐ隣に企業名を文字で出しており読み上げが重複するため */
+          const body = (
+            <>
+              {logo && <Image src={logo} alt="" class="slot-logo" />}
+              <span class="slot-name">{s.name}</span>
+            </>
+          );
           return (
             <li class:list={["slot", { "is-featured": s.featured }]}>
               {/* リンクを持たない協賛もあるので、url があるときだけリンクにする */}
@@ -85,10 +92,10 @@ function ordered(type: string) {
           <li class="slot">
             {s.url ? (
               <a href={s.url} target="_blank" rel="noopener noreferrer">
-                <span>{s.name}</span>
+                <span class="slot-name">{s.name}</span>
               </a>
             ) : (
-              <span>{s.name}</span>
+              <span class="slot-name">{s.name}</span>
             )}
           </li>
         ))
@@ -188,8 +195,10 @@ function ordered(type: string) {
     font-weight: 700;
     /* ロゴありと名前のみが混在するので、高さを揃えて中央に置く */
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: 8px;
     min-height: 76px;
   }
 
@@ -202,17 +211,23 @@ function ordered(type: string) {
   /* リンクの有無で見た目が変わらないよう、スロット全体を当たり判定にする */
   .slot a {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: 8px;
     width: 100%;
     height: 100%;
     color: inherit;
   }
 
-  .slot img {
+  .slot-logo {
     max-width: 100%;
-    max-height: 80px;
+    max-height: 56px;
     object-fit: contain;
+  }
+
+  .slot-name {
+    line-height: 1.4;
   }
 
   .sponsor-group {
