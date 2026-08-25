@@ -2,7 +2,7 @@
 
 第61回鈴鹿高専祭（2026/10/31 Sat・11/1 Sun、鈴鹿工業高等専門学校）の公式サイト。
 
-- 本番: https://snct-fes-2026.pages.dev
+- 本番: https://snct-fes-2026.pages.dev (snct-fes.info)
 
 ## ディレクトリ構成
 
