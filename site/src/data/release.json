@@ -1,8 +1,4 @@
 {
   "mode": "holding",
-  "published": [
-    "/",
-    "/access/",
-    "/news/"
-  ]
+  "published": []
 }
