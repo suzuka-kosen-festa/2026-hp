@@ -80,8 +80,14 @@ jobs:
       # ページを名指しでリダイレクトするのではなく、トップ以外のHTMLを消す。
       # 消えたURLには Cloudflare Pages が index.html を返すので、結果として
       # 全URLがポスターになる。ページが増えても自動で対象になり、追記漏れが起きない。
+      # 公開状態は src/data/release.json の mode で決める。
+      # v1公開時は mode を "open" にすればこのステップが丸ごと飛ぶ（ワークフローは触らない）
+      - name: 公開モードを判定
+        id: release
+        run: echo "mode=$(node -p "require('./src/data/release.json').mode")" >> "$GITHUB_OUTPUT"
+
       - name: 本番だけポスター表示に差し替える
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && steps.release.outputs.mode == 'holding'
         run: |
           # 消す対象に自分自身が含まれるので、先に退避する
           poster=$(mktemp)
