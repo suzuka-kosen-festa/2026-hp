@@ -2,6 +2,8 @@
 import SvgDefs from "../components/SvgDefs.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
+import Placeholder from "../components/ui/Placeholder.astro";
+import { isPublished } from "../lib/release";
 import "../styles/global.css";
 
 interface Props {
@@ -11,6 +13,11 @@ interface Props {
 }
 
 const { title, description = "第61回鈴鹿高専祭「collage」公式サイト", noindex = false } = Astro.props;
+
+// 公開前のページは、実装済みでも中身の代わりに「準備中」を出す（src/data/release.json）。
+// ヘッダーのnavは全ページから常に7項目をリンクしているので、未公開でもページ自体は
+// 生成する。消すとトップから飛べる場所が404になってしまう。
+const published = isPublished(Astro.url.pathname);
 
 // 同じ中身が apex・pages.dev でも配信されるので、canonical で www に寄せて重複扱いを避ける。
 // Astro.site は astro.config.mjs の site。
@@ -32,7 +39,7 @@ const ogImage = new URL("/ogp.png", Astro.site);
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
-    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    {(noindex || !published) && <meta name="robots" content="noindex, nofollow" />}
 
     <!-- OGP。画像は横長のテーマロゴを 1200x630 に組んだ public/ogp.png -->
     <meta property="og:type" content="website" />
@@ -53,7 +60,21 @@ const ogImage = new URL("/ogp.png", Astro.site);
     <SvgDefs />
     <Header />
     <main>
-      <slot />
+      {
+        published ? (
+          <slot />
+        ) : (
+          /* data-release-gate は検査用の目印。ページ自身が出す準備中（map/sponsors のような
+             未実装ページ）と、公開制御による準備中を区別するために付けている */
+          <div data-release-gate>
+            <Placeholder
+              label="COMING SOON"
+              heading="このページは準備中です"
+              note="内容の準備ができしだい公開します。もうしばらくお待ちください。"
+            />
+          </div>
+        )
+      }
     </main>
     <Footer />
   </body>

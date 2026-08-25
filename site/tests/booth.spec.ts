@@ -1,5 +1,12 @@
+import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 import { expect, test } from "@playwright/test";
 import { describePage } from "./_shared";
+
+/** /booth/ が準備中のあいだは中身が無いので、ページ固有の検査は飛ばす */
+const releasePath = fileURLToPath(new URL("../src/data/release.json", import.meta.url));
+const release: { published: string[] } = JSON.parse(readFileSync(releasePath, "utf8"));
+const boothPublished = release.published.includes("/booth/");
 
 describePage("booth", "/booth/");
 
@@ -14,6 +21,8 @@ describePage("booth", "/booth/");
  * （高速スクロールでは一瞬 1px 未満だけ重なるが、これは実害ではない）。
  */
 test.describe("booth PC", () => {
+  test.skip(!boothPublished, "/booth/ が準備中のため（src/data/release.json）");
+
   test("スクロール中にタグフィルタがヘッダーの下に潜らない", async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 800 });
     await page.addInitScript(() => {

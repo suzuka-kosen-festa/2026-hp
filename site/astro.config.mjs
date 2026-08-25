@@ -4,6 +4,8 @@ import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 
+import { isInSitemap } from './src/lib/release.ts';
+
 // https://astro.build/config
 export default defineConfig({
   // canonical URL と sitemap の絶対URLの基準。
@@ -12,8 +14,11 @@ export default defineConfig({
   site: 'https://www.snct-fes.info',
   integrations: [
     react(),
-    // /gallery は開発用（noindex）、/holding はv1公開までの暫定ページなので
-    // どちらも sitemap からは外す
-    sitemap({ filter: (page) => !page.includes('/gallery') && !page.includes('/holding') }),
+    // 公開しているページだけ載せる（src/data/release.json）。
+    // 準備中のページは noindex なので、sitemap に出すと矛盾する。
+    // /gallery と /holding は isPublished の対象外（常にtrue）なのでここで明示的に外す
+    // 本番に実在するURLだけを載せる。実体の無いURLを申告し続けると、
+    // 消えたあとも検索結果から飛ばれ続ける（/booth/ で実際に起きた）
+    sitemap({ filter: (page) => isInSitemap(new URL(page).pathname) }),
   ],
 });

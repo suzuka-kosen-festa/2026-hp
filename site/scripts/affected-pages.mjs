@@ -26,6 +26,8 @@ const SHARED = [
   /^site\/src\/components\/(Header|Footer|SvgDefs)\.astro$/,
   /^site\/src\/styles\//,
   /^site\/src\/(lib|types)\//,
+  // 公開制御。全ページの表示可否が変わるので全ページ検査する
+  /^site\/src\/data\/release\.json$/,
   /^site\/src\/data\//,
   /^site\/(package\.json|package-lock\.json|astro\.config\..*|playwright\.config\.ts)$/,
   /^site\/public\//,
