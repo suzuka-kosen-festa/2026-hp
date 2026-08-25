@@ -1,0 +1,80 @@
+---
+import Button from "../ui/Button.astro";
+import access from "../../data/access.json";
+---
+
+<section class="access-section">
+  <h2>会場：{access.venue.name}</h2>
+
+  <div class="info">
+  <ul>
+    {access.access.map((item) => (
+      <li>
+        <strong>{item.title}</strong><br />
+        {item.text}
+
+        {item.subtext && (
+          <>
+            <br />
+            {item.subtext}
+          </>
+        )}
+      </li>
+    ))}
+  </ul>
+</div>
+
+  <Button
+    href="https://www.google.com/maps/search/?api=1&query=鈴鹿工業高等専門学校"
+    class="map-button"
+    target="_blank"
+    rel="noopener noreferrer"
+    color="black"
+  >
+    Googleマップで開く →
+  </Button>
+</section>
+
+<style>
+  .access-section {
+    margin-bottom: 56px;
+  }
+
+  .access-section > h2 {
+    margin-bottom: 24px;
+    font-size: 22px;
+    line-height: 1.4;
+  }
+
+  .info {
+    margin-bottom: 24px;
+  }
+
+  .info ul {
+    margin: 0;
+    padding-left: 1.4em;
+  }
+
+  .info li {
+    margin-bottom: 14px;
+    line-height: 1.7;
+  }
+
+  .info li:last-child {
+    margin-bottom: 0;
+  }
+
+  .info strong {
+    font-weight: 800;
+  }
+
+  .access-section :global(.map-button) {
+    margin-top: 4px;
+  }
+  
+  @media (min-width: 900px) {
+    .access-section h2 {
+      font-size: 24px;
+    }
+  }
+</style>

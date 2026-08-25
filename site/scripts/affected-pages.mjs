@@ -50,6 +50,7 @@ const PAGE_RULES = [
   // そのページのE2Eが1つも走らない（実装の大半がここに置かれるので取りこぼしが大きい）。
   // ページを追加してコンポーネントを components/<ページ名>/ に置くなら、ここにも足すこと
   { pattern: /^site\/src\/components\/(booth|timetable|access)\//, page: (m) => m[1] },
+
   // 以降、ページを追加したらここに1行足して tests/<page>.spec.ts を作る
   { pattern: /^site\/src\/pages\/booth/, page: "booth" },
   { pattern: /^site\/src\/pages\/news/, page: "news" },
