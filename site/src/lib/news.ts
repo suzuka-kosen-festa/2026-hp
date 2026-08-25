@@ -1,4 +1,8 @@
-import newsData from "../data/news.json";
+import { withoutDrafts } from "./draft";
+import rawNews from "../data/news.json";
+
+/** draft のお知らせは本番ビルドで落とす。一覧・詳細ページの生成ともここを通る */
+const newsData = withoutDrafts(rawNews);
 
 /**
  * NEW 判定の期間（日）。

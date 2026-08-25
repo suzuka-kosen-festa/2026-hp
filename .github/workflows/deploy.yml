@@ -37,8 +37,12 @@ jobs:
       - name: Check
         run: npm run check
 
+      # 未確定データ（draft: true）は本番だけ落とす。プレビューでは見えるので
+      # レイアウト確認ができる。詳細は site/src/lib/draft.ts
       - name: Build
         run: npm run build
+        env:
+          INCLUDE_DRAFTS: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && '0' || '1' }}
 
       # ページ単位で分担しているので、触ったページのE2Eだけを走らせる。
       # 共通部品を触った場合は affected-pages.mjs が全ページを返す。

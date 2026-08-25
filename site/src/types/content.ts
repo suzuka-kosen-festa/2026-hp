@@ -15,6 +15,8 @@ export interface Occurrence {
 }
 
 export interface Entry {
+  /** 動作確認用のダミー等、本番に出したくないものに付ける（本番ビルドで落とす）。詳細は lib/draft.ts */
+  draft?: boolean;
   id: string;
   category: Category;
   name: string;
