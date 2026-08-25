@@ -2,9 +2,13 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import SponsorsSection from "../components/sections/SponsorsSection.astro";
 import Button from "../components/ui/Button.astro";
+import site from "../data/site.json";
 ---
 
-<BaseLayout title="協賛">
+<BaseLayout
+  title={`SPONSORS | ${site.eventName}`}
+  description="第61回鈴鹿高専祭にご協賛いただいた企業・団体の紹介"
+>
   <section class="sponsors-page">
     <SponsorsSection />
 

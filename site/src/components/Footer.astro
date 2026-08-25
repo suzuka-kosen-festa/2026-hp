@@ -31,7 +31,6 @@ function getImage(filename?: string | null) {
       <h4>主要協賛</h4>
 
       <div class="sponsor-group">
-        <span class="label">法人協賛</span>
         <ul class="grid">
         {
         sponsors
@@ -53,29 +52,6 @@ function getImage(filename?: string | null) {
         </ul>
       </div>
 
-      <div class="sponsor-group">
-        <span class="label">個人協賛</span>
-        <ul class="grid">
-        {
-        sponsors
-          .filter((s) => s.type === "individual" && s.featured)
-          .sort((a, b) => a.name.localeCompare(b.name, "ja"))
-          .map((s) => {
-            const image = getImage(s.logo);
-
-            return (
-              <li class="slot">
-                {image ? (
-                  <Image src={image} alt={s.name} />
-                ) : (
-                  s.name
-                )}
-              </li>
-            );
-          })
-        }
-        </ul>
-      </div>
     </div>
   
     <div class="contact">
@@ -177,9 +153,10 @@ function getImage(filename?: string | null) {
   text-align: center;
   font-weight: 700;
   color: var(--ink);
-  width: 150px;
-  height: 120px;
-  font-size: 16px;
+  /* 全ページ共通のフッターなので、協賛が増えても縦に伸びすぎないよう小さめに保つ */
+  width: 75px;
+  height: 60px;
+  font-size: 10px;
 }
 
 .slot img {
@@ -190,10 +167,10 @@ function getImage(filename?: string | null) {
 
   @media (min-width: 900px) {
     .slot {
-  width: 200px;
-  height:160px;
-   font-size: 20px;
-}
+      width: 100px;
+      height: 80px;
+      font-size: 12px;
+    }
   }
 
 </style>

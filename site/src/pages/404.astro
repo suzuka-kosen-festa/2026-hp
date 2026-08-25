@@ -1,0 +1,16 @@
+---
+// 404ページ。
+// これが無いと Cloudflare Pages は未知のパスに index.html を 200 で返してしまい、
+// 存在しないURLがトップページの複製として無限に生えることになる（ソフト404）。
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Placeholder from "../components/ui/Placeholder.astro";
+import site from "../data/site.json";
+---
+
+<BaseLayout title={`ページが見つかりません | ${site.eventName}`} description="お探しのページは見つかりませんでした。">
+  <Placeholder
+    label="404"
+    heading="ページが見つかりません"
+    note="URLが変わったか、まだ公開されていないページかもしれません。お手数ですがトップページからお探しください。"
+  />
+</BaseLayout>

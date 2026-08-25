@@ -2,7 +2,36 @@
 import Reveal from "../motion/Reveal";
 import Tape from "../ui/Tape.astro";
 import Star from "../ui/Star.astro";
+import { Image } from "astro:assets";
 import sponsors from "../../data/sponsors.json";
+
+/* 協賛ロゴはフッターと同じ置き場から拾う */
+const logoFiles = import.meta.glob("../../assets/sponsors/*.{png,jpg,jpeg,webp}", {
+  eager: true,
+  import: "default",
+});
+
+function getLogo(filename?: string | null) {
+  if (!filename) return null;
+  return logoFiles[`../../assets/sponsors/${filename}`] ?? null;
+}
+
+/**
+ * 並び順は「主要協賛(featured) → ロゴあり → 五十音」。
+ * featured はフッターに載るのと同じ企業で、ロゴを持っていることが多い。
+ * ロゴありを先に出すのは、名前だけのスロットが上に並ぶと見栄えが落ちるため。
+ */
+function ordered(type: string) {
+  return sponsors
+    .filter((s) => s.type === type)
+    .sort((a, b) => {
+      if (!!a.featured !== !!b.featured) return a.featured ? -1 : 1;
+      const aLogo = !!getLogo(a.logo);
+      const bLogo = !!getLogo(b.logo);
+      if (aLogo !== bLogo) return aLogo ? -1 : 1;
+      return a.name.localeCompare(b.name, "ja");
+    });
+}
 ---
 
 <section class="sponsors">
@@ -28,10 +57,22 @@ import sponsors from "../../data/sponsors.json";
     <h3>法人協賛</h3>
     <ul class="grid">
       {
-        sponsors
-          .filter((s) => s.type === "corporate")
-          .sort((a, b) => a.name.localeCompare(b.name, "ja"))
-          .map((s) => <li class="slot">{s.name}</li>)
+        ordered("corporate").map((s) => {
+          const logo = getLogo(s.logo);
+          const body = logo ? <Image src={logo} alt={s.name} /> : <span>{s.name}</span>;
+          return (
+            <li class:list={["slot", { "is-featured": s.featured }]}>
+              {/* リンクを持たない協賛もあるので、url があるときだけリンクにする */}
+              {s.url ? (
+                <a href={s.url} target="_blank" rel="noopener noreferrer">
+                  {body}
+                </a>
+              ) : (
+                body
+              )}
+            </li>
+          );
+        })
       }
     </ul>
   </div>
@@ -40,10 +81,17 @@ import sponsors from "../../data/sponsors.json";
     <h3>個人協賛</h3>
     <ul class="grid">
       {
-        sponsors
-          .filter((s) => s.type === "individual")
-          .sort((a, b) => a.name.localeCompare(b.name, "ja"))
-          .map((s) => <li class="slot">{s.name}</li>)
+        ordered("individual").map((s) => (
+          <li class="slot">
+            {s.url ? (
+              <a href={s.url} target="_blank" rel="noopener noreferrer">
+                <span>{s.name}</span>
+              </a>
+            ) : (
+              <span>{s.name}</span>
+            )}
+          </li>
+        ))
       }
     </ul>
   </div>
@@ -138,6 +186,33 @@ import sponsors from "../../data/sponsors.json";
     text-align: center;
     font-size: 12px;
     font-weight: 700;
+    /* ロゴありと名前のみが混在するので、高さを揃えて中央に置く */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 76px;
+  }
+
+  /* 主要協賛はロゴを載せるぶん少し大きく取る */
+  .slot.is-featured {
+    min-height: 104px;
+    padding: 12px;
+  }
+
+  /* リンクの有無で見た目が変わらないよう、スロット全体を当たり判定にする */
+  .slot a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    color: inherit;
+  }
+
+  .slot img {
+    max-width: 100%;
+    max-height: 80px;
+    object-fit: contain;
   }
 
   .sponsor-group {
