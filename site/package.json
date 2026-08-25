@@ -9,6 +9,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
+    "build:release": "APPLY_RELEASE=1 astro build",
     "preview": "astro preview",
     "check": "node scripts/check-motion-safety.mjs",
     "test:e2e": "playwright test",

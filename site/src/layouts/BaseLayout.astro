@@ -64,11 +64,15 @@ const ogImage = new URL("/ogp.png", Astro.site);
         published ? (
           <slot />
         ) : (
-          <Placeholder
-            label="COMING SOON"
-            heading="このページは準備中です"
-            note="内容の準備ができしだい公開します。もうしばらくお待ちください。"
-          />
+          /* data-release-gate は検査用の目印。ページ自身が出す準備中（map/sponsors のような
+             未実装ページ）と、公開制御による準備中を区別するために付けている */
+          <div data-release-gate>
+            <Placeholder
+              label="COMING SOON"
+              heading="このページは準備中です"
+              note="内容の準備ができしだい公開します。もうしばらくお待ちください。"
+            />
+          </div>
         )
       }
     </main>

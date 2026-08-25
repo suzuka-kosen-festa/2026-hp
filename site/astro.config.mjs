@@ -4,7 +4,7 @@ import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 
-import { isPublished } from './src/lib/release.ts';
+import { isInSitemap } from './src/lib/release.ts';
 
 // https://astro.build/config
 export default defineConfig({
@@ -17,12 +17,8 @@ export default defineConfig({
     // 公開しているページだけ載せる（src/data/release.json）。
     // 準備中のページは noindex なので、sitemap に出すと矛盾する。
     // /gallery と /holding は isPublished の対象外（常にtrue）なのでここで明示的に外す
-    sitemap({
-      filter: (page) => {
-        const path = new URL(page).pathname;
-        if (path.startsWith('/gallery') || path.startsWith('/holding')) return false;
-        return isPublished(path);
-      },
-    }),
+    // 本番に実在するURLだけを載せる。実体の無いURLを申告し続けると、
+    // 消えたあとも検索結果から飛ばれ続ける（/booth/ で実際に起きた）
+    sitemap({ filter: (page) => isInSitemap(new URL(page).pathname) }),
   ],
 });
