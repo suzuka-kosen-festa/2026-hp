@@ -25,12 +25,6 @@
   object-fit: cover;
 }
 
-.pc__noimg {
-  font-size: 13px;
-  letter-spacing: 0.05em;
-  color: #999;
-}
-
 .pc__body {
   display: flex;
   flex-direction: column;
@@ -83,8 +77,10 @@
   aspect-ratio: 4 / 3;
 }
 
-.pc--compact .pc__noimg {
-  font-size: 9px;
+/* 画像なし。写真ぶんの余白が消えるので、左の内側余白を右と揃える
+   （写真ありの 10px は、写真を紙片の端に寄せるための詰めなので流用できない） */
+.pc--compact.pc--noimg {
+  padding-left: 14px;
 }
 
 .pc--compact .pc__body {
@@ -125,4 +121,38 @@
   -webkit-line-clamp: 2;
   line-clamp: 2;
   overflow: hidden;
+}
+
+/* ── リンクで包んだときの挙動 ────────────────────
+   home の PICK UP（PromoList）と /booth の常設セクションが同じカードを使うので、
+   押し込み感とフォーカス表示は並べ方ではなくカード側に持たせる。
+   並べ方ごとに書くと、片方だけ直したときに手触りがずれる */
+a:has(> .pc) .pc {
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.12s ease;
+}
+
+/* :active はモバイルのタップでも効く */
+a:has(> .pc):active .pc {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 var(--ink);
+}
+
+@media (hover: hover) {
+  a:has(> .pc):hover .pc {
+    transform: translate(-1px, -1px);
+    box-shadow: 6px 6px 0 var(--ink);
+  }
+}
+
+a:has(> .pc):focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  a:has(> .pc) .pc {
+    transition: none;
+  }
 }

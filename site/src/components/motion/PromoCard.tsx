@@ -21,14 +21,14 @@ export default function PromoCard({ entry, more = false }: Props) {
   const label = entry.isPermanent ? "常設企画" : entry.category;
 
   return (
-    <div className="pc pc--compact">
-      <div className="pc__photo">
-        {entry.image ? (
+    <div className={`pc pc--compact${entry.image ? "" : " pc--noimg"}`}>
+      {/* 写真を用意できない企画は今後も存在するので、画像なしを正式なレイアウトとして扱う。
+          「NO IMAGE」の空枠を出すと、写真ブロックごと省く詳細ページと食い違う（Issue #60） */}
+      {entry.image && (
+        <div className="pc__photo">
           <img src={entry.image} alt="" loading="lazy" />
-        ) : (
-          <span className="pc__noimg num">NO IMAGE</span>
-        )}
-      </div>
+        </div>
+      )}
       <div className="pc__body">
         <p className="pc__label">{label}</p>
         <p className="pc__name">{entry.name}</p>
