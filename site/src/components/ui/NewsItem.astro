@@ -9,7 +9,7 @@ const { date, href, isNew = false } = Astro.props;
 const Tag = href ? "a" : "div";
 ---
 
-<Tag class="news-item" href={href}>
+<Tag class={href ? "news-item is-link" : "news-item"} href={href}>
   <span class="date num">{date}</span>
   {isNew && <span class="new">NEW</span>}
   <span class="title"><slot /></span>
@@ -51,5 +51,26 @@ const Tag = href ? "a" : "div";
   }
   .title {
     color: var(--ink);
+  }
+  /* 詳細ページを持つお知らせにだけ「→」を出す。ホバーの無いスマホでも
+     押せるかどうかが分かるようにする（Issue #63）。/news 一覧と揃えている */
+  .is-link .title::after {
+    content: "→";
+    margin-left: 6px;
+    color: var(--blue);
+    font-family: var(--font-num);
+    font-weight: 800;
+    white-space: nowrap;
+  }
+  .is-link:focus-visible {
+    outline: 3px solid var(--blue);
+    outline-offset: 2px;
+  }
+  @media (hover: hover) {
+    .is-link:hover .title {
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 3px;
+    }
   }
 </style>

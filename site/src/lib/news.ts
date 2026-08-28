@@ -91,6 +91,22 @@ export function isNew(date: string) {
 }
 
 /**
+ * お知らせの遷移先。詳細ページが無いお知らせは undefined を返す。
+ *
+ * 詳細ページは body があるものだけ生成される（getNewsPaths）。リンクの有無を
+ * 手書きの href に頼ると、body を足したのに href を書き忘れて「記事はあるのに
+ * 押せない」状態になる。判定は body 側を正とし、href は外部リンク用の上書きに留める。
+ *
+ * 使い方:
+ * const href = getNewsHref(item);
+ */
+export function getNewsHref(item: { id: string; href?: string; body?: string }) {
+  if (item.href) return item.href;
+
+  return item.body ? `/news/${item.id}/` : undefined;
+}
+
+/**
  * 詳細ページを生成するお知らせのパスを取得。
  *
  * body がある記事だけ対象。
