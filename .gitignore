@@ -5,3 +5,7 @@
 
 # Playwright MCP の実行時ログ・スクショ置き場
 .playwright-mcp/
+
+# Playwright をうっかりルートから実行したときの出力（正規の置き場は site/ 配下）
+test-results/
+playwright-report/

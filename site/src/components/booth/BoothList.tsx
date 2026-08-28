@@ -5,6 +5,7 @@ import PromoCard from "../motion/PromoCard";
 import { getByCategory, getPermanentEntries } from "../../lib/entries";
 import { buildFilterUrl, parseFilterParams } from "../../lib/deepLink";
 import { dayColorClass, formatDayLabel } from "../../lib/eventDate";
+import { displayTags, matchesTag, tagColor, tagLabel } from "../../lib/tags";
 import type { Category, Day, Entry, Occurrence } from "../../types/content";
 
 interface Props {
@@ -29,22 +30,22 @@ const TABS: TabConfig[] = [
     id: "出店",
     label: "出店",
     tags: [
-      { id: "飲食-フード", label: "飲食-フード" },
-      { id: "飲食-スイーツ", label: "飲食-スイーツ" },
-      { id: "レク", label: "レク" },
-      { id: "物販", label: "物販" },
-      { id: "展示", label: "展示" },
+      { id: "飲食-フード", label: tagLabel("飲食-フード") },
+      { id: "飲食-スイーツ", label: tagLabel("飲食-スイーツ") },
+      { id: "レク", label: tagLabel("レク") },
+      { id: "物販", label: tagLabel("物販") },
+      { id: "展示", label: tagLabel("展示") },
     ],
   },
   {
     id: "学科展示",
     label: "学科展示",
     tags: [
-      { id: "M科", label: "機械" },
-      { id: "E科", label: "電気電子" },
-      { id: "I科", label: "電子情報" },
-      { id: "C科", label: "生物応用" },
-      { id: "S科", label: "材料" },
+      { id: "M科", label: tagLabel("M科") },
+      { id: "E科", label: tagLabel("E科") },
+      { id: "I科", label: tagLabel("I科") },
+      { id: "C科", label: tagLabel("C科") },
+      { id: "S科", label: tagLabel("S科") },
     ],
   },
   {
@@ -61,8 +62,8 @@ const TABS: TabConfig[] = [
     tags: [
       { id: "day1", label: formatDayLabel("day1") },
       { id: "day2", label: formatDayLabel("day2") },
-      { id: "中夜祭", label: "中夜祭" },
-      { id: "決勝バンド", label: "決勝バンド" },
+      { id: "中夜祭", label: tagLabel("中夜祭") },
+      { id: "決勝バンド", label: tagLabel("決勝バンド") },
     ],
   },
 ];
@@ -97,7 +98,7 @@ export default function BoothList({ entries }: Props) {
   const filtered =
     selectedTags.length === 0
       ? regularEntries
-      : regularEntries.filter((entry) => entry.tags.some((tag) => selectedTags.includes(tag)));
+      : regularEntries.filter((entry) => selectedTags.some((tag) => matchesTag(entry, tag)));
 
   return (
     <div className="booth-list" id="list">
@@ -152,11 +153,11 @@ export default function BoothList({ entries }: Props) {
                   <p className="bl-name">{entry.name}</p>
                   {entry.group && <p className="bl-group">{entry.group}</p>}
                   {entry.summary && <p className="bl-summary">{entry.summary}</p>}
-                  {entry.tags.length > 0 && (
+                  {displayTags(entry.tags).length > 0 && (
                     <ul className="bl-tags">
-                      {entry.tags.map((tag, ti) => (
+                      {displayTags(entry.tags).map((tag) => (
                         <li key={tag}>
-                          <span className={`bl-chip ${ti % 2 === 0 ? "red" : "blue"}`}>{tag}</span>
+                          <span className={`bl-chip ${tagColor(tag)}`}>{tagLabel(tag)}</span>
                         </li>
                       ))}
                     </ul>

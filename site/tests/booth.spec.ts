@@ -81,3 +81,20 @@ test.describe("booth PC", () => {
     ).toBeGreaterThanOrEqual(0);
   });
 });
+
+/**
+ * カードのチップは内部キー（day1 / M科）ではなく表示名を出す。
+ * 表示名が絞り込みバー側にしか無かったため、同じ画面でフィルタは「機械」、
+ * カードは「M科」と違う言葉が出ていた（Issue #53）。
+ */
+test("カードのチップに内部キーが出ない", async ({ page }) => {
+  await page.goto("/booth/", { waitUntil: "networkidle" });
+  await page.getByRole("tab", { name: "学科展示" }).click();
+
+  const chips = await page.locator(".bl-chip").allTextContents();
+  expect(chips.length, "学科展示のカードにチップが1つも出ていません").toBeGreaterThan(0);
+  expect(
+    chips.filter((text) => /^(day[12]|[MEICS]科)$/.test(text.trim())),
+    "内部キーがそのままチップに出ています",
+  ).toEqual([]);
+});

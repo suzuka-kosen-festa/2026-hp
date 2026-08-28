@@ -10,6 +10,7 @@ import Button from "../../components/ui/Button.astro";
 import Star from "../../components/ui/Star.astro";
 import { entries } from "../../lib/loadEntries";
 import { dayColorClass, formatDayLabel } from "../../lib/eventDate";
+import { displayTags as toDisplayTags, tagColor, tagLabel } from "../../lib/tags";
 import type { Day, Entry, Occurrence } from "../../types/content";
 import site from "../../data/site.json";
 
@@ -38,8 +39,9 @@ function formatTime(occurrence: Occurrence) {
 
 const dayGroups = groupByDay(entry.occurrences);
 const hasSchedule = entry.isPermanent || dayGroups.length > 0;
-// 表示用のタグからは日付タグを落とす（開催日は上の「開催」欄で正確に出しているため重複する）
-const displayTags = entry.tags.filter((tag) => tag !== "day1" && tag !== "day2");
+// 表示用のタグからは日付タグを落とす（開催日は上の「開催」欄で正確に出しているため重複する）。
+// 落とす判定と表示名・色は lib/tags.ts が唯一の持ち主（Issue #53）
+const displayTags = toDisplayTags(entry.tags);
 ---
 
 <BaseLayout title={`${entry.name} | ${site.eventName}`} description={entry.summary ?? entry.description ?? undefined}>
@@ -53,9 +55,9 @@ const displayTags = entry.tags.filter((tag) => tag !== "day1" && tag !== "day2")
       {
         displayTags.length > 0 && (
           <ul class="tags">
-            {displayTags.map((tag, i) => (
+            {displayTags.map((tag) => (
               <li>
-                <Chip color={i % 2 === 0 ? "red" : "blue"}>{tag}</Chip>
+                <Chip color={tagColor(tag)}>{tagLabel(tag)}</Chip>
               </li>
             ))}
           </ul>
