@@ -3,7 +3,14 @@
   top: var(--header-offset-sp);
   z-index: 50;
   background: var(--paper);
-  padding: 10px 16px 12px;
+  /* ページ左右の余白を打ち消して、コンテナの端まで敷く。
+     この帯の役目は「下を流れるコンテンツを背景で隠すこと」なので、左右に余白が
+     残るとそこだけ素通しになり、スクロール中に横から中身が覗く（Issue #64）。
+     timetable のグリッド(.tl-grid-wrap)と同じ打ち消し方で、値も booth/timetable の
+     ページ padding（SP 20px・PC 24px）に合わせている。
+     100vw はスクロールバー幅ぶん溢れて横スクロールが出るので使わない */
+  margin-inline: -20px;
+  padding: 10px 20px 12px;
   border-bottom: 2px solid var(--ink);
 }
 
@@ -18,6 +25,9 @@
        Header.astro の SHRINK_AT を下げるか、この top を --header-height-pc 側へ寄せること。
        なお、スクロール中に変化する値をここに入れるとガクつくので必ず固定値を使う */
     top: var(--header-height-pc-shrunk);
+    /* PCはページ padding が 24px */
+    margin-inline: -24px;
+    padding-inline: 24px;
   }
 }
 

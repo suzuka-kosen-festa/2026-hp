@@ -3,10 +3,17 @@ import { fileURLToPath } from "node:url";
 import { expect, test } from "@playwright/test";
 import { describePage } from "./_shared";
 
-/** /booth/ が準備中のあいだは中身が無いので、ページ固有の検査は飛ばす */
+/**
+ * /booth/ が準備中のあいだは中身が無いので、ページ固有の検査は飛ばす。
+ *
+ * 判定に APPLY_RELEASE を含めるのが重要。公開制御が適用されるのは本番と
+ * release.json を触るPRだけなので、release.json だけで見ると通常のPRや手元でも
+ * 恒久的に skip され続ける。CIのレポーターは失敗しか注釈しないため、
+ * skip は緑のチェックに埋もれて誰も気づけない（CLAUDE.md の運用ルール）。
+ */
 const releasePath = fileURLToPath(new URL("../src/data/release.json", import.meta.url));
 const release: { published: string[] } = JSON.parse(readFileSync(releasePath, "utf8"));
-const boothPublished = release.published.includes("/booth/");
+const boothHidden = process.env.APPLY_RELEASE === "1" && !release.published.includes("/booth/");
 
 describePage("booth", "/booth/");
 
@@ -21,7 +28,7 @@ describePage("booth", "/booth/");
  * （高速スクロールでは一瞬 1px 未満だけ重なるが、これは実害ではない）。
  */
 test.describe("booth PC", () => {
-  test.skip(!boothPublished, "/booth/ が準備中のため（src/data/release.json）");
+  test.skip(boothHidden, "/booth/ が準備中のため（src/data/release.json）");
 
   test("スクロール中にタグフィルタがヘッダーの下に潜らない", async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 800 });
