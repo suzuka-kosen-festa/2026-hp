@@ -20,35 +20,8 @@
   text-decoration: none;
 }
 
-/* カードのハードシャドウを押し込む＝「押した」感触。:active はモバイルのタップでも効く */
-.pl__link .pc {
-  transition:
-    transform 0.12s ease,
-    box-shadow 0.12s ease;
-}
-
-.pl__link:active .pc {
-  transform: translate(2px, 2px);
-  box-shadow: 2px 2px 0 var(--ink);
-}
-
-@media (hover: hover) {
-  .pl__link:hover .pc {
-    transform: translate(-1px, -1px);
-    box-shadow: 6px 6px 0 var(--ink);
-  }
-}
-
-.pl__link:focus-visible {
-  outline: 3px solid var(--blue);
-  outline-offset: 4px;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .pl__link .pc {
-    transition: none;
-  }
-}
+/* 押し込み感・ホバー・フォーカス表示は PromoCard.css 側にある
+   （/booth の常設セクションも同じカードを使うため、カード側に持たせている） */
 
 /* 検証用: タップ領域の可視化 */
 .pl--hit .pl__link {

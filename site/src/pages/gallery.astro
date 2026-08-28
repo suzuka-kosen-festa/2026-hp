@@ -15,6 +15,10 @@ import { getFeaturedEntries } from "../lib/entries";
 import { entries } from "../lib/loadEntries";
 
 const featured = getFeaturedEntries(entries);
+
+// 実データは現在すべて image が無く、画像ありの見え方をレビューできない。
+// 比較用に1件だけ写真を差した複製を作る（画像は本番でも配信している /ogp.png を借用）。
+const featuredWithImage = featured.slice(0, 1).map((entry) => ({ ...entry, image: "/ogp.png" }));
 ---
 
 <BaseLayout title="部品ギャラリー（開発用）" noindex>
@@ -144,6 +148,19 @@ const featured = getFeaturedEntries(entries);
       </div>
 
       <h3>参考: 広告が1件のとき</h3>
+      <div class="promo-slot" data-promo>
+        <PromoList client:visible entries={featured.slice(0, 1)} />
+      </div>
+
+      <h3>参考: 画像あり / 画像なし</h3>
+      <p class="sub">
+        写真を用意できない企画は今後も残るため、<strong>画像なしを正式なレイアウトとして扱う</strong>（Issue #60）。
+        「NO IMAGE」の空枠は出さない。写真ブロックごと省く詳細ページ <code>/entry/[id]</code> と同じ考え方で、
+        カードの高さは中身なりに変わる。
+      </p>
+      <div class="promo-slot" data-promo>
+        <PromoList client:visible entries={featuredWithImage} />
+      </div>
       <div class="promo-slot" data-promo>
         <PromoList client:visible entries={featured.slice(0, 1)} />
       </div>

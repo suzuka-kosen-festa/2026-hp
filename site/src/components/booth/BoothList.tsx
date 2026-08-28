@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import "./BoothList.css";
 import TabTagFilter, { type TabConfig } from "../filter/TabTagFilter";
+import PromoCard from "../motion/PromoCard";
 import { getByCategory, getPermanentEntries } from "../../lib/entries";
 import { buildFilterUrl, parseFilterParams } from "../../lib/deepLink";
 import { dayColorClass, formatDayLabel } from "../../lib/eventDate";
@@ -102,28 +103,25 @@ export default function BoothList({ entries }: Props) {
     <div className="booth-list" id="list">
       {permanentEntries.length > 0 && (
         <div className="bl-permanent">
-          <h2 className="bl-permanent-title">常設</h2>
+          {/* カード内の「常設企画」ラベルが見出しの役割を兼ねるので、黄色テープの
+              見出しは出さない。ただし見出し階層とセクションの区切りは要るので、
+              読み上げ用には残す */}
+          <h2 className="visually-hidden">常設</h2>
           <ul className="bl-permanent-list">
             {permanentEntries.map((entry) => (
               <li key={entry.id} className="bl-permanent-card">
-                <div className="bl-permanent-photo">
-                  {entry.image ? (
-                    <img src={entry.image} alt="" loading="lazy" />
-                  ) : (
-                    <span className="bl-no-image num">NO IMAGE</span>
-                  )}
-                </div>
-                <div className="bl-permanent-body">
-                  <a className="bl-permanent-link" href={`/entry/${entry.id}/`}>
-                    <p className="bl-permanent-name">{entry.name}</p>
-                    {entry.summary && <p className="bl-permanent-summary">{entry.summary}</p>}
+                {/* home の PICK UP と同じカード（PromoCard）を使う。常設セクションは
+                    縦1列でカードの高さを揃える必要が無いので、「NO IMAGE」を出す
+                    .bl-grid 側とは扱いを分ける（Issue #60） */}
+                <a className="bl-permanent-link" href={`/entry/${entry.id}/`}>
+                  <PromoCard entry={entry} more />
+                </a>
+                {/* カードの外に出す。中に入れるとリンクの入れ子になる */}
+                {entry.link && (
+                  <a className="bl-permanent-cta" href={entry.link}>
+                    やってみる →
                   </a>
-                  {entry.link && (
-                    <a className="bl-permanent-cta" href={entry.link}>
-                      やってみる →
-                    </a>
-                  )}
-                </div>
+                )}
               </li>
             ))}
           </ul>
