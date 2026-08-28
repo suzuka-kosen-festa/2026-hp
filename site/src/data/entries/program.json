@@ -37,6 +37,27 @@
     "link": null
   },
   {
+    "id": "workshop-drone",
+    "category": "イベント",
+    "name": "親子でドローン体験",
+    "group": "材料工学科(S科)",
+    "summary": "親子でドローンを体験できるワークショップ。",
+    "tags": ["day1", "day2"],
+    "location": "イノベーション交流プラザ2F サイエンス教育支援室",
+    "image": null,
+    "occurrences": [
+      { "day": "day1", "start_time": "11:00", "end_time": "12:00" },
+      { "day": "day1", "start_time": "14:00", "end_time": "15:00" },
+      { "day": "day2", "start_time": "11:00", "end_time": "12:00" },
+      { "day": "day2", "start_time": "14:00", "end_time": "15:00" }
+    ],
+    "audience": "親子",
+    "capacity": "各回親子5組（合計10名程度）",
+    "notes": ["鈴鹿高専入試広報HPにて募集", "応募多数の場合は抽選"],
+    "featured": true,
+    "link": null
+  },
+  {
     "id": "event-mainstage-open",
     "category": "イベント",
     "name": "開会式",
