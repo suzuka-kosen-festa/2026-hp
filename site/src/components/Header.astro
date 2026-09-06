@@ -1,6 +1,9 @@
 ---
 import HamburgerMenu from "./motion/HamburgerMenu";
+import { isComingSoon } from "../lib/release";
 
+/* リンクは外さず、押す前に準備中と分かるようにする。行き先の公開状態は
+   release.json だけを見るので、公開するときにここは触らなくてよい */
 const navItems = [
   { label: "HOME", href: "/" },
   { label: "TIMETABLE", href: "/timetable/" },
@@ -9,7 +12,7 @@ const navItems = [
   { label: "ACCESS", href: "/access/" },
   { label: "SPONSORS", href: "/sponsors/" },
   { label: "NEWS", href: "/news/" },
-];
+].map((item) => ({ ...item, comingSoon: isComingSoon(item.href) }));
 
 const currentPath = Astro.url.pathname;
 
@@ -35,6 +38,8 @@ function isActive(href: string) {
               {i > 0 && <span class="tick" aria-hidden="true" />}
               <a href={item.href} aria-current={isActive(item.href) ? "page" : undefined}>
                 {item.label}
+                {/* 読み上げでも「準備中」が伝わるよう、視覚だけの印にはしない */}
+                {item.comingSoon && <span class="soon">準備中</span>}
               </a>
             </li>
           ))
@@ -172,6 +177,19 @@ function isActive(href: string) {
     font-size: 19px;
     letter-spacing: 0.02em;
     color: var(--ink);
+  }
+
+  nav a .soon {
+    display: inline-block;
+    margin-left: 6px;
+    padding: 1px 5px;
+    border: 1.5px solid currentColor;
+    border-radius: 2px;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    vertical-align: 2px;
+    opacity: 0.75;
   }
 
   nav a::after {

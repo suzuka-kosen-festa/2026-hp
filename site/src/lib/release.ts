@@ -83,6 +83,24 @@ export function isInSitemap(pathname: string) {
   return isPublishedPath(path);
 }
 
+/**
+ * 導線に「準備中」と出すか。
+ *
+ * リンクは残したまま、押す前に行き先が準備中だと分かるようにするための判定。
+ * ヘッダーのnavとトップの導線カードが使う。
+ *
+ * **isPublished() ではなくこちらを使うこと。** isPublished() は APPLY_RELEASE が
+ * 無いと常に true を返す（担当者が自分のPRのプレビューで自分のページを確認できる
+ * ようにするため）。それをバッジ判定に使うと、プレビューではバッジが1つも出ず、
+ * レビューもE2Eもできない。バッジは環境によらず release.json をそのまま見る。
+ */
+export function isComingSoon(pathname: string) {
+  const path = normalize(pathname);
+  if (EXEMPT.some((exempt) => path.startsWith(exempt))) return false;
+
+  return !isPublishedPath(path);
+}
+
 /** published の判定本体（APPLY_RELEASE の有無に関わらず published を見る） */
 function isPublishedPath(path: string) {
   const published = release.published as string[];
