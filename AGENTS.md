@@ -35,6 +35,8 @@
 - コミットはユーザーの指示があったときのみ
 - **Nodeは `.node-version`（24.19.0）に固定**。CIも同ファイルを参照するので、バージョンを上げるときはこのファイルだけを変える
 - **npmコマンドは `site/` にcdしてから実行する**。ルートから `--prefix site` で叩くと `site/.npmrc` が読まれず `engine-strict` が効かない
+- **コードを書いたら `npm run format` を流す**（`site/` で実行）。CIが `prettier --check` で見ているので、崩れていると落ちる。Markdownは対象外（`docs/` や CLAUDE.md を再折り返しさせると差分が読めなくなるため）
+- **`git blame` は `.git-blame-ignore-revs` を見るよう1回だけ設定しておく**（`git config blame.ignoreRevsFile .git-blame-ignore-revs`）。Prettier導入時の全体整形コミットが blame を埋めるのを防ぐ。GitHub上の表示は設定不要で自動的に効く
 - **依存を変えないときは `npm install` ではなく `npm ci`**。`npm install` はロックファイルを書き換えるため、内容が同じでもnpmのバージョン差でフォーマットの揺れが差分になる。`npm ci` は読むだけなので事故が起きない
 
 ## 共同作業ルール

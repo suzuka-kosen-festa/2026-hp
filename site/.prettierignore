@@ -10,3 +10,10 @@ node_modules/
 # 生成物・外部由来のファイル
 public/
 src/assets/
+
+# prettier-plugin-astro がこのファイルを壊す（Issue #52 で発覚）。
+# <title>{site.eventName}「{site.theme}」</title> のように式と地の文が混ざった
+# 要素を扱えず、</head> を title の途中で閉じ、OGPのmetaを head の外に出し、
+# 2回目の整形では <body> と <main> ごと消す。
+# 本番は holding モードで全URLがこのページを返すため、壊れると全滅する。
+src/pages/holding.astro

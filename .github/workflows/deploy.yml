@@ -37,6 +37,10 @@ jobs:
       - name: Check
         run: npm run check
 
+      # 整形崩れの検出（Issue #52）。崩れていたら site/ で `npm run format` を流す
+      - name: Format check
+        run: npm run format:check
+
       # 公開制御(published)を適用するかを決める。
       #   通常のPR              … 適用しない。実装中のページをプレビューで確認する必要がある
       #   release.json を触るPR … 適用する。マージ後の本番を事前に確認できる

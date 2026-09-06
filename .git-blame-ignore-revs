@@ -1,0 +1,9 @@
+# git blame がここに並ぶコミットを飛ばすようにするための一覧。
+#
+# 使い方（各自1回だけ設定する）:
+#   git config blame.ignoreRevsFile .git-blame-ignore-revs
+#
+# GitHubのblame表示は設定なしで自動的にこのファイルを見る。
+
+# Prettier 導入時の全体整形（Issue #52）。動作の変更は無い
+897d47486ca71f2a6f4fabfc21a77c83be9089d0
