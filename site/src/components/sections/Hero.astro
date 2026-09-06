@@ -1,7 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import themeLogo from "../../assets/logo/theme-logo.png";
-import heroCroud from "../../assets/hero/hero-croud.png";
+import heroCroud from "../../assets/hero/hero-croud.webp";
 import Tape from "../ui/Tape.astro";
 import Star from "../ui/Star.astro";
 import site from "../../data/site.json";
@@ -46,7 +46,15 @@ import site from "../../data/site.json";
         <span class="hc-tape hc-tape--yellow" aria-hidden="true"></span>
         <Star class="hc-star" color="var(--red)" size="22px" rotate={14} />
         <div class="hc-frame">
-          <Image src={heroCroud} alt="集まった観客が手を挙げて盛り上がっている様子" loading="lazy" class="hc-photo" width={245} height={168} />
+          <Image
+            src={heroCroud}
+            alt="集まった観客が手を挙げて盛り上がっている様子"
+            loading="lazy"
+            class="hc-photo"
+            width={320}
+            height={220}
+            densities={[1, 2]}
+          />
           <svg class="hc-pattern" width="52" height="52" aria-hidden="true">
             <rect width="52" height="52" fill="url(#dots-black)" filter="url(#torn-edge)"></rect>
           </svg>
