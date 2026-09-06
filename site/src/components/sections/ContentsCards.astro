@@ -3,10 +3,10 @@ import { Image } from "astro:assets";
 import Reveal from "../motion/Reveal";
 import Tape from "../ui/Tape.astro";
 import Card from "../ui/Card.astro";
-import timetablePhoto from "../../assets/cards/timetable.png";
-import mapPhoto from "../../assets/cards/map.png";
-import boothPhoto from "../../assets/cards/booth.png";
-import accessPhoto from "../../assets/cards/access.png";
+import timetablePhoto from "../../assets/cards/timetable.webp";
+import mapPhoto from "../../assets/cards/map.webp";
+import boothPhoto from "../../assets/cards/booth.webp";
+import accessPhoto from "../../assets/cards/access.webp";
 import { isComingSoon } from "../../lib/release";
 
 const items = [
@@ -62,7 +62,7 @@ const items = [
               {/* 写真つきで期待値が高いぶん、押す前に準備中と分かるようにする */}
               {item.comingSoon && <span class="soon">準備中</span>}
               <div class="photo">
-                <Image src={item.photo} alt="" loading="lazy" width={280} height={221} />
+                <Image src={item.photo} alt="" loading="lazy" width={280} height={221} densities={[1, 2]} />
               </div>
             </Card>
           </a>
