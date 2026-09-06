@@ -20,36 +20,37 @@ function getImage(filename?: string | null) {
 
   return imageFiles[path] ?? null;
 }
+
+/* フッターはロゴだけを並べる。ロゴが用意できていない協賛は、
+   名前だけの空きスロットを作らずここで外す */
+const featuredLogos = sponsors
+  .filter((s) => s.type === "corporate" && s.featured)
+  .map((s) => ({ ...s, image: getImage(s.logo) }))
+  .filter((s) => s.image)
+  .sort((a, b) => a.name.localeCompare(b.name, "ja"));
 ---
 
 <footer class="site-footer">
   <div class="inner">
     <Tape color="yellow" rotate={-1.5} as="p" class="footer-title">{site.eventNameEn}</Tape>
 
-    <div class="sponsors-line">
-      
-      <h4>主要協賛</h4>
+    {/* ロゴ画像が1枚も無いあいだは「主要協賛」の見出しだけが空のリストの上に
+        残ってしまうので、ブロックごと出さない（フッターは全ページ共通） */}
+    {featuredLogos.length > 0 && (
+      <div class="sponsors-line">
+        <h4>主要協賛</h4>
 
-      <div class="sponsor-group">
-        <ul class="grid">
-        {
-        sponsors
-          .filter((s) => s.type === "corporate" && s.featured)
-          .map((s) => ({ ...s, image: getImage(s.logo) }))
-          /* フッターはロゴだけを並べる。ロゴが用意できていない協賛は、
-             名前だけの空きスロットを作らずここで外す */
-          .filter((s) => s.image)
-          .sort((a, b) => a.name.localeCompare(b.name, "ja"))
-          .map((s) => (
-            <li class="slot">
-              <Image src={s.image} alt={s.name} />
-            </li>
-          ))
-        }
-        </ul>
+        <div class="sponsor-group">
+          <ul class="grid">
+            {featuredLogos.map((s) => (
+              <li class="slot">
+                <Image src={s.image} alt={s.name} />
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
-
-    </div>
+    )}
   
     <div class="contact">
       {site.sns.instagram && (

@@ -32,6 +32,8 @@ function ordered(type: string) {
       return a.name.localeCompare(b.name, "ja");
     });
 }
+
+const individuals = ordered("individual");
 ---
 
 <section class="sponsors">
@@ -86,21 +88,27 @@ function ordered(type: string) {
 
   <div class="sponsor-group">
     <h3>個人協賛</h3>
-    <ul class="grid">
-      {
-        ordered("individual").map((s) => (
-          <li class="slot">
-            {s.url ? (
-              <a href={s.url} target="_blank" rel="noopener noreferrer">
+    {/* 個人協賛はフォームで随時受付中のため、開幕前は0件になりうる。
+        見出しの下に空のグリッドが残ると壊れて見えるので、0件のときは案内に差し替える */}
+    {
+      individuals.length > 0 ? (
+        <ul class="grid">
+          {individuals.map((s) => (
+            <li class="slot">
+              {s.url ? (
+                <a href={s.url} target="_blank" rel="noopener noreferrer">
+                  <span class="slot-name">{s.name}</span>
+                </a>
+              ) : (
                 <span class="slot-name">{s.name}</span>
-              </a>
-            ) : (
-              <span class="slot-name">{s.name}</span>
-            )}
-          </li>
-        ))
-      }
-    </ul>
+              )}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p class="empty-note">現在募集中です。下のリンクからお申し込みいただけます。</p>
+      )
+    }
   </div>
 </Reveal>
 </section>
@@ -234,6 +242,13 @@ function ordered(type: string) {
     position: relative;
     z-index: 1;
     margin-bottom: 32px;
+  }
+
+  .empty-note {
+    position: relative;
+    z-index: 1;
+    font-size: 12px;
+    line-height: 1.6;
   }
 
 
