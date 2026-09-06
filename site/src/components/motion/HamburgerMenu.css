@@ -76,6 +76,20 @@
   z-index: 0;
 }
 
+/* 準備中バッジ。文字が32pxと大きいので、リンク名に対して小さく添える */
+.sp-menu a .soon {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 2px 6px;
+  border: 2px solid currentColor;
+  border-radius: 3px;
+  font-family: var(--font-base, inherit);
+  font-size: 11px;
+  font-weight: 800;
+  vertical-align: 8px;
+  opacity: 0.75;
+}
+
 .sp-menu a::before {
   content: "";
   position: absolute;
