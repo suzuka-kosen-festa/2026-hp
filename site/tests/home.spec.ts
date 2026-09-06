@@ -39,3 +39,18 @@ test("未公開の導線にだけ準備中が付く", async ({ page }) => {
     expect(hasBadge, `${href} の準備中バッジ`).toBe(!isPublished);
   }
 });
+
+/**
+ * About のボタンはテーマ記事へ直リンクしている（About.astro の themeArticle）。
+ * news.json の id を変えると静かに404になるので、行き先が実在するか見る。
+ * 記事を消したり id を変えたりしたら、ここが落ちて気づける。
+ */
+test("About のリンク先の記事が実在する", async ({ page }) => {
+  await page.goto("/");
+
+  const href = await page.locator(".about a").first().getAttribute("href");
+  expect(href, "About にリンクがありません").toBeTruthy();
+
+  const res = await page.request.get(href!);
+  expect(res.status(), `${href} が見つかりません`).toBe(200);
+});
