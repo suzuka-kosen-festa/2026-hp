@@ -1,0 +1,12 @@
+dist/
+.astro/
+node_modules/
+
+# Markdown は整形しない。
+# CLAUDE.md や docs/ は「なぜそうしたか」を日本語で長く書いてあり、Prettier に
+# 再折り返しさせると1文字直しただけで段落全体が差分になり、レビューで読めなくなる。
+*.md
+
+# 生成物・外部由来のファイル
+public/
+src/assets/

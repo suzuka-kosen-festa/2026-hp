@@ -96,7 +96,7 @@ const parkings = access.parkings;
         hidden={index !== 0}
       >
 
-        <!-- 駐車場名 -->
+        {/* 駐車場名 */}
         <h3>
           {parking.name}
           {parking.label && `｜${parking.label}`}
@@ -110,7 +110,7 @@ const parkings = access.parkings;
         </h3>
 
 
-        <!-- 駐車場画像 -->
+        {/* 駐車場画像 */}
         {image && (
           <Card
             rotate={parking.rotate ?? 0}
@@ -133,7 +133,7 @@ const parkings = access.parkings;
         )}
 
 
-        <!-- 手順 -->
+        {/* 手順 */}
         {parking.route &&
           parking.route.length > 0 && (
             <div class="route">
@@ -154,7 +154,7 @@ const parkings = access.parkings;
         )}
 
 
-        <!-- 補足 -->
+        {/* 補足 */}
         {parking.notes &&
           parking.notes.length > 0 && (
             <div class="notes">
@@ -173,7 +173,7 @@ const parkings = access.parkings;
         )}
 
 
-        <!-- Google Maps -->
+        {/* Google Maps */}
         {parking.mapUrl && (
           <Button
             href={parking.mapUrl}
