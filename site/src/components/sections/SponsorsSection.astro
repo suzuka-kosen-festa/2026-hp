@@ -17,19 +17,25 @@ function getLogo(filename?: string | null) {
 }
 
 /**
- * 並び順は「主要協賛(featured) → ロゴあり → 五十音」。
+ * 並び順は「主要協賛(featured) → ロゴあり → 協賛金額の高い順」。
  * featured はフッターに載るのと同じ企業で、ロゴを持っていることが多い。
  * ロゴありを先に出すのは、名前だけのスロットが上に並ぶと見栄えが落ちるため。
+ *
+ * 金額は sponsors.json に数値としては持たせていない（このリポジトリは公開
+ * されており、各社の協賛額は公開情報ではないため）。代わりに **JSONの行の
+ * 並び自体が金額の高い順** になっており、ここではその添字を使う。
+ * 協賛を追加するときは末尾ではなく金額に見合った位置に挿し込むこと。
  */
 function ordered(type: string) {
   return sponsors
+    .map((s, order) => ({ ...s, order }))
     .filter((s) => s.type === type)
     .sort((a, b) => {
       if (!!a.featured !== !!b.featured) return a.featured ? -1 : 1;
       const aLogo = !!getLogo(a.logo);
       const bLogo = !!getLogo(b.logo);
       if (aLogo !== bLogo) return aLogo ? -1 : 1;
-      return a.name.localeCompare(b.name, "ja");
+      return a.order - b.order;
     });
 }
 

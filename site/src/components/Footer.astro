@@ -22,12 +22,12 @@ function getImage(filename?: string | null) {
 }
 
 /* フッターはロゴだけを並べる。ロゴが用意できていない協賛は、
-   名前だけの空きスロットを作らずここで外す */
+   名前だけの空きスロットを作らずここで外す。
+   並べ替えないのは sponsors.json の行順がすでに金額の高い順だから */
 const featuredLogos = sponsors
   .filter((s) => s.type === "corporate" && s.featured)
   .map((s) => ({ ...s, image: getImage(s.logo) }))
-  .filter((s) => s.image)
-  .sort((a, b) => a.name.localeCompare(b.name, "ja"));
+  .filter((s) => s.image);
 ---
 
 <footer class="site-footer">
