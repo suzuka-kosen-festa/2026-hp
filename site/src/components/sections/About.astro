@@ -1,6 +1,11 @@
 ---
 import Reveal from "../motion/Reveal";
 import Tape from "../ui/Tape.astro";
+import Button from "../ui/Button.astro";
+
+/* リンク先はテーマ記事（news.json の theme-collage）。
+   記事のidを変えるとここが404になるので、home.spec.ts で存在を検査している */
+const themeArticle = "/news/theme-collage/";
 ---
 
 <section class="about">
@@ -9,8 +14,12 @@ import Tape from "../ui/Tape.astro";
     <p class="lead">
       今年のテーマは「collage(コラージュ)」。<br />
       個性も、アイデアも、技術も、想いも、<br />
-      全部重なってひとつの"最高"を作る。
+      ばらばらのまま重ねて、一枚の作品にする。
     </p>
+    {/* すぐ上のNEWSセクションと同じ語彙（Button）で揃える。
+        Aboutは一覧ではなく1つの文章なので、全体をリンクにすると
+        リンク名が段落まるごとになり読み上げが破綻する */}
+    <Button href={themeArticle} class="read-more">テーマの話を読む →</Button>
   </Reveal>
 </section>
 
@@ -31,6 +40,10 @@ import Tape from "../ui/Tape.astro";
     font-size: 15px;
     line-height: 2;
     font-weight: 700;
+  }
+
+  .about :global(.read-more) {
+    margin-top: 20px;
   }
 
   @media (min-width: 900px) {
