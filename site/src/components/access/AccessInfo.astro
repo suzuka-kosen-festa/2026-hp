@@ -7,22 +7,27 @@ import access from "../../data/access.json";
   <h2>会場：{access.venue.name}</h2>
 
   <div class="info">
-  <ul>
-    {access.access.map((item) => (
-      <li>
-        <strong>{item.title}</strong><br />
-        {item.text}
+    <ul>
+      {
+        access.access.map((item) => (
+          <li>
+            <>
+              <strong>{item.title}</strong>
+              <br />
+            </>
+            {item.text}
 
-        {item.subtext && (
-          <>
-            <br />
-            {item.subtext}
-          </>
-        )}
-      </li>
-    ))}
-  </ul>
-</div>
+            {item.subtext && (
+              <>
+                <br />
+                {item.subtext}
+              </>
+            )}
+          </li>
+        ))
+      }
+    </ul>
+  </div>
 
   <Button
     href="https://www.google.com/maps/search/?api=1&query=鈴鹿工業高等専門学校"
@@ -71,7 +76,7 @@ import access from "../../data/access.json";
   .access-section :global(.map-button) {
     margin-top: 4px;
   }
-  
+
   @media (min-width: 900px) {
     .access-section h2 {
       font-size: 24px;

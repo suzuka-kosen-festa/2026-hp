@@ -6,12 +6,10 @@ import Chip from "../../components/ui/Chip.astro";
 import Card from "../../components/ui/Card.astro";
 
 import site from "../../data/site.json";
-import { formatNewsDate,isNew,getNewsPaths } from "../../lib/news";
+import { formatNewsDate, isNew, getNewsPaths } from "../../lib/news";
 
 export function getStaticPaths() {
-    
   return getNewsPaths();
-  
 }
 
 interface Props {
@@ -26,94 +24,88 @@ interface Props {
 
 const { item } = Astro.props;
 const bodyLines = item.body?.split("\n") ?? [];
-
 ---
 
-<BaseLayout
-  title={`${item.title} | ${site.eventName}`}
-  description={item.title}
->
-
-
+<BaseLayout title={`${item.title} | ${site.eventName}`} description={item.title}>
   <article class="news-detail">
-    
     <p class="crumb"><a href="/news">← お知らせ一覧へ</a></p>
-    
+
     <header class="head">
       <Tape color="blue" rotate={-3} as="p" class="cat">NEWS</Tape>
 
       <div class="time-row">
-        <time datetime={formatNewsDate ( item.date )} class="date">
+        <time datetime={formatNewsDate(item.date)} class="date">
           {item.date}
         </time>
-        
+
         {isNew(item.date) && <Chip color="red">NEW</Chip>}
       </div>
 
       <h1 class="title">{item.title}</h1>
     </header>
 
-{
-  item.body && (
-    <div class="markdown-body">
-      {
-        bodyLines.map((line) => {
-        
-          if (line.startsWith("#### ")) {
-           return <h5>{line.slice(5)}</h5>;
-          }
+    {
+      item.body && (
+        <div class="markdown-body">
+          {bodyLines.map((line) => {
+            if (line.startsWith("#### ")) {
+              return <h5>{line.slice(5)}</h5>;
+            }
 
-          if (line.startsWith("### ")) {
-            return <h4>{line.slice(4)}</h4>;
-          }
+            if (line.startsWith("### ")) {
+              return <h4>{line.slice(4)}</h4>;
+            }
 
-          if (line.startsWith("## ")) {
-            return <h3>{line.slice(3)}</h3>;
-          }
+            if (line.startsWith("## ")) {
+              return <h3>{line.slice(3)}</h3>;
+            }
 
-          if (line.startsWith("# ")) {
-            return <h2>{line.slice(2)}</h2>;
-          }
+            if (line.startsWith("# ")) {
+              return <h2>{line.slice(2)}</h2>;
+            }
 
-           if (line.startsWith("* ")) {
-            return <p><strong>{line.slice(2)}</strong></p>;
-          }
+            if (line.startsWith("* ")) {
+              return (
+                <p>
+                  <strong>{line.slice(2)}</strong>
+                </p>
+              );
+            }
 
+            if (line.startsWith("- ")) {
+              return (
+                <p class="list-item">
+                  <span class="bullet" aria-hidden="true">
+                    ・
+                  </span>
+                  <span>{line.slice(2)}</span>
+                </p>
+              );
+            }
 
-          if (line.startsWith("- ")) {
-            return (
-              <p class="list-item">
-                <span class="bullet" aria-hidden="true">・</span>
-                <span>{line.slice(2)}</span>
-              </p>
-            );
-          }
-
-          if (line.startsWith("> ")) {
-            return (
-              <blockquote>
-                <Card rotate={1} texture attach="tape" cornerColor="yellow">
+            if (line.startsWith("> ")) {
+              return (
+                <blockquote>
+                  <Card rotate={1} texture attach="tape" cornerColor="yellow">
                     <p style="font-weight:800;">{line.slice(2)}</p>
-                </Card>
-              </blockquote>
-            );
-          }
+                  </Card>
+                </blockquote>
+              );
+            }
 
-          if (line.trim() === "") {
-            return <div class="spacer" aria-hidden="true" />;
-          }
+            if (line.trim() === "") {
+              return <div class="spacer" aria-hidden="true" />;
+            }
 
-          return <p>{line}</p>;
-        })
-      }
-    </div>
-  )
-}
+            return <p>{line}</p>;
+          })}
+        </div>
+      )
+    }
   </article>
 </BaseLayout>
 
 <style>
-
   .news-detail {
     max-width: var(--content-sp);
     margin: 0 auto;
@@ -132,16 +124,16 @@ const bodyLines = item.body?.split("\n") ?? [];
 
   .head {
     margin-bottom: 28px;
-    padding-top:4px;
-    padding-bottom:8px;
+    padding-top: 4px;
+    padding-bottom: 8px;
     border-bottom: 2px solid var(--ink);
   }
 
   .time-row {
     display: flex;
     align-items: center;
-    gap: 8px; 
-    margin-top:20px;
+    gap: 8px;
+    margin-top: 20px;
   }
 
   .date {
@@ -159,38 +151,37 @@ const bodyLines = item.body?.split("\n") ?? [];
     .news-detail {
       max-width: var(--content-narrow, 700px);
       padding: 40px 24px 96px;
-    } 
- 
+    }
+
     .head h1 {
       font-size: 36px;
     }
   }
 
-/* マークダウン */
-/* リスト */
+  /* マークダウン */
+  /* リスト */
 
-.markdown-body .list-item {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 8px;
-}
+  .markdown-body .list-item {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
 
-.markdown-body .bullet {
-  flex: 0 0 auto;
-  font-weight: 700;
-}
+  .markdown-body .bullet {
+    flex: 0 0 auto;
+    font-weight: 700;
+  }
 
+  /* 空行 */
 
-/* 空行 */
+  .markdown-body .spacer {
+    height: 0.6em;
+  }
 
-.markdown-body .spacer {
-  height: 0.6em;
-}
-
-/* 引用
+  /* 引用
    カードは傾き＋影を持つので、前後の段落と地の文と同じ間隔では窮屈になる。
    本文側で空行を余分に入れて調整すると書く人ごとにばらつくため、ここで固定する */
-.markdown-body blockquote {
-  margin: 1.5em 0;
-}
+  .markdown-body blockquote {
+    margin: 1.5em 0;
+  }
 </style>

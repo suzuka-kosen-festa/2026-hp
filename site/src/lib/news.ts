@@ -8,7 +8,7 @@ import newsData from "../data/news.json";
 export const NEW_THRESHOLD_DAYS = 7;
 
 function parseDate(date: string) {
-    const  [ year ,  month ,  day ]  = date.split (/[./-]/).map(Number) ;
+  const [year, month, day] = date.split(/[./-]/).map(Number);
 
   return new Date(year, month - 1, day);
 }
@@ -92,9 +92,7 @@ export function isNew(date: string) {
   const publishedDate = toDateOnly(parseDate(date));
   const todayDate = toDateOnly(new Date());
 
-  const diffDays =
-    (todayDate.getTime() - publishedDate.getTime()) /
-    (1000 * 60 * 60 * 24);
+  const diffDays = (todayDate.getTime() - publishedDate.getTime()) / (1000 * 60 * 60 * 24);
 
   return diffDays >= 0 && diffDays <= NEW_THRESHOLD_DAYS;
 }
@@ -126,12 +124,14 @@ export function getNewsHref(item: { id: string; href?: string; body?: string }) 
  * }
  */
 export function getNewsPaths() {
-  return newsData
-    /* 一覧から隠れているお知らせの詳細ページだけ生き残ると、URLを直接叩けば
+  return (
+    newsData
+      /* 一覧から隠れているお知らせの詳細ページだけ生き残ると、URLを直接叩けば
        読めてしまう。一覧と同じ条件で絞る */
-    .filter((item) => item.body && isPublished(item.date))
-    .map((item) => ({
-      params: { id: item.id },
-      props: { item },
-    }));
+      .filter((item) => item.body && isPublished(item.date))
+      .map((item) => ({
+        params: { id: item.id },
+        props: { item },
+      }))
+  );
 }

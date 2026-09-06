@@ -8,15 +8,10 @@ import { formatNewsDate, getNews, getNewsHref, isNew } from "../lib/news";
 const newsItems = getNews();
 ---
 
-<BaseLayout
-  title={`お知らせ | ${site.eventName}`}
-  description={`${site.eventName}のお知らせ`}
->
+<BaseLayout title={`お知らせ | ${site.eventName}`} description={`${site.eventName}のお知らせ`}>
   <section class="news">
     <header class="head">
-      <Tape color="blue" rotate={-3} as="p" class="cat">
-        NEWS
-      </Tape>
+      <Tape color="blue" rotate={-3} as="p" class="cat"> NEWS </Tape>
     </header>
 
     <ul class="list">
@@ -125,7 +120,6 @@ const newsItems = getNews();
     font-size: 15px;
     line-height: 1.6;
   }
-
 
   @media (min-width: 900px) {
     .news {

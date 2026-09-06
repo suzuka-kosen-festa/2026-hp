@@ -25,10 +25,7 @@ const withImage = entries.find((entry) => entry.image);
  * 気づけるよう、ここで明示的に落とす。
  */
 test("画像まわりを検査できるデータがある", () => {
-  expect(
-    withoutImage ?? withImage,
-    "entries が空です。画像まわりの検査が1件も走っていません",
-  ).toBeTruthy();
+  expect(withoutImage ?? withImage, "entries が空です。画像まわりの検査が1件も走っていません").toBeTruthy();
 });
 
 test.describe("entry の画像", () => {

@@ -49,9 +49,7 @@ export default function PromoList({ entries, hrefFor = defaultHref, showHitArea 
             whileInView={{ opacity: 1, y: 0, scale: 1, rotate: tilt }}
             viewport={{ once: true, margin: "-40px" }}
             transition={
-              shouldReduceMotion
-                ? { duration: 0 }
-                : { type: "spring", stiffness: 320, damping: 28, delay: i * 0.06 }
+              shouldReduceMotion ? { duration: 0 } : { type: "spring", stiffness: 320, damping: 28, delay: i * 0.06 }
             }
           >
             <a className="pl__link" href={hrefFor(entry)} aria-label={`${entry.name} の詳細を見る`}>

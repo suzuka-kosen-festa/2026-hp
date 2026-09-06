@@ -5,14 +5,10 @@ import Tape from "./ui/Tape.astro";
 
 import { Image } from "astro:assets";
 
-
-const imageFiles = import.meta.glob(
-  "../assets/sponsors/*.{png,jpg,jpeg,webp}",
-  {
-    eager: true,
-    import: "default",
-  }
-);
+const imageFiles = import.meta.glob("../assets/sponsors/*.{png,jpg,jpeg,webp}", {
+  eager: true,
+  import: "default",
+});
 
 function getImage(filename?: string | null) {
   if (!filename) return null;
@@ -34,35 +30,43 @@ const featuredLogos = sponsors
   <div class="inner">
     <Tape color="yellow" rotate={-1.5} as="p" class="footer-title">{site.eventNameEn}</Tape>
 
-    {/* ロゴ画像が1枚も無いあいだは「主要協賛」の見出しだけが空のリストの上に
-        残ってしまうので、ブロックごと出さない（フッターは全ページ共通） */}
-    {featuredLogos.length > 0 && (
-      <div class="sponsors-line">
-        <h4>主要協賛</h4>
+    {
+      /* ロゴ画像が1枚も無いあいだは「主要協賛」の見出しだけが空のリストの上に
+        残ってしまうので、ブロックごと出さない（フッターは全ページ共通） */
+    }
+    {
+      featuredLogos.length > 0 && (
+        <div class="sponsors-line">
+          <h4>主要協賛</h4>
 
-        <div class="sponsor-group">
-          <ul class="grid">
-            {featuredLogos.map((s) => (
-              <li class="slot">
-                <Image src={s.image} alt={s.name} />
-              </li>
-            ))}
-          </ul>
+          <div class="sponsor-group">
+            <ul class="grid">
+              {featuredLogos.map((s) => (
+                <li class="slot">
+                  <Image src={s.image} alt={s.name} />
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
-      </div>
-    )}
-  
+      )
+    }
+
     <div class="contact">
-      {site.sns.instagram && (
-        <a href={site.sns.instagram} class="sns" aria-label="Instagram">
-          Instagram
-        </a>
-      )}
-      {site.sns.x && (
-        <a href={site.sns.x} class="sns" aria-label="X">
-          X
-        </a>
-      )}
+      {
+        site.sns.instagram && (
+          <a href={site.sns.instagram} class="sns" aria-label="Instagram">
+            Instagram
+          </a>
+        )
+      }
+      {
+        site.sns.x && (
+          <a href={site.sns.x} class="sns" aria-label="X">
+            X
+          </a>
+        )
+      }
       {site.phone && <span class="phone num">{site.phone}</span>}
       <a href={`mailto:${site.contactEmail}`} class="email">{site.contactEmail}</a>
     </div>
@@ -101,7 +105,7 @@ const featuredLogos = sponsors
   }
 
   .sponsors-line .label {
-    margin-top:10px;
+    margin-top: 10px;
     display: block;
     font-size: 11px;
     letter-spacing: 0.15em;
@@ -138,30 +142,30 @@ const featuredLogos = sponsors
     opacity: 0.6;
   }
 
-.slot {
-  background: var(--paper);
-  border: 2px solid #ffffff;
-  padding: 0;
-  box-sizing: border-box;
+  .slot {
+    background: var(--paper);
+    border: 2px solid #ffffff;
+    padding: 0;
+    box-sizing: border-box;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-  text-align: center;
-  font-weight: 700;
-  color: var(--ink);
-  /* 全ページ共通のフッターなので、協賛が増えても縦に伸びすぎないよう小さめに保つ */
-  width: 75px;
-  height: 60px;
-  font-size: 10px;
-}
+    text-align: center;
+    font-weight: 700;
+    color: var(--ink);
+    /* 全ページ共通のフッターなので、協賛が増えても縦に伸びすぎないよう小さめに保つ */
+    width: 75px;
+    height: 60px;
+    font-size: 10px;
+  }
 
-.slot img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
+  .slot img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
 
   @media (min-width: 900px) {
     .slot {
@@ -170,5 +174,4 @@ const featuredLogos = sponsors
       font-size: 12px;
     }
   }
-
 </style>

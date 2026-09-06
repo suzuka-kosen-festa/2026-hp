@@ -50,8 +50,7 @@ test.describe("booth PC", () => {
       // 縮小アニメーションが動いている間は測らない。
       // 高さが両端の値に近いかで判定すると、遷移の終わりぎわ（56.8px等）を
       // 完了と誤認するため、実際に走っているアニメーションの有無で見る
-      const isAnimating = () =>
-        header.getAnimations({ subtree: true }).some((a) => a.playState === "running");
+      const isAnimating = () => header.getAnimations({ subtree: true }).some((a) => a.playState === "running");
 
       let min = Infinity;
       let minY = -1;

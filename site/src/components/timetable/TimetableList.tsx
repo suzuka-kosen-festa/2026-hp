@@ -80,7 +80,8 @@ export default function TimetableList({ entries }: Props) {
 
   const starts = slots.map((slot) => toMinutes(slot.occurrence.start_time as string));
   const ends = slots.map((slot) => toMinutes(slot.occurrence.end_time as string));
-  const axisStart = starts.length > 0 ? Math.min(AXIS_MIN_START, Math.floor(Math.min(...starts) / 60) * 60) : AXIS_MIN_START;
+  const axisStart =
+    starts.length > 0 ? Math.min(AXIS_MIN_START, Math.floor(Math.min(...starts) / 60) * 60) : AXIS_MIN_START;
   const axisEnd = ends.length > 0 ? Math.max(AXIS_MAX_END, Math.ceil(Math.max(...ends) / 60) * 60) : AXIS_MAX_END;
 
   const hourMarks: number[] = [];

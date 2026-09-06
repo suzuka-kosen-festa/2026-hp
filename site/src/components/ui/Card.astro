@@ -10,10 +10,7 @@ interface Props {
 const { rotate = -0.8, attach = "tape", cornerColor = "yellow", texture = false, class: className } = Astro.props;
 ---
 
-<div
-  class:list={["card", { texture }, className]}
-  style={{ transform: `rotate(${rotate}deg)` }}
->
+<div class:list={["card", { texture }, className]} style={{ transform: `rotate(${rotate}deg)` }}>
   {attach === "tape" && <div class:list={["corner-tape", cornerColor]} />}
   {attach === "pin" && <div class:list={["pushpin", cornerColor]} />}
   <slot />

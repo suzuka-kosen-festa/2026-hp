@@ -8,8 +8,7 @@ const { color = "red", rotate = color === "red" ? -1.2 : 0.8 } = Astro.props;
 ---
 
 <div class="divider-clip">
-  <div class:list={["divider", color]} style={{ transform: `rotate(${rotate}deg) scaleX(1.05)` }}>
-  </div>
+  <div class:list={["divider", color]} style={{ transform: `rotate(${rotate}deg) scaleX(1.05)` }}></div>
 </div>
 
 <style>

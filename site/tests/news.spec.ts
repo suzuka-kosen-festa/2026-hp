@@ -11,9 +11,7 @@ describePage("news", "/news/");
  * src/lib/news.ts をimportすると json の import attribute で落ちるため、ファイルを直接読む。
  */
 const newsJson = fileURLToPath(new URL("../src/data/news.json", import.meta.url));
-const items: { id: string; date: string; body?: string }[] = JSON.parse(
-  readFileSync(newsJson, "utf8"),
-);
+const items: { id: string; date: string; body?: string }[] = JSON.parse(readFileSync(newsJson, "utf8"));
 
 /**
  * 未来の日付のお知らせは詳細ページが生成されない（src/lib/news.ts の isPublished）。
@@ -25,8 +23,7 @@ function isPublished(date: string) {
   const now = new Date();
 
   return (
-    new Date(year, month - 1, day).getTime() <=
-    new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime()
+    new Date(year, month - 1, day).getTime() <= new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime()
   );
 }
 

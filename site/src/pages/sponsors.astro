@@ -5,19 +5,11 @@ import Button from "../components/ui/Button.astro";
 import site from "../data/site.json";
 ---
 
-<BaseLayout
-  title={`SPONSORS | ${site.eventName}`}
-  description="第61回鈴鹿高専祭にご協賛いただいた企業・団体の紹介"
->
+<BaseLayout title={`SPONSORS | ${site.eventName}`} description="第61回鈴鹿高専祭にご協賛いただいた企業・団体の紹介">
   <section class="sponsors-page">
     <SponsorsSection />
 
-    <Button
-      href="https://forms.gle/vgvRbGAmfEGoBbxBA"
-      target="_blank"
-      rel="noopener noreferrer"
-      color="yellow"
-    >
+    <Button href="https://forms.gle/vgvRbGAmfEGoBbxBA" target="_blank" rel="noopener noreferrer" color="yellow">
       個人協賛リンク
     </Button>
   </section>

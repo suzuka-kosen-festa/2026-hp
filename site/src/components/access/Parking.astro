@@ -4,7 +4,6 @@ import Tape from "../ui/Tape.astro";
 import Button from "../ui/Button.astro";
 import { Image } from "astro:assets";
 
-
 import access from "../../data/access.json";
 
 /*
@@ -13,13 +12,10 @@ import access from "../../data/access.json";
  * JSONの image に書かれたファイル名から
  * assets/access/ 内の画像を取得する
  */
-const imageFiles = import.meta.glob(
-  "../../assets/access/*.{png,jpg,jpeg,webp}",
-  {
-    eager: true,
-    import: "default",
-  }
-);
+const imageFiles = import.meta.glob("../../assets/access/*.{png,jpg,jpeg,webp}", {
+  eager: true,
+  import: "default",
+});
 
 /*
  * JSONで指定された画像を取得
@@ -36,160 +32,111 @@ const parkings = access.parkings;
 ---
 
 <section class="parking-section">
-
   <!-- 見出し -->
-  <Tape color="red" rotate={3} as="p" class="cat">
-    駐車場
-  </Tape>
-
+  <Tape color="red" rotate={3} as="p" class="cat"> 駐車場 </Tape>
 
   <!-- 駐車場案内 -->
   <div class="parking-intro">
     <div class="parking-description">
-      {access.description.map((text) => (
-        <p>{text}</p>
-      ))}
+      {access.description.map((text) => <p>{text}</p>)}
     </div>
   </div>
 
-
   <!-- 駐車場タブ -->
-  <div
-    class="parking-tabs"
-    role="tablist"
-    aria-label="駐車場の選択"
-  >
-    {parkings.map((parking, index) => (
-      <button
-        type="button"
-        class:list={[
-          "parking-tab",
-          { "is-active": index === 0 },
-        ]}
-        id={`parking-tab-${index}`}
-        data-parking-tab={`parking-${index}`}
-        role="tab"
-        aria-selected={index === 0}
-        aria-controls={`parking-${index}`}
-      >
-        {parking.name}
-      </button>
-    ))}
+  <div class="parking-tabs" role="tablist" aria-label="駐車場の選択">
+    {
+      parkings.map((parking, index) => (
+        <button
+          type="button"
+          class:list={["parking-tab", { "is-active": index === 0 }]}
+          id={`parking-tab-${index}`}
+          data-parking-tab={`parking-${index}`}
+          role="tab"
+          aria-selected={index === 0}
+          aria-controls={`parking-${index}`}
+        >
+          {parking.name}
+        </button>
+      ))
+    }
   </div>
 
-
   <!-- 駐車場詳細 -->
-  {parkings.map((parking, index) => {
-    const panelId = `parking-${index}`;
-    const image = getImage(parking.image);
+  {
+    parkings.map((parking, index) => {
+      const panelId = `parking-${index}`;
+      const image = getImage(parking.image);
 
-    return (
-      <div
-        id={panelId}
-        class:list={[
-          "parking-panel",
-          { "is-active": index === 0 },
-        ]}
-        data-parking-panel={panelId}
-        role="tabpanel"
-        aria-labelledby={`parking-tab-${index}`}
-        hidden={index !== 0}
-      >
+      return (
+        <div
+          id={panelId}
+          class:list={["parking-panel", { "is-active": index === 0 }]}
+          data-parking-panel={panelId}
+          role="tabpanel"
+          aria-labelledby={`parking-tab-${index}`}
+          hidden={index !== 0}
+        >
+          {/* 駐車場名 */}
+          <h3>
+            {parking.name}
+            {parking.label && `｜${parking.label}`}
 
-        {/* 駐車場名 */}
-        <h3>
-          {parking.name}
-          {parking.label && `｜${parking.label}`}
+            {parking.location && (
+              <>
+                <br />
+                {parking.location}
+              </>
+            )}
+          </h3>
 
-          {parking.location && (
-            <>
-              <br />
-              {parking.location}
-            </>
+          {/* 駐車場画像 */}
+          {image && (
+            <Card rotate={parking.rotate ?? 0} texture class="parking-image-card">
+              <Image
+                src={image}
+                alt={parking.imageAlt ?? `${parking.name}の案内図`}
+                loading={index === 0 ? "eager" : "lazy"}
+                fetchpriority={index === 0 ? "high" : undefined}
+              />
+            </Card>
           )}
-        </h3>
 
-
-        {/* 駐車場画像 */}
-        {image && (
-          <Card
-            rotate={parking.rotate ?? 0}
-            texture
-            class="parking-image-card"
-          >
-            <Image
-              src={image}
-              alt={
-                parking.imageAlt ??
-                `${parking.name}の案内図`
-              }
-              loading={index === 0 ? "eager" : "lazy"}
-              fetchpriority={
-                index === 0 ? "high" : undefined
-              }
-            />
-          
-          </Card>
-        )}
-
-
-        {/* 手順 */}
-        {parking.route &&
-          parking.route.length > 0 && (
+          {/* 手順 */}
+          {parking.route && parking.route.length > 0 && (
             <div class="route">
-
-              <p class="route-title">
-                駐車場までの手順
-              </p>
+              <p class="route-title">駐車場までの手順</p>
 
               <ol>
                 {parking.route.map((step) => (
-                  <li>
-                    {step}
-                  </li>
+                  <li>{step}</li>
                 ))}
               </ol>
-
             </div>
-        )}
+          )}
 
-
-        {/* 補足 */}
-        {parking.notes &&
-          parking.notes.length > 0 && (
+          {/* 補足 */}
+          {parking.notes && parking.notes.length > 0 && (
             <div class="notes">
-
               {parking.notes.map((note) => (
                 <p>
-                  <strong>
-                    {note.title}
-                  </strong>
+                  <strong>{note.title}</strong>
                   <br />
                   {note.text}
                 </p>
               ))}
-
             </div>
-        )}
+          )}
 
-
-        {/* Google Maps */}
-        {parking.mapUrl && (
-          <Button
-            href={parking.mapUrl}
-            class="map-button"
-            target="_blank"
-            rel="noopener noreferrer"
-            color="yellow"
-          >
-            Googleマップで開く →
-          </Button>
-        )}
-
-      </div>
-    );
-  })}
-
+          {/* Google Maps */}
+          {parking.mapUrl && (
+            <Button href={parking.mapUrl} class="map-button" target="_blank" rel="noopener noreferrer" color="yellow">
+              Googleマップで開く →
+            </Button>
+          )}
+        </div>
+      );
+    })
+  }
 
   <!-- 最終更新日 -->
   <p class="updated">
@@ -198,20 +145,12 @@ const parkings = access.parkings;
       {access.updated_at.replaceAll("-", ".")}
     </time>
   </p>
-
 </section>
 
-
 <script>
-  const tabs =
-    document.querySelectorAll<HTMLButtonElement>(
-      "[data-parking-tab]"
-    );
+  const tabs = document.querySelectorAll<HTMLButtonElement>("[data-parking-tab]");
 
-  const panels =
-    document.querySelectorAll<HTMLElement>(
-      "[data-parking-panel]"
-    );
+  const panels = document.querySelectorAll<HTMLElement>("[data-parking-panel]");
 
   tabs.forEach((tab) => {
     tab.addEventListener("click", () => {
@@ -220,25 +159,15 @@ const parkings = access.parkings;
       tabs.forEach((item) => {
         const active = item === tab;
 
-        item.classList.toggle(
-          "is-active",
-          active
-        );
+        item.classList.toggle("is-active", active);
 
-        item.setAttribute(
-          "aria-selected",
-          String(active)
-        );
+        item.setAttribute("aria-selected", String(active));
       });
 
       panels.forEach((panel) => {
-        const active =
-          panel.dataset.parkingPanel === target;
+        const active = panel.dataset.parkingPanel === target;
 
-        panel.classList.toggle(
-          "is-active",
-          active
-        );
+        panel.classList.toggle("is-active", active);
 
         panel.hidden = !active;
       });
@@ -246,12 +175,10 @@ const parkings = access.parkings;
   });
 </script>
 
-
 <style>
   .parking-section {
     margin-bottom: 56px;
   }
-
 
   /* 駐車場案内 */
 
@@ -278,7 +205,6 @@ const parkings = access.parkings;
     width: 100%;
     height: auto;
   }
-
 
   /* タブ */
 
@@ -316,7 +242,6 @@ const parkings = access.parkings;
     outline-offset: 2px;
   }
 
-
   /* 駐車場 */
 
   .parking-panel h3 {
@@ -331,13 +256,11 @@ const parkings = access.parkings;
     height: auto;
   }
 
-
   /* Google Maps */
 
   .parking-panel :global(.map-button) {
     margin-top: 24px;
   }
-
 
   /* 手順 */
 
@@ -362,7 +285,6 @@ const parkings = access.parkings;
     margin-bottom: 10px;
   }
 
-
   /* 補足 */
 
   .notes {
@@ -373,7 +295,6 @@ const parkings = access.parkings;
     margin-bottom: 18px;
   }
 
-
   /* 更新日 */
 
   .updated {
@@ -382,7 +303,6 @@ const parkings = access.parkings;
     font-weight: 700;
     color: #666;
   }
-
 
   @media (min-width: 900px) {
     .parking-panel h3 {

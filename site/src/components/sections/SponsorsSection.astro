@@ -47,76 +47,86 @@ const individuals = ordered("individual");
        左右それぞれ違う組み合わせのコラージュ角飾りを表現する -->
   <div class="deco-layer" aria-hidden="true">
     <div class="deco-stack bl">
-      <svg class="swatch s1" width="88" height="64"><rect width="88" height="64" fill="url(#check-blue)" filter="url(#torn-edge)"></rect></svg>
-      <svg class="swatch s2" width="64" height="90"><rect width="64" height="90" fill="url(#stripe-red)" filter="url(#torn-edge)"></rect></svg>
+      <svg class="swatch s1" width="88" height="64"
+        ><rect width="88" height="64" fill="url(#check-blue)" filter="url(#torn-edge)"></rect></svg
+      >
+      <svg class="swatch s2" width="64" height="90"
+        ><rect width="64" height="90" fill="url(#stripe-red)" filter="url(#torn-edge)"></rect></svg
+      >
       <Star class="star" color="var(--yellow)" size="26px" rotate={-10} />
     </div>
     <div class="deco-stack br">
-      <svg class="swatch s1" width="70" height="98"><rect width="70" height="98" fill="url(#dots-black)" filter="url(#torn-edge)"></rect></svg>
-      <svg class="swatch s2" width="80" height="56"><rect width="80" height="56" fill="url(#stripe-black)" filter="url(#torn-edge)"></rect></svg>
+      <svg class="swatch s1" width="70" height="98"
+        ><rect width="70" height="98" fill="url(#dots-black)" filter="url(#torn-edge)"></rect></svg
+      >
+      <svg class="swatch s2" width="80" height="56"
+        ><rect width="80" height="56" fill="url(#stripe-black)" filter="url(#torn-edge)"></rect></svg
+      >
       <Star class="star" color="var(--red)" size="22px" rotate={16} />
     </div>
   </div>
 
   <Reveal client:visible>
-  <Tape color="black" rotate={-1.2} as="h2" class="sec-title">SPONSORS</Tape>
+    <Tape color="black" rotate={-1.2} as="h2" class="sec-title">SPONSORS</Tape>
 
-  <div class="sponsor-group">
-    <h3>法人協賛</h3>
-    <ul class="grid">
-      {
-        ordered("corporate").map((s) => {
-          const logo = getLogo(s.logo);
-          /* ロゴがあれば「ロゴ＋企業名」。alt を空にしているのは、
+    <div class="sponsor-group">
+      <h3>法人協賛</h3>
+      <ul class="grid">
+        {
+          ordered("corporate").map((s) => {
+            const logo = getLogo(s.logo);
+            /* ロゴがあれば「ロゴ＋企業名」。alt を空にしているのは、
              すぐ隣に企業名を文字で出しており読み上げが重複するため */
-          const body = (
-            <>
-              {logo && <Image src={logo} alt="" class="slot-logo" />}
-              <span class="slot-name">{s.name}</span>
-            </>
-          );
-          return (
-            <li class:list={["slot", { "is-featured": s.featured }]}>
-              {/* リンクを持たない協賛もあるので、url があるときだけリンクにする */}
-              {s.url ? (
-                <a href={s.url} target="_blank" rel="noopener noreferrer">
-                  {body}
-                </a>
-              ) : (
-                body
-              )}
-            </li>
-          );
-        })
-      }
-    </ul>
-  </div>
-
-  <div class="sponsor-group">
-    <h3>個人協賛</h3>
-    {/* 個人協賛はフォームで随時受付中のため、開幕前は0件になりうる。
-        見出しの下に空のグリッドが残ると壊れて見えるので、0件のときは案内に差し替える */}
-    {
-      individuals.length > 0 ? (
-        <ul class="grid">
-          {individuals.map((s) => (
-            <li class="slot">
-              {s.url ? (
-                <a href={s.url} target="_blank" rel="noopener noreferrer">
-                  <span class="slot-name">{s.name}</span>
-                </a>
-              ) : (
+            const body = (
+              <>
+                {logo && <Image src={logo} alt="" class="slot-logo" />}
                 <span class="slot-name">{s.name}</span>
-              )}
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p class="empty-note">現在募集中です。下のリンクからお申し込みいただけます。</p>
-      )
-    }
-  </div>
-</Reveal>
+              </>
+            );
+            return (
+              <li class:list={["slot", { "is-featured": s.featured }]}>
+                {/* リンクを持たない協賛もあるので、url があるときだけリンクにする */}
+                {s.url ? (
+                  <a href={s.url} target="_blank" rel="noopener noreferrer">
+                    {body}
+                  </a>
+                ) : (
+                  body
+                )}
+              </li>
+            );
+          })
+        }
+      </ul>
+    </div>
+
+    <div class="sponsor-group">
+      <h3>個人協賛</h3>
+      {
+        /* 個人協賛はフォームで随時受付中のため、開幕前は0件になりうる。
+        見出しの下に空のグリッドが残ると壊れて見えるので、0件のときは案内に差し替える */
+      }
+      {
+        individuals.length > 0 ? (
+          <ul class="grid">
+            {individuals.map((s) => (
+              <li class="slot">
+                {s.url ? (
+                  <a href={s.url} target="_blank" rel="noopener noreferrer">
+                    <span class="slot-name">{s.name}</span>
+                  </a>
+                ) : (
+                  <span class="slot-name">{s.name}</span>
+                )}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p class="empty-note">現在募集中です。下のリンクからお申し込みいただけます。</p>
+        )
+      }
+    </div>
+  </Reveal>
 </section>
 
 <style>
@@ -257,7 +267,6 @@ const individuals = ordered("individual");
     line-height: 1.6;
   }
 
-
   @media (min-width: 900px) {
     .sponsors {
       max-width: var(--content-wide);
@@ -267,6 +276,4 @@ const individuals = ordered("individual");
       grid-template-columns: repeat(4, 1fr);
     }
   }
-
-
 </style>

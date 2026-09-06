@@ -130,8 +130,8 @@ const featuredWithImage = featured.slice(0, 1).map((entry) => ({ ...entry, image
       <p class="sub">
         featured企画の一覧。home の PICK UP 枠で使用。行全体が詳細ページへのリンクで、タップ領域は行の全面。
         <strong>home専用ではなくエントリ配列を受け取るだけなので、他ページの広告枠にも流用できる</strong>。
-        <strong>「タップ領域を表示」を押すと押せる範囲が赤破線で出ます</strong>。
-        参考値: WCAG 2.5.8(AA)の最小は24×24px、Apple HIGの推奨は44×44px。
+        <strong>「タップ領域を表示」を押すと押せる範囲が赤破線で出ます</strong>。 参考値: WCAG
+        2.5.8(AA)の最小は24×24px、Apple HIGの推奨は44×44px。
       </p>
       <p class="sub">
         切り替えUI（重ねてタブで選ぶ・カルーセル）も検討したが、広告は多くても4件程度のため畳まないのが最善と判断した。
@@ -155,8 +155,7 @@ const featuredWithImage = featured.slice(0, 1).map((entry) => ({ ...entry, image
       <h3>参考: 画像あり / 画像なし</h3>
       <p class="sub">
         写真を用意できない企画は今後も残るため、<strong>画像なしを正式なレイアウトとして扱う</strong>（Issue #60）。
-        「NO IMAGE」の空枠は出さない。写真ブロックごと省く詳細ページ <code>/entry/[id]</code> と同じ考え方で、
-        カードの高さは中身なりに変わる。
+        「NO IMAGE」の空枠は出さない。写真ブロックごと省く詳細ページ <code>/entry/[id]</code> と同じ考え方で、 カードの高さは中身なりに変わる。
       </p>
       <div class="promo-slot" data-promo>
         <PromoList client:visible entries={featuredWithImage} />
