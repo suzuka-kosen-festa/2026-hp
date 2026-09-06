@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
+import { test } from "@playwright/test";
 import { describePage } from "./_shared";
 
 describePage("news", "/news/");
@@ -10,8 +11,31 @@ describePage("news", "/news/");
  * src/lib/news.ts をimportすると json の import attribute で落ちるため、ファイルを直接読む。
  */
 const newsJson = fileURLToPath(new URL("../src/data/news.json", import.meta.url));
-const items: { id: string; body?: string }[] = JSON.parse(readFileSync(newsJson, "utf8"));
-const first = items.find((item) => item.body);
+const items: { id: string; date: string; body?: string }[] = JSON.parse(
+  readFileSync(newsJson, "utf8"),
+);
 
-if (!first) throw new Error("body を持つお知らせが無いため、詳細ページを検査できません");
-describePage("news 詳細", `/news/${first.id}/`);
+/**
+ * 未来の日付のお知らせは詳細ページが生成されない（src/lib/news.ts の isPublished）。
+ * ここで同じ条件を書いているのは、上のコメントのとおり lib を import できないため。
+ * 判定を変えるときは両方直すこと。
+ */
+function isPublished(date: string) {
+  const [year, month, day] = date.split(/[./-]/).map(Number);
+  const now = new Date();
+
+  return (
+    new Date(year, month - 1, day).getTime() <=
+    new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime()
+  );
+}
+
+const first = items.find((item) => item.body && isPublished(item.date));
+
+if (first) {
+  describePage("news 詳細", `/news/${first.id}/`);
+} else {
+  /* 全部が未来日付（リリース待ちの下書きだけ）のときは検査対象が無い。
+     日付が来れば自動で検査に戻るので、恒久的なskipにはならない */
+  test.skip("公開日を迎えた本文付きのお知らせが無いため、詳細ページを検査できません", () => {});
+}
