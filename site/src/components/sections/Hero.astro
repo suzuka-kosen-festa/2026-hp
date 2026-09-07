@@ -23,7 +23,11 @@ import site from "../../data/site.json";
     />
 
     <p class="hero-name">
-      {site.eventName}「<span class="theme-highlight">{site.theme}</span><span class="theme-yomi">({site.themeYomi})</span>」
+      {site.eventName}<span class="theme-term"
+        >「<span class="theme-highlight">{site.theme}</span><span class="theme-yomi"
+          >({site.themeYomi})</span
+        >」</span
+      >
     </p>
 
     <div class="hero-lower">
@@ -130,6 +134,13 @@ import site from "../../data/site.json";
     font-family: var(--font-body);
     font-weight: 700;
     font-size: clamp(20px, 6vw, 32px);
+  }
+
+  /* 「collage(コラージュ)」の途中で改行させない。
+     放っておくと読み仮名が「コラー / ジュ)」のように割れる。
+     全体は折り返してよいので、鉤括弧の手前で改行される */
+  .theme-term {
+    white-space: nowrap;
   }
 
   /* 鉤括弧つきの表記に揃えたのでイタリックは外した（MTG 2026-09-06）。
