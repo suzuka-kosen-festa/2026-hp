@@ -399,7 +399,10 @@ const parkings = access.parkings;
        （MTG 2026-09-06）。図と説明を左右に振り分けて、パネルの高さを
        「図＋文章」ではなく「図と文章の高いほう」にする。
        見出しは両カラムにまたがる */
-    .parking-panel {
+    /* :not([hidden]) が要る。素の .parking-panel に display を指定すると
+       [hidden] の display:none（UAスタイル）に勝ってしまい、
+       切り替えているはずの3枚が同時に出る */
+    .parking-panel:not([hidden]) {
       display: grid;
       grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
       column-gap: 36px;

@@ -62,3 +62,33 @@ test("PCでは駐車場の図と説明が左右に並ぶ", async ({ page }) => {
     `パネルが画面高の${Math.round((panelBox.height / 800) * 100)}%を占めています`,
   ).toBeLessThan(800);
 });
+
+/**
+ * 駐車場の切り替えが生きていること。
+ *
+ * PCの左右振り分けを入れたとき、素の .parking-panel に display:grid を書いて
+ * [hidden] の display:none（UAスタイル）を上書きしてしまい、3枚が同時に
+ * 表示された。:not([hidden]) で要素を選ぶ検査では属性上は正しい1枚が取れて
+ * しまい気づけなかったので、「見えている数」を数える。
+ */
+test("駐車場パネルは常に1枚だけ表示される", async ({ page }) => {
+  for (const width of [1280, 375]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/access/");
+
+    const panels = page.locator("[data-parking-panel]");
+    const total = await panels.count();
+    expect(total, "駐車場パネルが見つかりません").toBeGreaterThan(1);
+
+    const tabs = page.locator("[role=tab]");
+
+    for (let i = 0; i < total; i++) {
+      await tabs.nth(i).click();
+
+      const visible = await panels.evaluateAll(
+        (els) => els.filter((el) => (el as HTMLElement).offsetParent !== null).length,
+      );
+      expect(visible, `${width}px でタブ${i + 1}を選んだとき ${visible} 枚見えています`).toBe(1);
+    }
+  }
+});
