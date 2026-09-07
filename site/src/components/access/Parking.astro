@@ -388,5 +388,15 @@ const parkings = access.parkings;
     .parking-panel h3 {
       font-size: 20px;
     }
+
+    /* 横長の画面では図が縦を占領し、手順や地図を見るのにスクロールが要る
+       （MTG 2026-09-06）。幅ではなく高さが問題なので、画面の高さに対して
+       上限を設ける。縦に余裕のある画面では従来どおり原寸で収まる */
+    .parking-panel img {
+      width: auto;
+      max-width: 100%;
+      max-height: 58vh;
+      margin-inline: auto;
+    }
   }
 </style>
