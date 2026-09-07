@@ -46,7 +46,12 @@ const displayTags = toDisplayTags(entry.tags);
 
 <BaseLayout title={`${entry.name} | ${site.eventName}`} description={entry.summary ?? entry.description ?? undefined}>
   <article class="entry">
-    <p class="crumb"><a href="/booth/">← 企画一覧へ</a></p>
+    {/* 「企画一覧へ」の決め打ちだと、/booth/ が準備中のあいだは準備中ページに
+        着地する。実際にトップのPICK UPから入った人が戻れなくなっていた
+        （MTG 2026-09-06）。素直に元いたページへ帰す。
+        履歴が無いとき（検索やQRからの直接着地）はトップへ。行き先が毎回変わるので
+        ラベルは「戻る」にしてある */}
+    <p class="crumb"><a href="/" data-back>← 戻る</a></p>
 
     <header class="head">
       <Tape color="blue" rotate={-1.5} as="p" class="cat">{entry.category}</Tape>
@@ -153,6 +158,17 @@ const displayTags = toDisplayTags(entry.tags);
       )
     }
   </article>
+<script>
+  /* JSが動かなくても href="/" の普通のリンクとして機能する。
+     サイト内から来たときだけ履歴を1つ戻す */
+  document.querySelector<HTMLAnchorElement>("a[data-back]")?.addEventListener("click", (event) => {
+    const sameOrigin = document.referrer.startsWith(`${location.origin}/`);
+    if (!sameOrigin || history.length <= 1) return;
+
+    event.preventDefault();
+    history.back();
+  });
+</script>
 </BaseLayout>
 
 <style>

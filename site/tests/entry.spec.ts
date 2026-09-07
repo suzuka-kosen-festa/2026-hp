@@ -51,3 +51,35 @@ test.describe("entry の画像（あり）", () => {
     await expect(page.locator(".photo img")).toHaveCount(1);
   });
 });
+
+/**
+ * 戻る導線（MTG 2026-09-06）。
+ *
+ * 以前は「← 企画一覧へ」で /booth/ に決め打ちだった。v1では /booth/ が準備中なので、
+ * トップのPICK UPから入った人が戻ろうとすると準備中ページに着地していた。
+ *
+ * サイト内から来たときは履歴で元のページへ、履歴が無いとき（検索やQRからの
+ * 直接着地）はトップへ。JSが動かなくても href="/" の普通のリンクとして機能する。
+ */
+test.describe("entry の戻る導線", () => {
+  test("直接来たときはトップへ戻る", async ({ page }) => {
+    await page.goto("/entry/workshop-ai-sorting-robot/");
+
+    const back = page.locator("a[data-back]");
+    await expect(back, "戻るリンクがありません").toHaveCount(1);
+    // JS無効でも機能するよう、href は常にトップを指しておく
+    await expect(back).toHaveAttribute("href", "/");
+
+    await back.click();
+    await expect(page).toHaveURL(/\/$/);
+  });
+
+  test("サイト内から来たときは元のページへ戻る", async ({ page }) => {
+    await page.goto("/booth/");
+    await page.locator('a[href^="/entry/"]').first().click();
+    await expect(page).toHaveURL(/\/entry\//);
+
+    await page.locator("a[data-back]").click();
+    await expect(page, "元いた一覧ではなくトップに戻っています").toHaveURL(/\/booth\/$/);
+  });
+});

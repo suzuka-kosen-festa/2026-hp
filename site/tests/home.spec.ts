@@ -54,3 +54,24 @@ test("About のリンク先の記事が実在する", async ({ page }) => {
   const res = await page.request.get(href!);
   expect(res.status(), `${href} が見つかりません`).toBe(200);
 });
+
+/**
+ * PICK UP のサムネイルは右（MTG 2026-09-06）。
+ *
+ * 画像を持つ企画が1件も無いと検査対象が消えるので、そのときだけ skip する。
+ * 画像が入れば自動で検査に戻る。
+ */
+test("PICK UP のサムネイルが右にある", async ({ page }) => {
+  await page.goto("/");
+
+  const withPhoto = page.locator(".pc--compact:has(.pc__photo)").first();
+  test.skip((await withPhoto.count()) === 0, "画像を持つ PICK UP がまだ無いため");
+
+  const card = (await withPhoto.boundingBox())!;
+  const photo = (await withPhoto.locator(".pc__photo").boundingBox())!;
+
+  expect(
+    photo.x,
+    `サムネイルが左にあります（カード左端 ${Math.round(card.x)}px、写真左端 ${Math.round(photo.x)}px）`,
+  ).toBeGreaterThan(card.x + card.width / 2);
+});
