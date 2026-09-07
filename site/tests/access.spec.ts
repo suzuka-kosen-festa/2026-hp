@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 import { expect, test } from "@playwright/test";
 import { describePage } from "./_shared";
 
@@ -89,6 +91,34 @@ test("駐車場パネルは常に1枚だけ表示される", async ({ page }) =>
         (els) => els.filter((el) => (el as HTMLElement).offsetParent !== null).length,
       );
       expect(visible, `${width}px でタブ${i + 1}を選んだとき ${visible} 枚見えています`).toBe(1);
+    }
+  }
+});
+
+/**
+ * 利用条件のある駐車場は、タブの時点で分かること。
+ *
+ * 第二駐車場はワークショップ参加者専用・予約制で、パネルを開かないと
+ * 分からないと選んでから引き返すことになる（MTG 2026-09-06）。
+ * 期待値は access.json から引くので、他の駐車場に条件が付いても成り立つ。
+ */
+const accessJson = fileURLToPath(new URL("../src/data/access.json", import.meta.url));
+const access = JSON.parse(readFileSync(accessJson, "utf8")) as {
+  parkings: { name: string; badge?: string }[];
+};
+
+test("利用条件のある駐車場はタブに印が出る", async ({ page }) => {
+  await page.goto("/access/");
+
+  const tabs = page.locator("[role=tab]");
+
+  for (const [i, parking] of access.parkings.entries()) {
+    const badge = tabs.nth(i).locator(".tab-badge");
+
+    if (parking.badge) {
+      await expect(badge, `${parking.name} のタブに印が出ていません`).toHaveText(parking.badge);
+    } else {
+      await expect(badge, `${parking.name} のタブに余計な印が出ています`).toHaveCount(0);
     }
   }
 });
