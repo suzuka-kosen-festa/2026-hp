@@ -35,7 +35,6 @@ export const TAG_META: Record<string, { label: string; color: TagColor }> = {
   S科: { label: "材料", color: "blue" },
 
   // イベント・ライブ
-  ワークショップ: { label: "ワークショップ", color: "blue" },
   常設: { label: "常設", color: "blue" },
   中夜祭: { label: "中夜祭", color: "red" },
   決勝バンド: { label: "決勝バンド", color: "red" },

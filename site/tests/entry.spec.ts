@@ -12,7 +12,7 @@ describePage("entry", "/entry/workshop-ai-sorting-robot/");
  * 実データが入って画像の有無が変わっても追従するよう、データから引いて検査する。
  */
 const entriesDir = new URL("../src/data/entries/", import.meta.url);
-const entries: { id: string; image?: string }[] = ["booth", "department", "program"].flatMap((name) =>
+const entries: { id: string; image?: string; categoryLabel?: string }[] = ["booth", "department", "program"].flatMap((name) =>
   JSON.parse(readFileSync(fileURLToPath(new URL(`${name}.json`, entriesDir)), "utf8")),
 );
 
@@ -81,5 +81,28 @@ test.describe("entry の戻る導線", () => {
 
     await page.locator("a[data-back]").click();
     await expect(page, "元いた一覧ではなくトップに戻っています").toHaveURL(/\/booth\/$/);
+  });
+});
+
+/**
+ * 表示用のカテゴリ名（MTG 2026-09-06）。
+ *
+ * ワークショップは青いテープに「イベント」と出ていた。`category` は booth の
+ * 絞り込みタブとタイムテーブル掲載を決めているので表示の都合で書き換えられず、
+ * `categoryLabel` で表示だけを差し替えている。
+ *
+ * 期待値はデータから引くので、他の企画に付けても成り立つ。
+ */
+const withLabel = entries.filter((entry) => (entry as { categoryLabel?: string }).categoryLabel);
+
+test.describe("表示用のカテゴリ名", () => {
+  test.skip(withLabel.length === 0, "categoryLabel を持つ企画が無いため");
+
+  test("categoryLabel があればそれを出す", async ({ page }) => {
+    for (const entry of withLabel) {
+      const label = (entry as { categoryLabel?: string }).categoryLabel!;
+      await page.goto(`/entry/${entry.id}/`, { waitUntil: "domcontentloaded" });
+      await expect(page.locator(".cat"), `${entry.id} のカテゴリ表示`).toHaveText(label);
+    }
   });
 });

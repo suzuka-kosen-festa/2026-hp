@@ -54,7 +54,7 @@ const displayTags = toDisplayTags(entry.tags);
     <p class="crumb"><a href="/" data-back>← 戻る</a></p>
 
     <header class="head">
-      <Tape color="blue" rotate={-1.5} as="p" class="cat">{entry.category}</Tape>
+      <Tape color="blue" rotate={-1.5} as="p" class="cat">{entry.categoryLabel ?? entry.category}</Tape>
       <h1 class="name">{entry.name}</h1>
       {entry.group && <p class="group">{entry.group}</p>}
       {
