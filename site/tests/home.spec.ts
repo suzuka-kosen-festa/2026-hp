@@ -75,3 +75,52 @@ test("PICK UP のサムネイルが右にある", async ({ page }) => {
     `サムネイルが左にあります（カード左端 ${Math.round(card.x)}px、写真左端 ${Math.round(photo.x)}px）`,
   ).toBeGreaterThan(card.x + card.width / 2);
 });
+
+/**
+ * ファビコンの sizes 宣言が、favicon.ico の実体と一致していること（Issue #68）。
+ *
+ * Google はファビコンに「48pxの倍数の正方形」を要求する。実体には 48x48 が
+ * 入っているのに sizes="32x32" とだけ申告していると、条件を満たさないものとして
+ * 扱われる余地がある。
+ *
+ * 期待値は .ico を読んで作るので、アイコンを差し替えたときに宣言だけ古いまま
+ * 残っていれば落ちる。
+ */
+function icoSizes(path: string) {
+  const buf = readFileSync(path);
+  const count = buf.readUInt16LE(4);
+
+  return Array.from({ length: count }, (_, i) => {
+    const w = buf[6 + i * 16] || 256;
+    const h = buf[7 + i * 16] || 256;
+    return `${w}x${h}`;
+  });
+}
+
+const faviconPath = fileURLToPath(new URL("../public/favicon.ico", import.meta.url));
+
+test("favicon の sizes 宣言が実体と一致する", async ({ page }) => {
+  const expected = icoSizes(faviconPath);
+  expect(expected, "favicon.ico に画像が入っていません").not.toHaveLength(0);
+
+  /* BaseLayout（全ページ共通）と、本番でポスターを返す holding の両方。
+     holding は mode が open になるとビルドから外れる（strip-dev-pages.mjs）ので、
+     そのときだけ対象から外す */
+  const release = JSON.parse(
+    readFileSync(fileURLToPath(new URL("../src/data/release.json", import.meta.url)), "utf8"),
+  ) as { mode: string };
+  const paths = release.mode === "holding" ? ["/", "/holding/"] : ["/"];
+
+  for (const path of paths) {
+    await page.goto(path);
+
+    const declared = await page
+      .locator('link[rel="icon"][href="/favicon.ico"]')
+      .getAttribute("sizes");
+
+    expect(
+      declared?.split(/\s+/).sort(),
+      `${path} の宣言 "${declared}" が実体 [${expected.join(", ")}] と違います`,
+    ).toEqual([...expected].sort());
+  }
+});
