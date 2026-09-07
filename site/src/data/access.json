@@ -56,8 +56,7 @@
           "text": "付近には病院などの駐車場もございます。お間違えのないよう、必ず指定の駐車場をご利用ください。"
         }
       ],
-      "mapUrl": "https://www.google.com/maps/search/?api=1&query=34.8506944,136.5838889",
-      "badge": "予約制"
+      "mapUrl": "https://www.google.com/maps/search/?api=1&query=34.8506944,136.5838889"
     },
     {
       "name": "第三駐車場",

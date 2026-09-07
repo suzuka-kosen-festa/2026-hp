@@ -73,9 +73,6 @@ const parkings = access.parkings;
         aria-controls={`parking-${index}`}
       >
         {parking.name}
-        {/* 利用条件のある駐車場は、選ぶ前に分かるようタブに出す（MTG 2026-09-06）。
-            パネルを開かないと分からないと、選んでから引き返すことになる */}
-        {parking.badge && <span class="tab-badge">{parking.badge}</span>}
       </button>
     ))}
   </div>
@@ -373,20 +370,6 @@ const parkings = access.parkings;
 
 
   /* 補足 */
-
-  .tab-badge {
-    display: inline-block;
-    margin-left: 6px;
-    padding: 1px 5px;
-    border: 1.5px solid var(--red);
-    border-radius: 2px;
-    color: var(--red);
-    font-size: 10px;
-    font-weight: 800;
-    letter-spacing: 0.02em;
-    vertical-align: 1px;
-    white-space: nowrap;
-  }
 
   .notes {
     margin-top: 28px;
