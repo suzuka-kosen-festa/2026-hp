@@ -81,10 +81,42 @@ function computeLogoAlignedObjectPosition(): string {
   return `${posX}% ${posY}%`;
 }
 
+const SP_MAX_WIDTH = 700;
+
+/**
+ * SPでの動画の置き場所（画面上端からの位置と高さ）。
+ *
+ * 終盤に文字が外へ広がるアウトトランジションがあり、縦画面では動画の縁で
+ * 唐突に消えて見えない切断線ができる。CSS側で端をぼかして消すのだが、
+ * 要素を画面いっぱいにしたままだと contain のレターボックスが挟まり、
+ * ぼかしが動画ではなく余白に掛かってしまう。
+ * そこで要素を表示帯ちょうどの大きさにして、比率を動画と一致させる。
+ *
+ * 縦位置は computeLogoAlignedObjectPosition と同じ考えで、動画内でロゴが
+ * 組み上がる帯がヒーローロゴに重なる高さに置く。
+ */
+function computeSpBand(): { top: number; height: number } | null {
+  if (window.innerWidth > SP_MAX_WIDTH) return null;
+
+  const heroLogo = document.querySelector<HTMLElement>(".hero-logo");
+  if (!heroLogo) return null;
+
+  const rect = heroLogo.getBoundingClientRect();
+  if (rect.height === 0) return null;
+
+  const height = window.innerWidth / VIDEO_ASPECT;
+  const logoCenterFrac = (LOGO_FRAME.top + LOGO_FRAME.bottom) / 2;
+  const wanted = rect.top + rect.height / 2 - logoCenterFrac * height;
+  const top = Math.min(Math.max(wanted, 0), Math.max(0, window.innerHeight - height));
+
+  return { top, height };
+}
+
 export default function OpSplash() {
   const shouldReduceMotion = useReducedMotion();
   const [visible, setVisible] = useState(false);
   const [objectPosition, setObjectPosition] = useState("50% 50%");
+  const [spBand, setSpBand] = useState<{ top: number; height: number } | null>(null);
   const closedRef = useRef(false);
   const startFailSafeRef = useRef<number | null>(null);
 
@@ -108,6 +140,7 @@ export default function OpSplash() {
 
   function show() {
     setObjectPosition(computeLogoAlignedObjectPosition());
+    setSpBand(computeSpBand());
     setVisible(true);
     document.getElementById("op-cover")?.remove();
   }
@@ -150,7 +183,11 @@ export default function OpSplash() {
         <motion.div className="op-splash" exit={{ opacity: 0 }} transition={{ duration: 0.3, ease: "easeOut" }}>
           <video
             className="op-video"
-            style={{ ...baseVideoStyle, objectPosition }}
+            style={
+              spBand === null
+                ? { ...baseVideoStyle, objectPosition }
+                : { ...baseVideoStyle, position: "absolute", left: 0, top: spBand.top, height: spBand.height }
+            }
             autoPlay
             muted
             playsInline

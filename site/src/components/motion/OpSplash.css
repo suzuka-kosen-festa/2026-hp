@@ -15,6 +15,26 @@
   object-fit: contain;
 }
 
+/* SP。
+   動画は横長で、終盤に文字が外へ広がるアウトトランジションを持つ。
+   縦画面では動画が帯状になるため、広がった文字が白地の途中で唐突に消え、
+   見えない切断線ができる（MTG 2026-09-06 の「上下が見切れる」）。
+   上下端をぼかして、縁に達する前に薄れて消えるようにする。
+   左右は画面端まで届いているので、PCと同じく自然に画面外へ出ていく。
+
+   要素の大きさは OpSplash.tsx が表示帯ちょうどに合わせる。画面いっぱいのままだと
+   contain のレターボックスが挟まり、ぼかしが動画ではなく余白に掛かる。
+
+   本来は縦向き（1:1 や 4:5）に構図を組み直したOP素材を書き出すのが素直で、
+   そうすればこのぼかしは要らなくなる。ただし編集データ側の作業になるため、
+   まずはコード側で縁を目立たなくしている */
+@media (max-width: 700px) {
+  .op-video {
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 13%, #000 87%, transparent 100%);
+    mask-image: linear-gradient(to bottom, transparent 0%, #000 13%, #000 87%, transparent 100%);
+  }
+}
+
 .op-skip {
   position: absolute;
   right: 18px;
