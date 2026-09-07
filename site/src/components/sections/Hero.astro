@@ -23,7 +23,7 @@ import site from "../../data/site.json";
     />
 
     <p class="hero-name">
-      {site.eventName}<span class="theme-highlight">{site.theme}</span><span class="theme-yomi">({site.themeYomi})</span>
+      {site.eventName}「<span class="theme-highlight">{site.theme}</span><span class="theme-yomi">({site.themeYomi})</span>」
     </p>
 
     <div class="hero-lower">
@@ -132,9 +132,10 @@ import site from "../../data/site.json";
     font-size: clamp(20px, 6vw, 32px);
   }
 
+  /* 鉤括弧つきの表記に揃えたのでイタリックは外した（MTG 2026-09-06）。
+     括弧は地の色のまま、赤はテーマ名だけに残す */
   .theme-highlight {
     color: var(--red);
-    font-style: italic;
   }
 
   .theme-yomi {
