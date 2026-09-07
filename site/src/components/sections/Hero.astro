@@ -143,10 +143,11 @@ import site from "../../data/site.json";
     white-space: nowrap;
   }
 
-  /* 鉤括弧つきの表記に揃えたのでイタリックは外した（MTG 2026-09-06）。
-     括弧は地の色のまま、赤はテーマ名だけに残す */
+  /* 鉤括弧つきの表記に揃えたのでイタリックは外し、色も赤から黒にした
+     （MTG 2026-09-06）。地の文と同じ色だが、テーマ名の範囲を示す目印として
+     span は残してある */
   .theme-highlight {
-    color: var(--red);
+    color: var(--ink);
   }
 
   .theme-yomi {
