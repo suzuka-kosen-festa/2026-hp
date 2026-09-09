@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { expect, test } from "@playwright/test";
-import { describePage } from "./_shared";
+import { describePage, showsContent } from "./_shared";
 
 // 開催回・対象・定員・注記を全部持つ、いま一番情報量の多いエントリ
 describePage("entry", "/entry/workshop-ai-sorting-robot/");
@@ -75,6 +75,9 @@ test.describe("entry の戻る導線", () => {
   });
 
   test("サイト内から来たときは元のページへ戻る", async ({ page }) => {
+    /* 一覧が準備中だとカードが無く、たどれない。published に足せば検査に戻る */
+    test.skip(!showsContent("/booth/"), "/booth/ が準備中のため");
+
     await page.goto("/booth/");
     await page.locator('a[href^="/entry/"]').first().click();
     await expect(page).toHaveURL(/\/entry\//);
