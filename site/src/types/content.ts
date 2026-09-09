@@ -17,6 +17,14 @@ export interface Occurrence {
 export interface Entry {
   id: string;
   category: Category;
+  /**
+   * 画面に出すカテゴリ名。省略時は category をそのまま出す。
+   *
+   * category は booth の絞り込みタブとタイムテーブル掲載（SCHEDULABLE_CATEGORIES）を
+   * 決めているので、表示の都合で書き換えられない。ワークショップを「イベント」ではなく
+   * 「ワークショップ」と見せたい、のような表示だけの要求はこちらで受ける。
+   */
+  categoryLabel?: string;
   name: string;
   group?: string | null;
   /** バナー等の狭い場所に出す短い要約（40字目安）。長文はdescriptionへ */

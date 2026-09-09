@@ -4,6 +4,8 @@ import Tape from "../ui/Tape.astro";
 import Star from "../ui/Star.astro";
 import { Image } from "astro:assets";
 import { sponsors } from "../../lib/sponsors";
+import Button from "../ui/Button.astro";
+import site from "../../data/site.json";
 
 /* 協賛ロゴはフッターと同じ置き場から拾う */
 const logoFiles = import.meta.glob("../../assets/sponsors/*.{png,jpg,jpeg,webp}", {
@@ -92,10 +94,26 @@ const individuals = ordered("individual");
     </ul>
   </div>
 
-  <div class="sponsor-group">
+  {/* お知らせから直接ここへ来られるようにする（/sponsors/#individual）。
+      フォームに直リンクすると、何に申し込むのか分からないまま外部サイトへ飛ぶ */}
+  <div class="sponsor-group" id="individual">
     <h3>個人協賛</h3>
+
+    <div class="individual-intro">
+      <p class="intro-title">第61回 鈴鹿高専 高専祭 協賛金窓口〈個人様用〉</p>
+      <p>
+        第61回 鈴鹿高専 高専祭は鈴鹿工業高等専門学校にて開催される学校祭です。<br />
+        本イベントでは毎年多くの個人、企業、団体様からご支援をいただき運営を行っています。<br />
+        本年度につきましてもご支援を賜わりたく、お願い申し上げます。
+      </p>
+      <p>また、ご支援いただいた方には御礼として公式サイトおよび会場内へ名前を掲載させていただきます。</p>
+      <p>
+        不明点等に関しましては、<a href={`mailto:${site.contactEmail}`}>{site.contactEmail}</a>までお問い合わせください。
+      </p>
+    </div>
+
     {/* 個人協賛はフォームで随時受付中のため、開幕前は0件になりうる。
-        見出しの下に空のグリッドが残ると壊れて見えるので、0件のときは案内に差し替える */}
+        上の案内が既に募集中だと説明しているので、0件のときは何も出さない */}
     {
       individuals.length > 0 ? (
         <ul class="grid">
@@ -111,10 +129,18 @@ const individuals = ordered("individual");
             </li>
           ))}
         </ul>
-      ) : (
-        <p class="empty-note">現在募集中です。下のリンクからお申し込みいただけます。</p>
-      )
+      ) : null
     }
+
+    <Button
+      href={site.individualSponsorFormUrl}
+      class="individual-cta"
+      target="_blank"
+      rel="noopener noreferrer"
+      color="yellow"
+    >
+      個人協賛のお申し込み →
+    </Button>
   </div>
 </Reveal>
 </section>
@@ -250,11 +276,40 @@ const individuals = ordered("individual");
     margin-bottom: 32px;
   }
 
-  .empty-note {
+  /* お知らせからアンカーで飛んでくるので、見出しがヘッダーに隠れないよう逃がす。
+     ヘッダーぶんに加えて Reveal の登場ぶん（y: 24px → 0）も見込む。
+     ブラウザは登場前の位置でスクロールし、そのあとコンテンツが持ち上がるので、
+     この24pxが無いと見出しがヘッダーの下に潜る。
+     Reveal の y を変えたら access.spec ではなく sponsors.spec の検査が落ちる */
+  #individual {
+    scroll-margin-top: calc(var(--header-offset-sp) + 16px + 24px);
+  }
+
+  .individual-intro {
     position: relative;
     z-index: 1;
-    font-size: 12px;
-    line-height: 1.6;
+    margin-bottom: 20px;
+    font-size: 13px;
+    line-height: 1.9;
+  }
+
+  .individual-intro p {
+    margin-bottom: 12px;
+  }
+
+  .individual-intro .intro-title {
+    font-weight: 800;
+  }
+
+  .individual-intro a {
+    text-decoration: underline;
+    word-break: break-all;
+  }
+
+  .sponsors :global(.individual-cta) {
+    position: relative;
+    z-index: 1;
+    margin-top: 4px;
   }
 
 

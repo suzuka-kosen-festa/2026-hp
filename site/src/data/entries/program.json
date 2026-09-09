@@ -19,6 +19,7 @@
   {
     "id": "workshop-ai-sorting-robot",
     "category": "イベント",
+    "categoryLabel": "ワークショップ",
     "name": "親子で挑戦！AI×工作ワークショップ",
     "group": "電子情報工学科",
     "summary": "AIに学習させて、カメラで見たものを左右に仕分けるロボットを作ろう。",
@@ -63,6 +64,7 @@
   {
     "id": "workshop-drone",
     "category": "イベント",
+    "categoryLabel": "ワークショップ",
     "name": "親子でドローン体験",
     "group": "材料工学科",
     "summary": "教育用ドローンの操縦と、プログラミングによる自動飛行を体験できます。",

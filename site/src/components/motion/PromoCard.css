@@ -68,19 +68,23 @@
   flex-direction: row;
   align-items: center;
   gap: 12px;
-  padding: 10px 14px 10px 10px;
+  /* 写真は右端に寄せるので、詰めるのは右側（MTG 2026-09-06） */
+  padding: 10px 10px 10px 14px;
   box-shadow: 4px 4px 0 var(--ink);
 }
 
+/* 写真は右。DOM上は先頭のままにして、読み上げ順を変えずに見た目だけ入れ替える
+   （alt="" の飾りなので、視覚的な位置だけの問題） */
 .pc--compact .pc__photo {
+  order: 1;
   flex: 0 0 84px;
   aspect-ratio: 4 / 3;
 }
 
-/* 画像なし。写真ぶんの余白が消えるので、左の内側余白を右と揃える
+/* 画像なし。写真ぶんの余白が消えるので、右の内側余白を左と揃える
    （写真ありの 10px は、写真を紙片の端に寄せるための詰めなので流用できない） */
 .pc--compact.pc--noimg {
-  padding-left: 14px;
+  padding-right: 14px;
 }
 
 .pc--compact .pc__body {
