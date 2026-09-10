@@ -92,7 +92,7 @@ const bodyLines = item.body?.split("\n") ?? [];
           if (line.startsWith("> ")) {
             return (
               <blockquote>
-                <Card rotate={1} texture attach="pin" cornerColor="yellow">
+                <Card rotate={1} texture attach="tape" cornerColor="yellow">
                     <p style="font-weight:800;">{line.slice(2)}</p>
                 </Card>
               </blockquote>
@@ -185,5 +185,12 @@ const bodyLines = item.body?.split("\n") ?? [];
 
 .markdown-body .spacer {
   height: 0.6em;
+}
+
+/* 引用
+   カードは傾き＋影を持つので、前後の段落と地の文と同じ間隔では窮屈になる。
+   本文側で空行を余分に入れて調整すると書く人ごとにばらつくため、ここで固定する */
+.markdown-body blockquote {
+  margin: 1.5em 0;
 }
 </style>

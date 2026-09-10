@@ -1,7 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import SponsorsSection from "../components/sections/SponsorsSection.astro";
-import Button from "../components/ui/Button.astro";
 import site from "../data/site.json";
 ---
 
@@ -10,16 +9,9 @@ import site from "../data/site.json";
   description="第61回鈴鹿高専祭にご協賛いただいた企業・団体の紹介"
 >
   <section class="sponsors-page">
+    {/* 申し込みボタンは個人協賛セクションの中に移した。
+        説明を読んだ流れでそのまま押せるようにするため */}
     <SponsorsSection />
-
-    <Button
-      href="https://forms.gle/vgvRbGAmfEGoBbxBA"
-      target="_blank"
-      rel="noopener noreferrer"
-      color="yellow"
-    >
-      個人協賛リンク
-    </Button>
   </section>
 </BaseLayout>
 

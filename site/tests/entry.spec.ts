@@ -12,7 +12,7 @@ describePage("entry", "/entry/workshop-ai-sorting-robot/");
  * 実データが入って画像の有無が変わっても追従するよう、データから引いて検査する。
  */
 const entriesDir = new URL("../src/data/entries/", import.meta.url);
-const entries: { id: string; image?: string }[] = ["booth", "department", "program"].flatMap((name) =>
+const entries: { id: string; image?: string; categoryLabel?: string }[] = ["booth", "department", "program"].flatMap((name) =>
   JSON.parse(readFileSync(fileURLToPath(new URL(`${name}.json`, entriesDir)), "utf8")),
 );
 
@@ -49,5 +49,60 @@ test.describe("entry の画像（あり）", () => {
   test("画像がある企画は今までどおり写真枠を出す", async ({ page }) => {
     await page.goto(`/entry/${withImage!.id}/`, { waitUntil: "domcontentloaded" });
     await expect(page.locator(".photo img")).toHaveCount(1);
+  });
+});
+
+/**
+ * 戻る導線（MTG 2026-09-06）。
+ *
+ * 以前は「← 企画一覧へ」で /booth/ に決め打ちだった。v1では /booth/ が準備中なので、
+ * トップのPICK UPから入った人が戻ろうとすると準備中ページに着地していた。
+ *
+ * サイト内から来たときは履歴で元のページへ、履歴が無いとき（検索やQRからの
+ * 直接着地）はトップへ。JSが動かなくても href="/" の普通のリンクとして機能する。
+ */
+test.describe("entry の戻る導線", () => {
+  test("直接来たときはトップへ戻る", async ({ page }) => {
+    await page.goto("/entry/workshop-ai-sorting-robot/");
+
+    const back = page.locator("a[data-back]");
+    await expect(back, "戻るリンクがありません").toHaveCount(1);
+    // JS無効でも機能するよう、href は常にトップを指しておく
+    await expect(back).toHaveAttribute("href", "/");
+
+    await back.click();
+    await expect(page).toHaveURL(/\/$/);
+  });
+
+  test("サイト内から来たときは元のページへ戻る", async ({ page }) => {
+    await page.goto("/booth/");
+    await page.locator('a[href^="/entry/"]').first().click();
+    await expect(page).toHaveURL(/\/entry\//);
+
+    await page.locator("a[data-back]").click();
+    await expect(page, "元いた一覧ではなくトップに戻っています").toHaveURL(/\/booth\/$/);
+  });
+});
+
+/**
+ * 表示用のカテゴリ名（MTG 2026-09-06）。
+ *
+ * ワークショップは青いテープに「イベント」と出ていた。`category` は booth の
+ * 絞り込みタブとタイムテーブル掲載を決めているので表示の都合で書き換えられず、
+ * `categoryLabel` で表示だけを差し替えている。
+ *
+ * 期待値はデータから引くので、他の企画に付けても成り立つ。
+ */
+const withLabel = entries.filter((entry) => (entry as { categoryLabel?: string }).categoryLabel);
+
+test.describe("表示用のカテゴリ名", () => {
+  test.skip(withLabel.length === 0, "categoryLabel を持つ企画が無いため");
+
+  test("categoryLabel があればそれを出す", async ({ page }) => {
+    for (const entry of withLabel) {
+      const label = (entry as { categoryLabel?: string }).categoryLabel!;
+      await page.goto(`/entry/${entry.id}/`, { waitUntil: "domcontentloaded" });
+      await expect(page.locator(".cat"), `${entry.id} のカテゴリ表示`).toHaveText(label);
+    }
   });
 });

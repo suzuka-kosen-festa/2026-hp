@@ -3,10 +3,11 @@ import { Image } from "astro:assets";
 import Reveal from "../motion/Reveal";
 import Tape from "../ui/Tape.astro";
 import Card from "../ui/Card.astro";
-import timetablePhoto from "../../assets/cards/timetable.png";
-import mapPhoto from "../../assets/cards/map.png";
-import boothPhoto from "../../assets/cards/booth.png";
-import accessPhoto from "../../assets/cards/access.png";
+import timetablePhoto from "../../assets/cards/timetable.webp";
+import mapPhoto from "../../assets/cards/map.webp";
+import boothPhoto from "../../assets/cards/booth.webp";
+import accessPhoto from "../../assets/cards/access.webp";
+import { isComingSoon } from "../../lib/release";
 
 const items = [
   {
@@ -41,7 +42,7 @@ const items = [
     photo: accessPhoto,
     rotate: 0.8,
   },
-];
+].map((item) => ({ ...item, comingSoon: isComingSoon(item.href) }));
 ---
 
 <section class="contents-cards">
@@ -58,8 +59,10 @@ const items = [
               <img src={item.icon} alt="" class="icon" />
               <h3 class="title num">{item.title}</h3>
               <p class="sublabel">{item.sublabel}</p>
+              {/* 写真つきで期待値が高いぶん、押す前に準備中と分かるようにする */}
+              {item.comingSoon && <span class="soon">準備中</span>}
               <div class="photo">
-                <Image src={item.photo} alt="" loading="lazy" width={280} height={221} />
+                <Image src={item.photo} alt="" loading="lazy" width={280} height={221} densities={[1, 2]} />
               </div>
             </Card>
           </a>
@@ -74,6 +77,18 @@ const items = [
     max-width: var(--content-sp);
     margin: 0 auto;
     padding: 32px 20px;
+  }
+
+  .soon {
+    display: inline-block;
+    margin-top: 4px;
+    padding: 2px 7px;
+    border: 2px solid var(--ink);
+    border-radius: 3px;
+    background: #fff;
+    font-size: 10px;
+    font-weight: 800;
+    line-height: 1.4;
   }
 
   /* Tape/Cardにpropsで渡したclassは子コンポーネント側のスコープになるため :global() が要る */

@@ -6,7 +6,9 @@
     "group": "実行委員会 システム班",
     "summary": "お題の写真を撮って、あなただけのフォトコラージュを作ろう。",
     "description": "お題の写真を撮って、あなただけのフォトコラージュを作ろう。",
-    "tags": ["常設"],
+    "tags": [
+      "常設"
+    ],
     "location": null,
     "image": null,
     "occurrences": [],
@@ -17,22 +19,90 @@
   {
     "id": "workshop-ai-sorting-robot",
     "category": "イベント",
+    "categoryLabel": "ワークショップ",
     "name": "親子で挑戦！AI×工作ワークショップ",
     "group": "電子情報工学科",
     "summary": "AIに学習させて、カメラで見たものを左右に仕分けるロボットを作ろう。",
     "description": "講座名：自動仕分けロボットを作ろう\n\n小さな小物やお菓子などをうまく判断できるようにAIを学習し、カメラで見たものをAIが判断して、左右に仕分ける仕組みを作ります。",
-    "tags": ["day1", "day2"],
+    "tags": [
+      "day1",
+      "day2"
+    ],
     "location": "電子情報工学実験室",
     "image": null,
     "occurrences": [
-      { "day": "day1", "start_time": "10:00", "end_time": "11:30" },
-      { "day": "day1", "start_time": "13:00", "end_time": "14:30" },
-      { "day": "day2", "start_time": "10:00", "end_time": "11:30" },
-      { "day": "day2", "start_time": "13:00", "end_time": "14:30" }
+      {
+        "day": "day1",
+        "start_time": "10:00",
+        "end_time": "11:30"
+      },
+      {
+        "day": "day1",
+        "start_time": "13:00",
+        "end_time": "14:30"
+      },
+      {
+        "day": "day2",
+        "start_time": "10:00",
+        "end_time": "11:30"
+      },
+      {
+        "day": "day2",
+        "start_time": "13:00",
+        "end_time": "14:30"
+      }
     ],
     "audience": "小学生(中学年〜高学年)と保護者",
     "capacity": "各回10組",
-    "notes": ["事前応募者のみ", "参加者は校門から実験室まで学生がご案内します"],
+    "notes": [
+      "事前応募者のみ",
+      "参加者は校門から実験室まで学生がご案内します"
+    ],
+    "featured": true,
+    "link": null
+  },
+  {
+    "id": "workshop-drone",
+    "category": "イベント",
+    "categoryLabel": "ワークショップ",
+    "name": "親子でドローン体験",
+    "group": "材料工学科",
+    "summary": "教育用ドローンの操縦と、プログラミングによる自動飛行を体験できます。",
+    "description": "教育用ドローン「CoDrone EDU」のマニュアル飛行とBlockly（ビジュアルプログラミング言語）による自動飛行を体験いただきます。Pythonによる自動飛行にも挑戦いただけます。産業、防災分野などでの活用が広がっているドローンの仕組み、飛行原理などを体験を通して理解いただけます。\n\nまた、無人航空機操縦士実地試験に対応した産業用ドローン「蒼天（SOTEN）」も展示いたします。ぜひご参加ください。",
+    "tags": [
+      "day1",
+      "day2"
+    ],
+    "location": "イノベーション交流プラザ2F サイエンス教育支援室",
+    "image": "/entries/workshop-drone.webp",
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "11:00",
+        "end_time": "12:00"
+      },
+      {
+        "day": "day1",
+        "start_time": "14:00",
+        "end_time": "15:00"
+      },
+      {
+        "day": "day2",
+        "start_time": "11:00",
+        "end_time": "12:00"
+      },
+      {
+        "day": "day2",
+        "start_time": "14:00",
+        "end_time": "15:00"
+      }
+    ],
+    "audience": "親子",
+    "capacity": "各回親子5組（合計10名程度）",
+    "notes": [
+      "鈴鹿高専入試広報HPにて募集",
+      "応募多数の場合は抽選"
+    ],
     "featured": true,
     "link": null
   },
@@ -42,10 +112,18 @@
     "name": "開会式",
     "group": "実行委員会",
     "description": "第61回鈴鹿高専祭 開会式。",
-    "tags": ["day1"],
+    "tags": [
+      "day1"
+    ],
     "location": "MainStage",
     "image": null,
-    "occurrences": [{ "day": "day1", "start_time": "09:30", "end_time": "10:00" }],
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "09:30",
+        "end_time": "10:00"
+      }
+    ],
     "featured": false
   },
   {
@@ -54,10 +132,18 @@
     "name": "閉会式",
     "group": "実行委員会",
     "description": "第61回鈴鹿高専祭 閉会式・表彰。",
-    "tags": ["day2"],
+    "tags": [
+      "day2"
+    ],
     "location": "MainStage",
     "image": null,
-    "occurrences": [{ "day": "day2", "start_time": "16:00", "end_time": "16:30" }],
+    "occurrences": [
+      {
+        "day": "day2",
+        "start_time": "16:00",
+        "end_time": "16:30"
+      }
+    ],
     "featured": false
   },
   {
@@ -66,10 +152,18 @@
     "name": "軽音楽部 バンド演奏",
     "group": "軽音楽部",
     "description": "軽音楽部有志によるバンド演奏。",
-    "tags": ["day1"],
+    "tags": [
+      "day1"
+    ],
     "location": "LiveStage",
     "image": null,
-    "occurrences": [{ "day": "day1", "start_time": "11:00", "end_time": "11:30" }],
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "11:00",
+        "end_time": "11:30"
+      }
+    ],
     "featured": false
   },
   {
@@ -78,10 +172,18 @@
     "name": "中夜祭バンドライブ",
     "group": "有志バンド合同",
     "description": "1日目夜、中夜祭を彩る特別バンドライブ。在校生限定・当日直前まで詳細非公開の場合あり。",
-    "tags": ["中夜祭"],
+    "tags": [
+      "中夜祭"
+    ],
     "location": "LiveStage",
     "image": null,
-    "occurrences": [{ "day": "day1", "start_time": "18:00", "end_time": "19:00" }],
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "18:00",
+        "end_time": "19:00"
+      }
+    ],
     "featured": false
   },
   {
@@ -90,10 +192,18 @@
     "name": "軽音楽部 バンド演奏",
     "group": "軽音楽部",
     "description": "2日目の軽音楽部バンド演奏。",
-    "tags": ["day2"],
+    "tags": [
+      "day2"
+    ],
     "location": "LiveStage",
     "image": null,
-    "occurrences": [{ "day": "day2", "start_time": "11:00", "end_time": "11:30" }],
+    "occurrences": [
+      {
+        "day": "day2",
+        "start_time": "11:00",
+        "end_time": "11:30"
+      }
+    ],
     "featured": false
   },
   {
@@ -102,10 +212,19 @@
     "name": "バンド企画 決勝",
     "group": "バンド企画 出場バンド",
     "description": "予選を勝ち抜いたバンドによる決勝ラウンド。",
-    "tags": ["決勝バンド", "day2"],
+    "tags": [
+      "決勝バンド",
+      "day2"
+    ],
     "location": "MainStage",
     "image": null,
-    "occurrences": [{ "day": "day2", "start_time": "13:00", "end_time": "14:00" }],
+    "occurrences": [
+      {
+        "day": "day2",
+        "start_time": "13:00",
+        "end_time": "14:00"
+      }
+    ],
     "featured": false
   }
 ]

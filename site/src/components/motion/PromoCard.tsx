@@ -18,7 +18,7 @@ export default function PromoCard({ entry, more = false }: Props) {
   // 常設かどうかは isPermanent が正。タグは絞り込み用の文字列で、
   // 付け忘れても型では防げないため、ラベルの判定には使わない。
   // 常設でなければカテゴリをそのまま出す（"イベント"固定だと出店の広告で嘘になる）
-  const label = entry.isPermanent ? "常設企画" : entry.category;
+  const label = entry.isPermanent ? "常設企画" : (entry.categoryLabel ?? entry.category);
 
   return (
     <div className={`pc pc--compact${entry.image ? "" : " pc--noimg"}`}>
