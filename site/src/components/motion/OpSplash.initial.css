@@ -1,0 +1,13 @@
+/* WAAPIが初期キーフレームを適用する前にも、完成状態を描画しない。 */
+.op-grain {
+  z-index: 1;
+}
+
+.op-paper-placement,
+.op-finale {
+  opacity: 0;
+}
+
+.op-wipe {
+  transform: translateY(115%) rotate(-8deg);
+}

@@ -19,6 +19,7 @@ test("初回訪問では1桁につき24枚の紙片で日数を作るOPを表示
   const splash = page.getByLabel("開催まであと50日");
   await expect(splash).toBeVisible();
   await expect(splash.locator(".op-paper-placement")).toHaveCount(48);
+  await expect(splash.locator(".op-offcut")).toHaveCount(9);
   await expect(splash.locator("video")).toHaveCount(0);
 });
 
