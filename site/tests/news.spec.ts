@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import { test } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 import { describePage } from "./_shared";
 
 describePage("news", "/news/");
@@ -39,3 +39,35 @@ if (first) {
      日付が来れば自動で検査に戻るので、恒久的なskipにはならない */
   test.skip("公開日を迎えた本文付きのお知らせが無いため、詳細ページを検査できません", () => {});
 }
+
+/**
+ * お知らせ詳細の戻る導線（リリース後の指摘）。
+ *
+ * 「お知らせ一覧へ」の決め打ちだと、トップのNEWS枠から入った人が一覧に
+ * 飛ばされて元の場所に戻れない。元いたページへ帰す。
+ */
+test.describe("お知らせ詳細の戻る導線", () => {
+  const article = items.find((item) => item.body && isPublished(item.date));
+
+  test.skip(!article, "公開日を迎えた本文付きのお知らせが無いため");
+
+  test("履歴が無いときは一覧へ行く", async ({ page }) => {
+    await page.goto(`/news/${article!.id}/`);
+
+    const back = page.locator("a[data-back]");
+    // JS無効でも機能するよう、href は常に一覧を指しておく
+    await expect(back).toHaveAttribute("href", "/news/");
+
+    await back.click();
+    await expect(page).toHaveURL(/\/news\/$/);
+  });
+
+  test("トップのNEWS枠から来たときはトップへ戻る", async ({ page }) => {
+    await page.goto("/");
+    await page.locator(`a[href="/news/${article!.id}/"]`).first().click();
+    await expect(page).toHaveURL(new RegExp(`/news/${article!.id}/$`));
+
+    await page.locator("a[data-back]").click();
+    await expect(page, "トップではなく一覧に戻っています").toHaveURL(/\/$/);
+  });
+});

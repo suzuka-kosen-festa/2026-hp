@@ -37,7 +37,11 @@ const bodyLines = item.body?.split("\n") ?? [];
 
   <article class="news-detail">
     
-    <p class="crumb"><a href="/news">← お知らせ一覧へ</a></p>
+    {/* 「お知らせ一覧へ」の決め打ちだと、トップのNEWS枠から入った人が
+        一覧に飛ばされて元の場所に戻れない。素直に元いたページへ帰す。
+        履歴が無いとき（検索やSNSからの直接着地）は一覧へ。
+        行き先が毎回変わるのでラベルは「戻る」にしてある */}
+    <p class="crumb"><a href="/news/" data-back>← 戻る</a></p>
     
     <header class="head">
       <Tape color="blue" rotate={-3} as="p" class="cat">NEWS</Tape>
@@ -110,6 +114,17 @@ const bodyLines = item.body?.split("\n") ?? [];
   )
 }
   </article>
+<script>
+  /* JSが動かなくても href="/news/" の普通のリンクとして機能する。
+     サイト内から来たときだけ履歴を1つ戻す（entry/[id].astro と同じ作り） */
+  document.querySelector<HTMLAnchorElement>("a[data-back]")?.addEventListener("click", (event) => {
+    const sameOrigin = document.referrer.startsWith(`${location.origin}/`);
+    if (!sameOrigin || history.length <= 1) return;
+
+    event.preventDefault();
+    history.back();
+  });
+</script>
 </BaseLayout>
 
 <style>
