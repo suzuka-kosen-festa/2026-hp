@@ -12,6 +12,45 @@ test("PICK UP に NO IMAGE のプレースホルダーが出ない", async ({ pa
   await expect(page.getByText("NO IMAGE")).toHaveCount(0);
 });
 
+test("初回訪問では1桁につき24枚の紙片で日数を作るOPを表示する", async ({ page }) => {
+  await page.clock.setFixedTime(new Date("2026-09-11T00:00:00+09:00"));
+  await page.goto("/");
+
+  const splash = page.getByLabel("開催まであと50日");
+  await expect(splash).toBeVisible();
+  await expect(splash.locator(".op-paper-placement")).toHaveCount(48);
+  await expect(splash.locator(".op-offcut")).toHaveCount(9);
+  await expect(splash.locator("video")).toHaveCount(0);
+});
+
+test("OP終了を再生開始から4.8秒後に予約する", async ({ page }) => {
+  await page.addInitScript(() => {
+    const scheduledTimeouts: number[] = [];
+    const originalSetTimeout = window.setTimeout.bind(window);
+    Object.defineProperty(window, "__scheduledTimeouts", { value: scheduledTimeouts });
+    window.setTimeout = ((handler: TimerHandler, timeout?: number, ...args: unknown[]) => {
+      scheduledTimeouts.push(timeout ?? 0);
+      return originalSetTimeout(handler, timeout, ...args);
+    }) as typeof window.setTimeout;
+  });
+  await page.goto("/");
+  await expect(page.locator(".op-splash")).toBeVisible();
+
+  const scheduledTimeouts = await page.evaluate(
+    () => (window as Window & { __scheduledTimeouts: number[] }).__scheduledTimeouts,
+  );
+  expect(scheduledTimeouts).toContain(4_800);
+});
+
+test("OPをスキップすると同じセッションでは再表示しない", async ({ page }) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "SKIP" }).click();
+
+  await expect(page.locator(".op-splash")).toHaveCount(0);
+  await page.reload();
+  await expect(page.locator(".op-splash")).toHaveCount(0);
+});
+
 /**
  * 未公開ページへの導線には「準備中」を出す（押す前に空振りと分かるようにする）。
  *
