@@ -1,19 +1,8 @@
-import { readFileSync } from "node:fs";
-import { fileURLToPath } from "node:url";
 import { expect, test } from "@playwright/test";
-import { describePage } from "./_shared";
+import { describePage, showsContent } from "./_shared";
 
-/**
- * /booth/ が準備中のあいだは中身が無いので、ページ固有の検査は飛ばす。
- *
- * 判定に APPLY_RELEASE を含めるのが重要。公開制御が適用されるのは本番と
- * release.json を触るPRだけなので、release.json だけで見ると通常のPRや手元でも
- * 恒久的に skip され続ける。CIのレポーターは失敗しか注釈しないため、
- * skip は緑のチェックに埋もれて誰も気づけない（CLAUDE.md の運用ルール）。
- */
-const releasePath = fileURLToPath(new URL("../src/data/release.json", import.meta.url));
-const release: { published: string[] } = JSON.parse(readFileSync(releasePath, "utf8"));
-const boothHidden = process.env.APPLY_RELEASE === "1" && !release.published.includes("/booth/");
+/** /booth/ が準備中のあいだは中身が無いので、ページ固有の検査は飛ばす（showsContent 参照） */
+const boothHidden = !showsContent("/booth/");
 
 describePage("booth", "/booth/");
 
@@ -88,6 +77,8 @@ test.describe("booth PC", () => {
  * カードは「M科」と違う言葉が出ていた（Issue #53）。
  */
 test("カードのチップに内部キーが出ない", async ({ page }) => {
+  test.skip(boothHidden, "/booth/ が準備中のため（src/data/release.json）");
+
   await page.goto("/booth/", { waitUntil: "networkidle" });
   await page.getByRole("tab", { name: "学科展示" }).click();
 
