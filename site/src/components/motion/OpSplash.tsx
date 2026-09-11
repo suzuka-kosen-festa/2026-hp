@@ -6,7 +6,7 @@ import "./OpSplash.initial.css";
 
 const SESSION_KEY = "op-seen";
 export const OP_REPLAY_EVENT = "op:replay";
-const DURATION = 5500;
+const DURATION = 4800;
 const LOAD_FAILSAFE_MS = 5000;
 
 type NetworkInformation = { saveData?: boolean; effectiveType?: string };
@@ -83,9 +83,9 @@ function animateStage(stage: HTMLElement, day: string) {
     { transform: "translateY(115%) rotate(-8deg)", easing: "ease-in-out" },
     { transform: "translateY(-2%) rotate(0)", offset: .5, easing: "ease-in-out" },
     { transform: "translateY(-115%) rotate(5deg)" },
-  ], 4700, 800);
-  animate(stage.querySelector(".op-finale"), [{ opacity: 0 }, { opacity: 1 }], 5100, 1);
-  animate(stage.querySelector(".op-finale img"), [{ transform: "scale(.97)" }, { transform: "none" }], 5100, 400);
+  ], 4000, 800);
+  animate(stage.querySelector(".op-finale"), [{ opacity: 0 }, { opacity: 1 }], 4400, 1);
+  animate(stage.querySelector(".op-finale img"), [{ transform: "scale(.97)" }, { transform: "none" }], 4400, 400);
   return () => animations.forEach((animation) => animation.cancel());
 }
 
