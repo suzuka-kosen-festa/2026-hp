@@ -109,3 +109,56 @@ test.describe("表示用のカテゴリ名", () => {
     }
   });
 });
+
+/**
+ * 事前申込の導線（Issue #96）。
+ *
+ * 静的サイトなので、ビルド時刻だけでボタンを出し分けると、締切後も再デプロイ
+ * されるまで応募フォームへ誘導し続ける。閲覧時の時刻で合わせ直していることを、
+ * ブラウザの時計を締切の前後にずらして確かめる。
+ *
+ * 締切の境界は「締切日の日本時間 24:00」。期待値はデータから引くので、
+ * 申込を持つ企画が増えても・日付が変わっても成り立つ。
+ */
+const withApplication = entries.find(
+  (entry) => (entry as { application?: unknown }).application,
+) as (typeof entries)[number] & { application: { url: string; opens: string; closes: string } } | undefined;
+
+test.describe("entry の申込導線", () => {
+  test.skip(!withApplication, "application を持つ企画が無いため");
+
+  const jst = (date: string, time: string) => new Date(`${date}T${time}+09:00`);
+
+  test("受付期間中は申込ボタンを出し、フォームを別タブで開く", async ({ page }) => {
+    const { id, application } = withApplication!;
+    // 締切日の最後の1分。境界の取り違え（締切日の0時で閉じる）をここで捕まえる
+    await page.clock.setFixedTime(jst(application.closes, "23:59:00"));
+    await page.goto(`/entry/${id}/`);
+
+    const button = page.getByRole("link", { name: "申し込む" });
+    await expect(button, "受付期間中なのに申込ボタンが見えません").toBeVisible();
+    await expect(button).toHaveAttribute("href", application.url);
+    // 外部フォームなので学祭HPを残したまま別タブで開く
+    await expect(button).toHaveAttribute("target", "_blank");
+    await expect(page.getByText("募集は終了しました")).toBeHidden();
+  });
+
+  test("締切を過ぎたら申込ボタンを閉じる", async ({ page }) => {
+    const { id, application } = withApplication!;
+    const nextDay = new Date(jst(application.closes, "00:00:00").getTime() + 24 * 60 * 60 * 1000);
+    await page.clock.setFixedTime(nextDay);
+    await page.goto(`/entry/${id}/`);
+
+    await expect(page.getByText("募集は終了しました")).toBeVisible();
+    await expect(page.getByRole("link", { name: "申し込む" }), "締切後も申込ボタンが残っています").toBeHidden();
+  });
+
+  test("受付開始前は申込ボタンを出さない", async ({ page }) => {
+    const { id, application } = withApplication!;
+    await page.clock.setFixedTime(jst(application.opens, "00:00:00").getTime() - 60 * 1000);
+    await page.goto(`/entry/${id}/`);
+
+    await expect(page.getByText("から受付開始")).toBeVisible();
+    await expect(page.getByRole("link", { name: "申し込む" })).toBeHidden();
+  });
+});
