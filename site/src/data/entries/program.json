@@ -23,7 +23,7 @@
     "name": "親子で挑戦！AI×工作ワークショップ",
     "group": "電子情報工学科",
     "summary": "AIに学習させて、カメラで見たものを左右に仕分けるロボットを作ろう。",
-    "description": "講座名：自動仕分けロボットを作ろう\n\n小さな小物やお菓子などをうまく判断できるようにAIを学習し、カメラで見たものをAIが判断して、左右に仕分ける仕組みを作ります。",
+    "description": "自動仕分けロボットを作ろう！\n\n小さな小物やお菓子などをうまく判断できるようにAIを学習し、カメラで見たものをAIが判断して、左右に仕分ける仕組みを作ります。",
     "tags": [
       "day1",
       "day2"
@@ -54,8 +54,20 @@
     ],
     "audience": "小学生(中学年〜高学年)と保護者",
     "capacity": "各回10組",
+    "fee": "無料（別途、傷害保険料 50円/人）",
+    "application": {
+      "url": "https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=XYP-cpVeEkWK4KezivJfyNXHxjzMynRNuuQmuwM5UilUNVcwVjlNUjE0RzBNVTdPUFNNMEM0UjRJMiQlQCN0PWcu",
+      "opens": "2026-09-11",
+      "closes": "2026-09-30",
+      "guideUrl": "https://www.suzuka-ct.ac.jp/general/general_index/event/"
+    },
     "notes": [
       "事前応募者のみ",
+      "午前の部と午後の部は同じ内容です",
+      "実際に体験するのは、大人1名と子ども1名のペアです",
+      "応募フォームには、パソコンからのメールを受信できるメールアドレスを入力してください",
+      "応募者多数の場合は、主催者側で調整することがあります。結果は後日、応募者全員に通知されます",
+      "当日の様子を写真撮影し、鈴鹿高専ホームページに掲載する場合があります",
       "参加者は校門から実験室まで学生がご案内します"
     ],
     "featured": true,

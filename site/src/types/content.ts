@@ -14,6 +14,24 @@ export interface Occurrence {
   note?: string | null;
 }
 
+/**
+ * 事前申込（I科ワークショップ等。Issue #96）。
+ *
+ * `link` とは分けて持つ。`link` は「その場で遊べる外部アプリ」への導線で、
+ * 「やってみる」ボタンや booth / timetable の常設CTAにも使われている。
+ * 申込には締切があり、過ぎたらボタンを閉じる必要があるので意味が違う。
+ */
+export interface Application {
+  /** 申込フォームのURL（外部サイト。別タブで開く） */
+  url: string;
+  /** 受付開始日 "YYYY-MM-DD"（日本時間のこの日の0時から） */
+  opens: string;
+  /** 締切日 "YYYY-MM-DD"（日本時間のこの日の終わりまで受け付ける） */
+  closes: string;
+  /** 主催側の募集要項ページ。問い合わせ先などはこちらを見てもらう */
+  guideUrl?: string | null;
+}
+
 export interface Entry {
   id: string;
   category: Category;
@@ -52,6 +70,10 @@ export interface Entry {
   audience?: string | null;
   /** 定員。「各回10組」のような回単位の表現も許すため数値ではなく文字列 */
   capacity?: string | null;
+  /** 受講料・参加費。「無料（別途 傷害保険料50円/人）」のような但し書きも含めて文字列で持つ */
+  fee?: string | null;
+  /** 事前申込が要る企画の申込先。申込不要ならnull */
+  application?: Application | null;
   /** ※付きで並べる注意書き。descriptionの自由文に混ぜず構造化して持つ */
   notes?: string[];
   /** true: home等での特別扱い（バナー表示）対象 */
