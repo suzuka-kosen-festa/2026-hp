@@ -29,10 +29,14 @@ const DAYS: Day[] = ["day1", "day2"];
 const TABS: TabConfig[] = DAYS.map((day) => ({ id: day, label: formatDayLabel(day) }));
 
 const DESKTOP_QUERY = "(min-width: 900px)";
-const PX_PER_HOUR_SP = 280;
-const PX_PER_HOUR_PC = 340;
+const PX_PER_HOUR_SP = 140;
+const PX_PER_HOUR_PC = 170;
 const AXIS_MIN_START = 9 * 60;
-const AXIS_MAX_END = 17 * 60;
+/**
+ * 日ごとの軸の終わり。1日目は15:00以降が中夜祭（timetableの対象外）なので15:00で切る。
+ * これより遅く終わる企画がデータに入った場合は、切れないよう軸のほうを延ばす。
+ */
+const AXIS_END: Record<Day, number> = { day1: 15 * 60, day2: 16 * 60 };
 const SAFETY_MIN_HEIGHT_SP = 36;
 const SAFETY_MIN_HEIGHT_PC = 46;
 function toMinutes(time: string): number {
@@ -42,6 +46,14 @@ function toMinutes(time: string): number {
 
 function formatHourLabel(minutes: number): string {
   return `${String(Math.floor(minutes / 60)).padStart(2, "0")}:00`;
+}
+
+/**
+ * グリッドの枠は狭いので「グランプリ」は「GP」に縮めて出す（Vocal1グランプリ → Vocal1GP）。
+ * データ側はグランプリ表記のまま持ち、詳細ページのタイトルやtitle属性は正式名で出す。
+ */
+function gridName(name: string): string {
+  return name.replaceAll("グランプリ", "GP");
 }
 
 export default function TimetableList({ entries }: Props) {
@@ -81,14 +93,12 @@ export default function TimetableList({ entries }: Props) {
   const starts = slots.map((slot) => toMinutes(slot.occurrence.start_time as string));
   const ends = slots.map((slot) => toMinutes(slot.occurrence.end_time as string));
   const axisStart = starts.length > 0 ? Math.min(AXIS_MIN_START, Math.floor(Math.min(...starts) / 60) * 60) : AXIS_MIN_START;
-  const axisEnd = ends.length > 0 ? Math.max(AXIS_MAX_END, Math.ceil(Math.max(...ends) / 60) * 60) : AXIS_MAX_END;
+  const axisEnd = ends.length > 0 ? Math.max(AXIS_END[activeDay], Math.ceil(Math.max(...ends) / 60) * 60) : AXIS_END[activeDay];
 
   const hourMarks: number[] = [];
   for (let t = axisStart; t <= axisEnd; t += 60) hourMarks.push(t);
 
   const yFor = (minutes: number) => (minutes - axisStart) * PX_PER_MINUTE;
-  const totalHeight = yFor(axisEnd);
-
   const CARD_GAP = 5;
   const columns = STAGES.map((stage) => {
     let prevBottom = -Infinity;
@@ -103,8 +113,23 @@ export default function TimetableList({ entries }: Props) {
         prevBottom = top + height + CARD_GAP;
         return { slot, top, height };
       });
+
+    // 短い枠は最小の高さで下へ押し出されるので、そのままだと終盤の枠が軸の終わりからはみ出す
+    // （2日目のフィナーレ→エンディング等）。後ろから詰め直して軸の終わりに収める。
+    // 余裕のある長い枠（メモリーズ等）を見た目だけ縮めて吸収し、それでも足りなければ短い枠を少し上げる。
+    // 枠に書く時刻は実際の時刻のままなので、ずれるのは位置だけ。
+    let limit = yFor(axisEnd);
+    for (let i = blocks.length - 1; i >= 0; i--) {
+      const block = blocks[i];
+      if (block.top + block.height > limit) {
+        block.height = Math.max(limit - block.top, SAFETY_MIN_HEIGHT);
+        block.top = Math.min(block.top, limit - block.height);
+      }
+      limit = block.top - CARD_GAP;
+    }
     return { stage, blocks };
   });
+  const totalHeight = yFor(axisEnd);
 
   return (
     <div className="timetable-list" id="list">
@@ -150,7 +175,7 @@ export default function TimetableList({ entries }: Props) {
         <div className="tl-grid">
           <div className="tl-corner" aria-hidden="true" />
           {STAGES.map((stage) => (
-            <div key={stage} className="tl-col-header">
+            <div key={stage} className={`tl-col-header tl-stage-${stage}`}>
               {stage}
             </div>
           ))}
@@ -164,7 +189,7 @@ export default function TimetableList({ entries }: Props) {
           </div>
 
           {columns.map(({ stage, blocks }) => (
-            <div key={stage} className="tl-col-body" style={{ height: `${totalHeight}px` }}>
+            <div key={stage} className={`tl-col-body tl-stage-${stage}`} style={{ height: `${totalHeight}px` }}>
               {hourMarks.map((t) => (
                 <div key={t} className="tl-hour-line" style={{ top: `${yFor(t)}px` }} />
               ))}
@@ -182,7 +207,7 @@ export default function TimetableList({ entries }: Props) {
                     {occurrence.end_time}
                   </span>
                   <span className="tl-block-name">
-                    {entry.name}
+                    {gridName(entry.name)}
                     {isOccurrenceNow(occurrence) && <span className="tl-now">NOW</span>}
                   </span>
                 </a>

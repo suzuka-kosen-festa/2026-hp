@@ -119,11 +119,11 @@
     "link": null
   },
   {
-    "id": "event-mainstage-open",
+    "id": "main-opening",
     "category": "イベント",
-    "name": "開会式",
-    "group": "実行委員会",
-    "description": "第61回鈴鹿高専祭 開会式。",
+    "name": "オープニング",
+    "group": null,
+    "description": null,
     "tags": [
       "day1"
     ],
@@ -132,18 +132,210 @@
     "occurrences": [
       {
         "day": "day1",
+        "start_time": "09:00",
+        "end_time": "09:20"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "music-club-concert",
+    "category": "ライブ",
+    "name": "音楽部コンサート",
+    "group": null,
+    "description": null,
+    "tags": [
+      "day1",
+      "day2"
+    ],
+    "location": "MainStage",
+    "image": null,
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "09:50",
+        "end_time": "10:10"
+      },
+      {
+        "day": "day2",
+        "start_time": "09:00",
+        "end_time": "09:20"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "main-dance-battle",
+    "category": "イベント",
+    "name": "ダンスバトル",
+    "group": null,
+    "description": null,
+    "tags": [
+      "day1"
+    ],
+    "location": "MainStage",
+    "image": null,
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "10:20",
+        "end_time": "11:10"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "main-dance-battle-award",
+    "category": "イベント",
+    "name": "ダンスバトル表彰式",
+    "group": null,
+    "description": null,
+    "tags": [
+      "day1"
+    ],
+    "location": "MainStage",
+    "image": null,
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "11:10",
+        "end_time": "11:20"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "main-ore1-gp-prelim",
+    "category": "イベント",
+    "name": "オレ1グランプリ予選",
+    "group": null,
+    "description": null,
+    "tags": [
+      "day1"
+    ],
+    "location": "MainStage",
+    "image": null,
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "11:25",
+        "end_time": "11:50"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "main-yosakoi-katsuyama",
+    "category": "イベント",
+    "name": "よさこい勝山組",
+    "group": null,
+    "description": null,
+    "tags": [
+      "day1",
+      "day2"
+    ],
+    "location": "MainStage",
+    "image": null,
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "12:00",
+        "end_time": "12:20"
+      },
+      {
+        "day": "day2",
         "start_time": "09:30",
-        "end_time": "10:00"
+        "end_time": "09:50"
       }
     ],
     "featured": false
   },
   {
-    "id": "event-mainstage-closing",
+    "id": "main-vocal1-gp",
     "category": "イベント",
-    "name": "閉会式",
-    "group": "実行委員会",
-    "description": "第61回鈴鹿高専祭 閉会式・表彰。",
+    "name": "Vocal1グランプリ",
+    "group": null,
+    "description": null,
+    "tags": [
+      "day1"
+    ],
+    "location": "MainStage",
+    "image": null,
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "12:30",
+        "end_time": "13:10"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "main-hayaoshi-quiz",
+    "category": "イベント",
+    "name": "みんはや",
+    "group": null,
+    "description": "みんなで早押しクイズ",
+    "tags": [
+      "day1"
+    ],
+    "location": "MainStage",
+    "image": null,
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "13:20",
+        "end_time": "13:40"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "main-bazaar-gp-interim",
+    "category": "イベント",
+    "name": "バザーグランプリ 中間発表",
+    "group": null,
+    "description": null,
+    "tags": [
+      "day1"
+    ],
+    "location": "MainStage",
+    "image": null,
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "13:45",
+        "end_time": "13:55"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "main-attack25",
+    "category": "イベント",
+    "name": "アタック25",
+    "group": null,
+    "description": null,
+    "tags": [
+      "day1"
+    ],
+    "location": "MainStage",
+    "image": null,
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "14:00",
+        "end_time": "14:40"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "main-suzu-league",
+    "category": "イベント",
+    "name": "スズリーグ",
+    "group": null,
+    "description": null,
     "tags": [
       "day2"
     ],
@@ -152,78 +344,79 @@
     "occurrences": [
       {
         "day": "day2",
-        "start_time": "16:00",
-        "end_time": "16:30"
+        "start_time": "10:00",
+        "end_time": "10:30"
       }
     ],
     "featured": false
   },
   {
-    "id": "live-day1-band1",
-    "category": "ライブ",
-    "name": "軽音楽部 バンド演奏",
-    "group": "軽音楽部",
-    "description": "軽音楽部有志によるバンド演奏。",
-    "tags": [
-      "day1"
-    ],
-    "location": "LiveStage",
-    "image": null,
-    "occurrences": [
-      {
-        "day": "day1",
-        "start_time": "11:00",
-        "end_time": "11:30"
-      }
-    ],
-    "featured": false
-  },
-  {
-    "id": "live-chuyasai",
-    "category": "ライブ",
-    "name": "中夜祭バンドライブ",
-    "group": "有志バンド合同",
-    "description": "1日目夜、中夜祭を彩る特別バンドライブ。在校生限定・当日直前まで詳細非公開の場合あり。",
-    "tags": [
-      "中夜祭"
-    ],
-    "location": "LiveStage",
-    "image": null,
-    "occurrences": [
-      {
-        "day": "day1",
-        "start_time": "18:00",
-        "end_time": "19:00"
-      }
-    ],
-    "featured": false
-  },
-  {
-    "id": "live-day2-band1",
-    "category": "ライブ",
-    "name": "軽音楽部 バンド演奏",
-    "group": "軽音楽部",
-    "description": "2日目の軽音楽部バンド演奏。",
+    "id": "main-marubatsu-quiz",
+    "category": "イベント",
+    "name": "〇✕クイズ",
+    "group": null,
+    "description": null,
     "tags": [
       "day2"
     ],
-    "location": "LiveStage",
+    "location": "MainStage",
     "image": null,
     "occurrences": [
       {
         "day": "day2",
-        "start_time": "11:00",
-        "end_time": "11:30"
+        "start_time": "10:45",
+        "end_time": "11:05"
       }
     ],
     "featured": false
   },
   {
-    "id": "live-kessho-band",
+    "id": "main-warashibe-result",
+    "category": "イベント",
+    "name": "わらしべ長者 結果発表",
+    "group": null,
+    "description": null,
+    "tags": [
+      "day2"
+    ],
+    "location": "MainStage",
+    "image": null,
+    "occurrences": [
+      {
+        "day": "day2",
+        "start_time": "11:10",
+        "end_time": "11:20"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "live-kessaku-band",
     "category": "ライブ",
-    "name": "バンド企画 決勝",
-    "group": "バンド企画 出場バンド",
-    "description": "予選を勝ち抜いたバンドによる決勝ラウンド。",
+    "name": "結索バンド",
+    "group": null,
+    "description": null,
+    "tags": [
+      "決勝バンド",
+      "day2"
+    ],
+    "location": "MainStage",
+    "image": null,
+    "occurrences": [
+      {
+        "day": "day2",
+        "start_time": "12:30",
+        "end_time": "12:50"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "live-goaikyo",
+    "category": "ライブ",
+    "name": "御愛嬌",
+    "group": null,
+    "description": null,
     "tags": [
       "決勝バンド",
       "day2"
@@ -234,7 +427,493 @@
       {
         "day": "day2",
         "start_time": "13:00",
-        "end_time": "14:00"
+        "end_time": "13:20"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "main-bazaar-gp-final",
+    "category": "イベント",
+    "name": "バザーグランプリ 最終結果発表",
+    "group": null,
+    "description": null,
+    "tags": [
+      "day2"
+    ],
+    "location": "MainStage",
+    "image": null,
+    "occurrences": [
+      {
+        "day": "day2",
+        "start_time": "13:40",
+        "end_time": "13:50"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "main-memories",
+    "category": "イベント",
+    "name": "メモリーズ",
+    "group": null,
+    "description": null,
+    "tags": [
+      "day2"
+    ],
+    "location": "MainStage",
+    "image": null,
+    "occurrences": [
+      {
+        "day": "day2",
+        "start_time": "13:50",
+        "end_time": "15:40"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "main-finale",
+    "category": "イベント",
+    "name": "フィナーレ",
+    "group": null,
+    "description": null,
+    "tags": [
+      "day2"
+    ],
+    "location": "MainStage",
+    "image": null,
+    "occurrences": [
+      {
+        "day": "day2",
+        "start_time": "15:40",
+        "end_time": "15:50"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "main-ending",
+    "category": "イベント",
+    "name": "エンディング",
+    "group": null,
+    "description": null,
+    "tags": [
+      "day2"
+    ],
+    "location": "MainStage",
+    "image": null,
+    "occurrences": [
+      {
+        "day": "day2",
+        "start_time": "15:50",
+        "end_time": "16:00"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "live-beat-beat-beat",
+    "category": "ライブ",
+    "name": "BEAT BEAT BEAT",
+    "group": null,
+    "description": null,
+    "tags": [
+      "day1"
+    ],
+    "location": "LiveStage",
+    "image": null,
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "09:20",
+        "end_time": "09:40"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "live-irohazu",
+    "category": "ライブ",
+    "name": "いろはず",
+    "group": null,
+    "description": null,
+    "tags": [
+      "day1"
+    ],
+    "location": "LiveStage",
+    "image": null,
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "09:50",
+        "end_time": "10:10"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "live-attack",
+    "category": "ライブ",
+    "name": "アタック！！",
+    "group": null,
+    "description": null,
+    "tags": [
+      "day1"
+    ],
+    "location": "LiveStage",
+    "image": null,
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "10:20",
+        "end_time": "10:40"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "live-yuma",
+    "category": "ライブ",
+    "name": "(y)UMA",
+    "group": null,
+    "description": null,
+    "tags": [
+      "day1"
+    ],
+    "location": "LiveStage",
+    "image": null,
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "10:50",
+        "end_time": "11:10"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "live-dear",
+    "category": "ライブ",
+    "name": "Dear.",
+    "group": null,
+    "description": null,
+    "tags": [
+      "day1"
+    ],
+    "location": "LiveStage",
+    "image": null,
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "11:20",
+        "end_time": "11:40"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "live-its-up",
+    "category": "ライブ",
+    "name": "It's up",
+    "group": null,
+    "description": null,
+    "tags": [
+      "day1"
+    ],
+    "location": "LiveStage",
+    "image": null,
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "11:50",
+        "end_time": "12:10"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "live-e-m",
+    "category": "ライブ",
+    "name": "e/m",
+    "group": null,
+    "description": null,
+    "tags": [
+      "day1"
+    ],
+    "location": "LiveStage",
+    "image": null,
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "12:20",
+        "end_time": "12:40"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "live-alus-tale",
+    "category": "ライブ",
+    "name": "Alus Tale",
+    "group": null,
+    "description": null,
+    "tags": [
+      "day1"
+    ],
+    "location": "LiveStage",
+    "image": null,
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "12:50",
+        "end_time": "13:10"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "live-mikasa",
+    "category": "ライブ",
+    "name": "MIKASA",
+    "group": null,
+    "description": null,
+    "tags": [
+      "day2"
+    ],
+    "location": "LiveStage",
+    "image": null,
+    "occurrences": [
+      {
+        "day": "day2",
+        "start_time": "09:00",
+        "end_time": "09:20"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "live-incident-syndrome",
+    "category": "ライブ",
+    "name": "Incident Syndrome",
+    "group": null,
+    "description": null,
+    "tags": [
+      "day2"
+    ],
+    "location": "LiveStage",
+    "image": null,
+    "occurrences": [
+      {
+        "day": "day2",
+        "start_time": "09:30",
+        "end_time": "09:50"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "live-nuumin",
+    "category": "ライブ",
+    "name": "ヌー民",
+    "group": null,
+    "description": null,
+    "tags": [
+      "day2"
+    ],
+    "location": "LiveStage",
+    "image": null,
+    "occurrences": [
+      {
+        "day": "day2",
+        "start_time": "10:00",
+        "end_time": "10:20"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "live-dudge",
+    "category": "ライブ",
+    "name": "Dudge",
+    "group": null,
+    "description": null,
+    "tags": [
+      "day2"
+    ],
+    "location": "LiveStage",
+    "image": null,
+    "occurrences": [
+      {
+        "day": "day2",
+        "start_time": "10:30",
+        "end_time": "10:50"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "live-haraduction",
+    "category": "ライブ",
+    "name": "ハラダクション",
+    "group": null,
+    "description": null,
+    "tags": [
+      "day2"
+    ],
+    "location": "LiveStage",
+    "image": null,
+    "occurrences": [
+      {
+        "day": "day2",
+        "start_time": "11:00",
+        "end_time": "11:20"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "sub-secret-band",
+    "category": "ライブ",
+    "name": "SECRET BAND",
+    "group": null,
+    "description": null,
+    "tags": [
+      "day1"
+    ],
+    "location": "SubStage",
+    "image": null,
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "09:30",
+        "end_time": "09:50"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "sub-degudegu",
+    "category": "ライブ",
+    "name": "でぐでぐ",
+    "group": null,
+    "description": null,
+    "tags": [
+      "day1"
+    ],
+    "location": "SubStage",
+    "image": null,
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "10:00",
+        "end_time": "10:20"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "sub-esk",
+    "category": "ライブ",
+    "name": "esk.",
+    "group": null,
+    "description": null,
+    "tags": [
+      "day1"
+    ],
+    "location": "SubStage",
+    "image": null,
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "10:30",
+        "end_time": "10:50"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "sub-shilli-shally",
+    "category": "ライブ",
+    "name": "Shilli-shally",
+    "group": null,
+    "description": null,
+    "tags": [
+      "day1"
+    ],
+    "location": "SubStage",
+    "image": null,
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "11:00",
+        "end_time": "11:20"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "sub-akikoma-teatime",
+    "category": "ライブ",
+    "name": "空きコマティータイム",
+    "group": null,
+    "description": null,
+    "tags": [
+      "day1"
+    ],
+    "location": "SubStage",
+    "image": null,
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "11:30",
+        "end_time": "11:50"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "sub-chokkin-dekin",
+    "category": "ライブ",
+    "name": "CHOKKIN出禁",
+    "group": null,
+    "description": null,
+    "tags": [
+      "day1"
+    ],
+    "location": "SubStage",
+    "image": null,
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "12:00",
+        "end_time": "12:20"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "sub-acoustic-guitar-club",
+    "category": "ライブ",
+    "name": "アコギ部",
+    "group": null,
+    "description": null,
+    "tags": [
+      "day1",
+      "day2"
+    ],
+    "location": "SubStage",
+    "image": null,
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "12:40",
+        "end_time": "14:20"
+      },
+      {
+        "day": "day2",
+        "start_time": "09:30",
+        "end_time": "15:30"
       }
     ],
     "featured": false

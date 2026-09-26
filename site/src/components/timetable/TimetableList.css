@@ -110,12 +110,29 @@
 .tl-corner {
   grid-row: 1;
 }
+/*
+ * ステージごとのテーマ色。見出し・見出しの下線・枠の時刻に使う。
+ * 緑はパレット（global.css）に無いのでここだけで持つ。赤・青と同じ深さの緑にし、
+ * 10px台の時刻でも白地で読めるコントラスト（5.25:1）を確保している。
+ * パレットの黄色は白地の文字だと約1.5:1で読めないため、SubStageには使わない（検証済み）。
+ */
+.tl-stage-MainStage {
+  --stage-color: var(--red);
+}
+.tl-stage-LiveStage {
+  --stage-color: var(--blue);
+}
+.tl-stage-SubStage {
+  --stage-color: #0b7d34;
+}
+
 .tl-col-header {
   font-size: 10.5px;
   font-weight: 800;
   text-align: center;
+  color: var(--stage-color, var(--ink));
   padding-bottom: 6px;
-  border-bottom: 2px solid var(--ink);
+  border-bottom: 2px solid var(--stage-color, var(--ink));
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -159,7 +176,7 @@
 .tl-block-time {
   flex-shrink: 0;
   font-size: 10px;
-  color: var(--blue);
+  color: var(--stage-color, var(--blue));
   white-space: nowrap;
 }
 .tl-time-sep {
