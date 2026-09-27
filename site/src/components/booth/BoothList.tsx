@@ -70,6 +70,11 @@ const TABS: TabConfig[] = [
   },
 ];
 
+/** カードから詳細ページへ飛ばすか。出店はカードで情報が出きっているので飛ばさない */
+function hasDetailPage(entry: Entry) {
+  return entry.category !== "出店";
+}
+
 export default function BoothList({ entries }: Props) {
   const [activeTab, setActiveTab] = useState<string>(TABS[0].id);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
@@ -140,50 +145,60 @@ export default function BoothList({ entries }: Props) {
       />
 
       <ul className="bl-grid">
-        {filtered.map((entry, i) => (
-          <li key={entry.id}>
-            <a className="bl-card-link" href={`/entry/${entry.id}/`}>
-              <div className="bl-card" style={{ transform: `rotate(${i % 2 === 0 ? -0.8 : 0.9}deg)` }}>
-                <div className="bl-photo">
-                  {entry.image ? (
-                    <img src={entry.image} alt="" loading="lazy" />
-                  ) : (
-                    <span className="bl-no-image num">NO IMAGE</span>
-                  )}
-                </div>
-                <div className="bl-body">
-                  <p className="bl-name">{entry.name}</p>
-                  {entry.group && <p className="bl-group">{entry.group}</p>}
-                  {/* 出店の紹介文は50字程度なので、summaryを別に持たせずdescriptionをそのまま2行で見せる */}
-                  {(entry.summary ?? entry.description) && (
-                    <p className="bl-summary">{entry.summary ?? entry.description}</p>
-                  )}
-                  {displayTags(entry.tags).length > 0 && (
-                    <ul className="bl-tags">
-                      {displayTags(entry.tags).map((tag) => (
-                        <li key={tag}>
-                          <span className={`bl-chip ${tagColor(tag)}`}>{tagLabel(tag)}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                  {entry.occurrences.length > 0 && (
-                    <ul className="bl-times">
-                      {formatOccurrenceTimes(entry.occurrences).map((g) => (
-                        <li key={g.day}>
-                          <span className={`bl-day num ${dayColorClass(g.day) ?? ""}`}>{formatDayLabel(g.day)}</span>
-                          <span className="bl-time num">{g.times}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                  {entry.location && <p className="bl-location">{entry.location}</p>}
-                  <span className="bl-more">view more →</span>
-                </div>
+        {filtered.map((entry, i) => {
+          // 出店は紹介文と写真がカードで全部見えていて、詳細ページに行っても増える情報が無いので
+          // リンクにせず、紹介文も省略しないで出す。場内マップができたら、ここから場所へ飛ばしたい
+          const linked = hasDetailPage(entry);
+          const summary = entry.summary ?? entry.description;
+          const card = (
+            <div className="bl-card" style={{ transform: `rotate(${i % 2 === 0 ? -0.8 : 0.9}deg)` }}>
+              <div className="bl-photo">
+                {entry.image ? (
+                  <img src={entry.image} alt="" loading="lazy" />
+                ) : (
+                  <span className="bl-no-image num">NO IMAGE</span>
+                )}
               </div>
-            </a>
-          </li>
-        ))}
+              <div className="bl-body">
+                <p className="bl-name">{entry.name}</p>
+                {entry.group && <p className="bl-group">{entry.group}</p>}
+                {summary && <p className={`bl-summary${linked ? "" : " is-full"}`}>{summary}</p>}
+                {displayTags(entry.tags).length > 0 && (
+                  <ul className="bl-tags">
+                    {displayTags(entry.tags).map((tag) => (
+                      <li key={tag}>
+                        <span className={`bl-chip ${tagColor(tag)}`}>{tagLabel(tag)}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                {entry.occurrences.length > 0 && (
+                  <ul className="bl-times">
+                    {formatOccurrenceTimes(entry.occurrences).map((g) => (
+                      <li key={g.day}>
+                        <span className={`bl-day num ${dayColorClass(g.day) ?? ""}`}>{formatDayLabel(g.day)}</span>
+                        <span className="bl-time num">{g.times}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                {entry.location && <p className="bl-location">{entry.location}</p>}
+                {linked && <span className="bl-more">view more →</span>}
+              </div>
+            </div>
+          );
+          return (
+            <li key={entry.id}>
+              {linked ? (
+                <a className="bl-card-link" href={`/entry/${entry.id}/`}>
+                  {card}
+                </a>
+              ) : (
+                card
+              )}
+            </li>
+          );
+        })}
         {filtered.length === 0 && <li className="bl-empty">該当する企画がありません</li>}
       </ul>
     </div>

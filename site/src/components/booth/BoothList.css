@@ -113,6 +113,13 @@
   line-clamp: 2;
   overflow: hidden;
 }
+/* リンクしないカード（出店）は紹介文を省略しない。続きを読む先が無いため */
+.bl-summary.is-full {
+  display: block;
+  -webkit-line-clamp: unset;
+  line-clamp: unset;
+  overflow: visible;
+}
 .bl-tags {
   display: flex;
   flex-wrap: wrap;
