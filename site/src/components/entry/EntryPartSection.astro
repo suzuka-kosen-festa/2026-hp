@@ -1,0 +1,55 @@
+---
+// 複数の企画を載せる記事（ゲーム大会のスプラトゥーン3／スマブラSP等）の、企画1つぶん。
+// 共通部分（場所・対象・参加者規約など）は記事の上のほうに1回だけ出し、ここには
+// 企画ごとに違うもの（日時・定員・ルール・申込）だけを出す。
+import Tape from "../ui/Tape.astro";
+import EntryFacts from "./EntryFacts.astro";
+import EntryNotes from "./EntryNotes.astro";
+import EntryApply from "./EntryApply.astro";
+import EntryResources from "./EntryResources.astro";
+import type { EntryPart } from "../../types/content";
+
+interface Props {
+  part: EntryPart;
+  /** 紙片を貼り重ねたように見せるため、企画ごとに見出しの傾きを変える */
+  rotate?: number;
+}
+
+const { part, rotate = -1.2 } = Astro.props;
+---
+
+<section class="part" id={part.id} data-part={part.id}>
+  <Tape color="red" rotate={rotate} as="h2" class="part-name">{part.name}</Tape>
+  <EntryFacts
+    occurrences={part.occurrences}
+    capacity={part.capacity}
+    application={part.application}
+    extraFacts={part.extraFacts}
+  />
+  {part.description && <p class="part-desc">{part.description}</p>}
+  <EntryNotes notes={part.notes} />
+  {part.application && <EntryApply application={part.application} occurrences={part.occurrences} />}
+  <EntryResources resources={part.resources} />
+</section>
+
+<style>
+  .part {
+    margin-top: 48px;
+    /* ページ内リンクで飛んだとき、固定ヘッダーに見出しが隠れないようにする */
+    scroll-margin-top: 88px;
+  }
+
+  /* Tapeにpropsで渡したclassは子コンポーネント側のスコープになるため :global() が要る */
+  .part :global(.part-name) {
+    font-size: 16px;
+    line-height: 1.45;
+  }
+
+  .part-desc {
+    margin-top: 22px;
+    font-size: 14px;
+    line-height: 1.9;
+    /* データ側の改行をそのまま活かす */
+    white-space: pre-line;
+  }
+</style>

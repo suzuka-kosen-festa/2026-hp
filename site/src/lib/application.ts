@@ -1,4 +1,4 @@
-import type { Application } from "../types/content";
+import type { Application, Entry } from "../types/content";
 
 export type ApplicationStatus = "before" | "open" | "closed";
 
@@ -45,4 +45,12 @@ export function formatApplicationDate(date: string): string {
   const [year, month, day] = date.split("-").map(Number);
   const weekday = WEEKDAY_JA[new Date(Date.UTC(year, month - 1, day)).getUTCDay()];
   return `${month}/${day}(${weekday})`;
+}
+
+/**
+ * 事前申込が要る記事か。複数の企画を載せる記事（parts）は、どれか1つでも申込が要れば true。
+ * PICK UP の「事前申込制」の印に使う
+ */
+export function requiresApplication(entry: Entry): boolean {
+  return Boolean(entry.application) || (entry.parts ?? []).some((part) => part.application);
 }

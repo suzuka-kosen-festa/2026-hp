@@ -1,0 +1,40 @@
+---
+// 参加者規約・大会ポスターなどの資料リンク。申込の受付状態に関係なく出す
+// （締切後も規約やルールは読めるほうがよい）
+import type { EntryLink } from "../../types/content";
+
+interface Props {
+  resources?: EntryLink[];
+}
+
+const { resources = [] } = Astro.props;
+---
+
+{
+  resources.length > 0 && (
+    <ul class="resources">
+      {resources.map((resource) => (
+        <li>
+          <a href={resource.url} target="_blank" rel="noopener noreferrer">
+            {resource.label} ↗
+          </a>
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+<style>
+  .resources {
+    list-style: none;
+    margin-top: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 12.5px;
+    font-weight: 700;
+  }
+  .resources a {
+    text-decoration: underline;
+  }
+</style>

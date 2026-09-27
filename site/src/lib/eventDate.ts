@@ -28,3 +28,12 @@ export function dayColorClass(day: Day): "sat" | "sun" | null {
   if (weekday === 0) return "sun";
   return null;
 }
+
+/**
+ * 開催回のうち最初の日の日付 "YYYY-MM-DD"。開催回が無ければ null。
+ * 締切日の無い募集（定員に達し次第締切）で、申込ボタンを閉じる日に使う
+ */
+export function firstEventDate(occurrences: { day: Day }[]): string | null {
+  const day = (["day1", "day2"] as Day[]).find((d) => occurrences.some((o) => o.day === d));
+  return day ? DAY_DATES[day] : null;
+}

@@ -1,4 +1,5 @@
 import type { Entry } from "../../types/content";
+import { requiresApplication } from "../../lib/application";
 import "./PromoCard.css";
 
 interface Props {
@@ -31,10 +32,11 @@ export default function PromoCard({ entry, more = false }: Props) {
       )}
       <div className="pc__body">
         {/* 事前申込の要否はデータ（application の有無）から決める。セクション見出しに
-            「予約制」と書くと、コラージュカメラのような申込不要の企画を混ぜたときに嘘になる */}
+            「予約制」と書くと、コラージュカメラのような申込不要の企画を混ぜたときに嘘になる。
+            複数の企画を載せる記事（parts）は、どれか1つでも申込が要れば付ける */}
         <div className="pc__labels">
           <p className="pc__label">{label}</p>
-          {entry.application && <p className="pc__label pc__label--apply">事前申込制</p>}
+          {requiresApplication(entry) && <p className="pc__label pc__label--apply">事前申込制</p>}
         </div>
         <p className="pc__name">{entry.name}</p>
         {entry.summary && <p className="pc__summary">{entry.summary}</p>}

@@ -50,6 +50,30 @@ export interface EntryLink {
   url: string;
 }
 
+/**
+ * 1つの記事に載せる複数の企画のうちの1つ（ゲーム大会のスプラトゥーン3／スマブラSP等）。
+ *
+ * 別々の記事に分けると、場所・対象・参加者規約・注意書きといった共通部分が
+ * 2記事に重複して読みにくかった。共通部分は Entry 直下に、企画ごとに違うもの
+ * （日時・定員・ルール・申込フォーム）だけをここに書く。
+ */
+export interface EntryPart {
+  /** ページ内リンクのアンカー（/entry/xxx/#<id>）。記事内で一意にする */
+  id: string;
+  name: string;
+  /**
+   * この企画の開催回。Entry 直下の occurrences は書かない（loadEntries.ts が
+   * 全企画ぶんを集めて埋める。timetable 等は Entry 直下だけを見るため）
+   */
+  occurrences: Occurrence[];
+  capacity?: string | null;
+  description?: string | null;
+  extraFacts?: ExtraFact[];
+  notes?: string[];
+  application?: Application | null;
+  resources?: EntryLink[];
+}
+
 export interface Entry {
   id: string;
   category: Category;
@@ -104,6 +128,11 @@ export interface Entry {
    * 申込の受付状態に関係なく出す（締切後も規約やルールは読めるほうがよい）
    */
   resources?: EntryLink[];
+  /**
+   * 1つの記事に複数の企画を載せるときの企画ごとの情報。
+   * これを持つ記事は occurrences を企画ごとに書く（EntryPart 参照）
+   */
+  parts?: EntryPart[];
   /** true: home等での特別扱い（バナー表示）対象 */
   featured?: boolean;
   /** 外部Webアプリ等へのリンク（コラージュカメラ等）。未提供の間はnull */

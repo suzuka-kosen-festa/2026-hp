@@ -1,0 +1,87 @@
+---
+// 事前申込の導線（Issue #96）。
+//
+// 3つの状態を全部出力し、hidden で1つだけ見せる。初期状態はビルド時刻で決め、
+// 閲覧時に /entry/[id] の script で今の時刻に合わせ直す。静的サイトなので、ビルド時刻だけで
+// 決めると締切後も再デプロイされるまでボタンが残ってしまう。
+// 1ページに複数置ける（複数の企画を載せる記事では企画ごとに申込フォームが違う）
+import Button from "../ui/Button.astro";
+import { applicationStatus, applicationWindow, formatApplicationDate } from "../../lib/application";
+import { firstEventDate } from "../../lib/eventDate";
+import type { Application, Occurrence } from "../../types/content";
+
+interface Props {
+  application: Application;
+  /** 締切日の無い募集（定員に達し次第締切）は、最初の開催日の0時にボタンを閉じる */
+  occurrences: Occurrence[];
+}
+
+const { application, occurrences } = Astro.props;
+
+const eventDate = firstEventDate(occurrences);
+const { opensAt, closesAt } = applicationWindow(application, eventDate);
+const statusAtBuild = applicationStatus(application, Date.now(), eventDate);
+const closesLabel = application.closes ? formatApplicationDate(application.closes) : "定員に達し次第締切";
+---
+
+<div class="apply" data-apply data-opens-at={opensAt} data-closes-at={closesAt}>
+  <div data-apply-state="open" hidden={statusAtBuild !== "open"}>
+    <Button href={application.url} color="yellow" rotate={-1} target="_blank" rel="noopener noreferrer">
+      申し込む →
+    </Button>
+    <p class="apply-note">
+      {application.closes ? `${closesLabel}まで受付` : closesLabel}。応募フォーム（外部サイト）が別タブで開きます
+    </p>
+  </div>
+  <p class="apply-closed" data-apply-state="before" hidden={statusAtBuild !== "before"}>
+    {formatApplicationDate(application.opens)}から受付開始
+  </p>
+  <p class="apply-closed" data-apply-state="closed" hidden={statusAtBuild !== "closed"}>
+    募集は終了しました
+  </p>
+  {
+    application.guideUrl && (
+      <p class="apply-guide">
+        <a href={application.guideUrl} target="_blank" rel="noopener noreferrer">
+          募集要項・お問い合わせ先（鈴鹿高専HP）
+        </a>
+      </p>
+    )
+  }
+</div>
+
+<style>
+  .apply {
+    margin-top: 28px;
+  }
+
+  /* hidden 属性より display 指定が勝たないよう念のため明示する */
+  .apply [hidden] {
+    display: none;
+  }
+
+  .apply-note {
+    margin-top: 14px;
+    font-size: 12px;
+    line-height: 1.7;
+    color: #444;
+  }
+
+  .apply-closed {
+    display: inline-block;
+    padding: 10px 18px;
+    border: 2px dashed rgba(17, 17, 17, 0.4);
+    font-size: 14px;
+    font-weight: 800;
+    color: #555;
+  }
+
+  .apply-guide {
+    margin-top: 14px;
+    font-size: 12.5px;
+    font-weight: 700;
+  }
+  .apply-guide a {
+    text-decoration: underline;
+  }
+</style>
