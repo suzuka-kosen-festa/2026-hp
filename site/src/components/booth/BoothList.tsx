@@ -154,7 +154,10 @@ export default function BoothList({ entries }: Props) {
                 <div className="bl-body">
                   <p className="bl-name">{entry.name}</p>
                   {entry.group && <p className="bl-group">{entry.group}</p>}
-                  {entry.summary && <p className="bl-summary">{entry.summary}</p>}
+                  {/* 出店の紹介文は50字程度なので、summaryを別に持たせずdescriptionをそのまま2行で見せる */}
+                  {(entry.summary ?? entry.description) && (
+                    <p className="bl-summary">{entry.summary ?? entry.description}</p>
+                  )}
                   {displayTags(entry.tags).length > 0 && (
                     <ul className="bl-tags">
                       {displayTags(entry.tags).map((tag) => (

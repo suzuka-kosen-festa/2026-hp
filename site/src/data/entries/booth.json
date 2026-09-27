@@ -1,76 +1,602 @@
 [
   {
-    "id": "yatai-takoyaki",
+    "id": "food-kyudo",
     "category": "出店",
-    "name": "たこ焼き屋台",
-    "group": "有志団体 たこ焼き部",
-    "description": "外はカリッと中はとろとろの自家製たこ焼き。",
-    "tags": ["飲食-フード"],
-    "location": "飲食バザー Aブロック1番",
-    "image": null,
+    "name": "シューアイス",
+    "group": "弓道部",
+    "description": "バニラ、チョコ、抹茶の三種類！サクッと香ばしいシュー生地と濃厚なアイスを包み込んだ贅沢なスイーツをどうぞ！",
+    "tags": [
+      "飲食-スイーツ"
+    ],
+    "location": null,
+    "image": "/entries/food-kyudo.webp",
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "food-koshiki-tennis",
+    "category": "出店",
+    "name": "じゃがバター",
+    "group": "硬式テニス部",
+    "description": "ほくほくのじゃがいもに、とろけるバターが相性抜群！できたて熱々のじゃがバターをぜひどうぞ！",
+    "tags": [
+      "飲食-フード"
+    ],
+    "location": null,
+    "image": "/entries/food-koshiki-tennis.webp",
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "food-sado",
+    "category": "出店",
+    "name": "抹茶・栗きんとん",
+    "group": "茶道部",
+    "description": "マルチメディア棟で今年も出店！抹茶と栗きんとんで一息つきませんか？",
+    "tags": [
+      "飲食-スイーツ"
+    ],
+    "location": "マルチメディア棟",
+    "image": "/entries/food-sado.webp",
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "food-soft-tennis",
+    "category": "出店",
+    "name": "フライドポテト",
+    "group": "ソフトテニス部",
+    "description": "中はホクホク！外はカリッと！揚げたてフライドポテトを3種類のフレーバーでお楽しみください！",
+    "tags": [
+      "飲食-フード"
+    ],
+    "location": null,
+    "image": "/entries/food-soft-tennis.webp",
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "food-kendo",
+    "category": "出店",
+    "name": "わらび餅",
+    "group": "剣道部",
+    "description": "ひやひやもちもちわらび餅！好きな味を好きなだけ、今年も一ついかがですか？剣道部一同お待ちしております！",
+    "tags": [
+      "飲食-スイーツ"
+    ],
+    "location": null,
+    "image": "/entries/food-kendo.webp",
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "food-procon",
+    "category": "出店",
+    "name": "ドリンク",
+    "group": "プロコン",
+    "description": "写真映えするソフトドリンクやノンアルコールカクテルを販売！食べ物とご一緒に、食べ歩きのおともに！",
+    "tags": [
+      "飲食-スイーツ"
+    ],
+    "location": null,
+    "image": "/entries/food-procon.webp",
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "food-soccer",
+    "category": "出店",
+    "name": "チョコバナナ",
+    "group": "サッカー部",
+    "description": "チョコとホワイトチョコの２つの味！カラフルなトッピングで見た目も楽しく、美味しく仕上げました！",
+    "tags": [
+      "飲食-スイーツ"
+    ],
+    "location": null,
+    "image": "/entries/food-soccer.webp",
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "food-rikujo",
+    "category": "出店",
+    "name": "たい焼き",
+    "group": "陸上部",
+    "description": "小腹が空いたらたい焼き！あんことカスタードあなたはどっち派？",
+    "tags": [
+      "飲食-スイーツ"
+    ],
+    "location": null,
+    "image": "/entries/food-rikujo.webp",
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "food-karate",
+    "category": "出店",
+    "name": "たこ焼き",
+    "group": "空手道部",
+    "description": "ソースの香りが食欲をそそる絶品たこ焼き！空手道部一同心を込めて販売します！",
+    "tags": [
+      "飲食-フード"
+    ],
+    "location": null,
+    "image": "/entries/food-karate.webp",
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "food-basketball",
+    "category": "出店",
+    "name": "みたらし団子",
+    "group": "バスケ部",
+    "description": "文化祭の食べ歩きならコレ！タレのツヤと焦げ目が食欲をそそる、バスケ部特製のみたらし団子をどうぞ！",
+    "tags": [
+      "飲食-スイーツ"
+    ],
+    "location": null,
+    "image": "/entries/food-basketball.webp",
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "food-yosakoi",
+    "category": "出店",
+    "name": "フランクフルト",
+    "group": "よさこい同好会",
+    "description": "よさこい同好会のフランクフルトです！サイズも大きく、ソースの種類も豊富！ぜひご賞味あれ！",
+    "tags": [
+      "飲食-フード"
+    ],
+    "location": null,
+    "image": "/entries/food-yosakoi.webp",
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "food-handball",
+    "category": "出店",
+    "name": "チュロス",
+    "group": "ハンドボール部",
+    "description": "文化祭定番のサクサクチュロス！食べ歩きには欠かせない一本をあなた好みの味で楽しめます！",
+    "tags": [
+      "飲食-スイーツ"
+    ],
+    "location": null,
+    "image": "/entries/food-handball.webp",
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "food-volleyball",
+    "category": "出店",
+    "name": "焼きドーナッツ",
+    "group": "女子バレーボール部",
+    "description": "ふんわり食感でシンプルな味わい！バニラ味とココア味のドーナツを販売します！",
+    "tags": [
+      "飲食-スイーツ"
+    ],
+    "location": null,
+    "image": "/entries/food-volleyball.webp",
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "food-badminton",
+    "category": "出店",
+    "name": "ワッフル",
+    "group": "バドミントン部",
+    "description": "インスタ映え間違いなし！選べるトッピングで自分だけのオリジナルワッフルを作ろう！",
+    "tags": [
+      "飲食-スイーツ"
+    ],
+    "location": null,
+    "image": "/entries/food-badminton.webp",
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "food-rugby",
+    "category": "出店",
+    "name": "牛串",
+    "group": "ラグビー部",
+    "description": "ラグビー部の牛串！炭火で焼いたカルビやタンを販売します！",
+    "tags": [
+      "飲食-フード"
+    ],
+    "location": null,
+    "image": "/entries/food-rugby.webp",
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "food-ongaku",
+    "category": "出店",
+    "name": "五平餅",
+    "group": "音楽部",
+    "description": "もちもち食感の五平餅！音楽部の演奏のお供にぴったりです！",
+    "tags": [
+      "飲食-フード"
+    ],
+    "location": null,
+    "image": "/entries/food-ongaku.webp",
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "food-5c",
+    "category": "出店",
+    "name": "焼きうどん",
+    "group": "5C",
+    "description": "鉄板で一気に焼き上げる絶品焼きうどん！もちもち麺と濃厚ソースの絡みがクセになる、間違いなしの味をぜひ！",
+    "tags": [
+      "飲食-フード"
+    ],
+    "location": null,
+    "image": "/entries/food-5c.webp",
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "food-baseball",
+    "category": "出店",
+    "name": "焼きそば",
+    "group": "野球部",
+    "description": "毎年人気な野球部伝統の焼きそばです！出来立ての味をぜひ食べに来てください！",
+    "tags": [
+      "飲食-フード"
+    ],
+    "location": null,
+    "image": "/entries/food-baseball.webp",
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "food-5e",
+    "category": "出店",
+    "name": "ベーコンチーズ巻",
+    "group": "5E",
+    "description": "外はカリカリのベーコン、中はトロトロのチーズの串焼きです。炭火でこんがり焼きます。",
+    "tags": [
+      "飲食-フード"
+    ],
+    "location": null,
+    "image": "/entries/food-5e.webp",
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "food-5m",
+    "category": "出店",
+    "name": "焼き鳥",
+    "group": "5M",
+    "description": "炭火の香ばしさが決め手！ジューシーな焼きたて焼き鳥、ぜひ食べ歩きのお供にお召し上がりください。",
+    "tags": [
+      "飲食-フード"
+    ],
+    "location": null,
+    "image": "/entries/food-5m.webp",
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "food-shashin",
+    "category": "出店",
+    "name": "ベビーカステラ",
+    "group": "写真部",
+    "description": "焼きたてベビーカステラはいかがですか？お好きなソースを選んで、写真展示を楽しむ最高のお供に。美味しい写真鑑賞を、ぜひお楽しみください。",
+    "tags": [
+      "飲食-スイーツ"
+    ],
+    "location": null,
+    "image": "/entries/food-shashin.webp",
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "food-takkyu",
+    "category": "出店",
+    "name": "肉まん",
+    "group": "卓球部",
+    "description": "卓球部が真心を込めて、できたての肉まんを販売します！ほかほかで大満足の味を、ぜひ会場でご堪能ください！",
+    "tags": [
+      "飲食-フード"
+    ],
+    "location": null,
+    "image": "/entries/food-takkyu.webp",
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "food-ecocar",
+    "category": "出店",
+    "name": "餃子",
+    "group": "エコカー",
+    "description": "餃子「でも」てっぺん取ります。",
+    "tags": [
+      "飲食-フード"
+    ],
+    "location": null,
+    "image": "/entries/food-ecocar.webp",
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "rec-suiei",
+    "category": "出店",
+    "name": "水泳部",
+    "group": null,
+    "description": "射的と輪投げに挑戦して高得点を目指そう！1等には豪華景品が待っています！",
+    "tags": [
+      "レク"
+    ],
+    "location": null,
+    "image": "/entries/rec-suiei.webp",
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "rec-kagaku-magic",
+    "category": "出店",
+    "name": "化学マジック",
+    "group": null,
+    "description": "『化学の城』〜空に輝く石が紡ぐ天空の物語〜",
+    "tags": [
+      "レク"
+    ],
+    "location": null,
+    "image": "/entries/rec-kagaku-magic.webp",
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "rec-bijutsu",
+    "category": "出店",
+    "name": "美術展",
+    "group": "美術部",
+    "description": "美術部員による作品の展示、美術科目での自画像展示中！グッズ、プラ板、イラストの体験スペースも設置中！ぜひお越しください！",
+    "tags": [
+      "展示"
+    ],
+    "location": null,
+    "image": "/entries/rec-bijutsu.webp",
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "rec-seibutsu",
+    "category": "出店",
+    "name": "生物同好会",
+    "group": null,
+    "description": "今年も葉脈標本やレモン等の抽出液、花のレジンキーホルダー等販売！ケミカルガーデンや発光細菌を見てゆっくりしませんか？",
+    "tags": [
+      "物販"
+    ],
+    "location": null,
+    "image": "/entries/rec-seibutsu.webp",
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "rec-ongaku",
+    "category": "出店",
+    "name": "ぷよぷよボールすくい",
+    "group": "音楽部",
+    "description": "今年もぷよぷよボールすくいを開催！1回100円、小さなお子さんも大人の方も！ぷよぷよしましょう！",
+    "tags": [
+      "レク"
+    ],
+    "location": null,
+    "image": "/entries/rec-ongaku.webp",
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "rec-douga",
+    "category": "出店",
+    "name": "動画同好会",
+    "group": null,
+    "description": "先生たちがカードになって登場！集めて楽しい、遊んで盛り上がる、ここでしか手に入らない特別な一枚をぜひ！",
+    "tags": [
+      "物販"
+    ],
+    "location": null,
+    "image": "/entries/rec-douga.webp",
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "rec-ecocar",
+    "category": "出店",
+    "name": "エコカープロジェクト",
+    "group": null,
+    "description": "大会に出場しているマシンの展示や決勝走行の車載映像の上映を行います！部員への質問も大歓迎！",
+    "tags": [
+      "展示"
+    ],
+    "location": null,
+    "image": "/entries/rec-ecocar.webp",
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "rec-kado",
+    "category": "出店",
+    "name": "華道同好会",
+    "group": null,
+    "description": "マルチメディア棟で季節のお花を使った作品を展示！休憩がてらお気軽にご覧ください！",
+    "tags": [
+      "展示"
+    ],
+    "location": "マルチメディア棟",
+    "image": "/entries/rec-kado.webp",
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "rec-2a",
+    "category": "出店",
+    "name": "2Aベガスドリーム",
+    "group": null,
+    "description": "ドキドキの瞬間を君に。トランプ・ルーレットで腕試し！運命を味方につけられるか、挑戦してみよう。",
+    "tags": [
+      "レク"
+    ],
+    "location": null,
+    "image": "/entries/rec-2a.webp",
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "rec-procon",
+    "category": "出店",
+    "name": "プロコンプロジェクト",
+    "group": null,
+    "description": "コンテストに出場する作品や学生が作ったオリジナルゲームを大公開！もちろん無料で楽しめるよ！",
+    "tags": [
+      "展示"
+    ],
+    "location": null,
+    "image": "/entries/rec-procon.webp",
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "rec-5i",
+    "category": "出店",
+    "name": "5I",
+    "group": null,
+    "description": "スマホの写真がその場でシールに！貼って剥がせる可愛いぷっくりシール「ボンドロ」もたくさん販売します！",
+    "tags": [
+      "物販"
+    ],
+    "location": null,
+    "image": "/entries/rec-5i.webp",
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "rec-gcon",
+    "category": "出店",
+    "name": "NEO縁日by@uzumeland",
+    "group": "GCON",
+    "description": "技術と遊びを混ぜ込んだ、UZMのNEO縁日。詳細はInstagramで公開中。",
+    "tags": [
+      "レク"
+    ],
+    "location": null,
+    "image": "/entries/rec-gcon.webp",
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "rec-wandervogel",
+    "category": "出店",
+    "name": "ワンダーフォーゲル部",
+    "group": null,
+    "description": "夏に登りに行った山の写真を展示しています。標高3000mからの景色を見に来ませんか。",
+    "tags": [
+      "展示"
+    ],
+    "location": null,
+    "image": "/entries/rec-wandervogel.webp",
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "rec-shashin",
+    "category": "出店",
+    "name": "写真部",
+    "group": null,
+    "description": "「今の瞬間」をそれぞれの視点で。一眼からスマホまで、旅の絶景や青春の一コマを展示中。部員の見ている世界をぜひお楽しみください！",
+    "tags": [
+      "展示"
+    ],
+    "location": null,
+    "image": "/entries/rec-shashin.webp",
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "rec-rigaku",
+    "category": "出店",
+    "name": "理学同好会",
+    "group": null,
+    "description": "理工学モチーフのキーホルダーを販売します！分子模型や理工学書の展示も！",
+    "tags": [
+      "物販"
+    ],
+    "location": null,
+    "image": "/entries/rec-rigaku.webp",
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "rec-kanko",
+    "category": "出店",
+    "name": "観光研究同好会",
+    "group": null,
+    "description": null,
+    "tags": [
+      "レク"
+    ],
+    "location": null,
+    "image": "/entries/rec-kanko.webp",
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "rec-kyokotsu-appaku",
+    "category": "出店",
+    "name": "課題研究（胸骨圧迫）",
+    "group": "伊藤明研究室",
+    "description": "「小学生向け胸骨圧迫教材開発」の紹介展示です。",
+    "tags": [
+      "展示"
+    ],
+    "location": null,
+    "image": "/entries/rec-kyokotsu-appaku.webp",
     "occurrences": [
-      { "day": "day1", "start_time": "10:00", "end_time": "16:00" },
-      { "day": "day2", "start_time": "10:00", "end_time": "16:00" }
+      {
+        "day": "day1",
+        "start_time": "13:00",
+        "end_time": "15:00",
+        "note": "実演"
+      },
+      {
+        "day": "day2",
+        "start_time": "10:30",
+        "end_time": "12:30",
+        "note": "実演"
+      }
     ],
     "featured": false
   },
   {
-    "id": "yatai-crepe",
+    "id": "rec-1a",
     "category": "出店",
-    "name": "クレープ屋台",
-    "group": "有志団体 スイーツ班",
-    "description": "定番から季節限定まで、選べるクレープ屋台。",
-    "tags": ["飲食-スイーツ"],
-    "location": "飲食バザー Aブロック2番",
-    "image": null,
+    "name": "理科教材の開発",
+    "group": "1A",
+    "description": "小学校や中学校で習う理科の内容を楽しく体験してみませんか？学校では得られなかった発見ができるかもしれません。",
+    "tags": [
+      "展示"
+    ],
+    "location": null,
+    "image": "/entries/rec-1a.webp",
     "occurrences": [],
     "featured": false
   },
   {
-    "id": "yatai-yakisoba",
+    "id": "rec-robocon",
     "category": "出店",
-    "name": "焼きそば屋台",
-    "group": "機械工学部",
-    "description": "ボリューム満点、部活動有志による焼きそば。",
-    "tags": ["飲食-フード"],
-    "location": "飲食バザー Aブロック3番",
-    "image": null,
-    "occurrences": [],
-    "featured": false
-  },
-  {
-    "id": "goods-tenji",
-    "category": "出店",
-    "name": "手作り雑貨販売",
-    "group": "美術部",
-    "description": "部員手作りのアクセサリー・雑貨を販売。",
-    "tags": ["物販"],
-    "location": "展示・レク Bブロック1番",
-    "image": null,
-    "occurrences": [],
-    "featured": false
-  },
-  {
-    "id": "kingyo-sukui",
-    "category": "出店",
-    "name": "輪投げコーナー",
-    "group": "有志団体",
-    "description": "景品を狙って輪投げに挑戦しよう。",
-    "tags": ["レク"],
-    "location": "ゲームイベント",
-    "image": null,
-    "occurrences": [],
-    "featured": false
-  },
-  {
-    "id": "robot-tenji",
-    "category": "出店",
-    "name": "ロボット展示",
-    "group": "ロボット研究部",
-    "description": "部員が製作したロボットの実演展示。",
-    "tags": ["展示"],
-    "location": "展示・レク Bブロック2番",
-    "image": null,
+    "name": "ロボコンプロジェクト",
+    "group": null,
+    "description": "鈴鹿高専ロボコンプロジェクトの活動の紹介をします！チームメンバーによる2026年度ロボコンの大会の見どころの紹介や、ロボットの実演を不定期で開催する予定です！",
+    "tags": [
+      "展示"
+    ],
+    "location": null,
+    "image": "/entries/rec-robocon.webp",
     "occurrences": [],
     "featured": false
   }
