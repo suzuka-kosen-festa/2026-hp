@@ -1,7 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import themeLogo from "../../assets/logo/theme-logo.png";
-import heroCroud from "../../assets/hero/hero-croud.png";
+import heroCroud from "../../assets/hero/hero-croud.webp";
 import Tape from "../ui/Tape.astro";
 import Star from "../ui/Star.astro";
 import site from "../../data/site.json";
@@ -23,7 +23,11 @@ import site from "../../data/site.json";
     />
 
     <p class="hero-name">
-      {site.eventName}<span class="theme-highlight">{site.theme}</span><span class="theme-yomi">({site.themeYomi})</span>
+      {site.eventName}<span class="theme-term"
+        >「<span class="theme-highlight">{site.theme}</span><span class="theme-yomi"
+          >({site.themeYomi})</span
+        >」</span
+      >
     </p>
 
     <div class="hero-lower">
@@ -46,7 +50,15 @@ import site from "../../data/site.json";
         <span class="hc-tape hc-tape--yellow" aria-hidden="true"></span>
         <Star class="hc-star" color="var(--red)" size="22px" rotate={14} />
         <div class="hc-frame">
-          <Image src={heroCroud} alt="集まった観客が手を挙げて盛り上がっている様子" loading="lazy" class="hc-photo" width={245} height={168} />
+          <Image
+            src={heroCroud}
+            alt="集まった観客が手を挙げて盛り上がっている様子"
+            loading="lazy"
+            class="hc-photo"
+            width={320}
+            height={220}
+            densities={[1, 2]}
+          />
           <svg class="hc-pattern" width="52" height="52" aria-hidden="true">
             <rect width="52" height="52" fill="url(#dots-black)" filter="url(#torn-edge)"></rect>
           </svg>
@@ -124,9 +136,18 @@ import site from "../../data/site.json";
     font-size: clamp(20px, 6vw, 32px);
   }
 
+  /* 「collage(コラージュ)」の途中で改行させない。
+     放っておくと読み仮名が「コラー / ジュ)」のように割れる。
+     全体は折り返してよいので、鉤括弧の手前で改行される */
+  .theme-term {
+    white-space: nowrap;
+  }
+
+  /* 鉤括弧つきの表記に揃えたのでイタリックは外し、色も赤から黒にした
+     （MTG 2026-09-06）。地の文と同じ色だが、テーマ名の範囲を示す目印として
+     span は残してある */
   .theme-highlight {
-    color: var(--red);
-    font-style: italic;
+    color: var(--ink);
   }
 
   .theme-yomi {

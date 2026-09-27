@@ -1,4 +1,11 @@
 {
-  "mode": "holding",
-  "published": []
+  "mode": "open",
+  "published": [
+    "/",
+    "/access/",
+    "/news/",
+    "/sponsors/",
+    "/entry/workshop-ai-sorting-robot/",
+    "/entry/workshop-drone/"
+  ]
 }

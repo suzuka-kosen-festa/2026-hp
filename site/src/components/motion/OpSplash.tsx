@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import themeLogoUrl from "../../assets/logo/theme-logo.png";
 import "./OpSplash.css";
+import "./OpSplash.initial.css";
 import { OP_DURATIONS, selectOpVariant, type OpVariant } from "./opVariants";
 import OpCandidate1 from "./OpCandidate1";
 import OpCandidate2 from "./OpCandidate2";
@@ -9,6 +10,7 @@ import OpCandidate2 from "./OpCandidate2";
 const SESSION_KEY = "op-seen";
 const VARIANT_KEY = "op-variant";
 export const OP_REPLAY_EVENT = "op:replay";
+const LOAD_FAILSAFE_MS = 5000;
 
 type NetworkInformation = { saveData?: boolean; effectiveType?: string };
 function isSlowNetwork() {
@@ -41,20 +43,37 @@ function makeClips() {
 }
 const CLIPS = makeClips();
 
-function animateStage(stage: HTMLElement, day: string) {
-  const animations: Animation[] = [];
+function preloadOpAssets(variant: OpVariant) {
+  const digits = variant === "candidate1" ? "/op/candidate1-digits.png" : "/op/countdown-digits.png";
+  return Promise.all([digits, themeLogoUrl.src].map((src) => new Promise<void>((resolve) => {
+    const image = new Image();
+    image.onload = image.onerror = () => resolve();
+    image.src = src;
+  })));
+}
+
+function sizeDigits(stage: HTMLElement, day: string) {
   const digits = stage.querySelector<HTMLElement>(".op-digits");
-  if (!digits) return () => undefined;
+  if (!digits) return 0;
   const bounds = stage.getBoundingClientRect();
   const size = Math.min(bounds.height * .83, bounds.width * .86 / (day.length * .87));
   digits.style.setProperty("--op-digit-size", `${size}px`);
+  return size;
+}
+
+function animateStage(stage: HTMLElement, day: string) {
+  const animations: Animation[] = [];
+  const size = sizeDigits(stage, day);
+  if (!size) return () => undefined;
   const interval = 3000 / (24 * day.length);
   const landingDuration = Math.min(110, interval * .96);
   const animate = (element: Element | null, frames: Keyframe[], delay: number, duration: number) => {
     if (element) animations.push(element.animate(frames, { delay, duration, fill: "both", easing: "linear" }));
   };
   stage.querySelectorAll<HTMLElement>(".op-paper-placement").forEach((paper, index) => {
-    const piece = index % 24, row = Math.floor(piece / 4), column = row % 2 ? 3 - piece % 4 : piece % 4;
+    const digitIndex = Math.floor(index / 24), piece = index % 24, row = Math.floor(piece / 4), part = piece % 4;
+    const column = row % 2 ? 3 - part : part;
+    const sequenceIndex = row * day.length * 4 + digitIndex * 4 + part;
     const sign = piece % 2 ? 1 : -1;
     paper.style.transformOrigin = `${column * 25 + 12.5}% ${row * 100 / 6 + 100 / 12}%`;
     animate(paper, [
@@ -62,7 +81,7 @@ function animateStage(stage: HTMLElement, day: string) {
       { opacity: 1, transform: `translate(${sign * size * .038}px,${-size * .075}px) rotate(${sign * 9}deg) scale(1.25)`, filter: "drop-shadow(6px 10px 3px #0004)", offset: .12, easing: "cubic-bezier(.7,0,1,.6)" },
       { opacity: 1, transform: "translateY(2px) rotate(0deg) scale(1.09,.91)", filter: "drop-shadow(0 1px 0 #0003)", offset: .65, easing: "cubic-bezier(.1,.85,.2,1)" },
       { opacity: 1, transform: "none", filter: "drop-shadow(0 0 0 transparent)" },
-    ], 60 + index * interval, landingDuration);
+    ], 60 + sequenceIndex * interval, landingDuration);
   });
   animate(stage.querySelector(".op-wipe"), [
     { transform: "translateY(115%) rotate(-8deg)", easing: "ease-in-out" },
@@ -76,9 +95,16 @@ function animateStage(stage: HTMLElement, day: string) {
 
 function CountdownStage({ day }: { day: string }) {
   const ref = useRef<HTMLDivElement>(null);
-  useEffect(() => ref.current ? animateStage(ref.current, day) : undefined, [day]);
+  useEffect(() => {
+    if (!ref.current) return;
+    const stage = ref.current;
+    const stopAnimation = animateStage(stage, day);
+    const resizeObserver = new ResizeObserver(() => sizeDigits(stage, day));
+    resizeObserver.observe(stage);
+    return () => { resizeObserver.disconnect(); stopAnimation(); };
+  }, [day]);
   return <div ref={ref} className="op-stage" aria-label={`開催まであと${day}日`}>
-    <div className="op-camera"><div className="op-grain" /><div className="op-edge op-edge-red" /><div className="op-edge op-edge-stripe" /><div className="op-edge op-edge-yellow" />
+    <div className="op-camera"><div className="op-grain" /><div className="op-offcuts">{Array.from({ length: 9 }, (_, index) => <div className={`op-offcut op-offcut-${index}`} key={index} />)}</div><div className="op-edge op-edge-red" /><div className="op-edge op-edge-stripe" /><div className="op-edge op-edge-yellow" />
       <div className="op-digits">{[...day].map((digit, digitIndex) => <div className="op-digit" key={`${digit}-${digitIndex}`}>
         {CLIPS.map((clipPath, piece) => <div className="op-paper-placement" key={piece}><div className="op-paper-face" style={{ backgroundPosition: `${+digit % 5 * 25}% ${+digit > 4 ? 100 : 0}%`, clipPath, filter: `saturate(${[1.12, .82, 1, .92][piece % 4]})` }} /></div>)}
       </div>)}</div>
@@ -100,24 +126,38 @@ export default function OpSplash() {
     try { sessionStorage.setItem(SESSION_KEY, "1"); } catch { /* unavailable storage */ }
     setVisible(false);
   };
-  const show = () => {
+  const chooseVariant = () => {
     if (!selectedVariant.current) {
       let saved: string | null = null;
       try { saved = sessionStorage.getItem(VARIANT_KEY); } catch { /* unavailable storage */ }
       selectedVariant.current = selectOpVariant(saved, Math.random);
       try { sessionStorage.setItem(VARIANT_KEY, selectedVariant.current); } catch { /* unavailable storage */ }
     }
-    setVariant(selectedVariant.current);
+    return selectedVariant.current;
+  };
+  const show = () => {
+    const chosen = chooseVariant();
+    setVariant(chosen);
     clearTimer(); closed.current = false; setRun(value => value + 1); setVisible(true);
-    document.getElementById("op-cover")?.remove(); endTimer.current = window.setTimeout(close, OP_DURATIONS[selectedVariant.current]);
+    document.getElementById("op-cover")?.remove(); endTimer.current = window.setTimeout(close, OP_DURATIONS[chosen]);
   };
   useEffect(() => {
+    let cancelled = false;
     let seen = false;
     try { seen = !!sessionStorage.getItem(SESSION_KEY); } catch { /* unavailable storage */ }
-    if (seen || reduceMotion || isSlowNetwork()) { closed.current = true; document.getElementById("op-cover")?.remove(); } else show();
-    const replay = () => show();
+    if (seen || reduceMotion || isSlowNetwork()) {
+      closed.current = true;
+      document.getElementById("op-cover")?.remove();
+    } else {
+      const failsafe = window.setTimeout(() => { if (!cancelled && !visible) close(); }, LOAD_FAILSAFE_MS);
+      preloadOpAssets(chooseVariant()).then(() => {
+        window.clearTimeout(failsafe);
+        if (!cancelled && !closed.current) show();
+      });
+    }
+    const replay = () => { preloadOpAssets(chooseVariant()).then(() => { if (!cancelled) show(); }); };
     window.addEventListener(OP_REPLAY_EVENT, replay);
-    return () => { clearTimer(); window.removeEventListener(OP_REPLAY_EVENT, replay); };
+    return () => { cancelled = true; clearTimer(); window.removeEventListener(OP_REPLAY_EVENT, replay); };
     // The replay event deliberately owns subsequent runs.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

@@ -13,6 +13,27 @@ function parseDate(date: string) {
   return new Date(year, month - 1, day);
 }
 
+/** 時刻を落として日付だけにする（同じ日なら差0として比べたいため） */
+function toDateOnly(d: Date) {
+  return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+}
+
+/**
+ * 公開日を迎えているか。
+ *
+ * 未来の日付のお知らせは一覧にも詳細ページにも出さない。書きかけの告知を
+ * コミットしても日付が来るまでは出ない、という安全弁のための判定。
+ *
+ * **予約投稿ではない。** サイトは push のたびにビルドして配るので、日付が来ても
+ * 誰も push しなければ出ない。公開日にリリースPRを出す運用が前提。
+ *
+ * 使い方:
+ * isPublished(item.date)
+ */
+export function isPublished(date: string) {
+  return toDateOnly(parseDate(date)).getTime() <= toDateOnly(new Date()).getTime();
+}
+
 /**
  * お知らせの日付を datetime 属性用の形式に変換。
  *
@@ -36,9 +57,9 @@ export function formatNewsDate(date: string) {
  * const newsItems = sortNews();
  */
 export function sortNews() {
-  return [...newsData].sort(
-    (a, b) => parseDate(b.date).getTime() - parseDate(a.date).getTime(),
-  );
+  return newsData
+    .filter((item) => isPublished(item.date))
+    .sort((a, b) => parseDate(b.date).getTime() - parseDate(a.date).getTime());
 }
 
 /**
@@ -68,20 +89,8 @@ export function getNews(limit?: number) {
  * {isNew(item.date) && <Chip color="red">NEW</Chip>}
  */
 export function isNew(date: string) {
-  const publishedAt = parseDate(date);
-  const today = new Date();
-
-  const publishedDate = new Date(
-    publishedAt.getFullYear(),
-    publishedAt.getMonth(),
-    publishedAt.getDate(),
-  );
-
-  const todayDate = new Date(
-    today.getFullYear(),
-    today.getMonth(),
-    today.getDate(),
-  );
+  const publishedDate = toDateOnly(parseDate(date));
+  const todayDate = toDateOnly(new Date());
 
   const diffDays =
     (todayDate.getTime() - publishedDate.getTime()) /
@@ -118,7 +127,9 @@ export function getNewsHref(item: { id: string; href?: string; body?: string }) 
  */
 export function getNewsPaths() {
   return newsData
-    .filter((item) => item.body)
+    /* 一覧から隠れているお知らせの詳細ページだけ生き残ると、URLを直接叩けば
+       読めてしまう。一覧と同じ条件で絞る */
+    .filter((item) => item.body && isPublished(item.date))
     .map((item) => ({
       params: { id: item.id },
       props: { item },

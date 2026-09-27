@@ -23,7 +23,10 @@ import site from "../data/site.json";
     <!-- 本番では全URLがこのページを返すため、評価をトップに寄せる -->
     <link rel="canonical" href="https://www.snct-fes.info/" />
     <!-- BaseLayout と同じ組。favicon.svg は削除済みなので参照しない -->
-    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <!-- sizes は favicon.ico の実体（48x48 / 32x32 / 16x16）に合わせる。
+         Google はファビコンに「48pxの倍数の正方形」を要求するので、32x32 とだけ
+         申告していると条件を満たさないものとして扱われる余地がある（Issue #68） -->
+    <link rel="icon" href="/favicon.ico" sizes="48x48 32x32 16x16" />
     <link rel="icon" href="/favicon-96.png" type="image/png" sizes="96x96" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <title>{site.eventName}「{site.theme}」</title>

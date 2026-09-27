@@ -34,7 +34,10 @@ const ogImage = new URL("/ogp.png", Astro.site);
       コンテンツの上に浮くため、安全領域は各自で塞ぐ必要がある（Issue #42） -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <!-- テーマロゴ（正方形版）から生成。元画像は src/assets/logo/theme-logo-square.png -->
-    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <!-- sizes は favicon.ico の実体（48x48 / 32x32 / 16x16）に合わせる。
+         Google はファビコンに「48pxの倍数の正方形」を要求するので、32x32 とだけ
+         申告していると条件を満たさないものとして扱われる余地がある（Issue #68） -->
+    <link rel="icon" href="/favicon.ico" sizes="48x48 32x32 16x16" />
     <link rel="icon" href="/favicon-96.png" type="image/png" sizes="96x96" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="description" content={description} />

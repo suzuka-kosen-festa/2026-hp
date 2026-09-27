@@ -5,6 +5,7 @@ import "./HamburgerMenu.css";
 interface NavItem {
   label: string;
   href: string;
+  comingSoon?: boolean;
 }
 
 interface Props {
@@ -74,13 +75,12 @@ export default function HamburgerMenu({ navItems, currentPath }: Props) {
                     onClick={() => setOpen(false)}
                   >
                     {item.label}
+                    {/* 読み上げでも伝わるよう、視覚だけの印にはしない */}
+                    {item.comingSoon && <span className="soon">準備中</span>}
                   </a>
                 </motion.li>
               ))}
             </ul>
-            <button type="button" className="close-btn" onClick={() => setOpen(false)} aria-label="メニューを閉じる">
-              ✕
-            </button>
           </motion.nav>
         )}
       </AnimatePresence>

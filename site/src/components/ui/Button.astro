@@ -1,15 +1,20 @@
 ---
-interface Props {
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends Omit<HTMLAttributes<"a">, "href" | "class"> {
   href: string;
   color?: "black" | "yellow";
   rotate?: number;
   class?: string;
 }
 
-const { href, color = "black", rotate = -1.5, class: className } = Astro.props;
+// target / rel などの残りの属性は <a> にそのまま渡す。
+// 以前は受け取らずに捨てていたため、target="_blank" を付けた外部リンク
+// （協賛フォーム・Googleマップ）が同じタブで開いていた
+const { href, color = "black", rotate = -1.5, class: className, ...rest } = Astro.props;
 ---
 
-<a href={href} class:list={["btn", color, className]} style={{ transform: `rotate(${rotate}deg)` }}>
+<a href={href} class:list={["btn", color, className]} style={{ transform: `rotate(${rotate}deg)` }} {...rest}>
   <slot />
 </a>
 

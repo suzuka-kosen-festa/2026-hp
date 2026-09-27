@@ -1,4 +1,33 @@
+import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 import { expect, test, type Page } from "@playwright/test";
+
+const release = JSON.parse(
+  readFileSync(fileURLToPath(new URL("../src/data/release.json", import.meta.url)), "utf8"),
+) as { mode: string; published: string[] };
+
+/**
+ * このパスが「実際に中身を表示する」状態か。
+ *
+ * ページ固有の検査（カードのチップを見る、等）は自分のページが公開されている
+ * 前提で書かれている。公開制御で準備中になるとカードが無くなり、クリック待ちで
+ * タイムアウトする。リリースPRでだけ落ちる、という一番気付きにくい壊れ方をする。
+ *
+ * APPLY_RELEASE が無いあいだは全ページ中身が出るので常に true。
+ * published に足せば自動で検査対象へ戻るので、恒久的なskipにはならない。
+ *
+ * 使い方:
+ *   test.skip(!showsContent("/booth/"), "booth が準備中のため");
+ */
+export function showsContent(path: string) {
+  if (process.env.APPLY_RELEASE !== "1") return true;
+  if (path === "/holding/") return release.mode === "holding";
+
+  if (release.published.includes(path)) return true;
+  const section = path.split("/").filter(Boolean)[0];
+
+  return section ? release.published.includes(`/${section}/`) : false;
+}
 
 /**
  * 全ページ共通の検査。ページごとにセレクタを列挙する運用は続かないので、
@@ -87,6 +116,11 @@ async function countRevealInSsr(page: Page, path: string) {
  */
 export function describePage(name: string, path: string) {
   test.describe(name, () => {
+    /* holding は mode が open になるとビルドから外れる（strip-dev-pages.mjs）。
+       404を検査しても意味が無いので、そのときだけ丸ごと飛ばす。
+       準備中ページ自体は検査対象に残す（Header/Footerや横スクロールは見たい） */
+    test.skip(path === "/holding/" && !showsContent(path), "holding モードではないため");
+
     test("通常表示", async ({ page }) => {
       const errors = await gotoAndSettle(page, path, "no-preference");
       await assertHealthy(page, errors);

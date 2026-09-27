@@ -5,6 +5,13 @@ on:
     branches: [main]
   pull_request:
 
+# ランナーの既定はUTC。サイトの日付は全部日本の暦（news.json の date、
+# NEW バッジの7日判定）なので、ビルドもJSTで判定させる。
+# UTCのままだと、日本時間の朝9時より前にビルドした場合に「まだ前日」と
+# 判定され、その日付のお知らせが出ない。
+env:
+  TZ: Asia/Tokyo
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest

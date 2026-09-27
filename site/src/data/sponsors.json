@@ -1,66 +1,35 @@
 [
-  {
-  "name": "企業名",
-  "type": "corporate",
-  "featured": true,
-  "logo": "test1.png"
-  },  
-    {
-  "name": "aest2",
-  "type": "corporate",
-  "featured": true,
-  "logo": "test2.png"
-  },    {
-  "name": "10文字ぐらいの写真のない会社",
-  "type": "corporate",
-  "featured": true,
-  "logo": "zest3.png"
-  },    {
-  "name": "z企業名3",
-  "type": "corporate",
-  "featured": true,
-  "logo": "test4.png"
-  },    {
-  "name": "a企業名4",
-  "type": "corporate",
-  "featured": true,
-  "logo": "test5.png"
-  },   {
-  "name": "30文字ぐらいの写真のない会社。30文字ぐらいの写真のない会社。テスト",
-  "type": "corporate",
-  "featured": true,
-  "logo": "test5.png"
-  },     
-  {
-  "name": "test",
-  "type": "corporate",
-  "featured": false,
-  "logo": "test1.png"
-  },  
-  {
-  "name": "個人",
-  "type": "individual",
-  "featured": false,
-  "logo": "test2.png"
-  },
-    {
-  "name": "個人",
-  "type": "individual",
-  "featured": true,
-  "logo": "test2.png"
-  },{
-  "name": "匿名",
-  "type": "individual",
-  "featured": false,
-  "logo": "test2.png"
-  },{
-  "name": "匿名",
-  "type": "individual",
-  "featured": true,
-  "logo": "test5.png"
-  },{
-  "name": "匿名",
-  "type": "individual",
-  "featured": true
-  }
+  {"name":"ダイソウ工業株式会社","type":"corporate","featured":true,"logo":"daiso-kogyo.png"},
+  {"name":"住友電装株式会社","type":"corporate","featured":true,"logo":"sumitomo-densou.png"},
+  {"name":"シンフォニアテクノロジー株式会社","type":"corporate","featured":false,"logo":"sinfonia-technology.png"},
+  {"name":"旭ダイヤモンド工業株式会社","type":"corporate","featured":false,"logo":"asahi-diamond.png"},
+  {"name":"株式会社クラフトワークス","type":"corporate","featured":false,"logo":null},
+  {"name":"株式会社ダイム","type":"corporate","featured":false,"logo":"daimu.png"},
+  {"name":"株式会社光機械製作所","type":"corporate","featured":false,"logo":null},
+  {"name":"三重機械鐵工株式会社","type":"corporate","featured":false,"logo":"mie-kikai-tekko.png"},
+  {"name":"第一工業製薬株式会社","type":"corporate","featured":false,"logo":"daiichi-kogyo-seiyaku.png"},
+  {"name":"内田鍛工株式会社","type":"corporate","featured":false,"logo":"uchida-tanko.png"},
+  {"name":"平田機工株式会社","type":"corporate","featured":false,"logo":"hirata-kiko.png"},
+  {"name":"ニプロファーマ株式会社","type":"corporate","featured":false,"logo":null},
+  {"name":"株式会社ハマムラ工業","type":"corporate","featured":false,"logo":null},
+  {"name":"株式会社中勢自動車学校","type":"corporate","featured":false,"logo":null},
+  {"name":"有限会社川井電気商会","type":"corporate","featured":false,"logo":null},
+  {"name":"有限会社浜村工務店","type":"corporate","featured":false,"logo":null},
+  {"name":"鈴鹿商工会議所","type":"corporate","featured":false,"logo":null},
+  {"name":"家田クリニック","type":"corporate","featured":false,"logo":null},
+  {"name":"株式会社第一電気工業","type":"corporate","featured":false,"logo":null},
+  {"name":"株式会社萩野建設","type":"corporate","featured":false,"logo":null},
+  {"name":"株式会社名光精機","type":"corporate","featured":false,"logo":null},
+  {"name":"株式会社名南製作所","type":"corporate","featured":false,"logo":null},
+  {"name":"有限会社鳶田中工業","type":"corporate","featured":false,"logo":null},
+  {"name":"ガット張り専門店キートス","type":"corporate","featured":false,"logo":null},
+  {"name":"ハートフルクリニック北井内科","type":"corporate","featured":false,"logo":null},
+  {"name":"医療法人 冨田内科","type":"corporate","featured":false,"logo":null},
+  {"name":"岡三証券株式会社　鈴鹿支店","type":"corporate","featured":false,"logo":null},
+  {"name":"大井歯科医院","type":"corporate","featured":false,"logo":null},
+  {"name":"中川建材株式会社","type":"corporate","featured":false,"logo":null},
+  {"name":"八木医院","type":"corporate","featured":false,"logo":null},
+  {"name":"野町どい眼科","type":"corporate","featured":false,"logo":null},
+  {"name":"野町歯科医院","type":"corporate","featured":false,"logo":null},
+  {"name":"林歯科医院","type":"corporate","featured":false,"logo":null}
 ]
