@@ -8,11 +8,15 @@ import Tape from "../../components/ui/Tape.astro";
 import Chip from "../../components/ui/Chip.astro";
 import Button from "../../components/ui/Button.astro";
 import Star from "../../components/ui/Star.astro";
+import EntryFacts from "../../components/entry/EntryFacts.astro";
+import EntryNotes from "../../components/entry/EntryNotes.astro";
+import EntryApply from "../../components/entry/EntryApply.astro";
+import EntryResources from "../../components/entry/EntryResources.astro";
+import EntryPartSection from "../../components/entry/EntryPartSection.astro";
 import { entries } from "../../lib/loadEntries";
 import { dayColorClass, formatDayLabel } from "../../lib/eventDate";
 import { displayTags as toDisplayTags, tagColor, tagLabel } from "../../lib/tags";
-import { applicationStatus, applicationWindow, formatApplicationDate } from "../../lib/application";
-import type { Day, Entry, Occurrence } from "../../types/content";
+import type { Entry } from "../../types/content";
 import site from "../../data/site.json";
 
 export function getStaticPaths() {
@@ -25,28 +29,16 @@ interface Props {
 
 const { entry } = Astro.props;
 
-/** 開催回を日ごとにまとめる。同じ日に複数公演ある企画（化学マジック等）を1行に畳むため */
-function groupByDay(occurrences: Occurrence[]) {
-  const order: Day[] = ["day1", "day2"];
-  return order
-    .map((day) => ({ day, items: occurrences.filter((o) => o.day === day) }))
-    .filter((group) => group.items.length > 0);
-}
-
-function formatTime(occurrence: Occurrence) {
-  if (!occurrence.start_time) return "時間未定";
-  return occurrence.end_time ? `${occurrence.start_time}-${occurrence.end_time}` : `${occurrence.start_time}〜`;
-}
-
-const dayGroups = groupByDay(entry.occurrences);
-const hasSchedule = entry.isPermanent || dayGroups.length > 0;
-// 表示用のタグからは日付タグを落とす（開催日は上の「開催」欄で正確に出しているため重複する）。
+// 表示用のタグからは日付タグを落とす（開催日は下の「開催」欄で正確に出しているため重複する）。
 // 落とす判定と表示名・色は lib/tags.ts が唯一の持ち主（Issue #53）
 const displayTags = toDisplayTags(entry.tags);
 
-const application = entry.application ?? null;
-const applicationTimes = application ? applicationWindow(application) : null;
-const applicationStatusAtBuild = application ? applicationStatus(application, Date.now()) : null;
+// 複数の企画を載せる記事（ゲーム大会等）。開催・定員・申込は企画ごとの欄に出すので、
+// 記事全体の欄には場所・対象などの共通部分だけを出す
+const parts = entry.parts ?? [];
+const hasParts = parts.length > 0;
+/** 紙片を貼り重ねたように見せるため、企画ごとに見出しの傾きを散らす */
+const PART_TILTS = [-1.2, 1, -0.8, 1.2];
 ---
 
 <BaseLayout title={`${entry.name} | ${site.eventName}`} description={entry.summary ?? entry.description ?? undefined}>
@@ -88,126 +80,48 @@ const applicationStatusAtBuild = application ? applicationStatus(application, Da
 
     {entry.description && <p class="desc">{entry.description}</p>}
 
-    <dl class="facts">
-      {
-        hasSchedule && (
-          <div class="fact">
-            <dt>開催</dt>
-            <dd>
-              {entry.isPermanent ? (
-                <span>会期中ずっと</span>
-              ) : (
-                <ul class="days">
-                  {dayGroups.map((group) => (
-                    <li>
-                      <span class:list={["day", "num", dayColorClass(group.day)]}>{formatDayLabel(group.day)}</span>
-                      <span class="times">
-                        {group.items.map((o) => (
-                          <span class="slot">
-                            <span class="num">{formatTime(o)}</span>
-                            {o.note && <span class="slot-note">（{o.note}）</span>}
-                          </span>
-                        ))}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </dd>
-          </div>
-        )
-      }
-      {
-        entry.location && (
-          <div class="fact">
-            <dt>場所</dt>
-            <dd>{entry.location}</dd>
-          </div>
-        )
-      }
-      {
-        entry.audience && (
-          <div class="fact">
-            <dt>対象</dt>
-            <dd>{entry.audience}</dd>
-          </div>
-        )
-      }
-      {
-        entry.capacity && (
-          <div class="fact">
-            <dt>定員</dt>
-            <dd>{entry.capacity}</dd>
-          </div>
-        )
-      }
-      {
-        entry.fee && (
-          <div class="fact">
-            <dt>受講料</dt>
-            <dd>{entry.fee}</dd>
-          </div>
-        )
-      }
-      {
-        application && (
-          <div class="fact">
-            <dt>募集期間</dt>
-            <dd>
-              {formatApplicationDate(application.opens)}〜{formatApplicationDate(application.closes)}
-            </dd>
-          </div>
-        )
-      }
-    </dl>
-
     {
-      entry.notes && entry.notes.length > 0 && (
-        <ul class="notes">
-          {entry.notes.map((note) => (
-            <li>※{note}</li>
-          ))}
-        </ul>
-      )
-    }
-
-    {
-      /* 3つの状態を全部出力し、hidden で1つだけ見せる。初期状態はビルド時刻で決め、
-         閲覧時に下の script で今の時刻に合わせ直す。静的サイトなので、ビルド時刻だけで
-         決めると締切後も再デプロイされるまでボタンが残ってしまう（Issue #96） */
-      application && applicationTimes && (
-        <div
-          class="apply"
-          data-apply
-          data-opens-at={applicationTimes.opensAt}
-          data-closes-at={applicationTimes.closesAt}
-        >
-          <div data-apply-state="open" hidden={applicationStatusAtBuild !== "open"}>
-            <Button href={application.url} color="yellow" rotate={-1} target="_blank" rel="noopener noreferrer">
-              申し込む →
-            </Button>
-            <p class="apply-note">
-              {formatApplicationDate(application.closes)}まで受付。応募フォーム（外部サイト）が別タブで開きます
-            </p>
-          </div>
-          <p class="apply-closed" data-apply-state="before" hidden={applicationStatusAtBuild !== "before"}>
-            {formatApplicationDate(application.opens)}から受付開始
-          </p>
-          <p class="apply-closed" data-apply-state="closed" hidden={applicationStatusAtBuild !== "closed"}>
-            募集は終了しました
-          </p>
-          {
-            application.guideUrl && (
-              <p class="apply-guide">
-                <a href={application.guideUrl} target="_blank" rel="noopener noreferrer">
-                  募集要項・お問い合わせ先（鈴鹿高専HP）
+      /* 企画ごとの欄へのページ内リンク。スマホでは記事が縦に長くなるので、
+         自分が出たい企画まで一気に飛べるようにする */
+      hasParts && (
+        <nav class="parts-nav" aria-label="この記事の企画">
+          <ul>
+            {parts.map((part) => (
+              <li>
+                <a href={`#${part.id}`}>
+                  {part.occurrences[0] && (
+                    <span class:list={["num", "parts-nav-day", dayColorClass(part.occurrences[0].day)]}>
+                      {formatDayLabel(part.occurrences[0].day)}
+                    </span>
+                  )}
+                  <span class="parts-nav-name">{part.name}</span>
+                  <span class="parts-nav-arrow" aria-hidden="true">↓</span>
                 </a>
-              </p>
-            )
-          }
-        </div>
+              </li>
+            ))}
+          </ul>
+        </nav>
       )
     }
+
+    <EntryFacts
+      occurrences={hasParts ? [] : entry.occurrences}
+      isPermanent={entry.isPermanent}
+      location={entry.location}
+      audience={entry.audience}
+      capacity={entry.capacity}
+      fee={entry.fee}
+      application={entry.application}
+      extraFacts={entry.extraFacts}
+    />
+
+    <EntryNotes notes={entry.notes} />
+
+    {entry.application && <EntryApply application={entry.application} occurrences={entry.occurrences} />}
+
+    <EntryResources resources={entry.resources} />
+
+    {parts.map((part, i) => <EntryPartSection part={part} rotate={PART_TILTS[i % PART_TILTS.length]} />)}
 
     {
       entry.link && (
@@ -232,14 +146,14 @@ const applicationStatusAtBuild = application ? applicationStatus(application, Da
     history.back();
   });
 
-  /* 申込ボタンの出し分けを閲覧時の時刻で合わせ直す */
-  const apply = document.querySelector<HTMLElement>("[data-apply]");
-  if (apply) {
+  /* 申込ボタンの出し分けを閲覧時の時刻で合わせ直す。
+     複数の企画を載せる記事では企画ごとに締切が違うので、1つずつ判定する */
+  document.querySelectorAll<HTMLElement>("[data-apply]").forEach((apply) => {
     const status = statusAt(Number(apply.dataset.opensAt), Number(apply.dataset.closesAt), Date.now());
     apply.querySelectorAll<HTMLElement>("[data-apply-state]").forEach((el) => {
       el.hidden = el.dataset.applyState !== status;
     });
-  }
+  });
 </script>
 </BaseLayout>
 
@@ -317,117 +231,51 @@ const applicationStatusAtBuild = application ? applicationStatus(application, Da
     white-space: pre-line;
   }
 
-  .facts {
-    margin-top: 26px;
-    border-top: 2px dashed rgba(17, 17, 17, 0.25);
-  }
-
-  .fact {
-    display: flex;
-    gap: 14px;
-    padding: 12px 2px;
-    border-bottom: 2px dashed rgba(17, 17, 17, 0.25);
-    font-size: 14px;
-  }
-
-  .fact dt {
-    flex: 0 0 4.5em;
-    font-weight: 800;
-  }
-
-  .fact dd {
-    flex: 1;
-    min-width: 0;
-    line-height: 1.7;
-  }
-
-  .days {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .days > li {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 4px 12px;
-  }
-
-  /* 曜日色はポスター準拠の慣例に合わせる（SAT=青 / SUN=赤。design-system.md §1） */
-  .day {
-    font-size: 17px;
-  }
-
-  /* ポスター準拠: SAT=青 / SUN=赤。day1/day2ではなく実際の曜日で決める
-     （site.json の日付を変えても色がずれない） */
-  .day.sat {
-    color: var(--blue);
-  }
-
-  .day.sun {
-    color: var(--red);
-  }
-
-  /* 1日に複数公演ある企画（化学マジック等）は回を横に並べる */
-  .times {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px 14px;
-  }
-
-  .slot-note {
-    font-size: 12px;
-  }
-
-  .notes {
-    list-style: none;
-    margin-top: 18px;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    font-size: 12.5px;
-    line-height: 1.7;
-    color: #444;
-  }
-
   .cta {
     margin-top: 28px;
   }
 
-  .apply {
-    margin-top: 28px;
+  /* 企画へのページ内リンク。貼った付箋のように1行ずつ並べる */
+  .parts-nav ul {
+    list-style: none;
+    margin-top: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
   }
 
-  /* hidden 属性より display 指定が勝たないよう念のため明示する */
-  .apply [hidden] {
-    display: none;
-  }
-
-  .apply-note {
-    margin-top: 14px;
-    font-size: 12px;
-    line-height: 1.7;
-    color: #444;
-  }
-
-  .apply-closed {
-    display: inline-block;
-    padding: 10px 18px;
-    border: 2px dashed rgba(17, 17, 17, 0.4);
+  .parts-nav a {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 2px 10px;
+    padding: 10px 14px;
+    background: #fff;
+    border: 2px solid var(--ink);
+    box-shadow: 3px 3px 0 var(--ink);
     font-size: 14px;
-    font-weight: 800;
-    color: #555;
-  }
-
-  .apply-guide {
-    margin-top: 14px;
-    font-size: 12.5px;
     font-weight: 700;
   }
-  .apply-guide a {
-    text-decoration: underline;
+
+  .parts-nav-day {
+    font-size: 15px;
+  }
+
+  .parts-nav-day.sat {
+    color: var(--blue);
+  }
+
+  .parts-nav-day.sun {
+    color: var(--red);
+  }
+
+  .parts-nav-name {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .parts-nav-arrow {
+    color: var(--blue);
   }
 
   @media (min-width: 900px) {

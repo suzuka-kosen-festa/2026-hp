@@ -1,0 +1,31 @@
+---
+// ※付きの注意書き。記事全体と企画ごと（EntryPartSection）で使い回す
+interface Props {
+  notes?: string[];
+}
+
+const { notes = [] } = Astro.props;
+---
+
+{
+  notes.length > 0 && (
+    <ul class="notes">
+      {notes.map((note) => (
+        <li>※{note}</li>
+      ))}
+    </ul>
+  )
+}
+
+<style>
+  .notes {
+    list-style: none;
+    margin-top: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 12.5px;
+    line-height: 1.7;
+    color: #444;
+  }
+</style>
