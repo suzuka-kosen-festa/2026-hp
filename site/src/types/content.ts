@@ -32,6 +32,16 @@ export interface Application {
   guideUrl?: string | null;
 }
 
+/**
+ * 出演者1人（バンドのメンバー等）。
+ * 出席番号は名簿にはあるが**公開ページに出さない**ので持たない。
+ */
+export interface Member {
+  name: string;
+  /** 他校からの参加者の所属（例:「亀山高校」）。本校生は省略 */
+  affiliation?: string | null;
+}
+
 export interface Entry {
   id: string;
   category: Category;
@@ -44,10 +54,17 @@ export interface Entry {
    */
   categoryLabel?: string;
   name: string;
+  /** 名前の読み仮名。英字やひねった表記のバンド名に添える（出演者の申告どおり） */
+  reading?: string | null;
   group?: string | null;
   /** バナー等の狭い場所に出す短い要約（40字目安）。長文はdescriptionへ */
   summary?: string | null;
   description?: string | null;
+  /**
+   * 出演者本人からの一言（バンド募集フォームの「意気込み」）。
+   * 企画を説明するdescriptionとは書き手が違うので分けて持ち、引用として見せる
+   */
+  comment?: string | null;
   /** 出店:飲食-フード等 / 学科展示:M科等 / イベント:day1,day2,常設 / ライブ:day1,day2,中夜祭,決勝バンド */
   tags: string[];
   /** 物理的な場所を持たない企画（コラージュカメラ等）はnull */
@@ -66,6 +83,10 @@ export interface Entry {
   occurrences: Occurrence[];
   /** 会期中ずっと開催。trueのときoccurrencesは空にする（時間軸を持たないため） */
   isPermanent?: boolean;
+  /** 代表者（バンドのリーダー等） */
+  leader?: Member | null;
+  /** 代表者以外の出演メンバー。leaderは含めない */
+  members?: Member[];
   /** 参加型企画の対象者（例:「小学生(中学年〜高学年)と保護者」） */
   audience?: string | null;
   /** 定員。「各回10組」のような回単位の表現も許すため数値ではなく文字列 */

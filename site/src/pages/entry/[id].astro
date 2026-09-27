@@ -44,12 +44,18 @@ const hasSchedule = entry.isPermanent || dayGroups.length > 0;
 // 落とす判定と表示名・色は lib/tags.ts が唯一の持ち主（Issue #53）
 const displayTags = toDisplayTags(entry.tags);
 
+// リーダーを先頭に並べる。データでは代表者とその他を分けて持っている
+const members = [
+  ...(entry.leader ? [{ ...entry.leader, isLeader: true }] : []),
+  ...(entry.members ?? []).map((member) => ({ ...member, isLeader: false })),
+];
+
 const application = entry.application ?? null;
 const applicationTimes = application ? applicationWindow(application) : null;
 const applicationStatusAtBuild = application ? applicationStatus(application, Date.now()) : null;
 ---
 
-<BaseLayout title={`${entry.name} | ${site.eventName}`} description={entry.summary ?? entry.description ?? undefined}>
+<BaseLayout title={`${entry.name} | ${site.eventName}`} description={entry.summary ?? entry.description ?? entry.comment ?? undefined}>
   <article class="entry">
     {/* 「企画一覧へ」の決め打ちだと、/booth/ が準備中のあいだは準備中ページに
         着地する。実際にトップのPICK UPから入った人が戻れなくなっていた
@@ -61,6 +67,7 @@ const applicationStatusAtBuild = application ? applicationStatus(application, Da
     <header class="head">
       <Tape color="blue" rotate={-1.5} as="p" class="cat">{entry.categoryLabel ?? entry.category}</Tape>
       <h1 class="name">{entry.name}</h1>
+      {entry.reading && <p class="reading">{entry.reading}</p>}
       {entry.group && <p class="group">{entry.group}</p>}
       {
         displayTags.length > 0 && (
@@ -83,6 +90,16 @@ const applicationStatusAtBuild = application ? applicationStatus(application, Da
           <img src={entry.image} alt="" loading="eager" fetchpriority="high" />
           <Star class="photo-star" color="var(--yellow)" size="30px" rotate={-12} />
         </div>
+      )
+    }
+
+    {
+      /* 出演者本人の言葉なので、企画説明（description）とは見た目を分けて引用として出す */
+      entry.comment && (
+        <figure class="comment">
+          <Tape color="yellow" rotate={-2} as="figcaption" class="comment-label">ひとこと</Tape>
+          <blockquote>{entry.comment}</blockquote>
+        </figure>
       )
     }
 
@@ -122,6 +139,24 @@ const applicationStatusAtBuild = application ? applicationStatus(application, Da
           <div class="fact">
             <dt>場所</dt>
             <dd>{entry.location}</dd>
+          </div>
+        )
+      }
+      {
+        members.length > 0 && (
+          <div class="fact">
+            <dt>メンバー</dt>
+            <dd>
+              <ul class="members">
+                {members.map((member) => (
+                  <li>
+                    {member.name}
+                    {member.affiliation && <span class="affiliation">（{member.affiliation}）</span>}
+                    {member.isLeader && <span class="role">リーダー</span>}
+                  </li>
+                ))}
+              </ul>
+            </dd>
           </div>
         )
       }
@@ -271,6 +306,13 @@ const applicationStatusAtBuild = application ? applicationStatus(application, Da
     line-height: 1.35;
   }
 
+  .reading {
+    margin-top: 4px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #555;
+  }
+
   .group {
     margin-top: 8px;
     font-size: 13px;
@@ -286,12 +328,10 @@ const applicationStatusAtBuild = application ? applicationStatus(application, Da
     margin-top: 14px;
   }
 
+  /* 枠は写真の縦横比に合わせる。16:9に固定して切り抜くと、バンドのロゴ画像（正方形）や
+     縦長の集合写真で文字やメンバーが切れる */
   .photo {
     position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    aspect-ratio: 16 / 9;
     margin-top: 22px;
     background: #f3ebd9;
     border: 2px solid var(--ink);
@@ -299,14 +339,55 @@ const applicationStatusAtBuild = application ? applicationStatus(application, Da
     rotate: -0.8deg;
   }
   .photo img {
+    display: block;
     width: 100%;
-    height: 100%;
-    object-fit: cover;
+    height: auto;
   }
   .photo :global(.photo-star) {
     position: absolute;
     top: -14px;
     right: -10px;
+  }
+
+  .comment {
+    position: relative;
+    margin-top: 30px;
+    padding: 20px 18px 16px;
+    background: #fff;
+    border: 2px solid var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
+  }
+  .comment :global(.comment-label) {
+    position: absolute;
+    top: -14px;
+    left: 12px;
+    padding: 4px 14px;
+    font-size: 11px;
+  }
+  .comment blockquote {
+    font-size: 14.5px;
+    font-weight: 700;
+    line-height: 1.8;
+    /* 出演者が入れた改行をそのまま活かす */
+    white-space: pre-line;
+  }
+
+  .members {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px 16px;
+  }
+  .affiliation {
+    font-size: 12px;
+  }
+  .role {
+    margin-left: 6px;
+    padding: 0 6px;
+    font-size: 11px;
+    font-weight: 800;
+    color: #fff;
+    background: var(--blue);
   }
 
   .desc {

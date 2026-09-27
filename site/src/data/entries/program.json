@@ -394,19 +394,39 @@
     "id": "live-kessaku-band",
     "category": "ライブ",
     "name": "結索バンド",
+    "reading": "けっさくばんど",
     "group": null,
     "description": null,
+    "comment": "「結束バンド」の楽曲コピーバンド「結索バンド」です。よろしくお願いします！！",
     "tags": [
       "決勝バンド",
       "day2"
     ],
     "location": "MainStage",
-    "image": null,
+    "image": "/entries/live-kessaku-band.webp",
     "occurrences": [
       {
         "day": "day2",
         "start_time": "12:30",
         "end_time": "12:50"
+      }
+    ],
+    "leader": {
+      "name": "安藤颯祐"
+    },
+    "members": [
+      {
+        "name": "竹浪陽太"
+      },
+      {
+        "name": "伊藤嵐"
+      },
+      {
+        "name": "花井玄太"
+      },
+      {
+        "name": "平田七海",
+        "affiliation": "飯野高校"
       }
     ],
     "featured": false
@@ -415,19 +435,41 @@
     "id": "live-goaikyo",
     "category": "ライブ",
     "name": "御愛嬌",
+    "reading": "ごあいきょう",
     "group": null,
     "description": null,
+    "comment": "頑張ります！！",
     "tags": [
       "決勝バンド",
       "day2"
     ],
     "location": "MainStage",
-    "image": null,
+    "image": "/entries/live-goaikyo.webp",
     "occurrences": [
       {
         "day": "day2",
         "start_time": "13:00",
         "end_time": "13:20"
+      }
+    ],
+    "leader": {
+      "name": "濱田圭太郎"
+    },
+    "members": [
+      {
+        "name": "井上高志"
+      },
+      {
+        "name": "小林蒼也"
+      },
+      {
+        "name": "杉本隼都"
+      },
+      {
+        "name": "野田飛翔"
+      },
+      {
+        "name": "宮脇海里"
       }
     ],
     "featured": false
@@ -516,18 +558,37 @@
     "id": "live-beat-beat-beat",
     "category": "ライブ",
     "name": "BEAT BEAT BEAT",
+    "reading": "ビートビートビート",
     "group": null,
     "description": null,
+    "comment": "THE BOHEMIANS のコピーバンドをします！！\n精一杯演奏するので観に来てください！！",
     "tags": [
       "day1"
     ],
     "location": "LiveStage",
-    "image": null,
+    "image": "/entries/live-beat-beat-beat.webp",
     "occurrences": [
       {
         "day": "day1",
         "start_time": "09:20",
         "end_time": "09:40"
+      }
+    ],
+    "leader": {
+      "name": "福島海音"
+    },
+    "members": [
+      {
+        "name": "笠井謙"
+      },
+      {
+        "name": "橋本琉空"
+      },
+      {
+        "name": "市川悠人"
+      },
+      {
+        "name": "堀川明人"
       }
     ],
     "featured": false
@@ -536,18 +597,34 @@
     "id": "live-irohazu",
     "category": "ライブ",
     "name": "いろはず",
+    "reading": "いろはず",
     "group": null,
     "description": null,
+    "comment": "伊藤清の置き土産こと、いろは率いる愉快な仲間たち「いろはず」がバンドやるよ！見に来てね！！",
     "tags": [
       "day1"
     ],
     "location": "LiveStage",
-    "image": null,
+    "image": "/entries/live-irohazu.webp",
     "occurrences": [
       {
         "day": "day1",
         "start_time": "09:50",
         "end_time": "10:10"
+      }
+    ],
+    "leader": {
+      "name": "高木咲衣"
+    },
+    "members": [
+      {
+        "name": "船木玲"
+      },
+      {
+        "name": "杉本隼都"
+      },
+      {
+        "name": "緒方彩羽"
       }
     ],
     "featured": false
@@ -556,18 +633,40 @@
     "id": "live-attack",
     "category": "ライブ",
     "name": "アタック！！",
+    "reading": "アタック",
     "group": null,
     "description": null,
+    "comment": "学内最年長の専攻科2年生バンド！6人で贈る全力アタック‼️お楽しみに！",
     "tags": [
       "day1"
     ],
     "location": "LiveStage",
-    "image": null,
+    "image": "/entries/live-attack.webp",
     "occurrences": [
       {
         "day": "day1",
         "start_time": "10:20",
         "end_time": "10:40"
+      }
+    ],
+    "leader": {
+      "name": "瀧澤拓朗"
+    },
+    "members": [
+      {
+        "name": "青木あまね"
+      },
+      {
+        "name": "小林赳翔"
+      },
+      {
+        "name": "首藤琴音"
+      },
+      {
+        "name": "服部花音"
+      },
+      {
+        "name": "櫻井映之進"
       }
     ],
     "featured": false
@@ -576,18 +675,40 @@
     "id": "live-yuma",
     "category": "ライブ",
     "name": "(y)UMA",
+    "reading": "ユーマ",
     "group": null,
     "description": null,
+    "comment": "全員盛り上げて宗教にします",
     "tags": [
       "day1"
     ],
     "location": "LiveStage",
-    "image": null,
+    "image": "/entries/live-yuma.webp",
     "occurrences": [
       {
         "day": "day1",
         "start_time": "10:50",
         "end_time": "11:10"
+      }
+    ],
+    "leader": {
+      "name": "河内奏人"
+    },
+    "members": [
+      {
+        "name": "有澤直都"
+      },
+      {
+        "name": "福島漣音"
+      },
+      {
+        "name": "宮下大雅"
+      },
+      {
+        "name": "石崎敬"
+      },
+      {
+        "name": "粂内將太朗"
       }
     ],
     "featured": false
@@ -596,18 +717,31 @@
     "id": "live-dear",
     "category": "ライブ",
     "name": "Dear.",
+    "reading": "でぃあー",
     "group": null,
     "description": null,
+    "comment": "みんなへ、楽しく笑顔になれる時間を届けます！",
     "tags": [
       "day1"
     ],
     "location": "LiveStage",
-    "image": null,
+    "image": "/entries/live-dear.webp",
     "occurrences": [
       {
         "day": "day1",
         "start_time": "11:20",
         "end_time": "11:40"
+      }
+    ],
+    "leader": {
+      "name": "岡本真弥"
+    },
+    "members": [
+      {
+        "name": "丸山優香"
+      },
+      {
+        "name": "川村美裕"
       }
     ],
     "featured": false
@@ -616,18 +750,34 @@
     "id": "live-its-up",
     "category": "ライブ",
     "name": "It's up",
+    "reading": "イッツ アップ",
     "group": null,
     "description": null,
+    "comment": "一生懸命に頑張ります",
     "tags": [
       "day1"
     ],
     "location": "LiveStage",
-    "image": null,
+    "image": "/entries/live-its-up.webp",
     "occurrences": [
       {
         "day": "day1",
         "start_time": "11:50",
         "end_time": "12:10"
+      }
+    ],
+    "leader": {
+      "name": "細見和生"
+    },
+    "members": [
+      {
+        "name": "秋田悠友"
+      },
+      {
+        "name": "岩崎元気"
+      },
+      {
+        "name": "矢田釉月"
       }
     ],
     "featured": false
@@ -636,18 +786,32 @@
     "id": "live-e-m",
     "category": "ライブ",
     "name": "e/m",
+    "reading": "いーぱーえむ",
     "group": null,
     "description": null,
+    "comment": "オリジナル曲やります\nぶちかましますよろしく",
     "tags": [
       "day1"
     ],
     "location": "LiveStage",
-    "image": null,
+    "image": "/entries/live-e-m.webp",
     "occurrences": [
       {
         "day": "day1",
         "start_time": "12:20",
         "end_time": "12:40"
+      }
+    ],
+    "leader": {
+      "name": "船木玲"
+    },
+    "members": [
+      {
+        "name": "杉本隼都"
+      },
+      {
+        "name": "草川琉翔",
+        "affiliation": "高田短期大学"
       }
     ],
     "featured": false
@@ -656,18 +820,31 @@
     "id": "live-alus-tale",
     "category": "ライブ",
     "name": "Alus Tale",
+    "reading": "アルステール",
     "group": null,
     "description": null,
+    "comment": "三重発 3ピースロックバンド Alus Tale",
     "tags": [
       "day1"
     ],
     "location": "LiveStage",
-    "image": null,
+    "image": "/entries/live-alus-tale.webp",
     "occurrences": [
       {
         "day": "day1",
         "start_time": "12:50",
         "end_time": "13:10"
+      }
+    ],
+    "leader": {
+      "name": "藤井英音"
+    },
+    "members": [
+      {
+        "name": "伊藤嵐"
+      },
+      {
+        "name": "竹浪陽太"
       }
     ],
     "featured": false
@@ -676,18 +853,34 @@
     "id": "live-mikasa",
     "category": "ライブ",
     "name": "MIKASA",
+    "reading": "ミカサ",
     "group": null,
     "description": null,
+    "comment": "3度目の響き、4つの言葉、\n最後まで声を限りに、\n最高の瞬間を！\nーーMIKASA",
     "tags": [
       "day2"
     ],
     "location": "LiveStage",
-    "image": null,
+    "image": "/entries/live-mikasa.webp",
     "occurrences": [
       {
         "day": "day2",
         "start_time": "09:00",
         "end_time": "09:20"
+      }
+    ],
+    "leader": {
+      "name": "福島海音"
+    },
+    "members": [
+      {
+        "name": "笠井謙"
+      },
+      {
+        "name": "カエ"
+      },
+      {
+        "name": "市川悠人"
       }
     ],
     "featured": false
@@ -696,18 +889,37 @@
     "id": "live-incident-syndrome",
     "category": "ライブ",
     "name": "Incident Syndrome",
+    "reading": "いんしでんと しんどろーむ",
     "group": null,
     "description": null,
+    "comment": "粋に、艶やかに、心を込めてお迎えします。東京事変/コピーバンド、再生ノ途中。一瞬ノ熱狂ヲ貴方ニ。",
     "tags": [
       "day2"
     ],
     "location": "LiveStage",
-    "image": null,
+    "image": "/entries/live-incident-syndrome.webp",
     "occurrences": [
       {
         "day": "day2",
         "start_time": "09:30",
         "end_time": "09:50"
+      }
+    ],
+    "leader": {
+      "name": "片岡宥人"
+    },
+    "members": [
+      {
+        "name": "田中爽太"
+      },
+      {
+        "name": "小林夢明"
+      },
+      {
+        "name": "細見和生"
+      },
+      {
+        "name": "竹浪陽太"
       }
     ],
     "featured": false
@@ -716,18 +928,40 @@
     "id": "live-nuumin",
     "category": "ライブ",
     "name": "ヌー民",
+    "reading": "ぬーみん",
     "group": null,
     "description": null,
+    "comment": "King Gnuを愛する民『Gnu-Ming』今年結成の私たちが、最高のグルーヴで会場を揺らします！",
     "tags": [
       "day2"
     ],
     "location": "LiveStage",
-    "image": null,
+    "image": "/entries/live-nuumin.webp",
     "occurrences": [
       {
         "day": "day2",
         "start_time": "10:00",
         "end_time": "10:20"
+      }
+    ],
+    "leader": {
+      "name": "矢田釉月"
+    },
+    "members": [
+      {
+        "name": "川村承太郎"
+      },
+      {
+        "name": "小林蒼也"
+      },
+      {
+        "name": "眞田朱"
+      },
+      {
+        "name": "川合可恋"
+      },
+      {
+        "name": "丸山優香"
       }
     ],
     "featured": false
@@ -736,18 +970,31 @@
     "id": "live-dudge",
     "category": "ライブ",
     "name": "Dudge",
+    "reading": "ダッジ",
     "group": null,
     "description": null,
+    "comment": "ライブキッズ、ドパガキ集まれ。",
     "tags": [
       "day2"
     ],
     "location": "LiveStage",
-    "image": null,
+    "image": "/entries/live-dudge.webp",
     "occurrences": [
       {
         "day": "day2",
         "start_time": "10:30",
         "end_time": "10:50"
+      }
+    ],
+    "leader": {
+      "name": "勝田翔万"
+    },
+    "members": [
+      {
+        "name": "田中柊灯"
+      },
+      {
+        "name": "五藤翔"
       }
     ],
     "featured": false
@@ -756,18 +1003,37 @@
     "id": "live-haraduction",
     "category": "ライブ",
     "name": "ハラダクション",
+    "reading": "はらだくしょん",
     "group": null,
     "description": null,
+    "comment": "去年よりもさらに洗練されたハラダクションをお届けします。",
     "tags": [
       "day2"
     ],
     "location": "LiveStage",
-    "image": null,
+    "image": "/entries/live-haraduction.webp",
     "occurrences": [
       {
         "day": "day2",
         "start_time": "11:00",
         "end_time": "11:20"
+      }
+    ],
+    "leader": {
+      "name": "中澤翼"
+    },
+    "members": [
+      {
+        "name": "石川龍"
+      },
+      {
+        "name": "片山賢"
+      },
+      {
+        "name": "栗山偉生"
+      },
+      {
+        "name": "原田祐樹"
       }
     ],
     "featured": false
@@ -796,18 +1062,34 @@
     "id": "sub-degudegu",
     "category": "ライブ",
     "name": "でぐでぐ",
+    "reading": "でぐでぐ",
     "group": null,
     "description": null,
+    "comment": "応援よろしくお願いします！！",
     "tags": [
       "day1"
     ],
     "location": "SubStage",
-    "image": null,
+    "image": "/entries/sub-degudegu.webp",
     "occurrences": [
       {
         "day": "day1",
         "start_time": "10:00",
         "end_time": "10:20"
+      }
+    ],
+    "leader": {
+      "name": "石場心寧"
+    },
+    "members": [
+      {
+        "name": "市川心晴"
+      },
+      {
+        "name": "足立ケイト"
+      },
+      {
+        "name": "出口結愛"
       }
     ],
     "featured": false
@@ -816,18 +1098,37 @@
     "id": "sub-esk",
     "category": "ライブ",
     "name": "esk.",
+    "reading": "えすく",
     "group": null,
     "description": null,
+    "comment": "皆が知ってる曲で盛り上げます！！",
     "tags": [
       "day1"
     ],
     "location": "SubStage",
-    "image": null,
+    "image": "/entries/sub-esk.webp",
     "occurrences": [
       {
         "day": "day1",
         "start_time": "10:30",
         "end_time": "10:50"
+      }
+    ],
+    "leader": {
+      "name": "舟木蒼真"
+    },
+    "members": [
+      {
+        "name": "豊田瑛太"
+      },
+      {
+        "name": "森川慧大"
+      },
+      {
+        "name": "矢野翔太"
+      },
+      {
+        "name": "方田奏太"
       }
     ],
     "featured": false
@@ -836,18 +1137,37 @@
     "id": "sub-shilli-shally",
     "category": "ライブ",
     "name": "Shilli-shally",
+    "reading": "しりーしゃりー",
     "group": null,
     "description": null,
+    "comment": "未熟者全力最高の熱をお届けします!!",
     "tags": [
       "day1"
     ],
     "location": "SubStage",
-    "image": null,
+    "image": "/entries/sub-shilli-shally.webp",
     "occurrences": [
       {
         "day": "day1",
         "start_time": "11:00",
         "end_time": "11:20"
+      }
+    ],
+    "leader": {
+      "name": "内山惟翔"
+    },
+    "members": [
+      {
+        "name": "笠野哲平"
+      },
+      {
+        "name": "寺村駿志"
+      },
+      {
+        "name": "岡田来美"
+      },
+      {
+        "name": "浦田圭祐"
       }
     ],
     "featured": false
@@ -856,18 +1176,38 @@
     "id": "sub-akikoma-teatime",
     "category": "ライブ",
     "name": "空きコマティータイム",
+    "reading": "あきこまてぃーたいむ",
     "group": null,
     "description": null,
+    "comment": "アニメけいおん！でお馴染みの放課後ティータイムのコピーバンドです！\nけいおんが好きな人集まれ！！",
     "tags": [
       "day1"
     ],
     "location": "SubStage",
-    "image": null,
+    "image": "/entries/sub-akikoma-teatime.webp",
     "occurrences": [
       {
         "day": "day1",
         "start_time": "11:30",
         "end_time": "11:50"
+      }
+    ],
+    "leader": {
+      "name": "伊藤嵐"
+    },
+    "members": [
+      {
+        "name": "安藤颯祐"
+      },
+      {
+        "name": "平畑果愛"
+      },
+      {
+        "name": "地主藍里"
+      },
+      {
+        "name": "加藤颯馬",
+        "affiliation": "亀山高校"
       }
     ],
     "featured": false
@@ -876,18 +1216,37 @@
     "id": "sub-chokkin-dekin",
     "category": "ライブ",
     "name": "CHOKKIN出禁",
+    "reading": "ちょっきんできん",
     "group": null,
     "description": null,
+    "comment": "ぶちかまし",
     "tags": [
       "day1"
     ],
     "location": "SubStage",
-    "image": null,
+    "image": "/entries/sub-chokkin-dekin.webp",
     "occurrences": [
       {
         "day": "day1",
         "start_time": "12:00",
         "end_time": "12:20"
+      }
+    ],
+    "leader": {
+      "name": "勝田翔万"
+    },
+    "members": [
+      {
+        "name": "尾竹凌"
+      },
+      {
+        "name": "田中爽太"
+      },
+      {
+        "name": "豊田桧規"
+      },
+      {
+        "name": "五藤翔"
       }
     ],
     "featured": false
