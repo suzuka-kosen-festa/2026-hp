@@ -42,6 +42,16 @@ export interface Member {
   affiliation?: string | null;
 }
 
+/** ビルド時に最適化した企画写真（lib/entryPhotos.ts）。JSONには書かない */
+export interface EntryPhoto {
+  src: string;
+  /** 幅違いの版。<img srcset> にそのまま渡す */
+  srcset: string;
+  /** 元画像の寸法。<img> に付けて、読み込み中に下の要素がずれないようにする */
+  width: number;
+  height: number;
+}
+
 export interface Entry {
   id: string;
   category: Category;
@@ -69,7 +79,10 @@ export interface Entry {
   tags: string[];
   /** 物理的な場所を持たない企画（ミッションフォトラリー等）はnull */
   location: string | null;
+  /** 写真のパス（"/entries/xxx.webp"）。ファイルは src/assets/entries/ に置く。無い企画はnull */
   image: string | null;
+  /** image から作った最適化済みの写真。ページ側（withEntryPhotos）が付ける。JSONには書かない */
+  photo?: EntryPhoto;
   /**
    * 開催の実体。1件 = 1回。
    * - 単発イベント: 1件

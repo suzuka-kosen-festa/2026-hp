@@ -9,6 +9,7 @@ import Chip from "../../components/ui/Chip.astro";
 import Button from "../../components/ui/Button.astro";
 import Star from "../../components/ui/Star.astro";
 import { entries } from "../../lib/loadEntries";
+import { optimizeEntryPhoto } from "../../lib/entryPhotos";
 import { dayColorClass, formatDayLabel } from "../../lib/eventDate";
 import { displayTags as toDisplayTags, tagColor, tagLabel } from "../../lib/tags";
 import { applicationStatus, applicationWindow, formatApplicationDate } from "../../lib/application";
@@ -38,6 +39,7 @@ function formatTime(occurrence: Occurrence) {
   return occurrence.end_time ? `${occurrence.start_time}-${occurrence.end_time}` : `${occurrence.start_time}〜`;
 }
 
+const photo = entry.image ? await optimizeEntryPhoto(entry.image) : null;
 const dayGroups = groupByDay(entry.occurrences);
 const hasSchedule = entry.isPermanent || dayGroups.length > 0;
 // 表示用のタグからは日付タグを落とす（開催日は上の「開催」欄で正確に出しているため重複する）。
@@ -82,9 +84,19 @@ const applicationStatusAtBuild = application ? applicationStatus(application, Da
     {
       /* 写真を用意できない企画は今後も存在するので、画像なしを正式なレイアウトとして扱う。
          「NO IMAGE」の空枠を出すと、16:9ぶんの高さがそのまま無駄になる（Issue #56） */
-      entry.image && (
+      photo && (
         <div class="photo">
-          <img src={entry.image} alt="" loading="eager" fetchpriority="high" />
+          {/* 本文幅（SPは画面幅−40px、PCは最大700px）。寸法を付けて、読み込み中に本文がずれないようにする */}
+          <img
+            src={photo.src}
+            srcset={photo.srcset}
+            sizes="(min-width: 900px) 700px, calc(100vw - 40px)"
+            width={photo.width}
+            height={photo.height}
+            alt=""
+            loading="eager"
+            fetchpriority="high"
+          />
           <Star class="photo-star" color="var(--yellow)" size="30px" rotate={-12} />
         </div>
       )

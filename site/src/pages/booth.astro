@@ -5,13 +5,14 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import BoothList from "../components/booth/BoothList";
 import { entries } from "../lib/loadEntries";
+import { withEntryPhotos } from "../lib/entryPhotos";
 import site from "../data/site.json";
 ---
 
 <BaseLayout title={`BOOTH | ${site.eventName}`} description="出店・学科展示・イベント・ライブの一覧">
   <section class="booth">
     <h1 class="page-title">BOOTH</h1>
-    <BoothList client:load entries={entries} />
+    <BoothList client:load entries={await withEntryPhotos(entries)} />
   </section>
 </BaseLayout>
 

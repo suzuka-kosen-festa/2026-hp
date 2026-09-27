@@ -8,8 +8,9 @@ import Tape from "../ui/Tape.astro";
 import PromoList from "../motion/PromoList";
 import { getFeaturedEntries } from "../../lib/entries";
 import { entries } from "../../lib/loadEntries";
+import { withEntryPhotos } from "../../lib/entryPhotos";
 
-const featured = getFeaturedEntries(entries);
+const featured = await withEntryPhotos(getFeaturedEntries(entries));
 ---
 
 {

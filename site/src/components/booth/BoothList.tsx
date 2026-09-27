@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import "./BoothList.css";
+import EntryPhotoImg from "../EntryPhotoImg";
 import TabTagFilter, { type TabConfig } from "../filter/TabTagFilter";
 import PromoCard from "../motion/PromoCard";
 import { getByCategory, getPermanentEntries } from "../../lib/entries";
@@ -155,7 +156,8 @@ export default function BoothList({ entries }: Props) {
             <div className="bl-card" style={{ transform: `rotate(${i % 2 === 0 ? -0.8 : 0.9}deg)` }}>
               <div className="bl-photo">
                 {entry.image ? (
-                  <img src={entry.image} alt="" loading="lazy" />
+                  // SPはページ幅いっぱい（本文幅の上限520px）、PCは3列
+                  <EntryPhotoImg entry={entry} sizes="(min-width: 900px) 380px, min(calc(100vw - 40px), 520px)" />
                 ) : (
                   <span className="bl-no-image num">NO IMAGE</span>
                 )}

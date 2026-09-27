@@ -1,5 +1,6 @@
 import { type CSSProperties, useEffect, useRef, useState } from "react";
 import "./TimetableList.css";
+import EntryPhotoImg from "../EntryPhotoImg";
 import TabTagFilter, { type TabConfig } from "../filter/TabTagFilter";
 import { getChuyasaiSlots, getOngoingEntries, getScheduledSlots } from "../../lib/entries";
 import { buildFilterUrl, parseFilterParams } from "../../lib/deepLink";
@@ -254,7 +255,7 @@ export default function TimetableList({ entries }: Props) {
               <li key={entry.id} className="tl-permanent-card">
                 <div className="tl-permanent-photo">
                   {entry.image ? (
-                    <img src={entry.image} alt="" loading="lazy" />
+                    <EntryPhotoImg entry={entry} sizes="110px" />
                   ) : (
                     <span className="tl-no-image num">NO IMAGE</span>
                   )}
