@@ -102,24 +102,3 @@
 .sp-menu a[aria-current="page"]::before {
   background: var(--yellow);
 }
-
-.sp-menu .close-btn {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  width: 44px;
-  height: 44px;
-  font-size: 20px;
-  font-weight: 800;
-  color: #fff;
-  z-index: 0;
-}
-
-.sp-menu .close-btn::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: var(--ink);
-  filter: url(#tape-edge);
-}

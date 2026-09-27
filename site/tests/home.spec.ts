@@ -218,3 +218,26 @@ test("お知らせから PICK UP へ着地できる", async ({ page }) => {
     ).toBeGreaterThanOrEqual(header.height);
   }
 });
+
+/**
+ * SPメニューの閉じるボタンは、✕に変形したハンバーガー1つだけであること。
+ *
+ * 以前はメニュー内にも別の「✕」ボタンを置いており、同じ右上の位置で
+ * ハンバーガーの✕と重なって二重に描画されていた。
+ * 閉じるボタンが1つだけ見えていること、それを押すと閉じることを見る。
+ */
+test("SPメニューの閉じるボタンは1つだけで、押すと閉じる", async ({ page }) => {
+  await page.addInitScript(() => sessionStorage.setItem("op-seen", "1"));
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.goto("/");
+
+  await page.getByRole("button", { name: "メニューを開く" }).click();
+  const menu = page.getByRole("navigation", { name: "メインナビゲーション" });
+  await expect(menu).toBeVisible();
+
+  const close = page.getByRole("button", { name: "メニューを閉じる" });
+  await expect(close, "閉じるボタンが複数あります").toHaveCount(1);
+
+  await close.click();
+  await expect(menu).toHaveCount(0);
+});
