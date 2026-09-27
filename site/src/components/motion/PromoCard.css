@@ -88,8 +88,21 @@
 }
 
 .pc--compact .pc__body {
+  /* 本文が残りの幅を取り、写真を紙片の右端まで押し出す（伸ばさないと写真が文字のすぐ隣に止まる） */
+  flex: 1;
   gap: 5px;
   min-width: 0;
+}
+
+/* PCは紙片が横に長いので、84pxの写真だと右側が大きく空く。写真を16:9で幅の約1/3まで広げる */
+@media (min-width: 900px) {
+  .pc--compact {
+    gap: 24px;
+  }
+  .pc--compact .pc__photo {
+    flex: 0 0 clamp(220px, 32%, 360px);
+    aspect-ratio: 16 / 9;
+  }
 }
 
 /* 小型版は見出しタグではなく p なので、太さを明示する */
