@@ -67,7 +67,7 @@ export interface Entry {
   comment?: string | null;
   /** 出店:飲食-フード等 / 学科展示:M科等 / イベント:day1,day2,常設,中夜祭,当日参加OK / ライブ:day1,day2,中夜祭,決勝バンド */
   tags: string[];
-  /** 物理的な場所を持たない企画（コラージュカメラ等）はnull */
+  /** 物理的な場所を持たない企画（ミッションフォトラリー等）はnull */
   location: string | null;
   image: string | null;
   /**
@@ -113,7 +113,7 @@ export interface Entry {
   notes?: string[];
   /** true: home等での特別扱い（バナー表示）対象 */
   featured?: boolean;
-  /** 外部Webアプリ等へのリンク（コラージュカメラ等）。未提供の間はnull */
+  /** 外部Webアプリ等へのリンク（ミッションフォトラリー等）。未提供の間はnull */
   link?: string | null;
   /** link のボタンの文言。省略時は「やってみる →」（バザーグランプリの「投票する →」等） */
   linkLabel?: string | null;

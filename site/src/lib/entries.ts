@@ -72,7 +72,7 @@ export function getOngoingEntries(entries: Entry[]): Entry[] {
   return entries.filter((entry) => entry.isPermanent || entry.period);
 }
 
-/** home等での特別扱い（コラージュカメラ等）対象のエントリ */
+/** home等での特別扱い（ミッションフォトラリー等）対象のエントリ */
 export function getFeaturedEntries(entries: Entry[]): Entry[] {
   return entries.filter((entry) => entry.featured);
 }

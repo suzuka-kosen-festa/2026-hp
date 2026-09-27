@@ -1,16 +1,16 @@
 [
   {
-    "id": "collage-camera",
+    "id": "mission-photo-rally",
     "category": "イベント",
-    "name": "コラージュカメラ(仮)",
-    "group": "実行委員会 システム班",
-    "summary": "お題の写真を撮って、あなただけのフォトコラージュを作ろう。",
-    "description": "お題の写真を撮って、あなただけのフォトコラージュを作ろう。",
+    "name": "ミッションフォトラリー",
+    "group": "実行委員会",
+    "summary": "謎を解いて、写真を撮って、校内をめぐろう！",
+    "description": "謎を解いて、写真を撮って、校内をめぐろう！",
     "tags": [
       "常設"
     ],
     "location": null,
-    "image": null,
+    "image": "/entries/mission-photo-rally.webp",
     "occurrences": [],
     "isPermanent": true,
     "featured": false,
