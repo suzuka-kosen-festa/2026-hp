@@ -163,3 +163,28 @@ test("favicon の sizes 宣言が実体と一致する", async ({ page }) => {
     ).toEqual([...expected].sort());
   }
 });
+
+/**
+ * PICK UP の「事前申込制」の印。
+ *
+ * セクション全体に「予約制」と書かず、申込（application）を持つ企画のカードにだけ付ける。
+ * コラージュカメラのような申込不要の企画が PICK UP に混ざっても嘘にならないようにするため。
+ * 期待値はデータから引くので、企画を入れ替えても成り立つ。
+ */
+const featuredEntries = ["booth", "department", "program"]
+  .flatMap((name) =>
+    JSON.parse(readFileSync(fileURLToPath(new URL(`../src/data/entries/${name}.json`, import.meta.url)), "utf8")),
+  )
+  .filter((entry: { featured?: boolean }) => entry.featured) as { id: string; application?: unknown }[];
+
+test("申込が要る企画にだけ「事前申込制」を付ける", async ({ page }) => {
+  test.skip(featuredEntries.length === 0, "PICK UP に載る企画が無いため");
+  await page.goto("/");
+
+  for (const entry of featuredEntries) {
+    const badge = page.locator(`a[href="/entry/${entry.id}/"] .pc__label--apply`);
+    await expect(badge, `${entry.id} の「事前申込制」の有無が申込データと食い違っています`).toHaveCount(
+      entry.application ? 1 : 0,
+    );
+  }
+});

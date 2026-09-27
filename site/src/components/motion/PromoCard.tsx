@@ -30,7 +30,12 @@ export default function PromoCard({ entry, more = false }: Props) {
         </div>
       )}
       <div className="pc__body">
-        <p className="pc__label">{label}</p>
+        {/* 事前申込の要否はデータ（application の有無）から決める。セクション見出しに
+            「予約制」と書くと、コラージュカメラのような申込不要の企画を混ぜたときに嘘になる */}
+        <div className="pc__labels">
+          <p className="pc__label">{label}</p>
+          {entry.application && <p className="pc__label pc__label--apply">事前申込制</p>}
+        </div>
         <p className="pc__name">{entry.name}</p>
         {entry.summary && <p className="pc__summary">{entry.summary}</p>}
         {entry.location && <p className="pc__place">{entry.location}</p>}
