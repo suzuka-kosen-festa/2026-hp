@@ -19,6 +19,11 @@ interface Props {
   onTagsChange: (tags: string[]) => void;
 }
 
+/** ラベルが英数字だけか（「10/31 SAT」なら true、「中夜祭」「出店」なら false）。和文のタブは字面を揃えるため小さく出す */
+function isLatinLabel(label: string) {
+  return /^[\x20-\x7E]*$/.test(label);
+}
+
 export default function TabTagFilter({ tabs, activeTab, onTabChange, selectedTags, onTagsChange }: Props) {
   const current = tabs.find((tab) => tab.id === activeTab) ?? tabs[0];
 
@@ -40,7 +45,7 @@ export default function TabTagFilter({ tabs, activeTab, onTabChange, selectedTag
             type="button"
             role="tab"
             aria-selected={tab.id === activeTab}
-            className={`tab${tab.id === activeTab ? " is-active" : ""}`}
+            className={`tab${tab.id === activeTab ? " is-active" : ""}${isLatinLabel(tab.label) ? "" : " is-ja"}`}
             onClick={() => selectTab(tab.id)}
           >
             {tab.label}

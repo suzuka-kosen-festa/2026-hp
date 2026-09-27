@@ -38,9 +38,17 @@
   -webkit-overflow-scrolling: touch;
 }
 
+/*
+ * 日付タブ（10/31 SAT）は Bebas Neue、「中夜祭」「出店」のような和文のタブは Noto Sans JP で出す。
+ * --font-num だけだと和文は Bebas にも Impact にも無く、末尾の sans-serif（端末の標準フォント）の
+ * 細字に落ちて1つだけ浮く。Bebas は1ウェイトしかないが字形自体が太いので、和文は常に太字にして揃え、
+ * Bebas 側は太字の合成をさせない（非選択の日付が太らないように）。
+ */
 .tab {
   flex: 0 0 auto;
-  font-family: var(--font-num);
+  font-family: "Bebas Neue", var(--font-body);
+  font-weight: 700;
+  font-synthesis: none;
   font-size: 15px;
   padding: 8px 10px;
   color: var(--ink);
@@ -50,7 +58,14 @@
 
 .tab.is-active {
   border-bottom-color: var(--red);
+  /* 選択中は従来どおり日付も太らせる（和文は Noto の 900 になる） */
   font-weight: 800;
+  font-synthesis: weight;
+}
+
+/* Bebas は縦長で字面が小さいので、同じ15pxだと和文のほうが一回り大きく重く見える。和文だけ詰める */
+.tab.is-ja {
+  font-size: 13px;
 }
 
 .tags {
