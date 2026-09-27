@@ -27,7 +27,7 @@ export default function PromoCard({ entry, more = false }: Props) {
           「NO IMAGE」の空枠を出すと、写真ブロックごと省く詳細ページと食い違う（Issue #60） */}
       {entry.image && (
         <div className="pc__photo">
-          <EntryPhotoImg entry={entry} sizes="(min-width: 900px) 360px, 84px" />
+          <EntryPhotoImg entry={entry} sizes="(min-width: 900px) 240px, 84px" />
         </div>
       )}
       <div className="pc__body">
