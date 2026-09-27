@@ -163,3 +163,58 @@ test("favicon の sizes 宣言が実体と一致する", async ({ page }) => {
     ).toEqual([...expected].sort());
   }
 });
+
+/**
+ * お知らせから PICK UP へ着地する（Issue #104）。
+ *
+ * 見出しは Reveal で下から持ち上がるので、scroll-margin が足りないと
+ * ヘッダーの下に潜る。
+ *
+ * html は scroll-behavior: smooth なので、クリック直後に測るとまだスクロールが
+ * 始まったばかりで、見出しは画面のはるか下にある（＝ヘッダーより下なので素通りする）。
+ * スクロールと Reveal の登場が止まるのを待ってから測る。
+ *
+ * PICK UP はページの最下部にあるので、画面が縦に長いとページの終わりで
+ * スクロールが止まり、scroll-margin が無くても見出しが下に余る（検査が効かない）。
+ * 実機のSafariに近い、縦の短い画面で測る。
+ */
+test("お知らせから PICK UP へ着地できる", async ({ page }) => {
+  // OPは初回訪問時に全画面を覆うので見た扱いにする（着地位置の検査の邪魔になる）
+  await page.addInitScript(() => {
+    try {
+      sessionStorage.setItem("op-seen", "1");
+    } catch {
+      /* noop */
+    }
+  });
+
+  for (const width of [375, 1280]) {
+    await page.setViewportSize({ width, height: 640 });
+
+    await page.goto("/news/");
+    const link = page.locator('a[href="/#pickup"]');
+    await expect(link, "PICK UP へ案内するお知らせがありません").toHaveCount(1);
+    await link.click();
+
+    const heading = page.locator("#pickup h2");
+    await expect(heading, `${width}px で PICK UP までスクロールしていません`).toBeInViewport();
+
+    // 150ms あけて2回測り、同じ位置なら止まったとみなす
+    let settledY: number | null = null;
+    await expect
+      .poll(async () => {
+        const before = (await heading.boundingBox())!.y;
+        await page.waitForTimeout(150);
+        const after = (await heading.boundingBox())!.y;
+        settledY = before === after ? after : null;
+        return settledY;
+      }, { message: `${width}px でスクロールが止まりません` })
+      .not.toBeNull();
+
+    const header = (await page.locator("header").boundingBox())!;
+    expect(
+      settledY!,
+      `${width}px で見出しがヘッダー（高さ${Math.round(header.height)}px）に隠れています（Y=${Math.round(settledY!)}）`,
+    ).toBeGreaterThanOrEqual(header.height);
+  }
+});
