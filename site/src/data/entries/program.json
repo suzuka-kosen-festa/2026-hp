@@ -77,7 +77,7 @@
     "id": "workshop-drone",
     "category": "イベント",
     "categoryLabel": "ワークショップ",
-    "name": "親子でドローン体験",
+    "name": "親子でドローン体験！ワークショップ",
     "group": "材料工学科",
     "summary": "教育用ドローンの操縦と、プログラミングによる自動飛行を体験できます。",
     "description": "教育用ドローン「CoDrone EDU」のマニュアル飛行とBlockly（ビジュアルプログラミング言語）による自動飛行を体験いただきます。Pythonによる自動飛行にも挑戦いただけます。産業、防災分野などでの活用が広がっているドローンの仕組み、飛行原理などを体験を通して理解いただけます。\n\nまた、無人航空機操縦士実地試験に対応した産業用ドローン「蒼天（SOTEN）」も展示いたします。ぜひご参加ください。",
@@ -90,30 +90,41 @@
     "occurrences": [
       {
         "day": "day1",
-        "start_time": "11:00",
-        "end_time": "12:00"
+        "start_time": "10:00",
+        "end_time": "11:30"
       },
       {
         "day": "day1",
-        "start_time": "14:00",
-        "end_time": "15:00"
+        "start_time": "13:00",
+        "end_time": "14:30"
       },
       {
         "day": "day2",
-        "start_time": "11:00",
-        "end_time": "12:00"
+        "start_time": "10:00",
+        "end_time": "11:30"
       },
       {
         "day": "day2",
-        "start_time": "14:00",
-        "end_time": "15:00"
+        "start_time": "13:00",
+        "end_time": "14:30"
       }
     ],
-    "audience": "親子",
-    "capacity": "各回親子5組（合計10名程度）",
+    "audience": "小学生(中学年〜高学年)と保護者",
+    "capacity": "各回5組",
+    "fee": "無料（別途、傷害保険料 50円/人）",
+    "application": {
+      "url": "https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=XYP-cpVeEkWK4KezivJfyNXHxjzMynRNuuQmuwM5UilURFBORUpTREhNVkowUkRQR1UwUUJUOTI2SSQlQCN0PWcu",
+      "opens": "2026-09-25",
+      "closes": "2026-10-14",
+      "guideUrl": "https://www.suzuka-ct.ac.jp/general/general_index/event/"
+    },
     "notes": [
-      "鈴鹿高専入試広報HPにて募集",
-      "応募多数の場合は抽選"
+      "事前応募者のみ",
+      "午前の部と午後の部は同じ内容です",
+      "実際に体験するのは、大人1名と子ども1名のペアです",
+      "応募フォームには、パソコンからのメールを受信できるメールアドレスを入力してください",
+      "応募者多数の場合は、主催者側で調整することがあります。結果は後日、応募者全員に通知されます",
+      "当日の様子を写真撮影し、鈴鹿高専ホームページに掲載する場合があります"
     ],
     "featured": true,
     "link": null
