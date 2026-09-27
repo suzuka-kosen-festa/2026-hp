@@ -44,11 +44,8 @@ const hasSchedule = entry.isPermanent || dayGroups.length > 0;
 // 落とす判定と表示名・色は lib/tags.ts が唯一の持ち主（Issue #53）
 const displayTags = toDisplayTags(entry.tags);
 
-// リーダーを先頭に並べる。データでは代表者とその他を分けて持っている
-const members = [
-  ...(entry.leader ? [{ ...entry.leader, isLeader: true }] : []),
-  ...(entry.members ?? []).map((member) => ({ ...member, isLeader: false })),
-];
+// 代表者を先頭に並べる（ラベルは付けない）。データでは代表者とその他を分けて持っている
+const members = [...(entry.leader ? [entry.leader] : []), ...(entry.members ?? [])];
 
 const application = entry.application ?? null;
 const applicationTimes = application ? applicationWindow(application) : null;
@@ -152,7 +149,6 @@ const applicationStatusAtBuild = application ? applicationStatus(application, Da
                   <li>
                     {member.name}
                     {member.affiliation && <span class="affiliation">（{member.affiliation}）</span>}
-                    {member.isLeader && <span class="role">リーダー</span>}
                   </li>
                 ))}
               </ul>
@@ -380,14 +376,6 @@ const applicationStatusAtBuild = application ? applicationStatus(application, Da
   }
   .affiliation {
     font-size: 12px;
-  }
-  .role {
-    margin-left: 6px;
-    padding: 0 6px;
-    font-size: 11px;
-    font-weight: 800;
-    color: #fff;
-    background: var(--blue);
   }
 
   .desc {
