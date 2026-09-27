@@ -541,7 +541,8 @@
     "category": "イベント",
     "name": "メモリーズ",
     "group": null,
-    "description": null,
+    "summary": "最終学年の5年生が学科ごとに踊る！",
+    "description": "最終学年である5年生が、学科ごとにダンスを披露します。踊る順番は、機械工学科 → 電気電子工学科 → 電子情報工学科 → 生物応用化学科 → 材料工学科 です。",
     "tags": [
       "day2"
     ],
@@ -561,7 +562,8 @@
     "category": "イベント",
     "name": "フィナーレ",
     "group": null,
-    "description": null,
+    "summary": "高専祭実行委員によるダンス。",
+    "description": "高専祭実行委員がダンスを披露します。",
     "tags": [
       "day2"
     ],
