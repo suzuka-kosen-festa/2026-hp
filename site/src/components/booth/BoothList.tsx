@@ -54,6 +54,7 @@ const TABS: TabConfig[] = [
     tags: [
       { id: "day1", label: formatDayLabel("day1") },
       { id: "day2", label: formatDayLabel("day2") },
+      { id: "中夜祭", label: tagLabel("中夜祭") },
     ],
   },
   {

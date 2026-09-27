@@ -104,25 +104,74 @@
 }
 .tl-grid {
   display: grid;
-  grid-template-columns: 20px repeat(3, minmax(0, 1fr));
+  /* 列数はタブごとに違う（日タブは3ステージ、中夜祭は2ステージ）。TSX側で--stage-countを渡す */
+  grid-template-columns: 20px repeat(var(--stage-count, 3), minmax(0, 1fr));
   column-gap: 6px;
 }
 .tl-corner {
   grid-row: 1;
+}
+
+/* 中夜祭タブの注意書き。一般の来場者が体育館へ向かわないよう、グリッドより先に目に入れる */
+.tl-notice {
+  margin-top: 20px;
+  padding: 14px 16px;
+  border: 2px solid var(--red);
+  background: #fff;
+  font-size: 13px;
+  line-height: 1.7;
+}
+.tl-notice-title {
+  display: inline-block;
+  margin-bottom: 6px;
+  padding: 2px 10px;
+  font-size: 12px;
+  font-weight: 800;
+  color: #fff;
+  background: var(--red);
+}
+.tl-notice-venue {
+  margin-top: 4px;
+  font-weight: 800;
+}
+
+/*
+ * 開場〜入場の帯。全ステージ列にまたがって重ねる（列本体と同じ行・ステージ列全体に置く）。
+ * 人が出る枠ではないので、企画カードとは見た目を変えて破線の帯にする
+ */
+.tl-marker-layer {
+  grid-row: 2;
+  grid-column: 2 / -1;
+  position: relative;
+  pointer-events: none;
+}
+.tl-marker {
+  position: absolute;
+  left: 2px;
+  right: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 2px dashed var(--ink);
+  background: var(--yellow);
+  font-size: 12px;
+  font-weight: 800;
 }
 /*
  * ステージごとのテーマ色。見出し・見出しの下線・枠の時刻に使う。
  * 緑はパレット（global.css）に無いのでここだけで持つ。赤・青と同じ深さの緑にし、
  * 10px台の時刻でも白地で読めるコントラスト（5.25:1）を確保している。
  * パレットの黄色は白地の文字だと約1.5:1で読めないため、SubStageには使わない（検証済み）。
+ * 中夜祭のT字ステージは墨（既定の色）のまま。
  */
-.tl-stage-MainStage {
+.tl-stage-main {
   --stage-color: var(--red);
 }
-.tl-stage-LiveStage {
+.tl-stage-live {
   --stage-color: var(--blue);
 }
-.tl-stage-SubStage {
+.tl-stage-sub {
   --stage-color: #0b7d34;
 }
 
@@ -139,6 +188,8 @@
 }
 .tl-axis-body {
   position: relative;
+  grid-row: 2;
+  grid-column: 1;
 }
 .tl-hour-label {
   position: absolute;
@@ -151,6 +202,7 @@
 }
 .tl-col-body {
   position: relative;
+  grid-row: 2;
   border-left: 1px solid #eee;
 }
 .tl-hour-line {
@@ -218,7 +270,7 @@
     padding: 0 8px;
   }
   .tl-grid {
-    grid-template-columns: 30px repeat(3, 1fr);
+    grid-template-columns: 30px repeat(var(--stage-count, 3), 1fr);
     column-gap: 12px;
   }
   .tl-col-header {

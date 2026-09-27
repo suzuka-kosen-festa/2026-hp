@@ -65,7 +65,7 @@ export interface Entry {
    * 企画を説明するdescriptionとは書き手が違うので分けて持ち、引用として見せる
    */
   comment?: string | null;
-  /** 出店:飲食-フード等 / 学科展示:M科等 / イベント:day1,day2,常設 / ライブ:day1,day2,中夜祭,決勝バンド */
+  /** 出店:飲食-フード等 / 学科展示:M科等 / イベント:day1,day2,常設,中夜祭 / ライブ:day1,day2,中夜祭,決勝バンド */
   tags: string[];
   /** 物理的な場所を持たない企画（コラージュカメラ等）はnull */
   location: string | null;

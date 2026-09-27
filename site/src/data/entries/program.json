@@ -1276,5 +1276,226 @@
       }
     ],
     "featured": false
+  },
+  {
+    "id": "chuyasai-staff-band",
+    "category": "ライブ",
+    "name": "教職員バンド",
+    "group": null,
+    "description": null,
+    "tags": [
+      "中夜祭"
+    ],
+    "location": "LiveStage",
+    "image": null,
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "15:30",
+        "end_time": "15:45"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "chuyasai-fashion-show",
+    "category": "イベント",
+    "name": "ファッションショー",
+    "group": null,
+    "description": null,
+    "tags": [
+      "中夜祭"
+    ],
+    "location": "T字ステージ",
+    "image": null,
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "15:45",
+        "end_time": "16:05"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "live-r04-notfound",
+    "category": "ライブ",
+    "name": "r04 NotFound",
+    "reading": "あーるぜろよんのっとふぁうんど",
+    "group": null,
+    "description": null,
+    "comment": "頑張ります！！",
+    "tags": [
+      "中夜祭"
+    ],
+    "location": "LiveStage",
+    "image": "/entries/live-r04-notfound.webp",
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "16:05",
+        "end_time": "16:20"
+      }
+    ],
+    "leader": {
+      "name": "濱田圭太郎"
+    },
+    "members": [
+      {
+        "name": "竹野萌花"
+      },
+      {
+        "name": "井上高志"
+      },
+      {
+        "name": "宮脇海里"
+      },
+      {
+        "name": "橋本琉空"
+      },
+      {
+        "name": "川村承太郎"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "chuyasai-body1-gp",
+    "category": "イベント",
+    "name": "Body1グランプリ",
+    "group": null,
+    "description": null,
+    "tags": [
+      "中夜祭"
+    ],
+    "location": "T字ステージ",
+    "image": null,
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "16:20",
+        "end_time": "16:35"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "live-archans",
+    "category": "ライブ",
+    "name": "アーチャンズ",
+    "reading": "あーちゃんず",
+    "group": null,
+    "description": null,
+    "comment": "本気出します",
+    "tags": [
+      "中夜祭"
+    ],
+    "location": "LiveStage",
+    "image": "/entries/live-archans.webp",
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "16:35",
+        "end_time": "16:50"
+      }
+    ],
+    "leader": {
+      "name": "眞田朱"
+    },
+    "members": [
+      {
+        "name": "中澤翼"
+      },
+      {
+        "name": "田中爽太"
+      },
+      {
+        "name": "三浦大輝"
+      },
+      {
+        "name": "丸山優香"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "chuyasai-vocal1-winner",
+    "category": "イベント",
+    "name": "Vocal1グランプリ優勝者",
+    "group": null,
+    "description": null,
+    "tags": [
+      "中夜祭"
+    ],
+    "location": "T字ステージ",
+    "image": null,
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "16:50",
+        "end_time": "16:55"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "chuyasai-ore1-gp",
+    "category": "イベント",
+    "name": "オレ1グランプリ",
+    "group": null,
+    "description": null,
+    "tags": [
+      "中夜祭"
+    ],
+    "location": "LiveStage",
+    "image": null,
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "16:55",
+        "end_time": "17:10"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "chuyasai-dance-otagei",
+    "category": "イベント",
+    "name": "ダンスバトル優勝チーム＆ヲタ芸",
+    "group": null,
+    "description": null,
+    "tags": [
+      "中夜祭"
+    ],
+    "location": "LiveStage",
+    "image": null,
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "17:10",
+        "end_time": "17:20"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "chuyasai-kakuzuke",
+    "category": "イベント",
+    "name": "格付けチェック",
+    "group": null,
+    "description": null,
+    "tags": [
+      "中夜祭"
+    ],
+    "location": "T字ステージ",
+    "image": null,
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "17:20",
+        "end_time": "17:35"
+      }
+    ],
+    "featured": false
   }
 ]
