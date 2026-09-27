@@ -38,7 +38,7 @@
 **Interfaces:**
 - `type OpVariant = "current" | "candidate1" | "candidate2"`
 - `const OP_VARIANTS: readonly OpVariant[]`
-- `const OP_DURATIONS: Record<OpVariant, number>`、単位はms、値は4800・3400・4000
+- `const OP_DURATIONS: Record<OpVariant, number>`、単位はms、値は4200・3400・4000
 - `selectOpVariant(saved: string | null, random: () => number): OpVariant`
 - `OpSplash` は選択済みIDを保持し、表示中の演出と終了タイマーを同じIDに対応させる。
 

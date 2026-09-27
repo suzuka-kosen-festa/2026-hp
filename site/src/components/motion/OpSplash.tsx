@@ -87,9 +87,9 @@ function animateStage(stage: HTMLElement, day: string) {
     { transform: "translateY(115%) rotate(-8deg)", easing: "ease-in-out" },
     { transform: "translateY(-2%) rotate(0)", offset: .5, easing: "ease-in-out" },
     { transform: "translateY(-115%) rotate(5deg)" },
-  ], 4000, 800);
-  animate(stage.querySelector(".op-finale"), [{ opacity: 0 }, { opacity: 1 }], 4400, 1);
-  animate(stage.querySelector(".op-finale img"), [{ transform: "scale(.97)" }, { transform: "none" }], 4400, 400);
+  ], 3400, 800);
+  animate(stage.querySelector(".op-finale"), [{ opacity: 0 }, { opacity: 1 }], 3800, 1);
+  animate(stage.querySelector(".op-finale img"), [{ transform: "scale(.97)" }, { transform: "none" }], 3800, 400);
   return () => animations.forEach((animation) => animation.cancel());
 }
 
