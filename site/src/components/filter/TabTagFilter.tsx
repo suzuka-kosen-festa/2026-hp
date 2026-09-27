@@ -32,8 +32,13 @@ export default function TabTagFilter({ tabs, activeTab, onTabChange, selectedTag
     onTagsChange([]);
   }
 
+  /**
+   * タグは1つだけ選べる。別のタグを押すと選び直し、選択中のタグをもう一度押すと解除。
+   * 以前は複数選べてOR検索になっていたが、「10/31 と 飲食-フード」のような組み合わせは
+   * ORだと広がるだけで使い道が無かった
+   */
   function toggleTag(tagId: string) {
-    onTagsChange(selectedTags.includes(tagId) ? selectedTags.filter((t) => t !== tagId) : [...selectedTags, tagId]);
+    onTagsChange(selectedTags.includes(tagId) ? [] : [tagId]);
   }
 
   return (

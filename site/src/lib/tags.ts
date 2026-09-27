@@ -1,4 +1,5 @@
 import type { Entry } from "../types/content";
+import { isOutsideDayTabs } from "./entries";
 
 /** チップの色。Chip.astro / .bl-chip が持っているのはこの2色 */
 export type TagColor = "red" | "blue";
@@ -77,7 +78,8 @@ export function displayTags(tags: string[]) {
  * データ側で day タグを書き忘れても絞り込みから漏れなくなる。
  */
 export function matchesTag(entry: Entry, tag: string) {
-  if (isDayTag(tag)) return entry.occurrences.some((occurrence) => occurrence.day === tag);
+  // 中夜祭は day1 の夜に開催されるが、日付では絞り込まず「中夜祭」タグでだけ出す（timetable の日タブと同じ扱い）
+  if (isDayTag(tag)) return !isOutsideDayTabs(entry) && entry.occurrences.some((occurrence) => occurrence.day === tag);
 
   return entry.tags.includes(tag);
 }

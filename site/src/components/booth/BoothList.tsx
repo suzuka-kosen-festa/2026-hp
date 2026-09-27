@@ -84,7 +84,8 @@ export default function BoothList({ entries }: Props) {
   useEffect(() => {
     const { tab, tags } = parseFilterParams(window.location.search);
     if (tab && TABS.some((t) => t.id === tab)) setActiveTab(tab);
-    if (tags.length > 0) setSelectedTags(tags);
+    // タグは1つだけ選べる。古いリンク等で複数来たら先頭だけ使う
+    if (tags.length > 0) setSelectedTags(tags.slice(0, 1));
   }, []);
 
   // タブ・タグの選択をURLに反映する

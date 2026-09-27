@@ -15,6 +15,14 @@ const SCHEDULABLE_CATEGORIES: Category[] = ["イベント", "ライブ"];
 const CHUYASAI_TAG = "中夜祭";
 const DAY_TAB_EXCLUDED_TAGS = [CHUYASAI_TAG];
 
+/**
+ * 日付（Day1/Day2）の枠に入れない特別枠のエントリか。中夜祭は実際には day1 の夜に開催されるが、
+ * timetable の日タブにも booth の日付の絞り込みにも出さず、「中夜祭」として別に扱う
+ */
+export function isOutsideDayTabs(entry: Entry): boolean {
+  return entry.tags.some((tag) => DAY_TAB_EXCLUDED_TAGS.includes(tag));
+}
+
 /** timetableの1行ぶん。1エントリが1日に複数公演を持つため、エントリ単位では行を表せない */
 export interface ScheduledSlot {
   entry: Entry;
@@ -37,7 +45,7 @@ function toSlots(entries: Entry[], day: Day): ScheduledSlot[] {
  */
 export function getScheduledSlots(entries: Entry[], day: Day): ScheduledSlot[] {
   return toSlots(
-    entries.filter((entry) => !entry.tags.some((tag) => DAY_TAB_EXCLUDED_TAGS.includes(tag))),
+    entries.filter((entry) => !isOutsideDayTabs(entry)),
     day,
   );
 }
