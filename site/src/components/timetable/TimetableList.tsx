@@ -162,36 +162,6 @@ export default function TimetableList({ entries }: Props) {
 
   return (
     <div className="timetable-list" id="list">
-      {permanentEntries.length > 0 && (
-        <div className="tl-permanent">
-          <h2 className="tl-permanent-title">常設</h2>
-          <ul className="tl-permanent-list">
-            {permanentEntries.map((entry) => (
-              <li key={entry.id} className="tl-permanent-card">
-                <div className="tl-permanent-photo">
-                  {entry.image ? (
-                    <img src={entry.image} alt="" loading="lazy" />
-                  ) : (
-                    <span className="tl-no-image num">NO IMAGE</span>
-                  )}
-                </div>
-                <div className="tl-permanent-body">
-                  <a className="tl-permanent-link" href={`/entry/${entry.id}/`}>
-                    <p className="tl-permanent-name">{entry.name}</p>
-                    {entry.summary && <p className="tl-permanent-summary">{entry.summary}</p>}
-                  </a>
-                  {entry.link && (
-                    <a className="tl-permanent-cta" href={entry.link}>
-                      {entry.linkLabel ?? "やってみる →"}
-                    </a>
-                  )}
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-
       <TabTagFilter
         tabs={TAB_OPTIONS}
         activeTab={activeTab}
@@ -274,6 +244,37 @@ export default function TimetableList({ entries }: Props) {
 
         {slots.length === 0 && <p className="tl-empty">この日程の該当企画はまだありません</p>}
       </div>
+
+      {/* 常設・期間中の企画はグリッドの下に置く。当日まず見たいのは時刻の表なので */}
+      {permanentEntries.length > 0 && (
+        <div className="tl-permanent">
+          <h2 className="tl-permanent-title">常設</h2>
+          <ul className="tl-permanent-list">
+            {permanentEntries.map((entry) => (
+              <li key={entry.id} className="tl-permanent-card">
+                <div className="tl-permanent-photo">
+                  {entry.image ? (
+                    <img src={entry.image} alt="" loading="lazy" />
+                  ) : (
+                    <span className="tl-no-image num">NO IMAGE</span>
+                  )}
+                </div>
+                <div className="tl-permanent-body">
+                  <a className="tl-permanent-link" href={`/entry/${entry.id}/`}>
+                    <p className="tl-permanent-name">{entry.name}</p>
+                    {entry.summary && <p className="tl-permanent-summary">{entry.summary}</p>}
+                  </a>
+                  {entry.link && (
+                    <a className="tl-permanent-cta" href={entry.link}>
+                      {entry.linkLabel ?? "やってみる →"}
+                    </a>
+                  )}
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }
