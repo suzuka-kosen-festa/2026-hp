@@ -9,7 +9,7 @@ import Chip from "../../components/ui/Chip.astro";
 import Button from "../../components/ui/Button.astro";
 import Star from "../../components/ui/Star.astro";
 import { entries } from "../../lib/loadEntries";
-import { dayColorClass, formatDayLabel } from "../../lib/eventDate";
+import { DAY_DATES, dayColorClass, formatDayLabel } from "../../lib/eventDate";
 import { displayTags as toDisplayTags, tagColor, tagLabel } from "../../lib/tags";
 import { applicationStatus, applicationWindow, formatApplicationDate } from "../../lib/application";
 import type { Day, Entry, Occurrence } from "../../types/content";
@@ -45,8 +45,12 @@ const hasSchedule = entry.isPermanent || dayGroups.length > 0;
 const displayTags = toDisplayTags(entry.tags);
 
 const application = entry.application ?? null;
-const applicationTimes = application ? applicationWindow(application) : null;
-const applicationStatusAtBuild = application ? applicationStatus(application, Date.now()) : null;
+// 締切日の無い募集（定員に達し次第締切）は、最初の開催日の0時にボタンを閉じる
+const firstDay = dayGroups[0]?.day;
+const eventDate = firstDay ? DAY_DATES[firstDay] : null;
+const applicationTimes = application ? applicationWindow(application, eventDate) : null;
+const applicationStatusAtBuild = application ? applicationStatus(application, Date.now(), eventDate) : null;
+const closesLabel = application?.closes ? formatApplicationDate(application.closes) : "定員に達し次第締切";
 ---
 
 <BaseLayout title={`${entry.name} | ${site.eventName}`} description={entry.summary ?? entry.description ?? undefined}>
@@ -154,10 +158,18 @@ const applicationStatusAtBuild = application ? applicationStatus(application, Da
           <div class="fact">
             <dt>募集期間</dt>
             <dd>
-              {formatApplicationDate(application.opens)}〜{formatApplicationDate(application.closes)}
+              {formatApplicationDate(application.opens)}〜{closesLabel}
             </dd>
           </div>
         )
+      }
+      {
+        entry.extraFacts?.map((fact) => (
+          <div class="fact">
+            <dt>{fact.label}</dt>
+            <dd>{fact.value}</dd>
+          </div>
+        ))
       }
     </dl>
 
@@ -187,7 +199,7 @@ const applicationStatusAtBuild = application ? applicationStatus(application, Da
               申し込む →
             </Button>
             <p class="apply-note">
-              {formatApplicationDate(application.closes)}まで受付。応募フォーム（外部サイト）が別タブで開きます
+              {application.closes ? `${closesLabel}まで受付` : closesLabel}。応募フォーム（外部サイト）が別タブで開きます
             </p>
           </div>
           <p class="apply-closed" data-apply-state="before" hidden={applicationStatusAtBuild !== "before"}>
@@ -206,6 +218,20 @@ const applicationStatusAtBuild = application ? applicationStatus(application, Da
             )
           }
         </div>
+      )
+    }
+
+    {
+      entry.resources && entry.resources.length > 0 && (
+        <ul class="resources">
+          {entry.resources.map((resource) => (
+            <li>
+              <a href={resource.url} target="_blank" rel="noopener noreferrer">
+                {resource.label} ↗
+              </a>
+            </li>
+          ))}
+        </ul>
       )
     }
 
@@ -398,6 +424,19 @@ const applicationStatusAtBuild = application ? applicationStatus(application, Da
 
   .apply {
     margin-top: 28px;
+  }
+
+  .resources {
+    list-style: none;
+    margin-top: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 12.5px;
+    font-weight: 700;
+  }
+  .resources a {
+    text-decoration: underline;
   }
 
   /* hidden 属性より display 指定が勝たないよう念のため明示する */

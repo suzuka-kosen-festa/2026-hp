@@ -13,11 +13,18 @@ function startOfDayJst(date: string): number {
 /**
  * 受付状態の判定に使う境界。締切日は「その日の終わりまで」なので翌日0時を境にする。
  * 閲覧時にも判定し直すため、ページには数値にして埋め込む（[id].astro の data-*）
+ *
+ * 締切日が無い募集（定員に達し次第締切）は、開催日 `eventDate` の0時で閉じる。
+ * 開催日も無ければ閉じない
  */
-export function applicationWindow(application: Application) {
+export function applicationWindow(application: Application, eventDate?: string | null) {
+  let closesAt = Number.POSITIVE_INFINITY;
+  if (application.closes) closesAt = startOfDayJst(application.closes) + DAY_MS;
+  else if (eventDate) closesAt = startOfDayJst(eventDate);
+
   return {
     opensAt: startOfDayJst(application.opens),
-    closesAt: startOfDayJst(application.closes) + DAY_MS,
+    closesAt,
   };
 }
 
@@ -28,8 +35,8 @@ export function statusAt(opensAt: number, closesAt: number, now: number): Applic
   return "open";
 }
 
-export function applicationStatus(application: Application, now: number): ApplicationStatus {
-  const { opensAt, closesAt } = applicationWindow(application);
+export function applicationStatus(application: Application, now: number, eventDate?: string | null): ApplicationStatus {
+  const { opensAt, closesAt } = applicationWindow(application, eventDate);
   return statusAt(opensAt, closesAt, now);
 }
 

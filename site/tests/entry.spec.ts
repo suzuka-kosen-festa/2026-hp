@@ -121,17 +121,38 @@ test.describe("表示用のカテゴリ名", () => {
  * 日付が変わっても成り立つ。申込を持つ企画ごとに検査する（企画ごとにフォームも
  * 締切も違うので、先頭の1件だけ見ていると2件目以降の取り違えを見逃す。Issue #100）
  */
+type ApplicationEntry = (typeof entries)[number] & {
+  application: { url: string; opens: string; closes?: string | null };
+  occurrences: { day: "day1" | "day2" }[];
+};
 const withApplication = entries.filter(
   (entry) => (entry as { application?: unknown }).application,
-) as ((typeof entries)[number] & { application: { url: string; opens: string; closes: string } })[];
+) as ApplicationEntry[];
+
+const site = JSON.parse(readFileSync(fileURLToPath(new URL("../src/data/site.json", import.meta.url)), "utf8")) as {
+  day1Date: string;
+  day2Date: string;
+};
 
 const jst = (date: string, time: string) => new Date(`${date}T${time}+09:00`);
+const DAY_MS = 24 * 60 * 60 * 1000;
 
-for (const { id, application } of withApplication) {
+/**
+ * ボタンを閉じる瞬間。締切日があれば「締切日の日本時間 24:00」、
+ * 無ければ（ゲーム大会のような定員締切）「最初の開催日の 0:00」。
+ */
+function closesAt({ application, occurrences }: ApplicationEntry): Date {
+  if (application.closes) return new Date(jst(application.closes, "00:00:00").getTime() + DAY_MS);
+  const firstDay = ["day1", "day2"].find((day) => occurrences.some((o) => o.day === day)) as "day1" | "day2";
+  return jst(firstDay === "day1" ? site.day1Date : site.day2Date, "00:00:00");
+}
+
+for (const entry of withApplication) {
+  const { id, application } = entry;
   test.describe(`entry の申込導線（${id}）`, () => {
     test("受付期間中は申込ボタンを出し、フォームを別タブで開く", async ({ page }) => {
-      // 締切日の最後の1分。境界の取り違え（締切日の0時で閉じる）をここで捕まえる
-      await page.clock.setFixedTime(jst(application.closes, "23:59:00"));
+      // 閉じる直前の1分。境界の取り違え（締切日の0時で閉じる等）をここで捕まえる
+      await page.clock.setFixedTime(closesAt(entry).getTime() - 60 * 1000);
       await page.goto(`/entry/${id}/`);
 
       const button = page.getByRole("link", { name: "申し込む" });
@@ -143,8 +164,7 @@ for (const { id, application } of withApplication) {
     });
 
     test("締切を過ぎたら申込ボタンを閉じる", async ({ page }) => {
-      const nextDay = new Date(jst(application.closes, "00:00:00").getTime() + 24 * 60 * 60 * 1000);
-      await page.clock.setFixedTime(nextDay);
+      await page.clock.setFixedTime(closesAt(entry));
       await page.goto(`/entry/${id}/`);
 
       await expect(page.getByText("募集は終了しました")).toBeVisible();
@@ -158,5 +178,55 @@ for (const { id, application } of withApplication) {
       await expect(page.getByText("から受付開始")).toBeVisible();
       await expect(page.getByRole("link", { name: "申し込む" })).toBeHidden();
     });
+
+    /* 締切日の無い募集で「〜null」「undefinedまで受付」のような表示にならないこと */
+    test("募集期間の終わりを正しく書く", async ({ page }) => {
+      await page.goto(`/entry/${id}/`, { waitUntil: "domcontentloaded" });
+      const period = page.locator(".fact", { hasText: "募集期間" });
+      await expect(period).not.toContainText(/null|undefined|NaN/);
+      if (!application.closes) await expect(period).toContainText("定員に達し次第締切");
+    });
+  });
+}
+
+/**
+ * 資料リンク（参加者規約・大会ポスターなど）。
+ *
+ * サイト内に置いたポスター画像はファイル名の書き間違いでリンク切れになりうるので、
+ * 実際に取れることまで見る。外部リンクは相手の都合で落ちるので、ここでは叩かない。
+ */
+const withResources = entries.filter(
+  (entry) => ((entry as { resources?: unknown[] }).resources ?? []).length > 0,
+) as ((typeof entries)[number] & { resources: { label: string; url: string }[] })[];
+
+for (const { id, resources } of withResources) {
+  test(`資料リンクを別タブで開く（${id}）`, async ({ page }) => {
+    await page.goto(`/entry/${id}/`, { waitUntil: "domcontentloaded" });
+    for (const resource of resources) {
+      const link = page.locator(".resources a", { hasText: resource.label });
+      await expect(link, `${resource.label} のリンクがありません`).toHaveAttribute("href", resource.url);
+      await expect(link).toHaveAttribute("target", "_blank");
+      if (resource.url.startsWith("/")) {
+        const response = await page.request.get(resource.url);
+        expect(response.ok(), `${resource.url} が取得できません`).toBeTruthy();
+      }
+    }
+  });
+}
+
+/**
+ * 追加の項目（大会許諾番号など）。任天堂のガイドラインで告知への記載が求められる
+ * ものなので、注意書きに埋もれず項目として出ていることを見る。
+ */
+const withExtraFacts = entries.filter(
+  (entry) => ((entry as { extraFacts?: unknown[] }).extraFacts ?? []).length > 0,
+) as ((typeof entries)[number] & { extraFacts: { label: string; value: string }[] })[];
+
+for (const { id, extraFacts } of withExtraFacts) {
+  test(`追加の項目を出す（${id}）`, async ({ page }) => {
+    await page.goto(`/entry/${id}/`, { waitUntil: "domcontentloaded" });
+    for (const fact of extraFacts) {
+      await expect(page.locator(".fact", { hasText: fact.label })).toContainText(fact.value);
+    }
   });
 }
