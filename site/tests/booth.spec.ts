@@ -80,10 +80,15 @@ test("カードのチップに内部キーが出ない", async ({ page }) => {
   test.skip(boothHidden, "/booth/ が準備中のため（src/data/release.json）");
 
   await page.goto("/booth/", { waitUntil: "networkidle" });
-  await page.getByRole("tab", { name: "学科展示" }).click();
 
-  const chips = await page.locator(".bl-chip").allTextContents();
-  expect(chips.length, "学科展示のカードにチップが1つも出ていません").toBeGreaterThan(0);
+  // 特定のタブに決め打ちすると、そのタブのデータが空の間（学科展示は実データ待ち）に
+  // 何も検査しなくなるので、全タブのチップを集めて見る
+  const chips: string[] = [];
+  for (const tab of await page.getByRole("tab").all()) {
+    await tab.click();
+    chips.push(...(await page.locator(".bl-chip").allTextContents()));
+  }
+  expect(chips.length, "どのタブのカードにもチップが1つも出ていません").toBeGreaterThan(0);
   expect(
     chips.filter((text) => /^(day[12]|[MEICS]科)$/.test(text.trim())),
     "内部キーがそのままチップに出ています",
