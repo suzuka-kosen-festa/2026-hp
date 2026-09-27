@@ -81,9 +81,6 @@ export default function HamburgerMenu({ navItems, currentPath }: Props) {
                 </motion.li>
               ))}
             </ul>
-            <button type="button" className="close-btn" onClick={() => setOpen(false)} aria-label="メニューを閉じる">
-              ✕
-            </button>
           </motion.nav>
         )}
       </AnimatePresence>
