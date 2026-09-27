@@ -1,0 +1,10 @@
+.op-candidate1{position:absolute;inset:0;overflow:hidden;isolation:isolate;background:#fff;color:#282824}
+.op1-chrome{position:absolute;left:5%;right:5%;display:flex;justify-content:space-between;font:600 10px Arial,sans-serif;letter-spacing:.1em}
+.op1-top{top:32px}.op1-bottom{bottom:35px}
+.op1-composition{position:absolute;inset:15% 7%;display:grid;place-items:center}
+.op1-logo{position:absolute;width:min(100%,790px);aspect-ratio:2}
+.op1-logo .logo-piece{position:absolute;inset:0;background-position:center;background-size:contain;background-repeat:no-repeat;will-change:transform,opacity}
+.op1-digits{position:absolute;inset:0;display:flex;justify-content:center;align-items:center;mix-blend-mode:multiply}
+.op1-digit{position:relative;width:min(20vw,250px);aspect-ratio:1;margin:0 -12px}
+.op1-digit .digit-piece{position:absolute;inset:0;background-image:url('/op/candidate1-digits.png');background-size:500% 200%;background-repeat:no-repeat;will-change:transform,opacity}
+@media(max-width:800px){.op1-composition{inset:18% 5%}.op1-chrome{font-size:8px;letter-spacing:.02em}.op1-top{top:24px}.op1-bottom{bottom:24px}.op1-digit{width:min(145px,30vw);margin:0 -10px}}

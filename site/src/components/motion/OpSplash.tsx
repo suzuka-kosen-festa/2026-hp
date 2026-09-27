@@ -3,10 +3,13 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import themeLogoUrl from "../../assets/logo/theme-logo.png";
 import "./OpSplash.css";
 import "./OpSplash.initial.css";
+import { OP_DURATIONS, selectOpVariant, type OpVariant } from "./opVariants";
+import OpCandidate1 from "./OpCandidate1";
+import OpCandidate2 from "./OpCandidate2";
 
 const SESSION_KEY = "op-seen";
+const VARIANT_KEY = "op-variant";
 export const OP_REPLAY_EVENT = "op:replay";
-const DURATION = 4200;
 const LOAD_FAILSAFE_MS = 5000;
 
 type NetworkInformation = { saveData?: boolean; effectiveType?: string };
@@ -40,8 +43,9 @@ function makeClips() {
 }
 const CLIPS = makeClips();
 
-function preloadOpAssets() {
-  return Promise.all(["/op/countdown-digits.png", themeLogoUrl.src].map((src) => new Promise<void>((resolve) => {
+function preloadOpAssets(variant: OpVariant) {
+  const digits = variant === "candidate1" ? "/op/candidate1-digits.png" : "/op/countdown-digits.png";
+  return Promise.all([digits, themeLogoUrl.src].map((src) => new Promise<void>((resolve) => {
     const image = new Image();
     image.onload = image.onerror = () => resolve();
     image.src = src;
@@ -112,6 +116,8 @@ function CountdownStage({ day }: { day: string }) {
 export default function OpSplash() {
   const reduceMotion = useReducedMotion();
   const [visible, setVisible] = useState(false), [run, setRun] = useState(0);
+  const [variant, setVariant] = useState<OpVariant>("current");
+  const selectedVariant = useRef<OpVariant | null>(null);
   const closed = useRef(false), endTimer = useRef<number | null>(null);
   const clearTimer = () => { if (endTimer.current !== null) window.clearTimeout(endTimer.current); endTimer.current = null; };
   const close = () => {
@@ -120,9 +126,20 @@ export default function OpSplash() {
     try { sessionStorage.setItem(SESSION_KEY, "1"); } catch { /* unavailable storage */ }
     setVisible(false);
   };
+  const chooseVariant = () => {
+    if (!selectedVariant.current) {
+      let saved: string | null = null;
+      try { saved = sessionStorage.getItem(VARIANT_KEY); } catch { /* unavailable storage */ }
+      selectedVariant.current = selectOpVariant(saved, Math.random);
+      try { sessionStorage.setItem(VARIANT_KEY, selectedVariant.current); } catch { /* unavailable storage */ }
+    }
+    return selectedVariant.current;
+  };
   const show = () => {
+    const chosen = chooseVariant();
+    setVariant(chosen);
     clearTimer(); closed.current = false; setRun(value => value + 1); setVisible(true);
-    document.getElementById("op-cover")?.remove(); endTimer.current = window.setTimeout(close, DURATION);
+    document.getElementById("op-cover")?.remove(); endTimer.current = window.setTimeout(close, OP_DURATIONS[chosen]);
   };
   useEffect(() => {
     let cancelled = false;
@@ -133,18 +150,21 @@ export default function OpSplash() {
       document.getElementById("op-cover")?.remove();
     } else {
       const failsafe = window.setTimeout(() => { if (!cancelled && !visible) close(); }, LOAD_FAILSAFE_MS);
-      preloadOpAssets().then(() => {
+      preloadOpAssets(chooseVariant()).then(() => {
         window.clearTimeout(failsafe);
         if (!cancelled && !closed.current) show();
       });
     }
-    const replay = () => { preloadOpAssets().then(() => { if (!cancelled) show(); }); };
+    const replay = () => { preloadOpAssets(chooseVariant()).then(() => { if (!cancelled) show(); }); };
     window.addEventListener(OP_REPLAY_EVENT, replay);
     return () => { cancelled = true; clearTimer(); window.removeEventListener(OP_REPLAY_EVENT, replay); };
     // The replay event deliberately owns subsequent runs.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  return <AnimatePresence>{visible ? <motion.div className="op-splash" exit={{ opacity: 0 }} transition={{ duration: .3, ease: "easeOut" }}>
-    <CountdownStage day={daysToFestival()} key={run} /><button type="button" className="op-skip" aria-label="SKIP" onClick={close}>SKIP ↗</button>
+  return <AnimatePresence>{visible ? <motion.div className="op-splash" data-op-variant={variant} exit={{ opacity: 0 }} transition={{ duration: .3, ease: "easeOut" }}>
+    {variant === "candidate1" ? <OpCandidate1 day={daysToFestival()} key={run} /> :
+      variant === "candidate2" ? <OpCandidate2 day={daysToFestival()} key={run} /> :
+        <CountdownStage day={daysToFestival()} key={run} />}
+    <button type="button" className="op-skip" aria-label="SKIP" onClick={close}>SKIP ↗</button>
   </motion.div> : null}</AnimatePresence>;
 }
