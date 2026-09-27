@@ -123,7 +123,8 @@
     "category": "イベント",
     "name": "オープニング",
     "group": null,
-    "description": null,
+    "summary": "第61回鈴鹿高専祭の開幕！",
+    "description": "第61回鈴鹿高専祭の開幕です。部活動の表彰、校長先生・青峰同窓会会長のあいさつ、協賛企業のご紹介のあと、今年の新企画「わらしべ長者」のスタートをお知らせします。",
     "tags": [
       "day1"
     ],
@@ -143,7 +144,8 @@
     "category": "ライブ",
     "name": "音楽部コンサート",
     "group": null,
-    "description": null,
+    "summary": "鈴鹿高専音楽部によるコンサート。",
+    "description": "鈴鹿高専音楽部によるコンサートです。両日ともオープニングのあとに、メインステージ前で演奏します。",
     "tags": [
       "day1",
       "day2"
@@ -169,7 +171,8 @@
     "category": "イベント",
     "name": "ダンスバトル",
     "group": null,
-    "description": null,
+    "summary": "6チームがダンスで競い、観客の投票で優勝を決める。",
+    "description": "6チームが順番にダンスを披露し、観客のみなさんの投票（5段階評価）で優勝チームを決めます。優勝チームは中夜祭のステージにも出場します。",
     "tags": [
       "day1"
     ],
@@ -182,6 +185,10 @@
         "end_time": "11:10"
       }
     ],
+    "participation": "出場者の募集は終了しました。投票はどなたでも参加できます",
+    "notes": [
+      "三脚を使った撮影はご遠慮ください"
+    ],
     "featured": false
   },
   {
@@ -189,7 +196,8 @@
     "category": "イベント",
     "name": "ダンスバトル表彰式",
     "group": null,
-    "description": null,
+    "summary": "ダンスバトルの結果発表と表彰式。",
+    "description": "ダンスバトルの結果発表と表彰式です。出場した全チームがステージに集まり、優勝チームにトロフィーを贈ります。",
     "tags": [
       "day1"
     ],
@@ -209,7 +217,8 @@
     "category": "イベント",
     "name": "オレ1グランプリ予選",
     "group": null,
-    "description": null,
+    "summary": "高専生コンビの漫才。観客の投票で本選に進む3組を決める。",
+    "description": "テレビ番組「M-1グランプリ」の高専版。高専生のコンビが漫才を披露し、観客のみなさんの投票で、中夜祭の本選に進む3組を決めます。",
     "tags": [
       "day1"
     ],
@@ -222,6 +231,7 @@
         "end_time": "11:50"
       }
     ],
+    "participation": "出場者の募集は終了しました。投票はどなたでも参加できます",
     "featured": false
   },
   {
@@ -229,7 +239,8 @@
     "category": "イベント",
     "name": "よさこい勝山組",
     "group": null,
-    "description": null,
+    "summary": "よさこい同好会「勝山組」の演舞。",
+    "description": "よさこい同好会「勝山組」が、メインステージ前で演舞を披露します。",
     "tags": [
       "day1",
       "day2"
@@ -255,7 +266,8 @@
     "category": "イベント",
     "name": "Vocal1グランプリ",
     "group": null,
-    "description": null,
+    "summary": "高専歌うま王決定戦！観客の投票で順位を決める。",
+    "description": "高専で一番歌がうまいのは誰だ！高専歌うま王決定戦！出場者が持ち歌をフルコーラスで披露し、観客のみなさんの投票で順位を決めるのど自慢コンテストです。優勝者は中夜祭のステージでも歌います。",
     "tags": [
       "day1"
     ],
@@ -268,16 +280,54 @@
         "end_time": "13:10"
       }
     ],
+    "participation": "出場者の募集は終了しました。投票はどなたでも参加できます",
     "featured": false
+  },
+  {
+    "id": "main-bazaar-gp",
+    "category": "イベント",
+    "name": "バザーグランプリ",
+    "group": null,
+    "summary": "来場者の投票で一番人気の飲食バザーを決める！",
+    "description": "高専祭に出店している飲食バザーの中から、来場者のみなさんの投票で一番人気のバザーを決めます。実際にバザーを利用して、良かったと思う団体に投票してください。1日目に中間発表、2日目に最終結果（3位まで）をメインステージで発表します。",
+    "tags": [
+      "day1",
+      "day2",
+      "常設",
+      "当日参加OK"
+    ],
+    "location": "MainStage",
+    "image": null,
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "13:45",
+        "end_time": "13:55",
+        "note": "中間発表"
+      },
+      {
+        "day": "day2",
+        "start_time": "13:40",
+        "end_time": "13:50",
+        "note": "最終結果発表"
+      }
+    ],
+    "period": "10/31・11/1 の2日間（投票受付）",
+    "participation": "どなたでも投票できます（申込不要）。パンフレットのQRコードか、下のボタンから投票してください",
+    "featured": false,
+    "link": "https://docs.google.com/forms/d/e/1FAIpQLScxYlx_uv9bh0pLt1gYIu2fBQf0PLJPwLbJqeZi_2ngYCf3LQ/viewform",
+    "linkLabel": "投票する →"
   },
   {
     "id": "main-hayaoshi-quiz",
     "category": "イベント",
     "name": "みんはや",
     "group": null,
-    "description": "みんなで早押しクイズ",
+    "summary": "アプリで会場のみんなと早押しクイズ。1位には景品！",
+    "description": "アプリ「みんなで早押しクイズ」を使って、会場のみんなで早押しクイズに挑戦！正解するたびに得点が入り、早く正解するほど追加得点がもらえます。一番になった人には景品を贈ります。",
     "tags": [
-      "day1"
+      "day1",
+      "当日参加OK"
     ],
     "location": "MainStage",
     "image": null,
@@ -288,24 +338,18 @@
         "end_time": "13:40"
       }
     ],
-    "featured": false
-  },
-  {
-    "id": "main-bazaar-gp-interim",
-    "category": "イベント",
-    "name": "バザーグランプリ 中間発表",
-    "group": null,
-    "description": null,
-    "tags": [
-      "day1"
+    "participation": "当日その場で参加できます（申込不要）",
+    "notes": [
+      "参加にはスマートフォンと、アプリ「みんなで早押しクイズ」が必要です。開始前にインストールしておいてください"
     ],
-    "location": "MainStage",
-    "image": null,
-    "occurrences": [
+    "links": [
       {
-        "day": "day1",
-        "start_time": "13:45",
-        "end_time": "13:55"
+        "label": "App Store",
+        "url": "https://apps.apple.com/jp/app/%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E6%97%A9%E6%8A%BC%E3%81%97%E3%82%AF%E3%82%A4%E3%82%BA/id1044039663"
+      },
+      {
+        "label": "Google Play",
+        "url": "https://play.google.com/store/apps/details?id=com.tactosh.quiz&hl=ja"
       }
     ],
     "featured": false
@@ -315,7 +359,8 @@
     "category": "イベント",
     "name": "アタック25",
     "group": null,
-    "description": null,
+    "summary": "25枚のパネルを奪い合う早押しクイズ。",
+    "description": "クイズ番組でおなじみの、25枚のパネルを奪い合う早押しクイズです。5チームが25問に挑み、正解したチームがパネルを1枚獲得。最後に一番多くのパネルを取ったチームが優勝です。",
     "tags": [
       "day1"
     ],
@@ -328,6 +373,37 @@
         "end_time": "14:40"
       }
     ],
+    "participation": "出場者の募集は終了しました",
+    "featured": false
+  },
+  {
+    "id": "main-warashibe",
+    "category": "イベント",
+    "name": "わらしべ長者",
+    "group": null,
+    "summary": "物々交換で、最初の品物をどこまで出世させられるか？",
+    "description": "物々交換を繰り返して、最初の品物をどこまで価値のあるものにできるかに挑戦する、今年の新企画です。交換ブースで、手持ちの品物と交換していきます。どんなものにたどり着いたかは、2日目にメインステージで発表します。",
+    "tags": [
+      "day1",
+      "day2",
+      "常設",
+      "当日参加OK"
+    ],
+    "location": "MainStage",
+    "image": null,
+    "occurrences": [
+      {
+        "day": "day2",
+        "start_time": "11:10",
+        "end_time": "11:20",
+        "note": "結果発表"
+      }
+    ],
+    "period": "10/31 オープニング後〜11/1 11:00（交換受付）",
+    "participation": "どなたでも交換に参加できます（申込不要）",
+    "notes": [
+      "交換ブースは、本部イベントの物販テント内にあります"
+    ],
     "featured": false
   },
   {
@@ -335,9 +411,11 @@
     "category": "イベント",
     "name": "スズリーグ",
     "group": null,
-    "description": null,
+    "summary": "答えは何％？観客もスマホで参加できる新クイズ。",
+    "description": "人気番組「ネプリーグ」のパーセントバルーンをもとにした、鈴鹿高専オリジナルのクイズです。お題の答えが何％になるかを予想し、正解とのずれが小さいほど高得点。問題は鈴鹿高専生へのアンケート結果から作っています。4チームが挑戦するほか、観客のみなさんもスマートフォンから同じ問題に参加できます。",
     "tags": [
-      "day2"
+      "day2",
+      "当日参加OK"
     ],
     "location": "MainStage",
     "image": null,
@@ -348,6 +426,7 @@
         "end_time": "10:30"
       }
     ],
+    "participation": "観客として当日その場で参加できます（申込不要）。ステージで表示するQRコードから参加してください",
     "featured": false
   },
   {
@@ -355,9 +434,11 @@
     "category": "イベント",
     "name": "〇✕クイズ",
     "group": null,
-    "description": null,
+    "summary": "賞品をかけた勝ち残りの〇×クイズ。どなたでも参加OK。",
+    "description": "賞品をかけた勝ち残り形式の〇×クイズです。メインステージ前に作った〇と×のエリアに移動して答え、最後まで勝ち残った人が優勝です。",
     "tags": [
-      "day2"
+      "day2",
+      "当日参加OK"
     ],
     "location": "MainStage",
     "image": null,
@@ -368,26 +449,7 @@
         "end_time": "11:05"
       }
     ],
-    "featured": false
-  },
-  {
-    "id": "main-warashibe-result",
-    "category": "イベント",
-    "name": "わらしべ長者 結果発表",
-    "group": null,
-    "description": null,
-    "tags": [
-      "day2"
-    ],
-    "location": "MainStage",
-    "image": null,
-    "occurrences": [
-      {
-        "day": "day2",
-        "start_time": "11:10",
-        "end_time": "11:20"
-      }
-    ],
+    "participation": "当日その場で参加できます（申込不要）",
     "featured": false
   },
   {
@@ -475,26 +537,6 @@
     "featured": false
   },
   {
-    "id": "main-bazaar-gp-final",
-    "category": "イベント",
-    "name": "バザーグランプリ 最終結果発表",
-    "group": null,
-    "description": null,
-    "tags": [
-      "day2"
-    ],
-    "location": "MainStage",
-    "image": null,
-    "occurrences": [
-      {
-        "day": "day2",
-        "start_time": "13:40",
-        "end_time": "13:50"
-      }
-    ],
-    "featured": false
-  },
-  {
     "id": "main-memories",
     "category": "イベント",
     "name": "メモリーズ",
@@ -539,7 +581,8 @@
     "category": "イベント",
     "name": "エンディング",
     "group": null,
-    "description": null,
+    "summary": "2日間の締めくくり。",
+    "description": "2日間の締めくくりです。協賛企業のご紹介と、学生代表のあいさつで高専祭を振り返ります。",
     "tags": [
       "day2"
     ],
@@ -1302,7 +1345,8 @@
     "category": "イベント",
     "name": "ファッションショー",
     "group": null,
-    "description": null,
+    "summary": "KSC 〜kosen students contest〜 ランウェイを歩こう！",
+    "description": "KSC 〜kosen students contest〜。コスプレや思い思いの装いで、高専生がT字ステージのランウェイを歩きます。",
     "tags": [
       "中夜祭"
     ],
@@ -1364,7 +1408,8 @@
     "category": "イベント",
     "name": "Body1グランプリ",
     "group": null,
-    "description": null,
+    "summary": "高専の筋肉自慢が集まり、筋肉No.1を決める。",
+    "description": "高専の筋肉自慢が集まり、筋肉No.1を決める大会です。T字ステージでポーズを決め、観客の投票で優勝者を決めます。",
     "tags": [
       "中夜祭"
     ],
@@ -1423,7 +1468,8 @@
     "category": "イベント",
     "name": "Vocal1グランプリ優勝者",
     "group": null,
-    "description": null,
+    "summary": "Vocal1グランプリ優勝者が中夜祭で歌う！",
+    "description": "1日目の昼に行われたVocal1グランプリの優勝者が、中夜祭で歌を披露します。見逃すな！",
     "tags": [
       "中夜祭"
     ],
@@ -1443,7 +1489,8 @@
     "category": "イベント",
     "name": "オレ1グランプリ",
     "group": null,
-    "description": null,
+    "summary": "予選を勝ち抜いた3組の漫才で、今年のオレ1王者を決める。",
+    "description": "テレビ番組「M-1グランプリ」の高専版。昼の予選を勝ち抜いた3組が漫才を披露し、観客の投票で今年のオレ1王者を決めます。",
     "tags": [
       "中夜祭"
     ],
@@ -1463,7 +1510,8 @@
     "category": "イベント",
     "name": "ダンスバトル優勝チーム＆ヲタ芸",
     "group": null,
-    "description": null,
+    "summary": "ダンスバトル優勝チームのダンスとヲタ芸。",
+    "description": "昼のダンスバトルで優勝したチームのダンスと、ヲタ芸チームによるヲタ芸を披露します。",
     "tags": [
       "中夜祭"
     ],
@@ -1481,11 +1529,13 @@
   {
     "id": "chuyasai-kakuzuke",
     "category": "イベント",
-    "name": "格付けチェック",
+    "name": "高専生格付けチェック",
     "group": null,
-    "description": null,
+    "summary": "3択の問題にグー・チョキ・パーで答える格付けチェック。",
+    "description": "テレビ番組「格付けチェック」を中夜祭で開催！3択の問題に「グー」「チョキ」「パー」で答え、最後まで残った人に景品を贈ります。会場のみんなが参加できます。",
     "tags": [
-      "中夜祭"
+      "中夜祭",
+      "当日参加OK"
     ],
     "location": "T字ステージ",
     "image": null,
@@ -1496,6 +1546,7 @@
         "end_time": "17:35"
       }
     ],
+    "participation": "会場のみんなが参加できます（申込不要）",
     "featured": false
   }
 ]

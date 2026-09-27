@@ -1,7 +1,7 @@
 import { type CSSProperties, useEffect, useRef, useState } from "react";
 import "./TimetableList.css";
 import TabTagFilter, { type TabConfig } from "../filter/TabTagFilter";
-import { getChuyasaiSlots, getPermanentEntries, getScheduledSlots } from "../../lib/entries";
+import { getChuyasaiSlots, getOngoingEntries, getScheduledSlots } from "../../lib/entries";
 import { buildFilterUrl, parseFilterParams } from "../../lib/deepLink";
 import { formatDayLabel } from "../../lib/eventDate";
 import { isOccurrenceNow } from "../../lib/now";
@@ -107,7 +107,7 @@ export default function TimetableList({ entries }: Props) {
     window.history.replaceState(null, "", url);
   }, [activeTab]);
 
-  const permanentEntries = getPermanentEntries(entries);
+  const permanentEntries = getOngoingEntries(entries);
   const tab = TABS.find((t) => t.id === activeTab) ?? TABS[0];
   const isChuyasai = tab.id === "chuyasai";
   const slots = (isChuyasai ? getChuyasaiSlots(entries) : getScheduledSlots(entries, tab.id as Day)).filter((slot) =>
@@ -182,7 +182,7 @@ export default function TimetableList({ entries }: Props) {
                   </a>
                   {entry.link && (
                     <a className="tl-permanent-cta" href={entry.link}>
-                      やってみる →
+                      {entry.linkLabel ?? "やってみる →"}
                     </a>
                   )}
                 </div>
@@ -254,6 +254,8 @@ export default function TimetableList({ entries }: Props) {
                   </span>
                   <span className="tl-block-name">
                     {gridName(entry.name)}
+                    {/* 同じ企画の中の「どの回か」（バザーグランプリの中間発表／最終結果発表等） */}
+                    {occurrence.note && ` ${occurrence.note}`}
                     {isOccurrenceNow(occurrence) && <span className="tl-now">NOW</span>}
                   </span>
                 </a>

@@ -65,7 +65,7 @@ export interface Entry {
    * 企画を説明するdescriptionとは書き手が違うので分けて持ち、引用として見せる
    */
   comment?: string | null;
-  /** 出店:飲食-フード等 / 学科展示:M科等 / イベント:day1,day2,常設,中夜祭 / ライブ:day1,day2,中夜祭,決勝バンド */
+  /** 出店:飲食-フード等 / 学科展示:M科等 / イベント:day1,day2,常設,中夜祭,当日参加OK / ライブ:day1,day2,中夜祭,決勝バンド */
   tags: string[];
   /** 物理的な場所を持たない企画（コラージュカメラ等）はnull */
   location: string | null;
@@ -83,6 +83,20 @@ export interface Entry {
   occurrences: Occurrence[];
   /** 会期中ずっと開催。trueのときoccurrencesは空にする（時間軸を持たないため） */
   isPermanent?: boolean;
+  /**
+   * 期間中いつでも参加できる企画の期間（例:「10/31 オープニング後〜11/1 11:00」）。
+   *
+   * バザーグランプリ（投票）やわらしべ長者（物々交換）のように、参加は期間中ずっとできるが
+   * 結果発表だけはステージの決まった時刻にある企画のためのもの。発表の回は occurrences に
+   * `note`（「中間発表」等）付きで持ち、timetable のグリッドに載せる。
+   * isPermanent と違って occurrences を持てるので、別の項目にしている。
+   */
+  period?: string | null;
+  /**
+   * 参加の仕方（例:「当日その場で参加できます（申込不要）」「出場者の募集は終了しました」）。
+   * 観るだけの企画は省略する。当日参加できる企画には tags に「当日参加OK」も付ける
+   */
+  participation?: string | null;
   /** 代表者（バンドのリーダー等） */
   leader?: Member | null;
   /** 代表者以外の出演メンバー。leaderは含めない */
@@ -101,4 +115,8 @@ export interface Entry {
   featured?: boolean;
   /** 外部Webアプリ等へのリンク（コラージュカメラ等）。未提供の間はnull */
   link?: string | null;
+  /** link のボタンの文言。省略時は「やってみる →」（バザーグランプリの「投票する →」等） */
+  linkLabel?: string | null;
+  /** 詳細ページの下に並べる補助リンク（アプリのダウンロード先等）。別タブで開く */
+  links?: { label: string; url: string }[];
 }

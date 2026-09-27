@@ -55,6 +55,7 @@ const TABS: TabConfig[] = [
       { id: "day1", label: formatDayLabel("day1") },
       { id: "day2", label: formatDayLabel("day2") },
       { id: "中夜祭", label: tagLabel("中夜祭") },
+      { id: "当日参加OK", label: tagLabel("当日参加OK") },
     ],
   },
   {
@@ -121,7 +122,7 @@ export default function BoothList({ entries }: Props) {
                 {/* カードの外に出す。中に入れるとリンクの入れ子になる */}
                 {entry.link && (
                   <a className="bl-permanent-cta" href={entry.link}>
-                    やってみる →
+                    {entry.linkLabel ?? "やってみる →"}
                   </a>
                 )}
               </li>

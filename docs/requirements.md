@@ -144,7 +144,9 @@
 **データ**
 - 専用の`timetable.json`は作らず、結合後の`entries/`から`lib/entries.ts`の`getScheduledSlots(entries, day)`で行を組み立てる。**表の1行 = 1エントリではなく1 `occurrence`**（`ScheduledSlot = { entry, occurrence }`）。同じ企画でも1日に複数公演あれば、その回数ぶんの行になる（化学マジック等）
 - 対象は`category`が「イベント」「ライブ」のエントリの、指定`day`かつ時刻が揃っている`occurrence`。`location`でグルーピングし`start_time`順にソートする（出店・学科展示も`occurrences`に営業時間を持てるが、`category`で除外されるためtimetableには載らない）
-- 「常設」セクションは`isPermanent: true`のエントリ（`occurrences`が空で時間軸を持たない）を表示する
+- 「常設」セクションは`isPermanent: true`のエントリ（`occurrences`が空で時間軸を持たない）と、`period`を持つエントリを表示する（`getOngoingEntries`）
+- バザーグランプリ（投票）・わらしべ長者（物々交換）のように**参加は期間中いつでもできて、結果発表だけステージの時刻に決まっている企画**は、1エントリにまとめて`period`（参加できる期間）を持たせ、発表の回を`occurrences`に`note`（「中間発表」等）付きで入れる。グリッドには「バザーGP 中間発表」のように企画名＋noteで載り、常設セクションにも出る
+- 当日その場で参加できる企画は`tags`に「当日参加OK」を付け、`participation`に参加方法を書く（出場者を事前募集した企画は「募集は終了しました」と書く）
 - 決勝バンドは`location: "MainStage"` / `occurrences: [{ day: "day2", ... }]` / `tags: ["決勝バンド", "day2"]`（MainStageのDay2セクションに掲載）
 - 中夜祭は**在校生限定だが timetable に公開する**（2026-09 判断。当初は学外の方が来場できないため対象外としていた）。一般の来場者が体育館へ向かわないよう、中夜祭タブの先頭に「在校生限定」の注意書きを必ず出す。開場〜入場（`site.json` の `chuyasai.doorsOpen`〜`admissionEnd`）は人が出る枠ではないので企画エントリにはせず、全列にまたがる帯で表示する
 - 中夜祭は`day1`とは並列の特別枠として扱う。**`occurrences`には実際の日時（day1の夜）をそのまま持たせ**、通常の日タブ（Day1/Day2）からの除外は`tags: ["中夜祭"]`で判定する（`getScheduledSlots`が中夜祭タグを持つエントリを日タブから外し、`getChuyasaiSlots`が中夜祭タブに集める）。以前は`day: null`にして「開催日はあるが日タブに出さない」を表現していたが、データが実際の日時について嘘をつくことになるためやめた。公開制御は`entries/program.json`にエントリを追加するタイミング自体で行う（専用の公開制御フラグは作らない）
