@@ -253,13 +253,12 @@ export default function TimetableList({ entries }: Props) {
           <ul className="tl-permanent-list">
             {permanentEntries.map((entry) => (
               <li key={entry.id} className="tl-permanent-card">
-                <div className="tl-permanent-photo">
-                  {entry.image ? (
+                {/* 写真が無い企画は写真枠ごと出さない（boothのカード・詳細ページと同じ方針） */}
+                {entry.image && (
+                  <div className="tl-permanent-photo">
                     <EntryPhotoImg entry={entry} sizes="110px" />
-                  ) : (
-                    <span className="tl-no-image num">NO IMAGE</span>
-                  )}
-                </div>
+                  </div>
+                )}
                 <div className="tl-permanent-body">
                   <a className="tl-permanent-link" href={`/entry/${entry.id}/`}>
                     <p className="tl-permanent-name">{entry.name}</p>

@@ -86,11 +86,6 @@
   height: 100%;
   object-fit: cover;
 }
-.bl-no-image {
-  font-size: 12px;
-  letter-spacing: 0.05em;
-  color: #999;
-}
 .bl-body {
   padding: 14px 16px 16px;
 }

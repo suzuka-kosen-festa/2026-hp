@@ -71,9 +71,13 @@ const TABS: TabConfig[] = [
   },
 ];
 
-/** カードから詳細ページへ飛ばすか。出店はカードで情報が出きっているので飛ばさない */
+/**
+ * カードから詳細ページへ飛ばすか。出店と学科展示は、名前・団体・紹介文・写真がカードで
+ * 出きっていて、詳細ページに行っても増える情報が無いので飛ばさない
+ */
+const CARD_ONLY_CATEGORIES: Category[] = ["出店", "学科展示"];
 function hasDetailPage(entry: Entry) {
-  return entry.category !== "出店";
+  return !CARD_ONLY_CATEGORIES.includes(entry.category);
 }
 
 export default function BoothList({ entries }: Props) {
@@ -120,9 +124,7 @@ export default function BoothList({ entries }: Props) {
           <ul className="bl-permanent-list">
             {permanentEntries.map((entry) => (
               <li key={entry.id} className="bl-permanent-card">
-                {/* home の PICK UP と同じカード（PromoCard）を使う。常設セクションは
-                    縦1列でカードの高さを揃える必要が無いので、「NO IMAGE」を出す
-                    .bl-grid 側とは扱いを分ける（Issue #60） */}
+                {/* home の PICK UP と同じカード（PromoCard）を使う（Issue #60） */}
                 <a className="bl-permanent-link" href={`/entry/${entry.id}/`}>
                   <PromoCard entry={entry} more />
                 </a>
@@ -154,14 +156,14 @@ export default function BoothList({ entries }: Props) {
           const summary = entry.summary ?? entry.description;
           const card = (
             <div className="bl-card" style={{ transform: `rotate(${i % 2 === 0 ? -0.8 : 0.9}deg)` }}>
-              <div className="bl-photo">
-                {entry.image ? (
-                  // SPはページ幅いっぱい（本文幅の上限520px）、PCは3列
+              {/* 写真が無い企画（学科展示など）は写真枠ごと出さず、文字だけのカードにする。
+                  16:9の「NO IMAGE」枠を出すと、その高さがまるごと無駄になる（詳細ページと同じ方針。Issue #56） */}
+              {entry.image && (
+                <div className="bl-photo">
+                  {/* SPはページ幅いっぱい（本文幅の上限520px）、PCは3列 */}
                   <EntryPhotoImg entry={entry} sizes="(min-width: 900px) 380px, min(calc(100vw - 40px), 520px)" />
-                ) : (
-                  <span className="bl-no-image num">NO IMAGE</span>
-                )}
-              </div>
+                </div>
+              )}
               <div className="bl-body">
                 <p className="bl-name">{entry.name}</p>
                 {entry.group && <p className="bl-group">{entry.group}</p>}
