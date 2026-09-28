@@ -10,7 +10,18 @@
     ],
     "location": null,
     "image": "/entries/food-kyudo.webp",
-    "occurrences": [],
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "09:00",
+        "end_time": "14:30"
+      },
+      {
+        "day": "day2",
+        "start_time": "09:00",
+        "end_time": "15:50"
+      }
+    ],
     "featured": false
   },
   {
@@ -24,7 +35,18 @@
     ],
     "location": null,
     "image": "/entries/food-koshiki-tennis.webp",
-    "occurrences": [],
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "09:00",
+        "end_time": "14:30"
+      },
+      {
+        "day": "day2",
+        "start_time": "09:00",
+        "end_time": "15:50"
+      }
+    ],
     "featured": false
   },
   {
@@ -38,7 +60,18 @@
     ],
     "location": "マルチメディア棟",
     "image": "/entries/food-sado.webp",
-    "occurrences": [],
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "09:00",
+        "end_time": "14:30"
+      },
+      {
+        "day": "day2",
+        "start_time": "09:00",
+        "end_time": "15:50"
+      }
+    ],
     "featured": false
   },
   {
@@ -52,7 +85,18 @@
     ],
     "location": null,
     "image": "/entries/food-soft-tennis.webp",
-    "occurrences": [],
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "09:00",
+        "end_time": "14:30"
+      },
+      {
+        "day": "day2",
+        "start_time": "09:00",
+        "end_time": "15:50"
+      }
+    ],
     "featured": false
   },
   {
@@ -66,7 +110,18 @@
     ],
     "location": null,
     "image": "/entries/food-kendo.webp",
-    "occurrences": [],
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "09:00",
+        "end_time": "14:30"
+      },
+      {
+        "day": "day2",
+        "start_time": "09:00",
+        "end_time": "15:50"
+      }
+    ],
     "featured": false
   },
   {
@@ -80,7 +135,18 @@
     ],
     "location": null,
     "image": "/entries/food-procon.webp",
-    "occurrences": [],
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "09:00",
+        "end_time": "14:30"
+      },
+      {
+        "day": "day2",
+        "start_time": "09:00",
+        "end_time": "15:50"
+      }
+    ],
     "featured": false
   },
   {
@@ -94,7 +160,18 @@
     ],
     "location": null,
     "image": "/entries/food-soccer.webp",
-    "occurrences": [],
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "09:00",
+        "end_time": "14:30"
+      },
+      {
+        "day": "day2",
+        "start_time": "09:00",
+        "end_time": "15:50"
+      }
+    ],
     "featured": false
   },
   {
@@ -108,7 +185,18 @@
     ],
     "location": null,
     "image": "/entries/food-rikujo.webp",
-    "occurrences": [],
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "09:00",
+        "end_time": "14:30"
+      },
+      {
+        "day": "day2",
+        "start_time": "09:00",
+        "end_time": "15:50"
+      }
+    ],
     "featured": false
   },
   {
@@ -122,7 +210,18 @@
     ],
     "location": null,
     "image": "/entries/food-karate.webp",
-    "occurrences": [],
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "09:00",
+        "end_time": "14:30"
+      },
+      {
+        "day": "day2",
+        "start_time": "09:00",
+        "end_time": "15:50"
+      }
+    ],
     "featured": false
   },
   {
@@ -136,7 +235,18 @@
     ],
     "location": null,
     "image": "/entries/food-basketball.webp",
-    "occurrences": [],
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "09:00",
+        "end_time": "14:30"
+      },
+      {
+        "day": "day2",
+        "start_time": "09:00",
+        "end_time": "15:50"
+      }
+    ],
     "featured": false
   },
   {
@@ -150,7 +260,18 @@
     ],
     "location": null,
     "image": "/entries/food-yosakoi.webp",
-    "occurrences": [],
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "09:00",
+        "end_time": "14:30"
+      },
+      {
+        "day": "day2",
+        "start_time": "09:00",
+        "end_time": "15:50"
+      }
+    ],
     "featured": false
   },
   {
@@ -164,7 +285,18 @@
     ],
     "location": null,
     "image": "/entries/food-handball.webp",
-    "occurrences": [],
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "09:00",
+        "end_time": "14:30"
+      },
+      {
+        "day": "day2",
+        "start_time": "09:00",
+        "end_time": "15:50"
+      }
+    ],
     "featured": false
   },
   {
@@ -178,7 +310,18 @@
     ],
     "location": null,
     "image": "/entries/food-volleyball.webp",
-    "occurrences": [],
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "09:00",
+        "end_time": "14:30"
+      },
+      {
+        "day": "day2",
+        "start_time": "09:00",
+        "end_time": "15:50"
+      }
+    ],
     "featured": false
   },
   {
@@ -192,7 +335,18 @@
     ],
     "location": null,
     "image": "/entries/food-badminton.webp",
-    "occurrences": [],
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "09:00",
+        "end_time": "14:30"
+      },
+      {
+        "day": "day2",
+        "start_time": "09:00",
+        "end_time": "15:50"
+      }
+    ],
     "featured": false
   },
   {
@@ -206,7 +360,18 @@
     ],
     "location": null,
     "image": "/entries/food-rugby.webp",
-    "occurrences": [],
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "09:00",
+        "end_time": "14:30"
+      },
+      {
+        "day": "day2",
+        "start_time": "09:00",
+        "end_time": "15:50"
+      }
+    ],
     "featured": false
   },
   {
@@ -220,7 +385,18 @@
     ],
     "location": null,
     "image": "/entries/food-ongaku.webp",
-    "occurrences": [],
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "09:00",
+        "end_time": "14:30"
+      },
+      {
+        "day": "day2",
+        "start_time": "09:00",
+        "end_time": "15:50"
+      }
+    ],
     "featured": false
   },
   {
@@ -234,7 +410,18 @@
     ],
     "location": null,
     "image": "/entries/food-5c.webp",
-    "occurrences": [],
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "09:00",
+        "end_time": "14:30"
+      },
+      {
+        "day": "day2",
+        "start_time": "09:00",
+        "end_time": "15:50"
+      }
+    ],
     "featured": false
   },
   {
@@ -248,7 +435,18 @@
     ],
     "location": null,
     "image": "/entries/food-baseball.webp",
-    "occurrences": [],
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "09:00",
+        "end_time": "14:30"
+      },
+      {
+        "day": "day2",
+        "start_time": "09:00",
+        "end_time": "15:50"
+      }
+    ],
     "featured": false
   },
   {
@@ -262,7 +460,18 @@
     ],
     "location": null,
     "image": "/entries/food-5e.webp",
-    "occurrences": [],
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "09:00",
+        "end_time": "14:30"
+      },
+      {
+        "day": "day2",
+        "start_time": "09:00",
+        "end_time": "15:50"
+      }
+    ],
     "featured": false
   },
   {
@@ -276,7 +485,18 @@
     ],
     "location": null,
     "image": "/entries/food-5m.webp",
-    "occurrences": [],
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "09:00",
+        "end_time": "14:30"
+      },
+      {
+        "day": "day2",
+        "start_time": "09:00",
+        "end_time": "15:50"
+      }
+    ],
     "featured": false
   },
   {
@@ -290,7 +510,18 @@
     ],
     "location": null,
     "image": "/entries/food-shashin.webp",
-    "occurrences": [],
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "09:00",
+        "end_time": "14:30"
+      },
+      {
+        "day": "day2",
+        "start_time": "09:00",
+        "end_time": "15:50"
+      }
+    ],
     "featured": false
   },
   {
@@ -304,7 +535,18 @@
     ],
     "location": null,
     "image": "/entries/food-takkyu.webp",
-    "occurrences": [],
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "09:00",
+        "end_time": "14:30"
+      },
+      {
+        "day": "day2",
+        "start_time": "09:00",
+        "end_time": "15:50"
+      }
+    ],
     "featured": false
   },
   {
@@ -318,7 +560,18 @@
     ],
     "location": null,
     "image": "/entries/food-ecocar.webp",
-    "occurrences": [],
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "09:00",
+        "end_time": "14:30"
+      },
+      {
+        "day": "day2",
+        "start_time": "09:00",
+        "end_time": "15:50"
+      }
+    ],
     "featured": false
   },
   {
@@ -332,7 +585,18 @@
     ],
     "location": null,
     "image": "/entries/rec-suiei.webp",
-    "occurrences": [],
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "09:00",
+        "end_time": "15:00"
+      },
+      {
+        "day": "day2",
+        "start_time": "09:00",
+        "end_time": "15:00"
+      }
+    ],
     "featured": false
   },
   {
@@ -346,7 +610,18 @@
     ],
     "location": null,
     "image": "/entries/rec-kagaku-magic.webp",
-    "occurrences": [],
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "09:00",
+        "end_time": "15:00"
+      },
+      {
+        "day": "day2",
+        "start_time": "09:00",
+        "end_time": "15:00"
+      }
+    ],
     "featured": false
   },
   {
@@ -361,7 +636,18 @@
     ],
     "location": null,
     "image": "/entries/rec-bijutsu.webp",
-    "occurrences": [],
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "09:00",
+        "end_time": "15:00"
+      },
+      {
+        "day": "day2",
+        "start_time": "09:00",
+        "end_time": "15:00"
+      }
+    ],
     "featured": false
   },
   {
@@ -376,7 +662,18 @@
     ],
     "location": null,
     "image": "/entries/rec-seibutsu.webp",
-    "occurrences": [],
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "09:00",
+        "end_time": "15:00"
+      },
+      {
+        "day": "day2",
+        "start_time": "09:00",
+        "end_time": "15:00"
+      }
+    ],
     "featured": false
   },
   {
@@ -390,7 +687,18 @@
     ],
     "location": null,
     "image": "/entries/rec-ongaku.webp",
-    "occurrences": [],
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "09:00",
+        "end_time": "15:00"
+      },
+      {
+        "day": "day2",
+        "start_time": "09:00",
+        "end_time": "15:00"
+      }
+    ],
     "featured": false
   },
   {
@@ -405,7 +713,18 @@
     ],
     "location": null,
     "image": "/entries/rec-douga.webp",
-    "occurrences": [],
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "09:00",
+        "end_time": "15:00"
+      },
+      {
+        "day": "day2",
+        "start_time": "09:00",
+        "end_time": "15:00"
+      }
+    ],
     "featured": false
   },
   {
@@ -419,7 +738,18 @@
     ],
     "location": null,
     "image": "/entries/rec-ecocar.webp",
-    "occurrences": [],
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "09:00",
+        "end_time": "15:00"
+      },
+      {
+        "day": "day2",
+        "start_time": "09:00",
+        "end_time": "15:00"
+      }
+    ],
     "featured": false
   },
   {
@@ -433,7 +763,18 @@
     ],
     "location": "マルチメディア棟",
     "image": "/entries/rec-kado.webp",
-    "occurrences": [],
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "09:00",
+        "end_time": "15:00"
+      },
+      {
+        "day": "day2",
+        "start_time": "09:00",
+        "end_time": "15:00"
+      }
+    ],
     "featured": false
   },
   {
@@ -447,7 +788,18 @@
     ],
     "location": null,
     "image": "/entries/rec-2a.webp",
-    "occurrences": [],
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "09:00",
+        "end_time": "15:00"
+      },
+      {
+        "day": "day2",
+        "start_time": "09:00",
+        "end_time": "15:00"
+      }
+    ],
     "featured": false
   },
   {
@@ -461,7 +813,18 @@
     ],
     "location": null,
     "image": "/entries/rec-procon.webp",
-    "occurrences": [],
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "09:00",
+        "end_time": "15:00"
+      },
+      {
+        "day": "day2",
+        "start_time": "09:00",
+        "end_time": "15:00"
+      }
+    ],
     "featured": false
   },
   {
@@ -475,7 +838,18 @@
     ],
     "location": null,
     "image": "/entries/rec-5i.webp",
-    "occurrences": [],
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "09:00",
+        "end_time": "15:00"
+      },
+      {
+        "day": "day2",
+        "start_time": "09:00",
+        "end_time": "15:00"
+      }
+    ],
     "featured": false
   },
   {
@@ -489,7 +863,18 @@
     ],
     "location": null,
     "image": "/entries/rec-gcon.webp",
-    "occurrences": [],
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "09:00",
+        "end_time": "15:00"
+      },
+      {
+        "day": "day2",
+        "start_time": "09:00",
+        "end_time": "15:00"
+      }
+    ],
     "featured": false
   },
   {
@@ -503,7 +888,18 @@
     ],
     "location": null,
     "image": "/entries/rec-wandervogel.webp",
-    "occurrences": [],
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "09:00",
+        "end_time": "15:00"
+      },
+      {
+        "day": "day2",
+        "start_time": "09:00",
+        "end_time": "15:00"
+      }
+    ],
     "featured": false
   },
   {
@@ -517,7 +913,18 @@
     ],
     "location": null,
     "image": "/entries/rec-shashin.webp",
-    "occurrences": [],
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "09:00",
+        "end_time": "15:00"
+      },
+      {
+        "day": "day2",
+        "start_time": "09:00",
+        "end_time": "15:00"
+      }
+    ],
     "featured": false
   },
   {
@@ -532,7 +939,18 @@
     ],
     "location": null,
     "image": "/entries/rec-rigaku.webp",
-    "occurrences": [],
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "09:00",
+        "end_time": "15:00"
+      },
+      {
+        "day": "day2",
+        "start_time": "09:00",
+        "end_time": "15:00"
+      }
+    ],
     "featured": false
   },
   {
@@ -547,7 +965,18 @@
     ],
     "location": null,
     "image": "/entries/rec-kanko.webp",
-    "occurrences": [],
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "09:00",
+        "end_time": "15:00"
+      },
+      {
+        "day": "day2",
+        "start_time": "09:00",
+        "end_time": "15:00"
+      }
+    ],
     "featured": false
   },
   {
@@ -562,6 +991,16 @@
     "location": null,
     "image": "/entries/rec-kyokotsu-appaku.webp",
     "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "09:00",
+        "end_time": "15:00"
+      },
+      {
+        "day": "day2",
+        "start_time": "09:00",
+        "end_time": "15:00"
+      },
       {
         "day": "day1",
         "start_time": "13:00",
@@ -588,7 +1027,18 @@
     ],
     "location": null,
     "image": "/entries/rec-1a.webp",
-    "occurrences": [],
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "09:00",
+        "end_time": "15:00"
+      },
+      {
+        "day": "day2",
+        "start_time": "09:00",
+        "end_time": "15:00"
+      }
+    ],
     "featured": false
   },
   {
@@ -603,7 +1053,18 @@
     ],
     "location": null,
     "image": "/entries/rec-robocon.webp",
-    "occurrences": [],
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "09:00",
+        "end_time": "15:00"
+      },
+      {
+        "day": "day2",
+        "start_time": "09:00",
+        "end_time": "15:00"
+      }
+    ],
     "featured": false
   }
 ]

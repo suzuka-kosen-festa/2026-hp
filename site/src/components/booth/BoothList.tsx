@@ -19,7 +19,11 @@ function formatOccurrenceTimes(occurrences: Occurrence[]) {
     .map((day) => {
       const items = occurrences.filter((o) => o.day === day && o.start_time);
       if (items.length === 0) return null;
-      const times = items.map((o) => (o.end_time ? `${o.start_time}-${o.end_time}` : `${o.start_time}〜`)).join("・");
+      // 回ごとの補足（胸骨圧迫の展示の「実演」等）は詳細ページと同じく括弧で添える。
+      // 添えないと、営業時間と実演時間が「9:00-15:00・13:00-15:00」と並んで区別できない
+      const times = items
+        .map((o) => `${o.end_time ? `${o.start_time}-${o.end_time}` : `${o.start_time}〜`}${o.note ? `（${o.note}）` : ""}`)
+        .join("・");
       return { day, times };
     })
     .filter((g): g is { day: Day; times: string } => g !== null);
