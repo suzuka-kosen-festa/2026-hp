@@ -1,0 +1,95 @@
+---
+import Tape from "../ui/Tape.astro";
+import access from "../../data/access.json";
+
+/*
+ * 学校前の住宅地での乗降車禁止。
+ *
+ * 送迎だけの人は駐車場の案内を読み飛ばしがちなので、駐車場セクションの中ではなく
+ * ページ冒頭に置き、ほかの案内より一段強い見た目（赤枠＋警告ストライプ）にしている。
+ */
+const notice = access.notice;
+---
+
+<section class="dropoff" aria-labelledby="dropoff-title" data-dropoff-notice>
+  <Tape color="red" rotate={-3} as="p" class="label">
+    {notice.label}
+  </Tape>
+
+  <h2 id="dropoff-title" class="title">{notice.title}</h2>
+
+  <p class="lead">{notice.lead}</p>
+
+  {notice.text.map((text) => (
+    <p>{text}</p>
+  ))}
+</section>
+
+<style>
+  .dropoff {
+    position: relative;
+    margin-bottom: 48px;
+    padding: 34px 18px 20px;
+    background: #fff;
+    border: 3px solid var(--red);
+    box-shadow: 6px 6px 0 var(--ink);
+    font-size: 14px;
+    line-height: 1.8;
+  }
+
+  /* 上辺の警告ストライプ。不透明の黄×黒 */
+  .dropoff::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 10px;
+    background: repeating-linear-gradient(
+      -45deg,
+      var(--yellow) 0 10px,
+      var(--ink) 10px 20px
+    );
+  }
+
+  .dropoff :global(.label) {
+    position: absolute;
+    top: -16px;
+    left: 12px;
+    font-size: 15px;
+    letter-spacing: 0.08em;
+  }
+
+  .title {
+    margin-bottom: 12px;
+    color: var(--red);
+    font-size: 20px;
+    font-weight: 800;
+    line-height: 1.45;
+  }
+
+  .lead {
+    font-size: 15px;
+    font-weight: 800;
+  }
+
+  .dropoff p + p {
+    margin-top: 10px;
+  }
+
+  @media (min-width: 900px) {
+    .dropoff {
+      margin-bottom: 56px;
+      padding: 38px 28px 24px;
+      font-size: 15px;
+    }
+
+    .title {
+      font-size: 24px;
+    }
+
+    .lead {
+      font-size: 16px;
+    }
+  }
+</style>

@@ -5,6 +5,10 @@ import { describePage } from "./_shared";
 
 describePage("access", "/access/");
 
+const access = JSON.parse(
+  readFileSync(fileURLToPath(new URL("../src/data/access.json", import.meta.url)), "utf8"),
+) as { notice: { title: string } };
+
 /**
  * 駐車場の図が画面の高さを占領しないこと（MTG 2026-09-06 の指摘）。
  *
@@ -92,5 +96,33 @@ test("駐車場パネルは常に1枚だけ表示される", async ({ page }) =>
       );
       expect(visible, `${width}px でタブ${i + 1}を選んだとき ${visible} 枚見えています`).toBe(1);
     }
+  }
+});
+
+/**
+ * 学校前の住宅地での乗降車禁止が、開いた最初の画面で目に入ること（#109）。
+ *
+ * 送迎だけの人は駐車場の案内まで読まないので、駐車場セクションの中に埋もれたり、
+ * スクロールしないと見えない位置に下がったりしたら意味がない。
+ */
+test("乗降車禁止の注意書きが最初の画面に見えている", async ({ page }) => {
+  for (const [width, height] of [
+    [375, 812],
+    [1280, 800],
+  ]) {
+    await page.setViewportSize({ width, height });
+    await page.goto("/access/");
+
+    const notice = page.locator("[data-dropoff-notice]");
+    await expect(notice.getByRole("heading", { name: access.notice.title })).toBeVisible();
+
+    const title = (await notice.getByRole("heading").boundingBox())!;
+    expect(
+      title.y + title.height,
+      `${width}px で注意書きの見出しが最初の画面からはみ出しています（下端 ${Math.round(title.y + title.height)}px）`,
+    ).toBeLessThanOrEqual(height);
+
+    const parking = (await page.locator(".parking-section").boundingBox())!;
+    expect(title.y, `${width}px で注意書きが駐車場より下にあります`).toBeLessThan(parking.y);
   }
 });
