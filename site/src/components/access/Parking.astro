@@ -49,6 +49,10 @@ const parkings = access.parkings;
       {access.description.map((text) => (
         <p>{text}</p>
       ))}
+
+      {access.descriptionWarning && (
+        <p class="warning">{access.descriptionWarning}</p>
+      )}
     </div>
   </div>
 
@@ -277,6 +281,12 @@ const parkings = access.parkings;
 
   .parking-description p:last-child {
     margin-bottom: 0;
+  }
+
+  /* 「車」の案内（AccessInfo）の赤字と揃える */
+  .parking-description .warning {
+    color: var(--red);
+    font-weight: 800;
   }
 
   .parking-intro img {
