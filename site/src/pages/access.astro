@@ -3,7 +3,6 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import Tape from "../components/ui/Tape.astro";
 import Parking from "../components/access/Parking.astro";
 import AccessInfo from "../components/access/AccessInfo.astro";
-import DropOffNotice from "../components/access/DropOffNotice.astro";
 
 import site from "../data/site.json";
 ---
@@ -16,9 +15,6 @@ import site from "../data/site.json";
     <header class="head">
       <Tape color="blue" rotate={-3} as="p">ACCESS</Tape>
     </header>
-
-    <!-- 住宅地での乗降車禁止（送迎の人にも必ず目に入るよう冒頭に置く） -->
-    <DropOffNotice />
 
     <!-- 会場アクセス -->
     <AccessInfo />

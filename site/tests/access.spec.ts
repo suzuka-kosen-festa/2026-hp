@@ -7,7 +7,7 @@ describePage("access", "/access/");
 
 const access = JSON.parse(
   readFileSync(fileURLToPath(new URL("../src/data/access.json", import.meta.url)), "utf8"),
-) as { notice: { title: string } };
+) as { access: { title: string; warning?: string }[] };
 
 /**
  * 駐車場の図が画面の高さを占領しないこと（MTG 2026-09-06 の指摘）。
@@ -100,29 +100,26 @@ test("駐車場パネルは常に1枚だけ表示される", async ({ page }) =>
 });
 
 /**
- * 学校前の住宅地での乗降車禁止が、開いた最初の画面で目に入ること（#109）。
+ * 学校前の住宅地での乗降車禁止が、「車」の案内の中に赤字で出ていること（#109）。
  *
- * 送迎だけの人は駐車場の案内まで読まないので、駐車場セクションの中に埋もれたり、
- * スクロールしないと見えない位置に下がったりしたら意味がない。
+ * 文言は access.json の warning に持たせているので、データ側で消されたり
+ * 別の項目へ移されたりしても気づけるよう、「車」の項目に紐づいていることを見る。
  */
-test("乗降車禁止の注意書きが最初の画面に見えている", async ({ page }) => {
-  for (const [width, height] of [
-    [375, 812],
-    [1280, 800],
-  ]) {
-    await page.setViewportSize({ width, height });
-    await page.goto("/access/");
+test("車の案内に乗降車禁止が赤字で出ている", async ({ page }) => {
+  await page.goto("/access/");
 
-    const notice = page.locator("[data-dropoff-notice]");
-    await expect(notice.getByRole("heading", { name: access.notice.title })).toBeVisible();
+  const warning = access.access.find((item) => item.title === "車")?.warning;
+  expect(warning, "access.json の「車」に warning がありません").toBeTruthy();
 
-    const title = (await notice.getByRole("heading").boundingBox())!;
-    expect(
-      title.y + title.height,
-      `${width}px で注意書きの見出しが最初の画面からはみ出しています（下端 ${Math.round(title.y + title.height)}px）`,
-    ).toBeLessThanOrEqual(height);
+  const item = page.locator(".info li", { has: page.locator("strong", { hasText: /^車$/ }) });
+  const text = item.getByText(warning!);
+  await expect(text).toBeVisible();
 
-    const parking = (await page.locator(".parking-section").boundingBox())!;
-    expect(title.y, `${width}px で注意書きが駐車場より下にあります`).toBeLessThan(parking.y);
-  }
+  const [color, red] = await text.evaluate((el) => [
+    getComputedStyle(el).color,
+    getComputedStyle(el).getPropertyValue("--red").trim(),
+  ]);
+  // --red(#e31b23) = rgb(227, 27, 35)
+  expect(red).toBe("#e31b23");
+  expect(color, "乗降車禁止の文言が赤字になっていません").toBe("rgb(227, 27, 35)");
 });
