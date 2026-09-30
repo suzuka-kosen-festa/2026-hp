@@ -198,7 +198,7 @@
         "resources": [
           {
             "label": "大会ポスター（画像）",
-            "url": "/entries/game-splatoon3-poster.webp"
+            "url": "/files/game-splatoon3-poster.webp"
           }
         ]
       },
@@ -233,7 +233,7 @@
         "resources": [
           {
             "label": "大会ポスター（画像）",
-            "url": "/entries/game-smash-poster.webp"
+            "url": "/files/game-smash-poster.webp"
           }
         ]
       }
