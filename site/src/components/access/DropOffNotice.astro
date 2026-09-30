@@ -6,7 +6,8 @@ import access from "../../data/access.json";
  * 学校前の住宅地での乗降車禁止。
  *
  * 送迎だけの人は駐車場の案内を読み飛ばしがちなので、駐車場セクションの中ではなく
- * ページ冒頭に置き、ほかの案内より一段強い見た目（赤枠＋警告ストライプ）にしている。
+ * ページ冒頭に置いている。見た目はカード（黒枠＋ハードシャドウ）に赤テープと赤見出しで、
+ * 警告ストライプや赤枠まで足すと威圧的すぎたので控えた。
  */
 const notice = access.notice;
 ---
@@ -29,27 +30,12 @@ const notice = access.notice;
   .dropoff {
     position: relative;
     margin-bottom: 48px;
-    padding: 34px 18px 20px;
+    padding: 30px 18px 20px;
     background: #fff;
-    border: 3px solid var(--red);
-    box-shadow: 6px 6px 0 var(--ink);
+    border: 2px solid var(--ink);
+    box-shadow: 5px 5px 0 var(--ink);
     font-size: 14px;
     line-height: 1.8;
-  }
-
-  /* 上辺の警告ストライプ。不透明の黄×黒 */
-  .dropoff::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 10px;
-    background: repeating-linear-gradient(
-      -45deg,
-      var(--yellow) 0 10px,
-      var(--ink) 10px 20px
-    );
   }
 
   .dropoff :global(.label) {
@@ -80,7 +66,7 @@ const notice = access.notice;
   @media (min-width: 900px) {
     .dropoff {
       margin-bottom: 56px;
-      padding: 38px 28px 24px;
+      padding: 34px 28px 24px;
       font-size: 15px;
     }
 
