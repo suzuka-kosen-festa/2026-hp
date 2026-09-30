@@ -117,48 +117,154 @@ test.describe("表示用のカテゴリ名", () => {
  * されるまで応募フォームへ誘導し続ける。閲覧時の時刻で合わせ直していることを、
  * ブラウザの時計を締切の前後にずらして確かめる。
  *
- * 締切の境界は「締切日の日本時間 24:00」。期待値はデータから引くので、
- * 申込を持つ企画が増えても・日付が変わっても成り立つ。
+ * 期待値はデータから引くので、日付が変わっても成り立つ。申込ごとに検査する
+ * （申込ごとにフォームも締切も違うので、先頭の1件だけ見ていると2件目以降の
+ * 取り違えを見逃す。Issue #100）。複数の企画を載せる記事（parts）は企画ごとに
+ * 申込を持つので、その企画の欄の中だけを見る（ゲーム大会。Issue #102）
  */
-const withApplication = entries.find(
-  (entry) => (entry as { application?: unknown }).application,
-) as (typeof entries)[number] & { application: { url: string; opens: string; closes: string } } | undefined;
+type Day = "day1" | "day2";
+type ApplicationData = { url: string; opens: string; closes?: string | null };
+type LinkData = { label: string; url: string };
+type FactData = { label: string; value: string };
+type Section = {
+  occurrences?: { day: Day }[];
+  application?: ApplicationData | null;
+  resources?: LinkData[];
+  extraFacts?: FactData[];
+};
+type PartData = Section & { id: string; name: string; occurrences: { day: Day }[] };
+type EntryData = Section & { id: string; parts?: PartData[] };
 
-test.describe("entry の申込導線", () => {
-  test.skip(!withApplication, "application を持つ企画が無いため");
+/**
+ * 申込・資料・追加項目を持ちうる欄。記事全体の欄と、企画ごとの欄。
+ * scope はその欄だけを指すセレクタ（複数の企画で同じ「申し込む」「許諾番号」が並ぶため）
+ */
+const sections = (entries as EntryData[]).flatMap((entry) => [
+  { entryId: entry.id, name: entry.id, scope: "article.entry >", data: entry as Section },
+  ...(entry.parts ?? []).map((part) => ({
+    entryId: entry.id,
+    name: `${entry.id}#${part.id}`,
+    scope: `[data-part="${part.id}"]`,
+    data: part as Section,
+  })),
+]);
 
-  const jst = (date: string, time: string) => new Date(`${date}T${time}+09:00`);
+const site = JSON.parse(readFileSync(fileURLToPath(new URL("../src/data/site.json", import.meta.url)), "utf8")) as {
+  day1Date: string;
+  day2Date: string;
+};
 
-  test("受付期間中は申込ボタンを出し、フォームを別タブで開く", async ({ page }) => {
-    const { id, application } = withApplication!;
-    // 締切日の最後の1分。境界の取り違え（締切日の0時で閉じる）をここで捕まえる
-    await page.clock.setFixedTime(jst(application.closes, "23:59:00"));
-    await page.goto(`/entry/${id}/`);
+const jst = (date: string, time: string) => new Date(`${date}T${time}+09:00`);
+const DAY_MS = 24 * 60 * 60 * 1000;
 
-    const button = page.getByRole("link", { name: "申し込む" });
-    await expect(button, "受付期間中なのに申込ボタンが見えません").toBeVisible();
-    await expect(button).toHaveAttribute("href", application.url);
-    // 外部フォームなので学祭HPを残したまま別タブで開く
-    await expect(button).toHaveAttribute("target", "_blank");
-    await expect(page.getByText("募集は終了しました")).toBeHidden();
+/**
+ * ボタンを閉じる瞬間。締切日があれば「締切日の日本時間 24:00」、
+ * 無ければ（ゲーム大会のような定員締切）「その欄の最初の開催日の 0:00」。
+ */
+function closesAt(application: ApplicationData, occurrences: { day: Day }[] = []): Date {
+  if (application.closes) return new Date(jst(application.closes, "00:00:00").getTime() + DAY_MS);
+  const firstDay = (["day1", "day2"] as Day[]).find((day) => occurrences.some((o) => o.day === day));
+  return jst(firstDay === "day2" ? site.day2Date : site.day1Date, "00:00:00");
+}
+
+for (const { entryId, name, scope, data } of sections.filter((section) => section.data.application)) {
+  const application = data.application!;
+  const deadline = closesAt(application, data.occurrences);
+
+  test.describe(`entry の申込導線（${name}）`, () => {
+    test("受付期間中は申込ボタンを出し、フォームを別タブで開く", async ({ page }) => {
+      // 閉じる直前の1分。境界の取り違え（締切日の0時で閉じる等）をここで捕まえる
+      await page.clock.setFixedTime(deadline.getTime() - 60 * 1000);
+      await page.goto(`/entry/${entryId}/`);
+
+      const apply = page.locator(`${scope} [data-apply]`);
+      const button = apply.getByRole("link", { name: "申し込む" });
+      await expect(button, "受付期間中なのに申込ボタンが見えません").toBeVisible();
+      await expect(button).toHaveAttribute("href", application.url);
+      // 外部フォームなので学祭HPを残したまま別タブで開く
+      await expect(button).toHaveAttribute("target", "_blank");
+      await expect(apply.getByText("募集は終了しました")).toBeHidden();
+    });
+
+    test("締切を過ぎたら申込ボタンを閉じる", async ({ page }) => {
+      await page.clock.setFixedTime(deadline);
+      await page.goto(`/entry/${entryId}/`);
+
+      const apply = page.locator(`${scope} [data-apply]`);
+      await expect(apply.getByText("募集は終了しました")).toBeVisible();
+      await expect(apply.getByRole("link", { name: "申し込む" }), "締切後も申込ボタンが残っています").toBeHidden();
+    });
+
+    test("受付開始前は申込ボタンを出さない", async ({ page }) => {
+      await page.clock.setFixedTime(jst(application.opens, "00:00:00").getTime() - 60 * 1000);
+      await page.goto(`/entry/${entryId}/`);
+
+      const apply = page.locator(`${scope} [data-apply]`);
+      await expect(apply.getByText("から受付開始")).toBeVisible();
+      await expect(apply.getByRole("link", { name: "申し込む" })).toBeHidden();
+    });
+
+    /* 締切日の無い募集で「〜null」「undefinedまで受付」のような表示にならないこと */
+    test("募集期間の終わりを正しく書く", async ({ page }) => {
+      await page.goto(`/entry/${entryId}/`, { waitUntil: "domcontentloaded" });
+      const period = page.locator(`${scope} .facts .fact`, { hasText: "募集期間" });
+      await expect(period).not.toContainText(/null|undefined|NaN/);
+      if (!application.closes) await expect(period).toContainText("定員に達し次第締切");
+    });
   });
+}
 
-  test("締切を過ぎたら申込ボタンを閉じる", async ({ page }) => {
-    const { id, application } = withApplication!;
-    const nextDay = new Date(jst(application.closes, "00:00:00").getTime() + 24 * 60 * 60 * 1000);
-    await page.clock.setFixedTime(nextDay);
-    await page.goto(`/entry/${id}/`);
-
-    await expect(page.getByText("募集は終了しました")).toBeVisible();
-    await expect(page.getByRole("link", { name: "申し込む" }), "締切後も申込ボタンが残っています").toBeHidden();
+/**
+ * 資料リンク（参加者規約・大会ポスターなど）。
+ *
+ * サイト内に置いたポスター画像はファイル名の書き間違いでリンク切れになりうるので、
+ * 実際に取れることまで見る。外部リンクは相手の都合で落ちるので、ここでは叩かない。
+ */
+for (const { entryId, name, scope, data } of sections.filter((section) => (section.data.resources ?? []).length > 0)) {
+  test(`資料リンクを別タブで開く（${name}）`, async ({ page }) => {
+    await page.goto(`/entry/${entryId}/`, { waitUntil: "domcontentloaded" });
+    for (const resource of data.resources!) {
+      const link = page.locator(`${scope} .resources a`, { hasText: resource.label });
+      await expect(link, `${resource.label} のリンクがありません`).toHaveAttribute("href", resource.url);
+      await expect(link).toHaveAttribute("target", "_blank");
+      if (resource.url.startsWith("/")) {
+        const response = await page.request.get(resource.url);
+        expect(response.ok(), `${resource.url} が取得できません`).toBeTruthy();
+      }
+    }
   });
+}
 
-  test("受付開始前は申込ボタンを出さない", async ({ page }) => {
-    const { id, application } = withApplication!;
-    await page.clock.setFixedTime(jst(application.opens, "00:00:00").getTime() - 60 * 1000);
-    await page.goto(`/entry/${id}/`);
-
-    await expect(page.getByText("から受付開始")).toBeVisible();
-    await expect(page.getByRole("link", { name: "申し込む" })).toBeHidden();
+/**
+ * 追加の項目（大会許諾番号など）。任天堂のガイドラインで告知への記載が求められる
+ * ものなので、注意書きに埋もれず項目として出ていることを見る。
+ */
+for (const { entryId, name, scope, data } of sections.filter((section) => (section.data.extraFacts ?? []).length > 0)) {
+  test(`追加の項目を出す（${name}）`, async ({ page }) => {
+    await page.goto(`/entry/${entryId}/`, { waitUntil: "domcontentloaded" });
+    for (const fact of data.extraFacts!) {
+      await expect(page.locator(`${scope} .facts .fact`, { hasText: fact.label })).toContainText(fact.value);
+    }
   });
-});
+}
+
+/**
+ * 複数の企画を載せる記事（Issue #102）。
+ *
+ * スマホでは記事が縦に長くなるので、冒頭のリンクから各企画の欄へ飛べること。
+ * 開催回は企画ごとに書き、記事全体の「開催」欄は出さない（企画ごとの欄と重複するため）。
+ */
+const withParts = (entries as EntryData[]).filter((entry) => (entry.parts ?? []).length > 0);
+
+for (const entry of withParts) {
+  test(`企画ごとの欄へ飛べる（${entry.id}）`, async ({ page }) => {
+    await page.goto(`/entry/${entry.id}/`, { waitUntil: "domcontentloaded" });
+
+    for (const part of entry.parts!) {
+      await expect(page.locator(`.parts-nav a[href="#${part.id}"]`)).toContainText(part.name);
+      await expect(page.locator(`section#${part.id} h2`)).toHaveText(part.name);
+      await expect(page.locator(`[data-part="${part.id}"] .facts .fact`, { hasText: "開催" })).toHaveCount(1);
+    }
+    await expect(page.locator("article.entry > .facts .fact", { hasText: "開催" })).toHaveCount(0);
+  });
+}

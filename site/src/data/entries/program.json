@@ -79,7 +79,7 @@
     "id": "workshop-drone",
     "category": "イベント",
     "categoryLabel": "ワークショップ",
-    "name": "親子でドローン体験",
+    "name": "親子でドローン体験！ワークショップ",
     "group": "材料工学科",
     "summary": "教育用ドローンの操縦と、プログラミングによる自動飛行を体験できます。",
     "description": "教育用ドローン「CoDrone EDU」のマニュアル飛行とBlockly（ビジュアルプログラミング言語）による自動飛行を体験いただきます。Pythonによる自動飛行にも挑戦いただけます。産業、防災分野などでの活用が広がっているドローンの仕組み、飛行原理などを体験を通して理解いただけます。\n\nまた、無人航空機操縦士実地試験に対応した産業用ドローン「蒼天（SOTEN）」も展示いたします。ぜひご参加ください。",
@@ -92,30 +92,151 @@
     "occurrences": [
       {
         "day": "day1",
-        "start_time": "11:00",
-        "end_time": "12:00"
+        "start_time": "10:00",
+        "end_time": "11:30"
       },
       {
         "day": "day1",
-        "start_time": "14:00",
-        "end_time": "15:00"
+        "start_time": "13:00",
+        "end_time": "14:30"
       },
       {
         "day": "day2",
-        "start_time": "11:00",
-        "end_time": "12:00"
+        "start_time": "10:00",
+        "end_time": "11:30"
       },
       {
         "day": "day2",
-        "start_time": "14:00",
-        "end_time": "15:00"
+        "start_time": "13:00",
+        "end_time": "14:30"
       }
     ],
-    "audience": "親子",
-    "capacity": "各回親子5組（合計10名程度）",
+    "audience": "小学生(中学年〜高学年)と保護者",
+    "capacity": "各回5組",
+    "fee": "無料（別途、傷害保険料 50円/人）",
+    "application": {
+      "url": "https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=XYP-cpVeEkWK4KezivJfyNXHxjzMynRNuuQmuwM5UilURFBORUpTREhNVkowUkRQR1UwUUJUOTI2SSQlQCN0PWcu",
+      "opens": "2026-09-25",
+      "closes": "2026-10-14",
+      "guideUrl": "https://www.suzuka-ct.ac.jp/general/general_index/event/"
+    },
     "notes": [
-      "鈴鹿高専入試広報HPにて募集",
-      "応募多数の場合は抽選"
+      "事前応募者のみ",
+      "午前の部と午後の部は同じ内容です",
+      "実際に体験するのは、大人1名と子ども1名のペアです",
+      "応募フォームには、パソコンからのメールを受信できるメールアドレスを入力してください",
+      "応募者多数の場合は、主催者側で調整することがあります。結果は後日、応募者全員に通知されます",
+      "当日の様子を写真撮影し、鈴鹿高専ホームページに掲載する場合があります"
+    ],
+    "featured": true,
+    "link": null
+  },
+  {
+    "id": "game-tournament",
+    "category": "イベント",
+    "categoryLabel": "ゲーム大会",
+    "name": "高専祭ゲーム大会",
+    "group": "実行委員会",
+    "summary": "1日目は『スプラトゥーン3』、2日目は『スマブラSP』のトーナメント大会です。",
+    "description": "1日目は『スプラトゥーン3』、2日目は『大乱闘スマッシュブラザーズ SPECIAL』のトーナメント大会を開催します。参加条件はなく、鈴鹿高専生以外の方も参加できます。\n\n優勝賞品は日用品・菓子類等の景品を予定しています。",
+    "tags": [
+      "day1",
+      "day2"
+    ],
+    "location": "第二合併講義室",
+    "image": "/entries/game-tournament.webp",
+    "audience": "どなたでも（鈴鹿高専生以外も参加できます）",
+    "notes": [
+      "原則として事前申込のみです。大会ごとに申込フォームが分かれています",
+      "申し込む前に、参加者規約と任天堂の規約を確認してください。申込みをもって、参加者規約とルールブックに同意したものとします",
+      "18歳未満の方は、保護者に参加者規約・大会内容・ルールブックを確認してもらい、同意を得てからお申し込みください",
+      "大会中、運営または学校関係者が写真・動画を撮影し、広報等に使用する場合があります",
+      "この大会は、任天堂の協賛・提携を受けたものではありません"
+    ],
+    "resources": [
+      {
+        "label": "高専祭ゲーム大会 参加者規約",
+        "url": "https://docs.google.com/document/d/1gIQoYlBHGX_-38IP8LhQQQPdZ-04iKio/edit?usp=sharing"
+      },
+      {
+        "label": "任天堂「コミュニティ大会への出場および観戦に関する規約」",
+        "url": "https://www.nintendo.co.jp/tournament_guideline/rules.html"
+      }
+    ],
+    "parts": [
+      {
+        "id": "splatoon3",
+        "name": "スプラトゥーン3",
+        "occurrences": [
+          {
+            "day": "day1",
+            "start_time": "11:00",
+            "end_time": "15:00",
+            "note": "受付 9:45〜10:45"
+          }
+        ],
+        "capacity": "10チーム程度（4人1組）",
+        "description": "【大会形式】\n4人1組のチーム戦・トーナメント方式\n\n【プログラム】\n9:45〜10:45 参加チーム受付\n11:00〜11:15 開会式・ルール説明\n11:15〜14:30 予選・本選（トーナメント戦・昼休憩なし）\n14:30〜15:00 決勝戦\n15:00〜 結果発表・賞品授与\n\n【対戦ルール】\n・2本先取\n・ステージはすべてランダム\n・ブキの縛りなし（毎試合変更可能）\n・ギアはメインギアパワーのみ（追加ギアパワーなし）\n・1試合目はチームリーダー同士のじゃんけんの勝者が、2試合目は敗者がルールを決め、3試合目はナワバリバトルで行います\n\n【持ち物】\n・Nintendo Switch（Switch 2は不可）\n・『スプラトゥーン3』のゲームソフト\n・コントローラー（貸出もありますが、数に限りがあります）\n・イヤホン・ヘッドホン（無くても参加できますが、ゲーム音声は聞けません）",
+        "extraFacts": [
+          {
+            "label": "許諾番号",
+            "value": "NJ26-AV5JA-F04441（任天堂）"
+          }
+        ],
+        "notes": [
+          "1〜3名での応募もできます。事前アンケート（ウデマエや使用武器など）をもとに、運営側で「野良連合チーム」を編成します",
+          "応募が想定より多い場合は、応募人数の多い組を優先します。1人または2人での応募は参加できない場合があります。参加可否は募集締切後にご案内します",
+          "大会前に、必ずゲームソフトを最新版に更新してください",
+          "終了時刻は目安です"
+        ],
+        "application": {
+          "url": "https://docs.google.com/forms/d/e/1FAIpQLSc3_QROQluHy8BpAYUMP0S1_bCzIx0SSS1NUCqHFy1UpZA4Kg/viewform",
+          "opens": "2026-08-28",
+          "closes": null,
+          "guideUrl": null
+        },
+        "resources": [
+          {
+            "label": "大会ポスター（画像）",
+            "url": "/entries/game-splatoon3-poster.webp"
+          }
+        ]
+      },
+      {
+        "id": "smash",
+        "name": "大乱闘スマッシュブラザーズ SPECIAL",
+        "occurrences": [
+          {
+            "day": "day2",
+            "start_time": "10:45",
+            "end_time": "13:15",
+            "note": "受付 9:30〜10:30"
+          }
+        ],
+        "capacity": "最大64人",
+        "description": "【大会形式】\n個人戦・トーナメント方式（敗者復活なし。1回負けたら敗退）\n\n【プログラム】\n9:30〜10:30 参加受付\n10:45〜11:00 開会式・ルール説明\n11:00〜12:45 予選・本選（トーナメント戦・昼休憩なし）\n12:45〜13:15 決勝戦\n13:15〜 結果発表・賞品授与\n\n【対戦ルール】\n・3ゲーム2本先取\n・3ストック・7分のストック制\n・アイテムなし・スピリットなし・ステージギミックOFF\n\n【試合の進め方】\n1戦目: 両者が使用ファイターを選んだあと、じゃんけんの勝者がステージを選びます\n2戦目: 1戦目のじゃんけんの敗者がステージを選びます\n3戦目: 1勝1敗のときのみ。もう一度じゃんけんをして、勝者がステージを選びます\n試合に勝ったら、会場の受付にスコア（2勝1敗なら「2-1」）を報告し、次の対戦時間を確認してください。\n\n【持ち物】\n※Nintendo Switch本体とゲームソフトは運営が用意します\n・コントローラー（持ち込み可。貸出もあります）\n・イヤホン・ヘッドホン（推奨）",
+        "extraFacts": [
+          {
+            "label": "許諾番号",
+            "value": "NJ26-AAABA-F04443（任天堂）"
+          }
+        ],
+        "notes": [
+          "プログラムの時間は多少前後する可能性があります"
+        ],
+        "application": {
+          "url": "https://docs.google.com/forms/d/e/1FAIpQLSdvKf4f5U2tMkuNoQNBEoVu1jNX1dV45b0idjRZu25gEpKR-w/viewform",
+          "opens": "2026-08-28",
+          "closes": null,
+          "guideUrl": null
+        },
+        "resources": [
+          {
+            "label": "大会ポスター（画像）",
+            "url": "/entries/game-smash-poster.webp"
+          }
+        ]
+      }
     ],
     "featured": true,
     "link": null
@@ -344,7 +465,8 @@
     "notes": [
       "参加にはスマートフォンと、アプリ「みんなで早押しクイズ」が必要です。開始前にインストールしておいてください"
     ],
-    "links": [
+    "featured": false,
+    "resources": [
       {
         "label": "App Store",
         "url": "https://apps.apple.com/jp/app/%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E6%97%A9%E6%8A%BC%E3%81%97%E3%82%AF%E3%82%A4%E3%82%BA/id1044039663"
@@ -353,8 +475,7 @@
         "label": "Google Play",
         "url": "https://play.google.com/store/apps/details?id=com.tactosh.quiz&hl=ja"
       }
-    ],
-    "featured": false
+    ]
   },
   {
     "id": "main-attack25",

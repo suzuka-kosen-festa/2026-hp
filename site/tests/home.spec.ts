@@ -14,6 +14,7 @@ test("PICK UP に NO IMAGE のプレースホルダーが出ない", async ({ pa
 
 test("初回訪問では1桁につき24枚の紙片で日数を作るOPを表示する", async ({ page }) => {
   await page.clock.setFixedTime(new Date("2026-09-11T00:00:00+09:00"));
+  await page.addInitScript(() => sessionStorage.setItem("op-variant", "current"));
   await page.goto("/");
 
   const splash = page.getByLabel("開催まであと50日");
@@ -23,7 +24,8 @@ test("初回訪問では1桁につき24枚の紙片で日数を作るOPを表示
   await expect(splash.locator("video")).toHaveCount(0);
 });
 
-test("OP終了を再生開始から4.8秒後に予約する", async ({ page }) => {
+test("OP終了を再生開始から4.2秒後に予約する", async ({ page }) => {
+  await page.addInitScript(() => sessionStorage.setItem("op-variant", "current"));
   await page.addInitScript(() => {
     const scheduledTimeouts: number[] = [];
     const originalSetTimeout = window.setTimeout.bind(window);
@@ -39,7 +41,27 @@ test("OP終了を再生開始から4.8秒後に予約する", async ({ page }) =
   const scheduledTimeouts = await page.evaluate(
     () => (window as Window & { __scheduledTimeouts: number[] }).__scheduledTimeouts,
   );
-  expect(scheduledTimeouts).toContain(4_800);
+  expect(scheduledTimeouts).toContain(4_200);
+
+  const timing = await page.evaluate(() => {
+    const animationTiming = (selector: string) => {
+      const animation = document.querySelector(selector)?.getAnimations()[0];
+      const effectTiming = animation?.effect?.getTiming();
+      return effectTiming && { delay: effectTiming.delay, duration: effectTiming.duration };
+    };
+    const paperAnimations = [...document.querySelectorAll(".op-paper-placement")]
+      .map((paper) => paper.getAnimations()[0]?.effect?.getComputedTiming().endTime)
+      .filter((endTime): endTime is number => typeof endTime === "number");
+
+    return {
+      wipe: animationTiming(".op-wipe"),
+      logo: animationTiming(".op-finale img"),
+      paperEnd: Math.max(...paperAnimations),
+    };
+  });
+  expect(timing.wipe).toEqual({ delay: 3_400, duration: 800 });
+  expect(timing.logo).toEqual({ delay: 3_800, duration: 400 });
+  expect(timing.paperEnd).toBeLessThanOrEqual(3_100);
 });
 
 test("OPをスキップすると同じセッションでは再表示しない", async ({ page }) => {
@@ -162,4 +184,196 @@ test("favicon の sizes 宣言が実体と一致する", async ({ page }) => {
       `${path} の宣言 "${declared}" が実体 [${expected.join(", ")}] と違います`,
     ).toEqual([...expected].sort());
   }
+});
+
+/**
+ * PICK UP の「事前申込制」の印。
+ *
+ * セクション全体に「予約制」と書かず、申込（application）を持つ企画のカードにだけ付ける。
+ * コラージュカメラのような申込不要の企画が PICK UP に混ざっても嘘にならないようにするため。
+ * 期待値はデータから引くので、企画を入れ替えても成り立つ。
+ */
+const featuredEntries = ["booth", "department", "program"]
+  .flatMap((name) =>
+    JSON.parse(readFileSync(fileURLToPath(new URL(`../src/data/entries/${name}.json`, import.meta.url)), "utf8")),
+  )
+  .filter((entry: { featured?: boolean }) => entry.featured) as {
+  id: string;
+  application?: unknown;
+  parts?: { application?: unknown }[];
+}[];
+
+/** 複数の企画を載せる記事（parts）は、どれか1つでも申込が要れば印を付ける */
+const needsApplication = (entry: (typeof featuredEntries)[number]) =>
+  Boolean(entry.application) || (entry.parts ?? []).some((part) => part.application);
+
+test("申込が要る企画にだけ「事前申込制」を付ける", async ({ page }) => {
+  test.skip(featuredEntries.length === 0, "PICK UP に載る企画が無いため");
+  await page.goto("/");
+
+  for (const entry of featuredEntries) {
+    const badge = page.locator(`a[href="/entry/${entry.id}/"] .pc__label--apply`);
+    await expect(badge, `${entry.id} の「事前申込制」の有無が申込データと食い違っています`).toHaveCount(
+      needsApplication(entry) ? 1 : 0,
+    );
+  }
+});
+
+/**
+ * お知らせから PICK UP へ着地する（Issue #104）。
+ *
+ * 見出しは Reveal で下から持ち上がるので、scroll-margin が足りないと
+ * ヘッダーの下に潜る。
+ *
+ * html は scroll-behavior: smooth なので、クリック直後に測るとまだスクロールが
+ * 始まったばかりで、見出しは画面のはるか下にある（＝ヘッダーより下なので素通りする）。
+ * スクロールと Reveal の登場が止まるのを待ってから測る。
+ *
+ * PICK UP はページの最下部にあるので、画面が縦に長いとページの終わりで
+ * スクロールが止まり、scroll-margin が無くても見出しが下に余る（検査が効かない）。
+ * 実機のSafariに近い、縦の短い画面で測る。
+ */
+test("お知らせから PICK UP へ着地できる", async ({ page }) => {
+  // OPは初回訪問時に全画面を覆うので見た扱いにする（着地位置の検査の邪魔になる）
+  await page.addInitScript(() => {
+    try {
+      sessionStorage.setItem("op-seen", "1");
+    } catch {
+      /* noop */
+    }
+  });
+
+  for (const width of [375, 1280]) {
+    await page.setViewportSize({ width, height: 640 });
+
+    await page.goto("/news/");
+    const link = page.locator('a[href="/#pickup"]');
+    await expect(link, "PICK UP へ案内するお知らせがありません").toHaveCount(1);
+    await link.click();
+
+    const heading = page.locator("#pickup h2");
+    await expect(heading, `${width}px で PICK UP までスクロールしていません`).toBeInViewport();
+
+    // 150ms あけて2回測り、同じ位置なら止まったとみなす
+    let settledY: number | null = null;
+    await expect
+      .poll(async () => {
+        const before = (await heading.boundingBox())!.y;
+        await page.waitForTimeout(150);
+        const after = (await heading.boundingBox())!.y;
+        settledY = before === after ? after : null;
+        return settledY;
+      }, { message: `${width}px でスクロールが止まりません` })
+      .not.toBeNull();
+
+    const header = (await page.locator("header").boundingBox())!;
+    expect(
+      settledY!,
+      `${width}px で見出しがヘッダー（高さ${Math.round(header.height)}px）に隠れています（Y=${Math.round(settledY!)}）`,
+    ).toBeGreaterThanOrEqual(header.height);
+  }
+});
+
+/**
+ * SPメニューの閉じるボタンは、✕に変形したハンバーガー1つだけであること。
+ *
+ * 以前はメニュー内にも別の「✕」ボタンを置いており、同じ右上の位置で
+ * ハンバーガーの✕と重なって二重に描画されていた。
+ * 閉じるボタンが1つだけ見えていること、それを押すと閉じることを見る。
+ */
+test("SPメニューの閉じるボタンは1つだけで、押すと閉じる", async ({ page }) => {
+  await page.addInitScript(() => sessionStorage.setItem("op-seen", "1"));
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.goto("/");
+
+  await page.getByRole("button", { name: "メニューを開く" }).click();
+  const menu = page.getByRole("navigation", { name: "メインナビゲーション" });
+  await expect(menu).toBeVisible();
+
+  const close = page.getByRole("button", { name: "メニューを閉じる" });
+  await expect(close, "閉じるボタンが複数あります").toHaveCount(1);
+
+  await close.click();
+  await expect(menu).toHaveCount(0);
+});
+
+test("保存されたOPを初回表示と再再生で使い続ける", async ({ page }) => {
+  await page.addInitScript(() => sessionStorage.setItem("op-variant", "candidate1"));
+  await page.goto("/");
+
+  await expect(page.locator(".op-splash")).toHaveAttribute("data-op-variant", "candidate1");
+  await page.getByRole("button", { name: "SKIP" }).click();
+  await expect(page.locator(".op-splash")).toHaveCount(0);
+
+  await page.evaluate(() => window.dispatchEvent(new Event("op:replay")));
+  await expect(page.locator(".op-splash")).toHaveAttribute("data-op-variant", "candidate1");
+});
+
+test("再生途中の再再生でも最初に選んだ演出と新しい終了時刻を使う", async ({ page }) => {
+  await page.addInitScript(() => sessionStorage.setItem("op-variant", "candidate1"));
+  await page.goto("/");
+  await expect(page.locator(".op-splash")).toHaveAttribute("data-op-variant", "candidate1");
+  await page.waitForTimeout(1800);
+  await page.evaluate(() => window.dispatchEvent(new Event("op:replay")));
+  await page.waitForTimeout(1900);
+  await expect(page.locator(".op-splash")).toHaveAttribute("data-op-variant", "candidate1");
+  await expect(page.locator(".op-splash")).toHaveCount(0, { timeout: 2500 });
+});
+
+test("低減モーションでは初回OPを省略し、明示的な再再生はできる", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.addInitScript(() => sessionStorage.setItem("op-variant", "candidate2"));
+  await page.goto("/");
+  await expect(page.locator("#op-cover")).toHaveCount(0);
+  await expect(page.locator(".op-splash")).toHaveCount(0);
+  await page.evaluate(() => window.dispatchEvent(new Event("op:replay")));
+  await expect(page.locator(".op-splash")).toHaveAttribute("data-op-variant", "candidate2");
+});
+
+test("データ節約回線では初回OPを省略する", async ({ page }) => {
+  await page.addInitScript(() => Object.defineProperty(navigator, "connection", { value: { saveData: true } }));
+  await page.goto("/");
+  await expect(page.locator("#op-cover")).toHaveCount(0);
+  await expect(page.locator(".op-splash")).toHaveCount(0);
+});
+
+test("未知の保存値は有効なOPに選び直す", async ({ page }) => {
+  await page.addInitScript(() => sessionStorage.setItem("op-variant", "unknown"));
+  await page.goto("/");
+  await expect(page.locator(".op-splash")).toHaveAttribute("data-op-variant", /^(current|candidate1|candidate2)$/);
+  await expect.poll(() => page.evaluate(() => sessionStorage.getItem("op-variant"))).toMatch(/^(current|candidate1|candidate2)$/);
+});
+
+for (const [value, expected] of [[0, "current"], [0.5, "candidate1"], [0.99, "candidate2"]] as const) {
+  test(`抽選値${value}では${expected}を選ぶ`, async ({ page }) => {
+    await page.addInitScript((randomValue) => { Math.random = () => randomValue; }, value);
+    await page.goto("/");
+    await expect(page.locator(".op-splash")).toHaveAttribute("data-op-variant", expected);
+    await expect.poll(() => page.evaluate(() => sessionStorage.getItem("op-variant"))).toBe(expected);
+  });
+}
+
+test("候補1は紙片の数字からロゴを組み立てて終了する", async ({ page }) => {
+  await page.clock.setFixedTime(new Date("2026-09-11T00:00:00+09:00"));
+  await page.addInitScript(() => sessionStorage.setItem("op-variant", "candidate1"));
+  await page.goto("/");
+  const splash = page.locator(".op-splash");
+  await expect(splash.locator(".op-candidate1 .digit-piece")).toHaveCount(8);
+  await expect(splash.locator(".op-candidate1 .logo-piece")).toHaveCount(7);
+  await expect(splash).toHaveCount(0, { timeout: 6000 });
+});
+
+test("候補2は学科柄と黄色いワイプからロゴへ切り替わる", async ({ page }) => {
+  await page.addInitScript(() => sessionStorage.setItem("op-variant", "candidate2"));
+  await page.goto("/");
+  const splash = page.locator(".op-splash");
+  await expect(splash.locator(".op-candidate2 .opening-paper")).toHaveCount(3);
+  await expect(splash.locator(".op2-third circle")).toHaveCount(6);
+  await expect(splash.locator(".op-candidate2 .op2-wipe")).toHaveCount(1);
+  await expect.poll(() => splash.locator(".op2-wipe").evaluate(el => {
+    const progress = el.getAnimations()[0]?.currentTime;
+    if (typeof progress !== "number" || progress < 3300) return null;
+    return Number(getComputedStyle(document.querySelector(".op2-hero")!).opacity);
+  }), { timeout: 5000 }).toBe(1);
+  await expect(splash).toHaveCount(0, { timeout: 6500 });
 });

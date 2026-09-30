@@ -1,0 +1,245 @@
+---
+// 詳細ページの「開催・場所・対象・定員…」の並び。
+// 記事全体（/entry/[id]）と、複数の企画を載せる記事の企画ごと（EntryPartSection）で使い回す。
+// 渡されなかった項目は行ごと出さない。
+import { dayColorClass, formatDayLabel } from "../../lib/eventDate";
+import { formatApplicationDate } from "../../lib/application";
+import type { Application, Day, ExtraFact, Member, Occurrence } from "../../types/content";
+
+interface Props {
+  /** 期間中いつでも参加できる企画の期間（バザーグランプリ等） */
+  period?: string | null;
+  /** 参加の仕方（当日参加OKの企画等） */
+  participation?: string | null;
+  /** 出演メンバー（バンド）。代表者を先頭にして渡す */
+  members?: Member[];
+  occurrences?: Occurrence[];
+  isPermanent?: boolean;
+  location?: string | null;
+  audience?: string | null;
+  capacity?: string | null;
+  fee?: string | null;
+  application?: Application | null;
+  extraFacts?: ExtraFact[];
+}
+
+const {
+  period,
+  participation,
+  members = [],
+  occurrences = [],
+  isPermanent = false,
+  location,
+  audience,
+  capacity,
+  fee,
+  application,
+  extraFacts = [],
+} = Astro.props;
+
+/** 開催回を日ごとにまとめる。同じ日に複数公演ある企画（化学マジック等）を1行に畳むため */
+function groupByDay(items: Occurrence[]) {
+  const order: Day[] = ["day1", "day2"];
+  return order
+    .map((day) => ({ day, items: items.filter((o) => o.day === day) }))
+    .filter((group) => group.items.length > 0);
+}
+
+function formatTime(occurrence: Occurrence) {
+  if (!occurrence.start_time) return "時間未定";
+  return occurrence.end_time ? `${occurrence.start_time}-${occurrence.end_time}` : `${occurrence.start_time}〜`;
+}
+
+const dayGroups = groupByDay(occurrences);
+const hasSchedule = isPermanent || dayGroups.length > 0;
+const closesLabel = application?.closes ? formatApplicationDate(application.closes) : "定員に達し次第締切";
+---
+
+<dl class="facts">
+  {
+    period && (
+      <div class="fact">
+        <dt>期間</dt>
+        <dd>{period}</dd>
+      </div>
+    )
+  }
+  {
+    hasSchedule && (
+      <div class="fact">
+        <dt>開催</dt>
+        <dd>
+          {isPermanent ? (
+            <span>会期中ずっと</span>
+          ) : (
+            <ul class="days">
+              {dayGroups.map((group) => (
+                <li>
+                  <span class:list={["day", "num", dayColorClass(group.day)]}>{formatDayLabel(group.day)}</span>
+                  <span class="times">
+                    {group.items.map((o) => (
+                      <span class="slot">
+                        <span class="num">{formatTime(o)}</span>
+                        {o.note && <span class="slot-note">（{o.note}）</span>}
+                      </span>
+                    ))}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </dd>
+      </div>
+    )
+  }
+  {
+    location && (
+      <div class="fact">
+        <dt>場所</dt>
+        <dd>{location}</dd>
+      </div>
+    )
+  }
+  {
+    participation && (
+      <div class="fact">
+        <dt>参加</dt>
+        <dd>{participation}</dd>
+      </div>
+    )
+  }
+  {
+    members.length > 0 && (
+      <div class="fact">
+        <dt>メンバー</dt>
+        <dd>
+          <ul class="members">
+            {members.map((member) => (
+              <li>
+                {member.name}
+                {member.affiliation && <span class="affiliation">（{member.affiliation}）</span>}
+              </li>
+            ))}
+          </ul>
+        </dd>
+      </div>
+    )
+  }
+  {
+    audience && (
+      <div class="fact">
+        <dt>対象</dt>
+        <dd>{audience}</dd>
+      </div>
+    )
+  }
+  {
+    capacity && (
+      <div class="fact">
+        <dt>定員</dt>
+        <dd>{capacity}</dd>
+      </div>
+    )
+  }
+  {
+    fee && (
+      <div class="fact">
+        <dt>受講料</dt>
+        <dd>{fee}</dd>
+      </div>
+    )
+  }
+  {
+    application && (
+      <div class="fact">
+        <dt>募集期間</dt>
+        <dd>
+          {formatApplicationDate(application.opens)}〜{closesLabel}
+        </dd>
+      </div>
+    )
+  }
+  {
+    extraFacts.map((fact) => (
+      <div class="fact">
+        <dt>{fact.label}</dt>
+        <dd>{fact.value}</dd>
+      </div>
+    ))
+  }
+</dl>
+
+<style>
+  .facts {
+    margin-top: 26px;
+    border-top: 2px dashed rgba(17, 17, 17, 0.25);
+  }
+
+  .fact {
+    display: flex;
+    gap: 14px;
+    padding: 12px 2px;
+    border-bottom: 2px dashed rgba(17, 17, 17, 0.25);
+    font-size: 14px;
+  }
+
+  .fact dt {
+    flex: 0 0 4.5em;
+    font-weight: 800;
+  }
+
+  .fact dd {
+    flex: 1;
+    min-width: 0;
+    line-height: 1.7;
+  }
+
+  .days {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .days > li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 12px;
+  }
+
+  .day {
+    font-size: 17px;
+  }
+
+  /* ポスター準拠: SAT=青 / SUN=赤。day1/day2ではなく実際の曜日で決める
+     （site.json の日付を変えても色がずれない。design-system.md §1） */
+  .day.sat {
+    color: var(--blue);
+  }
+
+  .day.sun {
+    color: var(--red);
+  }
+
+  /* 1日に複数公演ある企画（化学マジック等）は回を横に並べる */
+  .times {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 14px;
+  }
+
+  .slot-note {
+    font-size: 12px;
+  }
+
+  .members {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px 16px;
+  }
+  .affiliation {
+    font-size: 12px;
+  }
+</style>

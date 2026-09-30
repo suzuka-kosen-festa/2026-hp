@@ -51,6 +51,25 @@
   filter: url(#tape-edge);
 }
 
+/* カテゴリと「事前申込制」を横に並べる。狭い幅では折り返す */
+.pc__labels {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 6px;
+}
+
+/* 赤は目を引かせたいものに取っておく色（lib/tags.ts の方針）。申込の要否は見落とすと
+   当日来ても参加できないので赤にする */
+.pc__label--apply {
+  /* 隣のカテゴリと逆に傾けて、別々に貼ったテープに見せる */
+  rotate: 1.2deg;
+}
+
+.pc__label--apply::before {
+  background: var(--red);
+}
+
 .pc__name {
   font-size: 19px;
   line-height: 1.35;
