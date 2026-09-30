@@ -649,15 +649,15 @@
     "description": null,
     "comment": "伊藤清の置き土産こと、いろは率いる愉快な仲間たち「いろはず」がバンドやるよ！見に来てね！！",
     "tags": [
-      "day1"
+      "day2"
     ],
     "location": "LiveStage",
     "image": "/entries/live-irohazu.webp",
     "occurrences": [
       {
-        "day": "day1",
-        "start_time": "09:50",
-        "end_time": "10:10"
+        "day": "day2",
+        "start_time": "09:00",
+        "end_time": "09:20"
       }
     ],
     "leader": {
@@ -692,8 +692,8 @@
     "occurrences": [
       {
         "day": "day1",
-        "start_time": "10:20",
-        "end_time": "10:40"
+        "start_time": "09:50",
+        "end_time": "10:10"
       }
     ],
     "leader": {
@@ -905,15 +905,15 @@
     "description": null,
     "comment": "3度目の響き、4つの言葉、\n最後まで声を限りに、\n最高の瞬間を！\nーーMIKASA",
     "tags": [
-      "day2"
+      "day1"
     ],
     "location": "LiveStage",
     "image": "/entries/live-mikasa.webp",
     "occurrences": [
       {
-        "day": "day2",
-        "start_time": "09:00",
-        "end_time": "09:20"
+        "day": "day1",
+        "start_time": "10:20",
+        "end_time": "10:40"
       }
     ],
     "leader": {
@@ -1086,9 +1086,9 @@
     "featured": false
   },
   {
-    "id": "sub-secret-band",
+    "id": "sub-the-low-guys",
     "category": "ライブ",
-    "name": "SECRET BAND",
+    "name": "The Low Guys",
     "group": null,
     "description": null,
     "tags": [
