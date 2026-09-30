@@ -5,6 +5,13 @@ import { describePage } from "./_shared";
 
 describePage("access", "/access/");
 
+const access = JSON.parse(
+  readFileSync(fileURLToPath(new URL("../src/data/access.json", import.meta.url)), "utf8"),
+) as { access: { title: string; warning?: string }[]; descriptionWarning?: string };
+
+/** --red(#e31b23) */
+const RED = "rgb(227, 27, 35)";
+
 /**
  * 駐車場の図が画面の高さを占領しないこと（MTG 2026-09-06 の指摘）。
  *
@@ -93,4 +100,41 @@ test("駐車場パネルは常に1枚だけ表示される", async ({ page }) =>
       expect(visible, `${width}px でタブ${i + 1}を選んだとき ${visible} 枚見えています`).toBe(1);
     }
   }
+});
+
+/**
+ * 学校前の住宅地での乗降車禁止が、「車」の案内の中に赤字で出ていること（#109）。
+ *
+ * 文言は access.json の warning に持たせているので、データ側で消されたり
+ * 別の項目へ移されたりしても気づけるよう、「車」の項目に紐づいていることを見る。
+ */
+test("車の案内に乗降車禁止が赤字で出ている", async ({ page }) => {
+  await page.goto("/access/");
+
+  const warning = access.access.find((item) => item.title === "車")?.warning;
+  expect(warning, "access.json の「車」に warning がありません").toBeTruthy();
+
+  const item = page.locator(".info li", { has: page.locator("strong", { hasText: /^車$/ }) });
+  const text = item.getByText(warning!);
+  await expect(text).toBeVisible();
+
+  const color = await text.evaluate((el) => getComputedStyle(el).color);
+  expect(color, "乗降車禁止の文言が赤字になっていません").toBe(RED);
+});
+
+/**
+ * 駐車場セクションの説明にも、送迎の人向けの一文が赤字で出ていること（#109）。
+ *
+ * 「車」の赤字とは画面ひとつぶん離れていて、駐車場を選ぶ人はこちらしか読まないため。
+ */
+test("駐車場の説明に送迎の注意が赤字で出ている", async ({ page }) => {
+  await page.goto("/access/");
+
+  expect(access.descriptionWarning, "access.json に descriptionWarning がありません").toBeTruthy();
+
+  const text = page.locator(".parking-description").getByText(access.descriptionWarning!);
+  await expect(text).toBeVisible();
+
+  const color = await text.evaluate((el) => getComputedStyle(el).color);
+  expect(color, "送迎の注意が赤字になっていません").toBe(RED);
 });
