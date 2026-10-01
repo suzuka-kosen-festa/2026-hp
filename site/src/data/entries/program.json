@@ -145,6 +145,7 @@
     ],
     "location": "第二合併講義室",
     "image": "/entries/game-tournament.webp",
+    "listInTimetable": true,
     "audience": "どなたでも（鈴鹿高専生以外も参加できます）",
     "notes": [
       "原則として事前申込のみです。大会ごとに申込フォームが分かれています",

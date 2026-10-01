@@ -64,12 +64,13 @@ export function getPermanentEntries(entries: Entry[]): Entry[] {
 }
 
 /**
- * timetableページ用: 常設セクションに並べる、期間中いつでも参加できるエントリ。
+ * timetableページ用: 常設セクションに並べるエントリ（データの記載順）。
  * 会期中ずっとの常設（isPermanent）に加え、バザーグランプリのように参加は期間中ずっとできて
- * 発表だけがステージにある企画（period あり）も含める。後者は発表の回がグリッドにも載る
+ * 発表だけがステージにある企画（period あり）、ステージ外だが表からも辿らせたい企画
+ * （listInTimetable。ゲーム大会等）を含める
  */
 export function getOngoingEntries(entries: Entry[]): Entry[] {
-  return entries.filter((entry) => entry.isPermanent || entry.period);
+  return entries.filter((entry) => entry.isPermanent || entry.period || entry.listInTimetable);
 }
 
 /** home等での特別扱い（ミッションフォトラリー等）対象のエントリ */
