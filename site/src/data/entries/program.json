@@ -1,18 +1,20 @@
 [
   {
-    "id": "collage-camera",
+    "id": "mission-photo-rally",
     "category": "イベント",
-    "name": "コラージュカメラ(仮)",
-    "group": "実行委員会 システム班",
-    "summary": "お題の写真を撮って、あなただけのフォトコラージュを作ろう。",
-    "description": "お題の写真を撮って、あなただけのフォトコラージュを作ろう。",
+    "name": "ミッションフォトラリー",
+    "group": "実行委員会",
+    "summary": "謎を解いて、写真を撮って、校内をめぐろう！",
+    "description": "謎を解いて、写真を撮って、校内をめぐろう！\n〜COLLAGEでつくる、最高の思い出〜\n\nすべてのミッションをクリアしたら、本部でガチャガチャにチャレンジ！クリアした人にはお菓子がもらえます。\n\n【遊び方】\n1. パンフレットや校内に貼ってあるQRコードを読み込んで、イベントスタート\n2. ニックネームなどを入力してサインイン\n3. お題が表示されます\n4. 謎を解いたり、特定の場所のQRコードを読み取ったりしよう\n5. 写真を撮って、フォトコラージュを完成させよう\n6. 完成したフォトコラージュを本部で見せて、景品をゲット！\n\n【追加イベント】\n公式Instagramストーリーのカウントダウン謎解きの答えを本部で伝えると、高専祭限定オリジナルキーホルダーをプレゼント！（ミッションフォトラリーとは別のイベントです）",
     "tags": [
-      "常設"
+      "常設",
+      "当日参加OK"
     ],
     "location": null,
-    "image": null,
+    "image": "/entries/mission-photo-rally.webp",
     "occurrences": [],
     "isPermanent": true,
+    "participation": "当日その場で参加できます（申込不要）。スマートフォンが必要です",
     "featured": false,
     "link": null
   },
@@ -143,6 +145,7 @@
     ],
     "location": "第二合併講義室",
     "image": "/entries/game-tournament.webp",
+    "listInTimetable": true,
     "audience": "どなたでも（鈴鹿高専生以外も参加できます）",
     "notes": [
       "原則として事前申込のみです。大会ごとに申込フォームが分かれています",
@@ -196,7 +199,7 @@
         "resources": [
           {
             "label": "大会ポスター（画像）",
-            "url": "/entries/game-splatoon3-poster.webp"
+            "url": "/files/game-splatoon3-poster.webp"
           }
         ]
       },
@@ -231,7 +234,7 @@
         "resources": [
           {
             "label": "大会ポスター（画像）",
-            "url": "/entries/game-smash-poster.webp"
+            "url": "/files/game-smash-poster.webp"
           }
         ]
       }
@@ -240,11 +243,12 @@
     "link": null
   },
   {
-    "id": "event-mainstage-open",
+    "id": "main-opening",
     "category": "イベント",
-    "name": "開会式",
-    "group": "実行委員会",
-    "description": "第61回鈴鹿高専祭 開会式。",
+    "name": "オープニング",
+    "group": null,
+    "summary": "第61回鈴鹿高専祭の開幕！",
+    "description": "第61回鈴鹿高専祭の開幕です。部活動の表彰、校長先生・青峰同窓会会長のあいさつ、協賛企業のご紹介のあと、今年の新企画「わらしべ長者」のスタートをお知らせします。",
     "tags": [
       "day1"
     ],
@@ -253,18 +257,416 @@
     "occurrences": [
       {
         "day": "day1",
-        "start_time": "09:30",
-        "end_time": "10:00"
+        "start_time": "09:00",
+        "end_time": "09:20"
       }
     ],
     "featured": false
   },
   {
-    "id": "event-mainstage-closing",
+    "id": "music-club-concert",
+    "category": "ライブ",
+    "name": "音楽部コンサート",
+    "group": null,
+    "summary": "鈴鹿高専音楽部によるコンサート。",
+    "description": "鈴鹿高専音楽部によるコンサートです。両日ともオープニングのあとに、メインステージ前で演奏します。",
+    "tags": [
+      "day1",
+      "day2"
+    ],
+    "location": "MainStage",
+    "image": "/entries/music-club-concert.webp",
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "09:50",
+        "end_time": "10:10"
+      },
+      {
+        "day": "day2",
+        "start_time": "09:00",
+        "end_time": "09:20"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "main-dance-battle",
     "category": "イベント",
-    "name": "閉会式",
-    "group": "実行委員会",
-    "description": "第61回鈴鹿高専祭 閉会式・表彰。",
+    "name": "ダンスバトル",
+    "group": null,
+    "summary": "6チームがダンスで競い、観客の投票で優勝を決める。",
+    "description": "6チームが順番にダンスを披露し、観客のみなさんの投票（5段階評価）で優勝チームを決めます。優勝チームは中夜祭のステージにも出場します。",
+    "tags": [
+      "day1"
+    ],
+    "location": "MainStage",
+    "image": "/entries/main-dance-battle.webp",
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "10:20",
+        "end_time": "11:10"
+      }
+    ],
+    "participation": "出場者の募集は終了しました。投票はどなたでも参加できます",
+    "notes": [
+      "三脚を使った撮影はご遠慮ください"
+    ],
+    "featured": false
+  },
+  {
+    "id": "main-dance-battle-award",
+    "category": "イベント",
+    "name": "ダンスバトル表彰式",
+    "group": null,
+    "summary": "ダンスバトルの結果発表と表彰式。",
+    "description": "ダンスバトルの結果発表と表彰式です。出場した全チームがステージに集まり、優勝チームにトロフィーを贈ります。",
+    "tags": [
+      "day1"
+    ],
+    "location": "MainStage",
+    "image": "/entries/main-dance-battle.webp",
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "11:10",
+        "end_time": "11:20"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "main-ore1-gp-prelim",
+    "category": "イベント",
+    "name": "オレ1グランプリ予選",
+    "group": null,
+    "summary": "高専生コンビの漫才。観客の投票で本選に進む3組を決める。",
+    "description": "テレビ番組「M-1グランプリ」の高専版。高専生のコンビが漫才を披露し、観客のみなさんの投票で、中夜祭の本選に進む3組を決めます。",
+    "tags": [
+      "day1"
+    ],
+    "location": "MainStage",
+    "image": "/entries/main-ore1-gp-prelim.webp",
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "11:25",
+        "end_time": "11:50"
+      }
+    ],
+    "participation": "出場者の募集は終了しました。投票はどなたでも参加できます",
+    "featured": false
+  },
+  {
+    "id": "main-yosakoi-katsuyama",
+    "category": "イベント",
+    "name": "よさこい勝山組",
+    "group": null,
+    "summary": "よさこい同好会「勝山組」の演舞。",
+    "description": "よさこい同好会「勝山組」が、メインステージ前で演舞を披露します。",
+    "tags": [
+      "day1",
+      "day2"
+    ],
+    "location": "MainStage",
+    "image": "/entries/main-yosakoi-katsuyama.webp",
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "12:00",
+        "end_time": "12:20"
+      },
+      {
+        "day": "day2",
+        "start_time": "09:30",
+        "end_time": "09:50"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "main-vocal1-gp",
+    "category": "イベント",
+    "name": "Vocal1グランプリ",
+    "group": null,
+    "summary": "高専歌うま王決定戦！観客の投票で順位を決める。",
+    "description": "高専で一番歌がうまいのは誰だ！高専歌うま王決定戦！出場者が持ち歌をフルコーラスで披露し、観客のみなさんの投票で順位を決めるのど自慢コンテストです。優勝者は中夜祭のステージでも歌います。",
+    "tags": [
+      "day1"
+    ],
+    "location": "MainStage",
+    "image": "/entries/main-vocal1-gp.webp",
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "12:30",
+        "end_time": "13:10"
+      }
+    ],
+    "participation": "出場者の募集は終了しました。投票はどなたでも参加できます",
+    "featured": false
+  },
+  {
+    "id": "main-bazaar-gp",
+    "category": "イベント",
+    "name": "バザーグランプリ",
+    "group": null,
+    "summary": "来場者の投票で一番人気の飲食バザーを決める！",
+    "description": "高専祭に出店している飲食バザーの中から、来場者のみなさんの投票で一番人気のバザーを決めます。実際にバザーを利用して、良かったと思う団体に投票してください。1日目に中間発表、2日目に最終結果（3位まで）をメインステージで発表します。",
+    "tags": [
+      "day1",
+      "day2",
+      "常設",
+      "当日参加OK"
+    ],
+    "location": "MainStage",
+    "image": "/entries/main-bazaar-gp.webp",
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "13:45",
+        "end_time": "13:55",
+        "note": "中間発表"
+      },
+      {
+        "day": "day2",
+        "start_time": "13:40",
+        "end_time": "13:50",
+        "note": "最終結果発表"
+      }
+    ],
+    "period": "10/31・11/1 の2日間（投票受付）",
+    "participation": "どなたでも投票できます（申込不要）。パンフレットのQRコードか、下のボタンから投票してください",
+    "featured": false,
+    "link": "https://docs.google.com/forms/d/e/1FAIpQLScxYlx_uv9bh0pLt1gYIu2fBQf0PLJPwLbJqeZi_2ngYCf3LQ/viewform",
+    "linkLabel": "投票する →"
+  },
+  {
+    "id": "main-hayaoshi-quiz",
+    "category": "イベント",
+    "name": "みんはや",
+    "group": null,
+    "summary": "アプリで会場のみんなと早押しクイズ。1位には景品！",
+    "description": "アプリ「みんなで早押しクイズ」を使って、会場のみんなで早押しクイズに挑戦！正解するたびに得点が入り、早く正解するほど追加得点がもらえます。一番になった人には景品を贈ります。",
+    "tags": [
+      "day1",
+      "当日参加OK"
+    ],
+    "location": "MainStage",
+    "image": "/entries/main-hayaoshi-quiz.webp",
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "13:20",
+        "end_time": "13:40"
+      }
+    ],
+    "participation": "当日その場で参加できます（申込不要）",
+    "notes": [
+      "参加にはスマートフォンと、アプリ「みんなで早押しクイズ」が必要です。開始前にインストールしておいてください"
+    ],
+    "featured": false,
+    "resources": [
+      {
+        "label": "App Store",
+        "url": "https://apps.apple.com/jp/app/%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E6%97%A9%E6%8A%BC%E3%81%97%E3%82%AF%E3%82%A4%E3%82%BA/id1044039663"
+      },
+      {
+        "label": "Google Play",
+        "url": "https://play.google.com/store/apps/details?id=com.tactosh.quiz&hl=ja"
+      }
+    ]
+  },
+  {
+    "id": "main-attack25",
+    "category": "イベント",
+    "name": "アタック25",
+    "group": null,
+    "summary": "25枚のパネルを奪い合う早押しクイズ。",
+    "description": "クイズ番組でおなじみの、25枚のパネルを奪い合う早押しクイズです。5チームが25問に挑み、正解したチームがパネルを1枚獲得。最後に一番多くのパネルを取ったチームが優勝です。",
+    "tags": [
+      "day1"
+    ],
+    "location": "MainStage",
+    "image": "/entries/main-attack25.webp",
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "14:00",
+        "end_time": "14:40"
+      }
+    ],
+    "participation": "出場者の募集は終了しました",
+    "featured": false
+  },
+  {
+    "id": "main-warashibe",
+    "category": "イベント",
+    "name": "わらしべ長者",
+    "group": null,
+    "summary": "物々交換で、最初の品物をどこまで出世させられるか？",
+    "description": "物々交換を繰り返して、最初の品物をどこまで価値のあるものにできるかに挑戦する、今年の新企画です。交換ブースで、手持ちの品物と交換していきます。どんなものにたどり着いたかは、2日目にメインステージで発表します。",
+    "tags": [
+      "day1",
+      "day2",
+      "常設",
+      "当日参加OK"
+    ],
+    "location": "MainStage",
+    "image": "/entries/main-warashibe.webp",
+    "occurrences": [
+      {
+        "day": "day2",
+        "start_time": "11:10",
+        "end_time": "11:20",
+        "note": "結果発表"
+      }
+    ],
+    "period": "10/31 オープニング後〜11/1 11:00（交換受付）",
+    "participation": "どなたでも交換に参加できます（申込不要）",
+    "notes": [
+      "交換ブースは、本部イベントの物販テント内にあります"
+    ],
+    "featured": false
+  },
+  {
+    "id": "main-suzu-league",
+    "category": "イベント",
+    "name": "スズリーグ",
+    "group": null,
+    "summary": "答えは何％？観客もスマホで参加できる新クイズ。",
+    "description": "人気番組「ネプリーグ」のパーセントバルーンをもとにした、鈴鹿高専オリジナルのクイズです。お題の答えが何％になるかを予想し、正解とのずれが小さいほど高得点。問題は鈴鹿高専生へのアンケート結果から作っています。4チームが挑戦するほか、観客のみなさんもスマートフォンから同じ問題に参加できます。",
+    "tags": [
+      "day2",
+      "当日参加OK"
+    ],
+    "location": "MainStage",
+    "image": "/entries/main-suzu-league.webp",
+    "occurrences": [
+      {
+        "day": "day2",
+        "start_time": "10:00",
+        "end_time": "10:30"
+      }
+    ],
+    "participation": "観客として当日その場で参加できます（申込不要）。ステージで表示するQRコードから参加してください",
+    "featured": false
+  },
+  {
+    "id": "main-marubatsu-quiz",
+    "category": "イベント",
+    "name": "〇✕クイズ",
+    "group": null,
+    "summary": "賞品をかけた勝ち残りの〇×クイズ。どなたでも参加OK。",
+    "description": "賞品をかけた勝ち残り形式の〇×クイズです。メインステージ前に作った〇と×のエリアに移動して答え、最後まで勝ち残った人が優勝です。",
+    "tags": [
+      "day2",
+      "当日参加OK"
+    ],
+    "location": "MainStage",
+    "image": "/entries/main-marubatsu-quiz.webp",
+    "occurrences": [
+      {
+        "day": "day2",
+        "start_time": "10:45",
+        "end_time": "11:05"
+      }
+    ],
+    "participation": "当日その場で参加できます（申込不要）",
+    "featured": false
+  },
+  {
+    "id": "live-kessaku-band",
+    "category": "ライブ",
+    "name": "結索バンド",
+    "reading": "けっさくばんど",
+    "group": null,
+    "description": null,
+    "comment": "「結束バンド」の楽曲コピーバンド「結索バンド」です。よろしくお願いします！！",
+    "tags": [
+      "決勝バンド",
+      "day2"
+    ],
+    "location": "MainStage",
+    "image": "/entries/live-kessaku-band.webp",
+    "occurrences": [
+      {
+        "day": "day2",
+        "start_time": "12:30",
+        "end_time": "12:50"
+      }
+    ],
+    "leader": {
+      "name": "安藤颯祐"
+    },
+    "members": [
+      {
+        "name": "竹浪陽太"
+      },
+      {
+        "name": "伊藤嵐"
+      },
+      {
+        "name": "花井玄太"
+      },
+      {
+        "name": "平田七海",
+        "affiliation": "飯野高校"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "live-goaikyo",
+    "category": "ライブ",
+    "name": "御愛嬌",
+    "reading": "ごあいきょう",
+    "group": null,
+    "description": null,
+    "comment": "頑張ります！！",
+    "tags": [
+      "決勝バンド",
+      "day2"
+    ],
+    "location": "MainStage",
+    "image": "/entries/live-goaikyo.webp",
+    "occurrences": [
+      {
+        "day": "day2",
+        "start_time": "13:00",
+        "end_time": "13:20"
+      }
+    ],
+    "leader": {
+      "name": "濱田圭太郎"
+    },
+    "members": [
+      {
+        "name": "井上高志"
+      },
+      {
+        "name": "小林蒼也"
+      },
+      {
+        "name": "杉本隼都"
+      },
+      {
+        "name": "野田飛翔"
+      },
+      {
+        "name": "宮脇海里"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "main-memories",
+    "category": "イベント",
+    "name": "メモリーズ",
+    "group": null,
+    "summary": "最終学年の5年生が学科ごとに踊る！",
+    "description": "最終学年である5年生が、学科ごとにダンスを披露します。踊る順番は、機械工学科 → 電気電子工学科 → 電子情報工学科 → 生物応用化学科 → 材料工学科 です。",
     "tags": [
       "day2"
     ],
@@ -273,38 +675,783 @@
     "occurrences": [
       {
         "day": "day2",
-        "start_time": "16:00",
-        "end_time": "16:30"
+        "start_time": "13:50",
+        "end_time": "15:40"
       }
     ],
     "featured": false
   },
   {
-    "id": "live-day1-band1",
+    "id": "main-finale",
+    "category": "イベント",
+    "name": "フィナーレ",
+    "group": null,
+    "summary": "高専祭実行委員によるダンス。",
+    "description": "高専祭実行委員がダンスを披露します。",
+    "tags": [
+      "day2"
+    ],
+    "location": "MainStage",
+    "image": null,
+    "occurrences": [
+      {
+        "day": "day2",
+        "start_time": "15:40",
+        "end_time": "15:50"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "main-ending",
+    "category": "イベント",
+    "name": "エンディング",
+    "group": null,
+    "summary": "2日間の締めくくり。",
+    "description": "2日間の締めくくりです。協賛企業のご紹介と、学生代表のあいさつで高専祭を振り返ります。",
+    "tags": [
+      "day2"
+    ],
+    "location": "MainStage",
+    "image": null,
+    "occurrences": [
+      {
+        "day": "day2",
+        "start_time": "15:50",
+        "end_time": "16:00"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "live-beat-beat-beat",
     "category": "ライブ",
-    "name": "軽音楽部 バンド演奏",
-    "group": "軽音楽部",
-    "description": "軽音楽部有志によるバンド演奏。",
+    "name": "BEAT BEAT BEAT",
+    "reading": "ビートビートビート",
+    "group": null,
+    "description": null,
+    "comment": "THE BOHEMIANS のコピーバンドをします！！\n精一杯演奏するので観に来てください！！",
     "tags": [
       "day1"
     ],
     "location": "LiveStage",
-    "image": null,
+    "image": "/entries/live-beat-beat-beat.webp",
     "occurrences": [
       {
         "day": "day1",
-        "start_time": "11:00",
-        "end_time": "11:30"
+        "start_time": "09:20",
+        "end_time": "09:40"
+      }
+    ],
+    "leader": {
+      "name": "福島海音"
+    },
+    "members": [
+      {
+        "name": "笠井謙"
+      },
+      {
+        "name": "橋本琉空"
+      },
+      {
+        "name": "市川悠人"
+      },
+      {
+        "name": "堀川明人"
       }
     ],
     "featured": false
   },
   {
-    "id": "live-chuyasai",
+    "id": "live-irohazu",
     "category": "ライブ",
-    "name": "中夜祭バンドライブ",
-    "group": "有志バンド合同",
-    "description": "1日目夜、中夜祭を彩る特別バンドライブ。在校生限定・当日直前まで詳細非公開の場合あり。",
+    "name": "いろはず",
+    "reading": "いろはず",
+    "group": null,
+    "description": null,
+    "comment": "伊藤清の置き土産こと、いろは率いる愉快な仲間たち「いろはず」がバンドやるよ！見に来てね！！",
+    "tags": [
+      "day2"
+    ],
+    "location": "LiveStage",
+    "image": "/entries/live-irohazu.webp",
+    "occurrences": [
+      {
+        "day": "day2",
+        "start_time": "09:00",
+        "end_time": "09:20"
+      }
+    ],
+    "leader": {
+      "name": "高木咲衣"
+    },
+    "members": [
+      {
+        "name": "船木玲"
+      },
+      {
+        "name": "杉本隼都"
+      },
+      {
+        "name": "緒方彩羽"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "live-attack",
+    "category": "ライブ",
+    "name": "アタック！！",
+    "reading": "アタック",
+    "group": null,
+    "description": null,
+    "comment": "学内最年長の専攻科2年生バンド！6人で贈る全力アタック‼️お楽しみに！",
+    "tags": [
+      "day1"
+    ],
+    "location": "LiveStage",
+    "image": "/entries/live-attack.webp",
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "09:50",
+        "end_time": "10:10"
+      }
+    ],
+    "leader": {
+      "name": "瀧澤拓朗"
+    },
+    "members": [
+      {
+        "name": "青木あまね"
+      },
+      {
+        "name": "小林赳翔"
+      },
+      {
+        "name": "首藤琴音"
+      },
+      {
+        "name": "服部花音"
+      },
+      {
+        "name": "櫻井映之進"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "live-yuma",
+    "category": "ライブ",
+    "name": "(y)UMA",
+    "reading": "ユーマ",
+    "group": null,
+    "description": null,
+    "comment": "全員盛り上げて宗教にします",
+    "tags": [
+      "day1"
+    ],
+    "location": "LiveStage",
+    "image": "/entries/live-yuma.webp",
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "10:50",
+        "end_time": "11:10"
+      }
+    ],
+    "leader": {
+      "name": "河内奏人"
+    },
+    "members": [
+      {
+        "name": "有澤直都"
+      },
+      {
+        "name": "福島漣音"
+      },
+      {
+        "name": "宮下大雅"
+      },
+      {
+        "name": "石崎敬"
+      },
+      {
+        "name": "粂内將太朗"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "live-dear",
+    "category": "ライブ",
+    "name": "Dear.",
+    "reading": "でぃあー",
+    "group": null,
+    "description": null,
+    "comment": "みんなへ、楽しく笑顔になれる時間を届けます！",
+    "tags": [
+      "day1"
+    ],
+    "location": "LiveStage",
+    "image": "/entries/live-dear.webp",
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "11:20",
+        "end_time": "11:40"
+      }
+    ],
+    "leader": {
+      "name": "岡本真弥"
+    },
+    "members": [
+      {
+        "name": "丸山優香"
+      },
+      {
+        "name": "川村美裕"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "live-its-up",
+    "category": "ライブ",
+    "name": "It's up",
+    "reading": "イッツ アップ",
+    "group": null,
+    "description": null,
+    "comment": "一生懸命に頑張ります",
+    "tags": [
+      "day1"
+    ],
+    "location": "LiveStage",
+    "image": "/entries/live-its-up.webp",
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "11:50",
+        "end_time": "12:10"
+      }
+    ],
+    "leader": {
+      "name": "細見和生"
+    },
+    "members": [
+      {
+        "name": "秋田悠友"
+      },
+      {
+        "name": "岩崎元気"
+      },
+      {
+        "name": "矢田釉月"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "live-e-m",
+    "category": "ライブ",
+    "name": "e/m",
+    "reading": "いーぱーえむ",
+    "group": null,
+    "description": null,
+    "comment": "オリジナル曲やります\nぶちかましますよろしく",
+    "tags": [
+      "day1"
+    ],
+    "location": "LiveStage",
+    "image": "/entries/live-e-m.webp",
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "12:20",
+        "end_time": "12:40"
+      }
+    ],
+    "leader": {
+      "name": "船木玲"
+    },
+    "members": [
+      {
+        "name": "杉本隼都"
+      },
+      {
+        "name": "草川琉翔",
+        "affiliation": "高田短期大学"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "live-alus-tale",
+    "category": "ライブ",
+    "name": "Alus Tale",
+    "reading": "アルステール",
+    "group": null,
+    "description": null,
+    "comment": "三重発 3ピースロックバンド Alus Tale",
+    "tags": [
+      "day1"
+    ],
+    "location": "LiveStage",
+    "image": "/entries/live-alus-tale.webp",
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "12:50",
+        "end_time": "13:10"
+      }
+    ],
+    "leader": {
+      "name": "藤井英音"
+    },
+    "members": [
+      {
+        "name": "伊藤嵐"
+      },
+      {
+        "name": "竹浪陽太"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "live-mikasa",
+    "category": "ライブ",
+    "name": "MIKASA",
+    "reading": "ミカサ",
+    "group": null,
+    "description": null,
+    "comment": "3度目の響き、4つの言葉、\n最後まで声を限りに、\n最高の瞬間を！\nーーMIKASA",
+    "tags": [
+      "day1"
+    ],
+    "location": "LiveStage",
+    "image": "/entries/live-mikasa.webp",
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "10:20",
+        "end_time": "10:40"
+      }
+    ],
+    "leader": {
+      "name": "福島海音"
+    },
+    "members": [
+      {
+        "name": "笠井謙"
+      },
+      {
+        "name": "カエ"
+      },
+      {
+        "name": "市川悠人"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "live-incident-syndrome",
+    "category": "ライブ",
+    "name": "Incident Syndrome",
+    "reading": "いんしでんと しんどろーむ",
+    "group": null,
+    "description": null,
+    "comment": "粋に、艶やかに、心を込めてお迎えします。東京事変/コピーバンド、再生ノ途中。一瞬ノ熱狂ヲ貴方ニ。",
+    "tags": [
+      "day2"
+    ],
+    "location": "LiveStage",
+    "image": "/entries/live-incident-syndrome.webp",
+    "occurrences": [
+      {
+        "day": "day2",
+        "start_time": "09:30",
+        "end_time": "09:50"
+      }
+    ],
+    "leader": {
+      "name": "片岡宥人"
+    },
+    "members": [
+      {
+        "name": "田中爽太"
+      },
+      {
+        "name": "小林夢明"
+      },
+      {
+        "name": "細見和生"
+      },
+      {
+        "name": "竹浪陽太"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "live-nuumin",
+    "category": "ライブ",
+    "name": "ヌー民",
+    "reading": "ぬーみん",
+    "group": null,
+    "description": null,
+    "comment": "King Gnuを愛する民『Gnu-Ming』今年結成の私たちが、最高のグルーヴで会場を揺らします！",
+    "tags": [
+      "day2"
+    ],
+    "location": "LiveStage",
+    "image": "/entries/live-nuumin.webp",
+    "occurrences": [
+      {
+        "day": "day2",
+        "start_time": "10:00",
+        "end_time": "10:20"
+      }
+    ],
+    "leader": {
+      "name": "矢田釉月"
+    },
+    "members": [
+      {
+        "name": "川村承太郎"
+      },
+      {
+        "name": "小林蒼也"
+      },
+      {
+        "name": "眞田朱"
+      },
+      {
+        "name": "川合可恋"
+      },
+      {
+        "name": "丸山優香"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "live-dudge",
+    "category": "ライブ",
+    "name": "Dudge",
+    "reading": "ダッジ",
+    "group": null,
+    "description": null,
+    "comment": "ライブキッズ、ドパガキ集まれ。",
+    "tags": [
+      "day2"
+    ],
+    "location": "LiveStage",
+    "image": "/entries/live-dudge.webp",
+    "occurrences": [
+      {
+        "day": "day2",
+        "start_time": "10:30",
+        "end_time": "10:50"
+      }
+    ],
+    "leader": {
+      "name": "勝田翔万"
+    },
+    "members": [
+      {
+        "name": "田中柊灯"
+      },
+      {
+        "name": "五藤翔"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "live-haraduction",
+    "category": "ライブ",
+    "name": "ハラダクション",
+    "reading": "はらだくしょん",
+    "group": null,
+    "description": null,
+    "comment": "去年よりもさらに洗練されたハラダクションをお届けします。",
+    "tags": [
+      "day2"
+    ],
+    "location": "LiveStage",
+    "image": "/entries/live-haraduction.webp",
+    "occurrences": [
+      {
+        "day": "day2",
+        "start_time": "11:00",
+        "end_time": "11:20"
+      }
+    ],
+    "leader": {
+      "name": "中澤翼"
+    },
+    "members": [
+      {
+        "name": "石川龍"
+      },
+      {
+        "name": "片山賢"
+      },
+      {
+        "name": "栗山偉生"
+      },
+      {
+        "name": "原田祐樹"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "sub-the-low-guys",
+    "category": "ライブ",
+    "name": "The Low Guys",
+    "group": null,
+    "description": null,
+    "tags": [
+      "day1"
+    ],
+    "location": "SubStage",
+    "image": null,
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "09:30",
+        "end_time": "09:50"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "sub-degudegu",
+    "category": "ライブ",
+    "name": "でぐでぐ",
+    "reading": "でぐでぐ",
+    "group": null,
+    "description": null,
+    "comment": "応援よろしくお願いします！！",
+    "tags": [
+      "day1"
+    ],
+    "location": "SubStage",
+    "image": "/entries/sub-degudegu.webp",
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "10:00",
+        "end_time": "10:20"
+      }
+    ],
+    "leader": {
+      "name": "石場心寧"
+    },
+    "members": [
+      {
+        "name": "市川心晴"
+      },
+      {
+        "name": "足立ケイト"
+      },
+      {
+        "name": "出口結愛"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "sub-esk",
+    "category": "ライブ",
+    "name": "esk.",
+    "reading": "えすく",
+    "group": null,
+    "description": null,
+    "comment": "皆が知ってる曲で盛り上げます！！",
+    "tags": [
+      "day1"
+    ],
+    "location": "SubStage",
+    "image": "/entries/sub-esk.webp",
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "10:30",
+        "end_time": "10:50"
+      }
+    ],
+    "leader": {
+      "name": "舟木蒼真"
+    },
+    "members": [
+      {
+        "name": "豊田瑛太"
+      },
+      {
+        "name": "森川慧大"
+      },
+      {
+        "name": "矢野翔太"
+      },
+      {
+        "name": "方田奏太"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "sub-shilli-shally",
+    "category": "ライブ",
+    "name": "Shilli-shally",
+    "reading": "しりーしゃりー",
+    "group": null,
+    "description": null,
+    "comment": "未熟者全力最高の熱をお届けします!!",
+    "tags": [
+      "day1"
+    ],
+    "location": "SubStage",
+    "image": "/entries/sub-shilli-shally.webp",
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "11:00",
+        "end_time": "11:20"
+      }
+    ],
+    "leader": {
+      "name": "内山惟翔"
+    },
+    "members": [
+      {
+        "name": "笠野哲平"
+      },
+      {
+        "name": "寺村駿志"
+      },
+      {
+        "name": "岡田来美"
+      },
+      {
+        "name": "浦田圭祐"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "sub-akikoma-teatime",
+    "category": "ライブ",
+    "name": "空きコマティータイム",
+    "reading": "あきこまてぃーたいむ",
+    "group": null,
+    "description": null,
+    "comment": "アニメけいおん！でお馴染みの放課後ティータイムのコピーバンドです！\nけいおんが好きな人集まれ！！",
+    "tags": [
+      "day1"
+    ],
+    "location": "SubStage",
+    "image": "/entries/sub-akikoma-teatime.webp",
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "11:30",
+        "end_time": "11:50"
+      }
+    ],
+    "leader": {
+      "name": "伊藤嵐"
+    },
+    "members": [
+      {
+        "name": "安藤颯祐"
+      },
+      {
+        "name": "平畑果愛"
+      },
+      {
+        "name": "地主藍里"
+      },
+      {
+        "name": "加藤颯馬",
+        "affiliation": "亀山高校"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "sub-chokkin-dekin",
+    "category": "ライブ",
+    "name": "CHOKKIN出禁",
+    "reading": "ちょっきんできん",
+    "group": null,
+    "description": null,
+    "comment": "ぶちかまし",
+    "tags": [
+      "day1"
+    ],
+    "location": "SubStage",
+    "image": "/entries/sub-chokkin-dekin.webp",
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "12:00",
+        "end_time": "12:20"
+      }
+    ],
+    "leader": {
+      "name": "勝田翔万"
+    },
+    "members": [
+      {
+        "name": "尾竹凌"
+      },
+      {
+        "name": "田中爽太"
+      },
+      {
+        "name": "豊田桧規"
+      },
+      {
+        "name": "五藤翔"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "sub-acoustic-guitar-club",
+    "category": "ライブ",
+    "name": "アコギ部",
+    "group": null,
+    "description": null,
+    "tags": [
+      "day1",
+      "day2"
+    ],
+    "location": "SubStage",
+    "image": null,
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "12:40",
+        "end_time": "14:20"
+      },
+      {
+        "day": "day2",
+        "start_time": "09:30",
+        "end_time": "15:30"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "chuyasai-staff-band",
+    "category": "ライブ",
+    "name": "教職員バンド",
+    "group": null,
+    "description": null,
     "tags": [
       "中夜祭"
     ],
@@ -313,51 +1460,219 @@
     "occurrences": [
       {
         "day": "day1",
-        "start_time": "18:00",
-        "end_time": "19:00"
+        "start_time": "15:30",
+        "end_time": "15:45"
       }
     ],
     "featured": false
   },
   {
-    "id": "live-day2-band1",
-    "category": "ライブ",
-    "name": "軽音楽部 バンド演奏",
-    "group": "軽音楽部",
-    "description": "2日目の軽音楽部バンド演奏。",
+    "id": "chuyasai-fashion-show",
+    "category": "イベント",
+    "name": "ファッションショー",
+    "group": null,
+    "summary": "KSC 〜kosen students contest〜 ランウェイを歩こう！",
+    "description": "KSC 〜kosen students contest〜。コスプレや思い思いの装いで、高専生がT字ステージのランウェイを歩きます。",
     "tags": [
-      "day2"
+      "中夜祭"
+    ],
+    "location": "T字ステージ",
+    "image": "/entries/chuyasai-fashion-show.webp",
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "15:45",
+        "end_time": "16:05"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "live-r04-notfound",
+    "category": "ライブ",
+    "name": "r04 NotFound",
+    "reading": "あーるぜろよんのっとふぁうんど",
+    "group": null,
+    "description": null,
+    "comment": "頑張ります！！",
+    "tags": [
+      "中夜祭"
     ],
     "location": "LiveStage",
-    "image": null,
+    "image": "/entries/live-r04-notfound.webp",
     "occurrences": [
       {
-        "day": "day2",
-        "start_time": "11:00",
-        "end_time": "11:30"
+        "day": "day1",
+        "start_time": "16:05",
+        "end_time": "16:20"
+      }
+    ],
+    "leader": {
+      "name": "濱田圭太郎"
+    },
+    "members": [
+      {
+        "name": "竹野萌花"
+      },
+      {
+        "name": "井上高志"
+      },
+      {
+        "name": "宮脇海里"
+      },
+      {
+        "name": "橋本琉空"
+      },
+      {
+        "name": "川村承太郎"
       }
     ],
     "featured": false
   },
   {
-    "id": "live-kessho-band",
-    "category": "ライブ",
-    "name": "バンド企画 決勝",
-    "group": "バンド企画 出場バンド",
-    "description": "予選を勝ち抜いたバンドによる決勝ラウンド。",
+    "id": "chuyasai-body1-gp",
+    "category": "イベント",
+    "name": "Body1グランプリ",
+    "group": null,
+    "summary": "高専の筋肉自慢が集まり、筋肉No.1を決める。",
+    "description": "高専の筋肉自慢が集まり、筋肉No.1を決める大会です。T字ステージでポーズを決め、観客の投票で優勝者を決めます。",
     "tags": [
-      "決勝バンド",
-      "day2"
+      "中夜祭"
     ],
-    "location": "MainStage",
-    "image": null,
+    "location": "T字ステージ",
+    "image": "/entries/chuyasai-body1-gp.webp",
     "occurrences": [
       {
-        "day": "day2",
-        "start_time": "13:00",
-        "end_time": "14:00"
+        "day": "day1",
+        "start_time": "16:20",
+        "end_time": "16:35"
       }
     ],
+    "featured": false
+  },
+  {
+    "id": "live-archans",
+    "category": "ライブ",
+    "name": "アーチャンズ",
+    "reading": "あーちゃんず",
+    "group": null,
+    "description": null,
+    "comment": "本気出します",
+    "tags": [
+      "中夜祭"
+    ],
+    "location": "LiveStage",
+    "image": "/entries/live-archans.webp",
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "16:35",
+        "end_time": "16:50"
+      }
+    ],
+    "leader": {
+      "name": "眞田朱"
+    },
+    "members": [
+      {
+        "name": "中澤翼"
+      },
+      {
+        "name": "田中爽太"
+      },
+      {
+        "name": "三浦大輝"
+      },
+      {
+        "name": "丸山優香"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "chuyasai-vocal1-winner",
+    "category": "イベント",
+    "name": "Vocal1グランプリ優勝者",
+    "group": null,
+    "summary": "Vocal1グランプリ優勝者が中夜祭で歌う！",
+    "description": "1日目の昼に行われたVocal1グランプリの優勝者が、中夜祭で歌を披露します。見逃すな！",
+    "tags": [
+      "中夜祭"
+    ],
+    "location": "T字ステージ",
+    "image": "/entries/main-vocal1-gp.webp",
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "16:50",
+        "end_time": "16:55"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "chuyasai-ore1-gp",
+    "category": "イベント",
+    "name": "オレ1グランプリ",
+    "group": null,
+    "summary": "予選を勝ち抜いた3組の漫才で、今年のオレ1王者を決める。",
+    "description": "テレビ番組「M-1グランプリ」の高専版。昼の予選を勝ち抜いた3組が漫才を披露し、観客の投票で今年のオレ1王者を決めます。",
+    "tags": [
+      "中夜祭"
+    ],
+    "location": "LiveStage",
+    "image": "/entries/main-ore1-gp-prelim.webp",
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "16:55",
+        "end_time": "17:10"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "chuyasai-dance-otagei",
+    "category": "イベント",
+    "name": "ダンスバトル優勝チーム＆ヲタ芸",
+    "group": null,
+    "summary": "ダンスバトル優勝チームのダンスとヲタ芸。",
+    "description": "昼のダンスバトルで優勝したチームのダンスと、ヲタ芸チームによるヲタ芸を披露します。",
+    "tags": [
+      "中夜祭"
+    ],
+    "location": "LiveStage",
+    "image": "/entries/chuyasai-dance-otagei.webp",
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "17:10",
+        "end_time": "17:20"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "id": "chuyasai-kakuzuke",
+    "category": "イベント",
+    "name": "高専生格付けチェック",
+    "group": null,
+    "summary": "3択の問題にグー・チョキ・パーで答える格付けチェック。",
+    "description": "テレビ番組「格付けチェック」を中夜祭で開催！3択の問題に「グー」「チョキ」「パー」で答え、最後まで残った人に景品を贈ります。会場のみんなが参加できます。",
+    "tags": [
+      "中夜祭",
+      "当日参加OK"
+    ],
+    "location": "T字ステージ",
+    "image": "/entries/chuyasai-kakuzuke.webp",
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "17:20",
+        "end_time": "17:35"
+      }
+    ],
+    "participation": "会場のみんなが参加できます（申込不要）",
     "featured": false
   }
 ]

@@ -4,9 +4,15 @@
 // 渡されなかった項目は行ごと出さない。
 import { dayColorClass, formatDayLabel } from "../../lib/eventDate";
 import { formatApplicationDate } from "../../lib/application";
-import type { Application, Day, ExtraFact, Occurrence } from "../../types/content";
+import type { Application, Day, ExtraFact, Member, Occurrence } from "../../types/content";
 
 interface Props {
+  /** 期間中いつでも参加できる企画の期間（バザーグランプリ等） */
+  period?: string | null;
+  /** 参加の仕方（当日参加OKの企画等） */
+  participation?: string | null;
+  /** 出演メンバー（バンド）。代表者を先頭にして渡す */
+  members?: Member[];
   occurrences?: Occurrence[];
   isPermanent?: boolean;
   location?: string | null;
@@ -18,6 +24,9 @@ interface Props {
 }
 
 const {
+  period,
+  participation,
+  members = [],
   occurrences = [],
   isPermanent = false,
   location,
@@ -47,6 +56,14 @@ const closesLabel = application?.closes ? formatApplicationDate(application.clos
 ---
 
 <dl class="facts">
+  {
+    period && (
+      <div class="fact">
+        <dt>期間</dt>
+        <dd>{period}</dd>
+      </div>
+    )
+  }
   {
     hasSchedule && (
       <div class="fact">
@@ -80,6 +97,31 @@ const closesLabel = application?.closes ? formatApplicationDate(application.clos
       <div class="fact">
         <dt>場所</dt>
         <dd>{location}</dd>
+      </div>
+    )
+  }
+  {
+    participation && (
+      <div class="fact">
+        <dt>参加</dt>
+        <dd>{participation}</dd>
+      </div>
+    )
+  }
+  {
+    members.length > 0 && (
+      <div class="fact">
+        <dt>メンバー</dt>
+        <dd>
+          <ul class="members">
+            {members.map((member) => (
+              <li>
+                {member.name}
+                {member.affiliation && <span class="affiliation">（{member.affiliation}）</span>}
+              </li>
+            ))}
+          </ul>
+        </dd>
       </div>
     )
   }
@@ -188,6 +230,16 @@ const closesLabel = application?.closes ? formatApplicationDate(application.clos
   }
 
   .slot-note {
+    font-size: 12px;
+  }
+
+  .members {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px 16px;
+  }
+  .affiliation {
     font-size: 12px;
   }
 </style>

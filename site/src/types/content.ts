@@ -38,6 +38,26 @@ export interface Application {
   guideUrl?: string | null;
 }
 
+/**
+ * 出演者1人（バンドのメンバー等）。
+ * 出席番号は名簿にはあるが**公開ページに出さない**ので持たない。
+ */
+export interface Member {
+  name: string;
+  /** 他校からの参加者の所属（例:「亀山高校」）。本校生は省略 */
+  affiliation?: string | null;
+}
+
+/** ビルド時に最適化した企画写真（lib/entryPhotos.ts）。JSONには書かない */
+export interface EntryPhoto {
+  src: string;
+  /** 幅違いの版。<img srcset> にそのまま渡す */
+  srcset: string;
+  /** 元画像の寸法。<img> に付けて、読み込み中に下の要素がずれないようにする */
+  width: number;
+  height: number;
+}
+
 /** 詳細ページの「開催・場所・対象…」の並びに足す項目（ゲーム大会の大会許諾番号など） */
 export interface ExtraFact {
   label: string;
@@ -86,15 +106,25 @@ export interface Entry {
    */
   categoryLabel?: string;
   name: string;
+  /** 名前の読み仮名。英字やひねった表記のバンド名に添える（出演者の申告どおり） */
+  reading?: string | null;
   group?: string | null;
   /** バナー等の狭い場所に出す短い要約（40字目安）。長文はdescriptionへ */
   summary?: string | null;
   description?: string | null;
-  /** 出店:飲食-フード等 / 学科展示:M科等 / イベント:day1,day2,常設 / ライブ:day1,day2,中夜祭,決勝バンド */
+  /**
+   * 出演者本人からの一言（バンド募集フォームの「意気込み」）。
+   * 企画を説明するdescriptionとは書き手が違うので分けて持ち、引用として見せる
+   */
+  comment?: string | null;
+  /** 出店:飲食-フード等 / 学科展示:M科等 / イベント:day1,day2,常設,中夜祭,当日参加OK / ライブ:day1,day2,中夜祭,決勝バンド */
   tags: string[];
-  /** 物理的な場所を持たない企画（コラージュカメラ等）はnull */
+  /** 物理的な場所を持たない企画（ミッションフォトラリー等）はnull */
   location: string | null;
+  /** 写真のパス（"/entries/xxx.webp"）。ファイルは src/assets/entries/ に置く。無い企画はnull */
   image: string | null;
+  /** image から作った最適化済みの写真。ページ側（withEntryPhotos）が付ける。JSONには書かない */
+  photo?: EntryPhoto;
   /**
    * 開催の実体。1件 = 1回。
    * - 単発イベント: 1件
@@ -108,6 +138,30 @@ export interface Entry {
   occurrences: Occurrence[];
   /** 会期中ずっと開催。trueのときoccurrencesは空にする（時間軸を持たないため） */
   isPermanent?: boolean;
+  /**
+   * timetable の常設セクションにも並べる。ステージ以外で開催するので表（グリッド）には載らないが、
+   * 当日の目玉としてタイムテーブルからも辿れるようにしたい企画用（ゲーム大会等）。
+   * 常設・period ありの企画は指定しなくても並ぶ。並び順はデータの記載順
+   */
+  listInTimetable?: boolean;
+  /**
+   * 期間中いつでも参加できる企画の期間（例:「10/31 オープニング後〜11/1 11:00」）。
+   *
+   * バザーグランプリ（投票）やわらしべ長者（物々交換）のように、参加は期間中ずっとできるが
+   * 結果発表だけはステージの決まった時刻にある企画のためのもの。発表の回は occurrences に
+   * `note`（「中間発表」等）付きで持ち、timetable のグリッドに載せる。
+   * isPermanent と違って occurrences を持てるので、別の項目にしている。
+   */
+  period?: string | null;
+  /**
+   * 参加の仕方（例:「当日その場で参加できます（申込不要）」「出場者の募集は終了しました」）。
+   * 観るだけの企画は省略する。当日参加できる企画には tags に「当日参加OK」も付ける
+   */
+  participation?: string | null;
+  /** 代表者（バンドのリーダー等） */
+  leader?: Member | null;
+  /** 代表者以外の出演メンバー。leaderは含めない */
+  members?: Member[];
   /** 参加型企画の対象者（例:「小学生(中学年〜高学年)と保護者」） */
   audience?: string | null;
   /** 定員。「各回10組」のような回単位の表現も許すため数値ではなく文字列 */
@@ -135,6 +189,8 @@ export interface Entry {
   parts?: EntryPart[];
   /** true: home等での特別扱い（バナー表示）対象 */
   featured?: boolean;
-  /** 外部Webアプリ等へのリンク（コラージュカメラ等）。未提供の間はnull */
+  /** 外部Webアプリ等へのリンク（ミッションフォトラリー等）。未提供の間はnull */
   link?: string | null;
+  /** link のボタンの文言。省略時は「やってみる →」（バザーグランプリの「投票する →」等） */
+  linkLabel?: string | null;
 }

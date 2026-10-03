@@ -86,11 +86,6 @@
   height: 100%;
   object-fit: cover;
 }
-.bl-no-image {
-  font-size: 12px;
-  letter-spacing: 0.05em;
-  color: #999;
-}
 .bl-body {
   padding: 14px 16px 16px;
 }
@@ -112,6 +107,13 @@
   -webkit-line-clamp: 2;
   line-clamp: 2;
   overflow: hidden;
+}
+/* リンクしないカード（出店）は紹介文を省略しない。続きを読む先が無いため */
+.bl-summary.is-full {
+  display: block;
+  -webkit-line-clamp: unset;
+  line-clamp: unset;
+  overflow: visible;
 }
 .bl-tags {
   display: flex;

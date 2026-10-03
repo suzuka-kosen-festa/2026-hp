@@ -80,12 +80,40 @@ test("カードのチップに内部キーが出ない", async ({ page }) => {
   test.skip(boothHidden, "/booth/ が準備中のため（src/data/release.json）");
 
   await page.goto("/booth/", { waitUntil: "networkidle" });
-  await page.getByRole("tab", { name: "学科展示" }).click();
 
-  const chips = await page.locator(".bl-chip").allTextContents();
-  expect(chips.length, "学科展示のカードにチップが1つも出ていません").toBeGreaterThan(0);
+  // 特定のタブに決め打ちすると、そのタブのデータが空の間（学科展示は実データ待ち）に
+  // 何も検査しなくなるので、全タブのチップを集めて見る
+  const chips: string[] = [];
+  for (const tab of await page.getByRole("tab").all()) {
+    await tab.click();
+    chips.push(...(await page.locator(".bl-chip").allTextContents()));
+  }
+  expect(chips.length, "どのタブのカードにもチップが1つも出ていません").toBeGreaterThan(0);
   expect(
     chips.filter((text) => /^(day[12]|[MEICS]科)$/.test(text.trim())),
     "内部キーがそのままチップに出ています",
   ).toEqual([]);
+});
+
+/**
+ * タグは1つだけ選べる（OR検索はしない）。また中夜祭は day1 の夜に開催されるが、
+ * 日付では絞り込まず「中夜祭」タグでだけ出す（timetable の日タブと同じ扱い）。
+ */
+test("タグは1つだけ選べ、中夜祭の企画は日付の絞り込みに混ざらない", async ({ page }) => {
+  test.skip(boothHidden, "/booth/ が準備中のため（src/data/release.json）");
+
+  await page.goto("/booth/", { waitUntil: "networkidle" });
+  await page.getByRole("tab", { name: "ライブ" }).click();
+
+  const day1 = page.getByRole("button", { name: "10/31 SAT" });
+  const chuyasai = page.getByRole("button", { name: "中夜祭" });
+
+  await day1.click();
+  await expect(page.locator(".bl-card").first()).toBeVisible();
+  await expect(page.locator(".bl-card", { hasText: "r04 NotFound" }), "中夜祭のバンドが10/31に出ています").toHaveCount(0);
+
+  await chuyasai.click();
+  await expect(day1, "2つ目のタグを押したら1つ目は外れる").toHaveAttribute("aria-pressed", "false");
+  await expect(chuyasai).toHaveAttribute("aria-pressed", "true");
+  await expect(page.locator(".bl-card", { hasText: "r04 NotFound" })).toHaveCount(1);
 });

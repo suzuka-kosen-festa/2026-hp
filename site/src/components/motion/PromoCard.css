@@ -107,8 +107,39 @@
 }
 
 .pc--compact .pc__body {
+  /* 本文が残りの幅を取り、写真を紙片の右端まで押し出す（伸ばさないと写真が文字のすぐ隣に止まる） */
+  flex: 1;
   gap: 5px;
   min-width: 0;
+}
+
+/*
+ * PCは写真を本文の高さいっぱいに伸ばし、幅は16:9から決める（紙片の縦の長さが本文で揃う）。
+ * flexだと「写真の幅←本文の高さ←本文の幅←写真の幅」の循環で高さを拾えないので grid にし、
+ * 写真は height:0 + min-height:100% で「行の高さの決定には参加せず、決まった高さに合わせる」。
+ * 列幅は写真の幅（aspect-ratio）で後から決まる
+ */
+@media (min-width: 900px) {
+  .pc--compact {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: stretch;
+    column-gap: 24px;
+  }
+  .pc--compact .pc__body {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .pc--compact .pc__photo {
+    grid-column: 2;
+    grid-row: 1;
+    height: 0;
+    min-height: 100%;
+    aspect-ratio: 16 / 9;
+    /* 高さから幅を割り出せないブラウザでも写真が潰れて消えないための下限。
+       本文は最低でも約95pxあるので、16:9なら通常はこれより広くなり効かない */
+    min-width: 160px;
+  }
 }
 
 /* 小型版は見出しタグではなく p なので、太さを明示する */

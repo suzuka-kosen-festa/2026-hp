@@ -1,63 +1,574 @@
 [
   {
-    "id": "dept-m",
+    "id": "dept-m-01",
     "category": "学科展示",
-    "name": "機械工学科 展示",
+    "name": "みんなでチョレイ卓球マシン！",
     "group": "機械工学科",
-    "description": "学生の研究・製作物を展示。",
-    "tags": ["M科"],
-    "location": "学科展示",
-    "image": null,
-    "occurrences": [
-      { "day": "day1", "start_time": "09:00", "end_time": "15:00" },
-      { "day": "day2", "start_time": "09:00", "end_time": "15:00" }
+    "description": "向かってくる玉を打ち返せ！みんなで一緒に盛り上がりましょう！",
+    "tags": [
+      "M科"
     ],
+    "location": "第二体育館",
+    "image": null,
+    "occurrences": [],
     "featured": false
   },
   {
-    "id": "dept-e",
+    "id": "dept-m-02",
     "category": "学科展示",
-    "name": "電気電子工学科 展示",
+    "name": "ダイナソーメテオアタック",
+    "group": "機械工学科",
+    "description": "迫りくる恐竜を隕石で倒せ！",
+    "tags": [
+      "M科"
+    ],
+    "location": "第二体育館",
+    "image": null,
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "dept-m-03",
+    "category": "学科展示",
+    "name": "招き猫ディーラーに勝てるかな？ルーレットバトル",
+    "group": "機械工学科",
+    "description": "一瞬の緊張感、回る盤面、そして止まるその時——。日常を忘れて、スリリングなゲームの世界へ飛び込んでみませんか？",
+    "tags": [
+      "M科"
+    ],
+    "location": "第二体育館",
+    "image": null,
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "dept-m-04",
+    "category": "学科展示",
+    "name": "まるっとだ!!サクラマス",
+    "group": "機械工学科",
+    "description": "サクラマスに見立てた可愛いロボットが口をぱくぱくさせて待っています！クレーンのアームをタイミングよく操作して、見事エサを口の中に入れられるか！？新感覚クレーンゲームです！",
+    "tags": [
+      "M科"
+    ],
+    "location": "第二体育館",
+    "image": null,
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "dept-m-05",
+    "category": "学科展示",
+    "name": "指スマロボット",
+    "group": "機械工学科",
+    "description": "陽気なおばちゃんロボットと指スマで対戦!飴ちゃんもあるよ",
+    "tags": [
+      "M科"
+    ],
+    "location": "第二体育館",
+    "image": null,
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "dept-m-06",
+    "category": "学科展示",
+    "name": "バンザイレッサー",
+    "group": "機械工学科",
+    "description": "レッサーパンダと旗上げゲームで勝負だ！可愛いからって見とれちゃダメだぞ～？",
+    "tags": [
+      "M科"
+    ],
+    "location": "第二体育館",
+    "image": null,
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "dept-m-07",
+    "category": "学科展示",
+    "name": "ネジモンスターパニック",
+    "group": "機械工学科",
+    "description": "鈴鹿高専の機械工学科に現れたネジモンスターを倒せ！！！！！",
+    "tags": [
+      "M科"
+    ],
+    "location": "第二体育館",
+    "image": null,
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "dept-m-08",
+    "category": "学科展示",
+    "name": "カーボンニュートラル",
+    "group": "機械工学科",
+    "description": "冷却用ファンの効率改善、その成果をご覧ください。",
+    "tags": [
+      "M科"
+    ],
+    "location": "第二体育館",
+    "image": null,
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "dept-m-09",
+    "category": "学科展示",
+    "name": "コリント機の改良",
+    "group": "機械工学科",
+    "description": "運ゲー開幕！大当たりか、ハズレか…挑戦者求む！！",
+    "tags": [
+      "M科"
+    ],
+    "location": "第二体育館",
+    "image": null,
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "dept-e-01",
+    "category": "学科展示",
+    "name": "DDDE",
     "group": "電気電子工学科",
-    "description": "回路・電子工作の展示。",
-    "tags": ["E科"],
-    "location": "学科展示",
+    "description": "瞬発力・跳躍力を鍛えながら楽しんで遊べる、リズムゲームマシンプロジェクト!",
+    "tags": [
+      "E科"
+    ],
+    "location": "第二体育館",
     "image": null,
     "occurrences": [],
     "featured": false
   },
   {
-    "id": "dept-i",
+    "id": "dept-e-02",
     "category": "学科展示",
-    "name": "電子情報工学科 展示",
+    "name": "パンチングマシン",
+    "group": "電気電子工学科",
+    "description": "誰でも気軽にパンチ力を測れます！みんなとスコアを競おう！",
+    "tags": [
+      "E科"
+    ],
+    "location": "第二体育館",
+    "image": null,
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "dept-e-03",
+    "category": "学科展示",
+    "name": "ライトソード",
+    "group": "電気電子工学科",
+    "description": "刃が伸び縮みする光る剣！君だけの一振りを体験しよう！",
+    "tags": [
+      "E科"
+    ],
+    "location": "第二体育館",
+    "image": null,
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "dept-e-04",
+    "category": "学科展示",
+    "name": "プリクラ",
+    "group": "電気電子工学科",
+    "description": "ここでしか撮れない、特別な一枚を体験しよう！",
+    "tags": [
+      "E科"
+    ],
+    "location": "第二体育館",
+    "image": null,
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "dept-e-05",
+    "category": "学科展示",
+    "name": "カーボンをニュートラルに",
+    "group": "電気電子工学科",
+    "description": "自分の脚で発電力を競い合う！",
+    "tags": [
+      "E科"
+    ],
+    "location": "第二体育館",
+    "image": null,
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "dept-e-06",
+    "category": "学科展示",
+    "name": "光る！動く！鳴る！　装甲決闘レーザラッシュ",
+    "group": "電気電子工学科",
+    "description": "フィールドを縦横無尽に駆け巡りながら光線銃を撃ちあうロボット1on1対戦型のロボットゲーム",
+    "tags": [
+      "E科"
+    ],
+    "location": "第二体育館",
+    "image": null,
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "dept-i-01",
+    "category": "学科展示",
+    "name": "客をさばけ！ゴ～ストラン",
     "group": "電子情報工学科",
-    "description": "ソフトウェア・アプリの展示。",
-    "tags": ["I科"],
-    "location": "学科展示",
+    "description": "お化けが働くレストランで、スタッフとなってお客様をおもてなし！ドタバタなレストランで、無事に営業を乗り切ろう！",
+    "tags": [
+      "I科"
+    ],
+    "location": "第二体育館",
     "image": null,
     "occurrences": [],
     "featured": false
   },
   {
-    "id": "dept-c",
+    "id": "dept-i-02",
     "category": "学科展示",
-    "name": "生物応用化学科 展示",
+    "name": "Re-write",
+    "group": "電子情報工学科",
+    "description": "2Dアクションステージを、ブロック型の命令で修理して攻略する、遊びながらデバッグとプログラミングを学べるゲームです。",
+    "tags": [
+      "I科"
+    ],
+    "location": "第二体育館",
+    "image": null,
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "dept-i-03",
+    "category": "学科展示",
+    "name": "Pixel LABO ~変なプリクラ~",
+    "group": "電子情報工学科",
+    "description": "私たちが画像処理技術を使って制作した、新感覚のプリクラです。普通とはひと味違うユニークな加工に加え、写真が変化していく加工工程もお楽しみいただけます。思い出に残る一枚を撮ってみませんか？",
+    "tags": [
+      "I科"
+    ],
+    "location": "第二体育館",
+    "image": null,
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "dept-i-04",
+    "category": "学科展示",
+    "name": "落とし物追跡サポートシステム",
+    "group": "電子情報工学科",
+    "description": "私たちが開発したのは、「落とし物追跡サポートシステム」です。ウェアラブルデバイスで撮影した視覚映像を元に、いつ・どのような場所で落とし物をしたのかを辿る支援の実現を目指しました。",
+    "tags": [
+      "I科"
+    ],
+    "location": "第二体育館",
+    "image": null,
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "dept-i-05",
+    "category": "学科展示",
+    "name": "ゲーム特化型タスク管理アプリ",
+    "group": "電子情報工学科",
+    "description": "ゲームのタスクを整理することに特化させたタスク管理アプリとなります。タスクの追加だけでなく、攻略の情報等を記録しておけるメモも付属しているため、ゲームに関する情報の整理にお役立てください。",
+    "tags": [
+      "I科"
+    ],
+    "location": "第二体育館",
+    "image": null,
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "dept-i-06",
+    "category": "学科展示",
+    "name": "さいくルーる",
+    "group": "電子情報工学科",
+    "description": "道路交通法改正により、自転車に関するルールを知ってもらうために自転車のVRシミュレーションゲームを作成しました！このゲームで正しく走行して、楽しく短時間で勉強しましょう！",
+    "tags": [
+      "I科"
+    ],
+    "location": "第二体育館",
+    "image": null,
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "dept-i-07",
+    "category": "学科展示",
+    "name": "この教室、なんか椅子多くない？",
+    "group": "電子情報工学科",
+    "description": "学校に潜む変身プレイヤーを探し出せ！身近な物になりきって楽しむ、スリル満点のかくれんぼゲームです。",
+    "tags": [
+      "I科"
+    ],
+    "location": "第二体育館",
+    "image": null,
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "dept-c-01",
+    "category": "学科展示",
+    "name": "ジャポニカス分裂酵母",
     "group": "生物応用化学科",
-    "description": "学生の研究・製作物を展示。",
-    "tags": ["C科"],
-    "location": "学科展示",
+    "description": "私達の身近にたくさん存在するジャポニカス分裂酵母の特性や、未解明の謎物体について研究しました！",
+    "tags": [
+      "C科"
+    ],
+    "location": "第二体育館",
     "image": null,
     "occurrences": [],
     "featured": false
   },
   {
-    "id": "dept-s",
+    "id": "dept-c-02",
     "category": "学科展示",
-    "name": "材料工学科 展示",
+    "name": "アミノ酸ミュージック",
+    "group": "生物応用化学科",
+    "description": "アミノ酸配列から音楽を作りました。どういうこと!?と思った方はぜひ一度聞いてみてください！",
+    "tags": [
+      "C科"
+    ],
+    "location": "第二体育館",
+    "image": null,
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "dept-c-03",
+    "category": "学科展示",
+    "name": "アクアポニックスを使った生態系の可視化",
+    "group": "生物応用化学科",
+    "description": "水槽でアクアポニックスを作成し、小さな生態系環境を再現しました。ぜひ見に来てください！",
+    "tags": [
+      "C科"
+    ],
+    "location": "第二体育館",
+    "image": null,
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "dept-c-04",
+    "category": "学科展示",
+    "name": "化学マジックの光る実験",
+    "group": "生物応用化学科",
+    "description": "化学マジックで披露するテルミット反応とクマリンの蛍光を研究しました！綺麗なのでぜひ見に来てください！",
+    "tags": [
+      "C科"
+    ],
+    "location": "第二体育館",
+    "image": null,
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "dept-c-05",
+    "category": "学科展示",
+    "name": "ぴかぴかの泥団子",
+    "group": "生物応用化学科",
+    "description": "泥から放つ、至高の輝き。粘土の粒子と向き合い、泥団子づくりの限界とロマンに挑む研究室です。",
+    "tags": [
+      "C科"
+    ],
+    "location": "第二体育館",
+    "image": null,
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "dept-c-06",
+    "category": "学科展示",
+    "name": "水素カタリスト",
+    "group": "生物応用化学科",
+    "description": "先端技術の高活性水電解触媒を用いて、簡易なキットに落とし込みました。ぜひご覧ください！",
+    "tags": [
+      "C科"
+    ],
+    "location": "第二体育館",
+    "image": null,
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "dept-c-07",
+    "category": "学科展示",
+    "name": "チタン着色チタンだー",
+    "group": "生物応用化学科",
+    "description": "チタンに電流を流していろんな色に着色してみました。綺麗なのでぜひ見に来てください！",
+    "tags": [
+      "C科"
+    ],
+    "location": "第二体育館",
+    "image": null,
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "dept-c-08",
+    "category": "学科展示",
+    "name": "パイプ腐食の男達",
+    "group": "生物応用化学科",
+    "description": "環境(水質)によるパイプ内腐食の発生、進行について調べてみました。",
+    "tags": [
+      "C科"
+    ],
+    "location": "第二体育館",
+    "image": null,
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "dept-c-09",
+    "category": "学科展示",
+    "name": "ダンゴムシ占い",
+    "group": "生物応用化学科",
+    "description": "調べたダンゴムシの特性を利用した占いを作りました。ぜひ見に行ってください！",
+    "tags": [
+      "C科"
+    ],
+    "location": "第二体育館",
+    "image": null,
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "dept-c-10",
+    "category": "学科展示",
+    "name": "七色に変わるゲーミング反応",
+    "group": "生物応用化学科",
+    "description": "まるでゲーミングPC！次々に色が変わる不思議な反応の秘密に迫ろう！",
+    "tags": [
+      "C科"
+    ],
+    "location": "第二体育館",
+    "image": null,
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "dept-c-11",
+    "category": "学科展示",
+    "name": "GODIVAを超えろ！",
+    "group": "生物応用化学科",
+    "description": "GODIVAを超えるチョコレートを作っています。ぜひ食べに来てください!!",
+    "tags": [
+      "C科"
+    ],
+    "location": "第二体育館",
+    "image": null,
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "dept-s-01",
+    "category": "学科展示",
+    "name": "藤田パイプ管楽団",
     "group": "材料工学科",
-    "description": "学生の研究・製作物を展示。",
-    "tags": ["S科"],
-    "location": "学科展示",
+    "description": "チタンでトロンボーンを作ることを目標にしてます！世界に一つだけの楽器を演奏してみませんか！",
+    "tags": [
+      "S科"
+    ],
+    "location": "第二体育館",
+    "image": null,
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "dept-s-02",
+    "category": "学科展示",
+    "name": "機能性クレンザーの創成と性能評価",
+    "group": "材料工学科",
+    "description": "天然素材を活かし、スクラブと機能性成分を組み合わせたペースト状のクレンザーを作りました！",
+    "tags": [
+      "S科"
+    ],
+    "location": "第二体育館",
+    "image": null,
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "dept-s-03",
+    "category": "学科展示",
+    "name": "スターリングエンジン",
+    "group": "材料工学科",
+    "description": "材料特性を活かしたスターリングエンジンを展示します。熱で動く仕組みをぜひご覧ください！",
+    "tags": [
+      "S科"
+    ],
+    "location": "第二体育館",
+    "image": null,
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "dept-s-04",
+    "category": "学科展示",
+    "name": "悪質な椅子取り　滅！",
+    "group": "材料工学科",
+    "description": "図書館の空席確認のため圧力感知搭載のクッションを作成しました。電気情報×材料工学の合わせ技をご覧ください。",
+    "tags": [
+      "S科"
+    ],
+    "location": "第二体育館",
+    "image": null,
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "dept-s-05",
+    "category": "学科展示",
+    "name": "機能性フィルム",
+    "group": "材料工学科",
+    "description": "温度の変化に応じて水とのなじみやすさが切り替わる、機能性フィルムを制作しました。",
+    "tags": [
+      "S科"
+    ],
+    "location": "第二体育館",
+    "image": null,
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "dept-s-06",
+    "category": "学科展示",
+    "name": "回折格子を用いたレンズフィルターの作成",
+    "group": "材料工学科",
+    "description": "光学現象を活用し、スマートフォンでレトロな写真表現を楽しめるフィルターを開発します。",
+    "tags": [
+      "S科"
+    ],
+    "location": "第二体育館",
+    "image": null,
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "dept-s-07",
+    "category": "学科展示",
+    "name": "砂の転職活動",
+    "group": "材料工学科",
+    "description": "役目を終えた鋳物砂、「まだ働けます！」新たな可能性を探す研究です。",
+    "tags": [
+      "S科"
+    ],
+    "location": "第二体育館",
+    "image": null,
+    "occurrences": [],
+    "featured": false
+  },
+  {
+    "id": "dept-s-08",
+    "category": "学科展示",
+    "name": "玉ねぎの外皮を利用したUVカット布製品",
+    "group": "材料工学科",
+    "description": "玉ねぎの外皮からケルセチンを抽出し、環境に配慮したUVカット機能性布の開発を目指す研究です。",
+    "tags": [
+      "S科"
+    ],
+    "location": "第二体育館",
     "image": null,
     "occurrences": [],
     "featured": false

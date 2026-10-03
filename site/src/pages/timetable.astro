@@ -4,13 +4,14 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import TimetableList from "../components/timetable/TimetableList";
 import { entries } from "../lib/loadEntries";
+import { withEntryPhotos } from "../lib/entryPhotos";
 import site from "../data/site.json";
 ---
 
 <BaseLayout title={`TIMETABLE | ${site.eventName}`} description="2日間のタイムスケジュール">
   <section class="timetable">
     <h1 class="page-title">TIMETABLE</h1>
-    <TimetableList client:load entries={entries} />
+    <TimetableList client:load entries={await withEntryPhotos(entries)} />
   </section>
 </BaseLayout>
 

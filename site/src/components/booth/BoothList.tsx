@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import "./BoothList.css";
+import EntryPhotoImg from "../EntryPhotoImg";
 import TabTagFilter, { type TabConfig } from "../filter/TabTagFilter";
 import PromoCard from "../motion/PromoCard";
 import { getByCategory, getPermanentEntries } from "../../lib/entries";
@@ -18,7 +19,11 @@ function formatOccurrenceTimes(occurrences: Occurrence[]) {
     .map((day) => {
       const items = occurrences.filter((o) => o.day === day && o.start_time);
       if (items.length === 0) return null;
-      const times = items.map((o) => (o.end_time ? `${o.start_time}-${o.end_time}` : `${o.start_time}〜`)).join("・");
+      // 回ごとの補足（胸骨圧迫の展示の「実演」等）は詳細ページと同じく括弧で添える。
+      // 添えないと、営業時間と実演時間が「9:00-15:00・13:00-15:00」と並んで区別できない
+      const times = items
+        .map((o) => `${o.end_time ? `${o.start_time}-${o.end_time}` : `${o.start_time}〜`}${o.note ? `（${o.note}）` : ""}`)
+        .join("・");
       return { day, times };
     })
     .filter((g): g is { day: Day; times: string } => g !== null);
@@ -54,6 +59,8 @@ const TABS: TabConfig[] = [
     tags: [
       { id: "day1", label: formatDayLabel("day1") },
       { id: "day2", label: formatDayLabel("day2") },
+      { id: "中夜祭", label: tagLabel("中夜祭") },
+      { id: "当日参加OK", label: tagLabel("当日参加OK") },
     ],
   },
   {
@@ -68,6 +75,15 @@ const TABS: TabConfig[] = [
   },
 ];
 
+/**
+ * カードから詳細ページへ飛ばすか。出店と学科展示は、名前・団体・紹介文・写真がカードで
+ * 出きっていて、詳細ページに行っても増える情報が無いので飛ばさない
+ */
+const CARD_ONLY_CATEGORIES: Category[] = ["出店", "学科展示"];
+function hasDetailPage(entry: Entry) {
+  return !CARD_ONLY_CATEGORIES.includes(entry.category);
+}
+
 export default function BoothList({ entries }: Props) {
   const [activeTab, setActiveTab] = useState<string>(TABS[0].id);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
@@ -77,7 +93,8 @@ export default function BoothList({ entries }: Props) {
   useEffect(() => {
     const { tab, tags } = parseFilterParams(window.location.search);
     if (tab && TABS.some((t) => t.id === tab)) setActiveTab(tab);
-    if (tags.length > 0) setSelectedTags(tags);
+    // タグは1つだけ選べる。古いリンク等で複数来たら先頭だけ使う
+    if (tags.length > 0) setSelectedTags(tags.slice(0, 1));
   }, []);
 
   // タブ・タグの選択をURLに反映する
@@ -111,16 +128,14 @@ export default function BoothList({ entries }: Props) {
           <ul className="bl-permanent-list">
             {permanentEntries.map((entry) => (
               <li key={entry.id} className="bl-permanent-card">
-                {/* home の PICK UP と同じカード（PromoCard）を使う。常設セクションは
-                    縦1列でカードの高さを揃える必要が無いので、「NO IMAGE」を出す
-                    .bl-grid 側とは扱いを分ける（Issue #60） */}
+                {/* home の PICK UP と同じカード（PromoCard）を使う（Issue #60） */}
                 <a className="bl-permanent-link" href={`/entry/${entry.id}/`}>
                   <PromoCard entry={entry} more />
                 </a>
                 {/* カードの外に出す。中に入れるとリンクの入れ子になる */}
                 {entry.link && (
                   <a className="bl-permanent-cta" href={entry.link}>
-                    やってみる →
+                    {entry.linkLabel ?? "やってみる →"}
                   </a>
                 )}
               </li>
@@ -138,47 +153,61 @@ export default function BoothList({ entries }: Props) {
       />
 
       <ul className="bl-grid">
-        {filtered.map((entry, i) => (
-          <li key={entry.id}>
-            <a className="bl-card-link" href={`/entry/${entry.id}/`}>
-              <div className="bl-card" style={{ transform: `rotate(${i % 2 === 0 ? -0.8 : 0.9}deg)` }}>
+        {filtered.map((entry, i) => {
+          // 出店は紹介文と写真がカードで全部見えていて、詳細ページに行っても増える情報が無いので
+          // リンクにせず、紹介文も省略しないで出す。場内マップができたら、ここから場所へ飛ばしたい
+          const linked = hasDetailPage(entry);
+          const summary = entry.summary ?? entry.description;
+          const card = (
+            <div className="bl-card" style={{ transform: `rotate(${i % 2 === 0 ? -0.8 : 0.9}deg)` }}>
+              {/* 写真が無い企画（学科展示など）は写真枠ごと出さず、文字だけのカードにする。
+                  16:9の「NO IMAGE」枠を出すと、その高さがまるごと無駄になる（詳細ページと同じ方針。Issue #56） */}
+              {entry.image && (
                 <div className="bl-photo">
-                  {entry.image ? (
-                    <img src={entry.image} alt="" loading="lazy" />
-                  ) : (
-                    <span className="bl-no-image num">NO IMAGE</span>
-                  )}
+                  {/* SPはページ幅いっぱい（本文幅の上限520px）、PCは3列 */}
+                  <EntryPhotoImg entry={entry} sizes="(min-width: 900px) 380px, min(calc(100vw - 40px), 520px)" />
                 </div>
-                <div className="bl-body">
-                  <p className="bl-name">{entry.name}</p>
-                  {entry.group && <p className="bl-group">{entry.group}</p>}
-                  {entry.summary && <p className="bl-summary">{entry.summary}</p>}
-                  {displayTags(entry.tags).length > 0 && (
-                    <ul className="bl-tags">
-                      {displayTags(entry.tags).map((tag) => (
-                        <li key={tag}>
-                          <span className={`bl-chip ${tagColor(tag)}`}>{tagLabel(tag)}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                  {entry.occurrences.length > 0 && (
-                    <ul className="bl-times">
-                      {formatOccurrenceTimes(entry.occurrences).map((g) => (
-                        <li key={g.day}>
-                          <span className={`bl-day num ${dayColorClass(g.day) ?? ""}`}>{formatDayLabel(g.day)}</span>
-                          <span className="bl-time num">{g.times}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                  {entry.location && <p className="bl-location">{entry.location}</p>}
-                  <span className="bl-more">view more →</span>
-                </div>
+              )}
+              <div className="bl-body">
+                <p className="bl-name">{entry.name}</p>
+                {entry.group && <p className="bl-group">{entry.group}</p>}
+                {summary && <p className={`bl-summary${linked ? "" : " is-full"}`}>{summary}</p>}
+                {displayTags(entry.tags).length > 0 && (
+                  <ul className="bl-tags">
+                    {displayTags(entry.tags).map((tag) => (
+                      <li key={tag}>
+                        <span className={`bl-chip ${tagColor(tag)}`}>{tagLabel(tag)}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                {entry.occurrences.length > 0 && (
+                  <ul className="bl-times">
+                    {formatOccurrenceTimes(entry.occurrences).map((g) => (
+                      <li key={g.day}>
+                        <span className={`bl-day num ${dayColorClass(g.day) ?? ""}`}>{formatDayLabel(g.day)}</span>
+                        <span className="bl-time num">{g.times}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                {entry.location && <p className="bl-location">{entry.location}</p>}
+                {linked && <span className="bl-more">view more →</span>}
               </div>
-            </a>
-          </li>
-        ))}
+            </div>
+          );
+          return (
+            <li key={entry.id}>
+              {linked ? (
+                <a className="bl-card-link" href={`/entry/${entry.id}/`}>
+                  {card}
+                </a>
+              ) : (
+                card
+              )}
+            </li>
+          );
+        })}
         {filtered.length === 0 && <li className="bl-empty">該当する企画がありません</li>}
       </ul>
     </div>
