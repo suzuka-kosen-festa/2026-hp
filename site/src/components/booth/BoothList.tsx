@@ -75,7 +75,7 @@ const TABS: TabConfig[] = [
       { id: "day1", label: formatDayLabel("day1") },
       { id: "day2", label: formatDayLabel("day2") },
       { id: "中夜祭", label: tagLabel("中夜祭") },
-      { id: "決勝バンド", label: tagLabel("決勝バンド") },
+      { id: "野外ライブ", label: tagLabel("野外ライブ") },
     ],
   },
 ];

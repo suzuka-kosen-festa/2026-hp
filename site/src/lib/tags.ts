@@ -16,7 +16,7 @@ export type TagColor = "red" | "blue";
  * 色が変わり、同じタグがカードごとに違う色になっていた。
  *
  * 色の使い分け:
- *   赤 … 飲食と、ライブの特別枠（中夜祭・決勝バンド）、当日参加OK。目を引かせたいもの
+ *   赤 … 飲食と、ライブの特別枠（中夜祭・野外ライブ）、当日参加OK。目を引かせたいもの
  *   青 … それ以外（学科展示・物販・展示・レク・常設）
  */
 export const TAG_META: Record<string, { label: string; color: TagColor }> = {
@@ -39,7 +39,7 @@ export const TAG_META: Record<string, { label: string; color: TagColor }> = {
   常設: { label: "常設", color: "blue" },
   中夜祭: { label: "中夜祭", color: "red" },
   当日参加OK: { label: "当日参加OK", color: "red" },
-  決勝バンド: { label: "決勝バンド", color: "red" },
+  野外ライブ: { label: "野外ライブ", color: "red" },
 };
 
 /**

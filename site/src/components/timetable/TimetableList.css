@@ -255,9 +255,13 @@
   font-size: 10.5px;
   font-weight: 800;
   line-height: 1.25;
-  white-space: nowrap;
+  /* 枠の高さに収まる行数まで改行し、超えたら「…」（行数は TSX が -webkit-line-clamp で渡す）。
+     日本語の途中では折らず「＆」「・」の後ろ（<wbr>）で折る。それでも収まらない語は任意の位置で折る */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
   overflow: hidden;
-  text-overflow: ellipsis;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
 }
 .tl-now {
   position: relative;

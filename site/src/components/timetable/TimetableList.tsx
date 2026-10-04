@@ -1,4 +1,4 @@
-import { type CSSProperties, useEffect, useRef, useState } from "react";
+import { type CSSProperties, type ReactNode, useEffect, useRef, useState } from "react";
 import "./TimetableList.css";
 import EntryPhotoImg from "../EntryPhotoImg";
 import TabTagFilter, { type TabConfig } from "../filter/TabTagFilter";
@@ -81,6 +81,27 @@ function formatHourLabel(minutes: number): string {
  */
 function gridName(name: string): string {
   return name.replaceAll("グランプリ", "GP");
+}
+
+/**
+ * 名前の改行位置。「＆」「・」「/」の後ろで折り返せるようにする（わらしべ長者＆／バザーGP紹介）。
+ * CSS で word-break: keep-all にしているので、日本語の途中（バザ／ーGP）では基本的に折り返さず、
+ * ここで入れた位置で折り返す。それでも1行に収まらない語は overflow-wrap: anywhere で折る
+ */
+function withBreaks(text: string): ReactNode[] {
+  return text.split(/(?<=[＆&・/])/).flatMap((part, i) => (i === 0 ? [part] : [<wbr key={i} />, part]));
+}
+
+/**
+ * 枠の高さに収まる名前の行数。短い枠は1行で「…」、高い枠は収まるだけ改行して出す。
+ * 1行の高さは CSS（.tl-block-name の font-size × line-height 1.25、.tl-block-time）に合わせた値
+ */
+function nameLines(blockHeight: number, isDesktop: boolean): number {
+  const padding = isDesktop ? 10 : 6;
+  const border = 3;
+  const timeLine = isDesktop ? 14 : 12;
+  const nameLine = isDesktop ? 12.5 * 1.25 : 10.5 * 1.25;
+  return Math.max(1, Math.floor((blockHeight - padding - border - timeLine - 1) / nameLine));
 }
 
 export default function TimetableList({ entries }: Props) {
@@ -232,8 +253,8 @@ export default function TimetableList({ entries }: Props) {
                     <span className="tl-time-sep">-</span>
                     {occurrence.end_time}
                   </span>
-                  <span className="tl-block-name">
-                    {gridName(entry.name)}
+                  <span className="tl-block-name" style={{ WebkitLineClamp: nameLines(height, isDesktop) }}>
+                    {withBreaks(gridName(entry.name))}
                     {/* 同じ企画の中の「どの回か」（バザーグランプリの中間発表／最終結果発表等） */}
                     {occurrence.note && ` ${occurrence.note}`}
                     {isOccurrenceNow(occurrence) && <span className="tl-now">NOW</span>}
