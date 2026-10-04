@@ -68,17 +68,6 @@ const PART_TILTS = [-1.2, 1, -0.8, 1.2];
         履歴が無いとき（検索やQRからの直接着地）はトップへ。行き先が毎回変わるので
         ラベルは「戻る」にしてある */}
     <p class="crumb"><a href="/" data-back>← 戻る</a></p>
-    {/* JSが動かなくても href="/" の普通のリンクとして機能する。サイト内から来たときだけ履歴を1つ戻す。
-        リンクの直後にインラインで置き、HTMLを読んだその場で効かせる。下の <script>（モジュール）に
-        入れると別ファイルの読み込みを待つので、表示直後に押すとトップへ飛んでしまっていた */}
-    <script is:inline>
-      document.querySelector("a[data-back]")?.addEventListener("click", (event) => {
-        const sameOrigin = document.referrer.startsWith(location.origin + "/");
-        if (!sameOrigin || history.length <= 1) return;
-        event.preventDefault();
-        history.back();
-      });
-    </script>
 
     <header class="head">
       <Tape color="blue" rotate={-1.5} as="p" class="cat">{entry.categoryLabel ?? entry.category}</Tape>
@@ -193,6 +182,16 @@ const PART_TILTS = [-1.2, 1, -0.8, 1.2];
   </article>
 <script>
   import { statusAt } from "../../lib/application";
+
+  /* JSが動かなくても href="/" の普通のリンクとして機能する。
+     サイト内から来たときだけ履歴を1つ戻す */
+  document.querySelector<HTMLAnchorElement>("a[data-back]")?.addEventListener("click", (event) => {
+    const sameOrigin = document.referrer.startsWith(`${location.origin}/`);
+    if (!sameOrigin || history.length <= 1) return;
+
+    event.preventDefault();
+    history.back();
+  });
 
   /* 申込ボタンの出し分けを閲覧時の時刻で合わせ直す。
      複数の企画を載せる記事では企画ごとに締切が違うので、1つずつ判定する */
