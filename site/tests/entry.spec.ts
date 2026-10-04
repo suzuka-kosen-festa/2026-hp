@@ -301,3 +301,23 @@ test.describe("entry の前後の企画", () => {
     await expect(page.locator("nav.neighbors")).toHaveCount(0);
   });
 });
+
+/**
+ * 前後の企画へは履歴を積まずに移動する。何回進んでも「← 戻る」1回で、最初に来たページ
+ * （ここでは timetable）へ戻れること。積むと1つ前の企画に戻るだけになる
+ */
+test("前後の企画を何回たどっても、戻るで最初に来たページへ戻る", async ({ page }) => {
+  await page.goto("/timetable/");
+  await page.locator(".tl-col-body.tl-stage-live .tl-block").first().click();
+  await expect(page).toHaveURL(/\/entry\//);
+
+  // 「次」へ2回進む
+  for (let i = 0; i < 2; i++) {
+    const current = page.url();
+    await page.locator("nav.neighbors").first().locator(".link-card").last().click();
+    await expect(page).not.toHaveURL(current);
+  }
+
+  await page.locator("a[data-back]").click();
+  await expect(page, "1つ前の企画に戻っています").toHaveURL(/\/timetable\/(\?tab=day1)?$/);
+});

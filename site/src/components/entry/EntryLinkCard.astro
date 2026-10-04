@@ -17,9 +17,22 @@ interface Props {
   align?: "start" | "end";
   /** 「view more →」の誘導を添える（カード全体がリンクなので、これ自体は飾り） */
   more?: boolean;
+  /**
+   * 履歴を積まずに移動する（EntryNeighbors の前後カード用。処理は EntryNeighbors のスクリプト）。
+   * 前後に何回進んでも「← 戻る」で最初に来たページ（timetable・booth等）へ1回で戻れるようにする
+   */
+  replaceHistory?: boolean;
 }
 
-const { entry, eyebrow, accent, showSummary = true, align = "start", more = false } = Astro.props;
+const {
+  entry,
+  eyebrow,
+  accent,
+  showSummary = true,
+  align = "start",
+  more = false,
+  replaceHistory = false,
+} = Astro.props;
 const photo = entry.image ? await optimizeEntryPhoto(entry.image) : null;
 ---
 
@@ -27,6 +40,7 @@ const photo = entry.image ? await optimizeEntryPhoto(entry.image) : null;
   class:list={["link-card", { "is-end": align === "end" }]}
   href={`/entry/${entry.id}/`}
   data-astro-prefetch="viewport"
+  data-replace-history={replaceHistory ? "" : undefined}
   style={accent ? { "--accent": accent } : undefined}
 >
   {/* 写真が無い企画は写真枠ごと出さない（boothのカード・常設セクションと同じ方針） */}

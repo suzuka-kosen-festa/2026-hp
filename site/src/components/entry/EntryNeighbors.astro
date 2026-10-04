@@ -44,6 +44,7 @@ function timeOf({ occurrence }: ScheduledSlot) {
               eyebrow={`← 前　${timeOf(group.prev)}`}
               accent={color}
               showSummary={false}
+              replaceHistory
             />
           ) : (
             <a class="neighbors-back" href={timetableHref}>
@@ -57,6 +58,7 @@ function timeOf({ occurrence }: ScheduledSlot) {
               accent={color}
               showSummary={false}
               align="end"
+              replaceHistory
             />
           ) : (
             <a class="neighbors-back" href={timetableHref}>
@@ -68,6 +70,26 @@ function timeOf({ occurrence }: ScheduledSlot) {
     );
   })
 }
+
+{
+  /*
+   * 前後の企画への移動は履歴を積まずにページを置き換える。積むと「← 戻る」やブラウザの戻るが
+   * 1つ前の企画に戻るだけになり、何回か進むと元のタイムテーブル（や booth）まで何回も戻る羽目になる。
+   * 別タブで開く操作（Cmd/Ctrl/Shift+クリック・中クリック）はブラウザに任せる。
+   * 検索やQRから記事に直接来たとき（サイト内から来ていない）は、置き換えると「戻る」で
+   * サイトの外まで戻ってしまうので、普通に履歴を積む。JSが動かなければ普通のリンクとして移動する
+   */
+}
+<script is:inline>
+  document.addEventListener("click", (event) => {
+    const link = event.target instanceof Element ? event.target.closest("a[data-replace-history]") : null;
+    if (!link || event.defaultPrevented || event.button !== 0) return;
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    if (!document.referrer.startsWith(location.origin + "/")) return;
+    event.preventDefault();
+    location.replace(link.href);
+  });
+</script>
 
 <style>
   .neighbors {
