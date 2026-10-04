@@ -1,7 +1,12 @@
 import { expect, test } from "@playwright/test";
-import { describePage, showsContent } from "./_shared";
+import { describePage, gatedLinkEntries, showsContent } from "./_shared";
 
 describePage("timetable", "/timetable/");
+
+/** 公開日を決めたCTA（バザーグランプリの投票。lib/entryLink.ts）を持つ常設企画 */
+const gatedLinks = gatedLinkEntries();
+/** 常設カードのCTAが出そろう時刻。公開日付きのCTAが無ければ時計はいじらない */
+const ctaVisibleAt = gatedLinks.length > 0 ? Math.max(...gatedLinks.map((entry) => entry.opensAt)) : null;
 
 /**
  * 中夜祭は在校生限定。タブを公開する以上、注意書きが消えると一般の来場者が
@@ -44,8 +49,11 @@ test.describe("timetable の常設カード", () => {
     await page.mouse.click(box.x + box.width - 6, box.y + box.height - 6);
     await expect(page).toHaveURL(new RegExp(`${href}$`));
 
+    // 公開日より前はCTAが出ない企画（投票フォーム）があるので、出ている時刻にしてから開く
+    if (ctaVisibleAt !== null) await page.clock.setFixedTime(ctaVisibleAt);
     await page.goto("/timetable/");
     const cta = page.locator(".tl-permanent-cta").first();
+    await expect(cta, "常設カードのCTAが1つも出ていません").toBeVisible();
     // trial: 実際には遷移せず、他の要素に覆われずにクリックを受け取れるかだけを確かめる
     await cta.click({ trial: true });
   });
@@ -62,3 +70,38 @@ test("回ごとに場所を指定した回は、その場所の列に載る", as
   const mainStage = page.locator(".tl-col-body.tl-stage-main");
   await expect(mainStage.locator(".tl-block", { hasText: "わらしべ長者" })).toHaveCount(1);
 });
+
+/**
+ * 公開日を決めたCTA（バザーグランプリの投票フォーム）は、開催前は常設カードにも出さない。
+ *
+ * アイランドはマウント後に出し直すので、SSRのHTMLだけ見ても足りない。
+ * 逆に当日になっても出ないほうが実害が大きいので、出る側もここで見る
+ */
+for (const entry of gatedLinks) {
+  test.describe(`timetable の常設カードのCTAの公開日（${entry.id}）`, () => {
+    test.skip(!showsContent("/timetable/"), "timetable が準備中のため");
+
+    const card = (page: import("@playwright/test").Page) =>
+      page.locator(".tl-permanent-card", { hasText: entry.name });
+
+    test("公開日より前は出さない", async ({ page }) => {
+      await page.clock.setFixedTime(entry.opensAt - 60 * 1000);
+      await page.goto("/timetable/", { waitUntil: "networkidle" });
+
+      await expect(card(page), `${entry.name} の常設カードがありません`).toHaveCount(1);
+      await expect(
+        card(page).getByRole("link", { name: entry.linkLabel }),
+        "公開日より前なのにCTAが出ています",
+      ).toHaveCount(0);
+    });
+
+    test("公開日になったら出す", async ({ page }) => {
+      await page.clock.setFixedTime(entry.opensAt);
+      await page.goto("/timetable/", { waitUntil: "networkidle" });
+
+      const cta = card(page).getByRole("link", { name: entry.linkLabel });
+      await expect(cta, "公開日になってもCTAが出ていません").toBeVisible();
+      await expect(cta).toHaveAttribute("href", entry.link);
+    });
+  });
+}

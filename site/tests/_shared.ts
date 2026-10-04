@@ -30,6 +30,33 @@ export function showsContent(path: string) {
 }
 
 /**
+ * 公開日（linkOpens）を決めた外部リンクを持つ企画。
+ *
+ * バザーグランプリの投票フォームが開催前から押せてしまったため入れた制限で、
+ * 記事ページ・booth の常設カード・timetable の常設カードの3か所に出る。
+ * 同じ企画を3つのspecから見るので、データの読み込みはここに置く
+ */
+export function gatedLinkEntries() {
+  const dir = new URL("../src/data/entries/", import.meta.url);
+  const all: { id: string; name: string; link?: string; linkLabel?: string; linkOpens?: string }[] = [
+    "booth",
+    "department",
+    "program",
+  ].flatMap((file) => JSON.parse(readFileSync(fileURLToPath(new URL(`${file}.json`, dir)), "utf8")));
+
+  return all
+    .filter((entry) => entry.link && entry.linkOpens)
+    .map((entry) => ({
+      ...entry,
+      link: entry.link!,
+      linkLabel: entry.linkLabel ?? "やってみる →",
+      linkOpens: entry.linkOpens!,
+      /** ボタンが開く瞬間（日本時間のその日の0時） */
+      opensAt: Date.parse(`${entry.linkOpens}T00:00:00+09:00`),
+    }));
+}
+
+/**
  * 全ページ共通の検査。ページごとにセレクタを列挙する運用は続かないので、
  * 「どのページでも成り立つべきこと」だけを見る。
  *

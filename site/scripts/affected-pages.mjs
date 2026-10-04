@@ -24,6 +24,9 @@ const SHARED = [
   /^site\/src\/layouts\//,
   /^site\/src\/components\/(ui|motion|filter)\//,
   /^site\/src\/components\/(Header|Footer|SvgDefs)\.astro$/,
+  // components 直下に置いた複数ページ共有の部品（EntryPhotoImg・EntryLinkCta）。
+  // ここを拾わないと、booth と timetable の両方で使う部品を直してもE2Eが1つも走らない
+  /^site\/src\/components\/[\w-]+\.tsx$/,
   /^site\/src\/styles\//,
   /^site\/src\/(lib|types)\//,
   // 公開制御。全ページの表示可否が変わるので全ページ検査する

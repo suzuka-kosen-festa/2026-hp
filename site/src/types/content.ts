@@ -206,4 +206,12 @@ export interface Entry {
   link?: string | null;
   /** link のボタンの文言。省略時は「やってみる →」（バザーグランプリの「投票する →」等） */
   linkLabel?: string | null;
+  /**
+   * link のボタンを出し始める日 "YYYY-MM-DD"（日本時間のこの日の0時から）。省略時は最初から出す。
+   *
+   * バザーグランプリの投票のように、開催前に押せてしまうと困る導線に付ける
+   * （application の opens と違い、こちらは締切を持たない。受付終了はフォーム側に任せる）。
+   * 静的サイトなので判定は閲覧時にもやり直す（lib/entryLink.ts）
+   */
+  linkOpens?: string | null;
 }

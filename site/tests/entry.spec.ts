@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { expect, test } from "@playwright/test";
-import { describePage, showsContent } from "./_shared";
+import { describePage, gatedLinkEntries, showsContent } from "./_shared";
 
 // 開催回・対象・定員・注記を全部持つ、いま一番情報量の多いエントリ
 describePage("entry", "/entry/workshop-ai-sorting-robot/");
@@ -337,4 +337,48 @@ test("前後の企画を何回たどっても、戻るで最初に来たペー�
 
   await page.locator("a[data-back]").click();
   await expect(page, "1つ前の企画に戻っています").toHaveURL(/\/timetable\/(\?tab=day1)?$/);
+});
+
+/**
+ * 外部リンク（link）のうち公開日（linkOpens）を決めたもの。
+ *
+ * バザーグランプリの投票フォームが開催前から押せてしまい、本番と関係ない票が
+ * 入りうる状態だったため入れた制限。申込と同じ理由で閲覧時の時刻で判定している
+ * （ビルド時刻だけで決めると、当日に再デプロイしない限りボタンが開かない）ので、
+ * ブラウザの時計を公開日の前後にずらして両方向から見る。
+ */
+for (const entry of gatedLinkEntries()) {
+  test.describe(`entry の外部リンクの公開日（${entry.id}）`, () => {
+    test("公開日より前はボタンを出さない", async ({ page }) => {
+      // 開く直前の1分。境界の取り違え（前日に開く等）をここで捕まえる
+      await page.clock.setFixedTime(entry.opensAt - 60 * 1000);
+      await page.goto(`/entry/${entry.id}/`);
+
+      await expect(page.locator(".cta"), "公開日より前なのにボタンが出ています").toBeHidden();
+    });
+
+    test("公開日になったらボタンを出す", async ({ page }) => {
+      await page.clock.setFixedTime(entry.opensAt);
+      await page.goto(`/entry/${entry.id}/`);
+
+      const button = page.locator(".cta").getByRole("link", { name: entry.linkLabel });
+      await expect(button, "公開日になってもボタンが出ていません").toBeVisible();
+      await expect(button).toHaveAttribute("href", entry.link);
+    });
+  });
+}
+
+/**
+ * 投票フォームは開催前に押せると集計が狂うので、公開日を必ず持たせる。
+ * linkOpens を外すと上のループが0件になり、検査ごと静かに消えてしまうため、ここで直接見る
+ */
+test("投票導線には公開日（linkOpens）が入っている", () => {
+  const voting = (entries as (EntryData & { link?: string; linkLabel?: string; linkOpens?: string })[]).filter(
+    (entry) => entry.link && (entry.linkLabel ?? "").includes("投票"),
+  );
+  expect(voting.length, "投票ボタンを持つ企画が1件もありません").toBeGreaterThan(0);
+  expect(
+    voting.filter((entry) => !entry.linkOpens).map((entry) => entry.id),
+    "公開日(linkOpens)の無い投票ボタンがあります。開催前から投票できてしまいます",
+  ).toEqual([]);
 });

@@ -20,6 +20,7 @@ import { entries } from "../../lib/loadEntries";
 import { getStageNeighbors } from "../../lib/entries";
 import { optimizeEntryPhoto } from "../../lib/entryPhotos";
 import { dayColorClass, formatDayLabel } from "../../lib/eventDate";
+import { isLinkOpen, linkOpensAt } from "../../lib/entryLink";
 import { displayTags as toDisplayTags, tagColor, tagLabel } from "../../lib/tags";
 import type { Entry } from "../../types/content";
 import site from "../../data/site.json";
@@ -59,6 +60,12 @@ const parts = entry.parts ?? [];
 const hasParts = parts.length > 0;
 /** 紙片を貼り重ねたように見せるため、企画ごとに見出しの傾きを散らす */
 const PART_TILTS = [-1.2, 1, -0.8, 1.2];
+
+// 外部リンク（バザーグランプリの投票フォーム等）に公開日が付いている場合の初期状態。
+// 静的サイトなのでビルド時刻だけでは決められない。EntryApply と同じく下の script が
+// 閲覧時の時刻で見直す（lib/entryLink.ts）
+const linkOpensAtMs = entry.linkOpens ? linkOpensAt(entry.linkOpens) : null;
+const linkHiddenAtBuild = !isLinkOpen(entry.linkOpens, Date.now());
 ---
 
 <BaseLayout title={`${entry.name} | ${site.eventName}`} description={entry.summary ?? entry.description ?? entry.comment ?? undefined}>
@@ -167,7 +174,7 @@ const PART_TILTS = [-1.2, 1, -0.8, 1.2];
 
     {
       entry.link && (
-        <div class="cta">
+        <div class="cta" data-link-opens-at={linkOpensAtMs ?? undefined} hidden={linkHiddenAtBuild}>
           <Button href={entry.link} color="yellow" rotate={-1}>
             {entry.linkLabel ?? "やってみる →"}
           </Button>
@@ -187,6 +194,12 @@ const PART_TILTS = [-1.2, 1, -0.8, 1.2];
     apply.querySelectorAll<HTMLElement>("[data-apply-state]").forEach((el) => {
       el.hidden = el.dataset.applyState !== status;
     });
+  });
+
+  /* 公開日を決めた外部リンク（バザーグランプリの投票フォーム等）も閲覧時の時刻で見直す。
+     ビルド時刻だけで決めると、当日に再デプロイしない限りボタンが開かない */
+  document.querySelectorAll<HTMLElement>("[data-link-opens-at]").forEach((cta) => {
+    cta.hidden = Date.now() < Number(cta.dataset.linkOpensAt);
   });
 </script>
 </BaseLayout>
@@ -286,6 +299,11 @@ const PART_TILTS = [-1.2, 1, -0.8, 1.2];
 
   .cta {
     margin-top: 28px;
+  }
+
+  /* hidden 属性より display 指定が勝たないよう念のため明示する（EntryApply と同じ） */
+  .cta[hidden] {
+    display: none;
   }
 
   /* 企画へのページ内リンク。貼った付箋のように1行ずつ並べる */
