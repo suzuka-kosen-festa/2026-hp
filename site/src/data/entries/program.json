@@ -597,24 +597,6 @@
         "end_time": "12:50"
       }
     ],
-    "leader": {
-      "name": "安藤颯祐"
-    },
-    "members": [
-      {
-        "name": "竹浪陽太"
-      },
-      {
-        "name": "伊藤嵐"
-      },
-      {
-        "name": "花井玄太"
-      },
-      {
-        "name": "平田七海",
-        "affiliation": "飯野高校"
-      }
-    ],
     "featured": false
   },
   {
@@ -636,26 +618,6 @@
         "day": "day2",
         "start_time": "13:00",
         "end_time": "13:20"
-      }
-    ],
-    "leader": {
-      "name": "濱田圭太郎"
-    },
-    "members": [
-      {
-        "name": "井上高志"
-      },
-      {
-        "name": "小林蒼也"
-      },
-      {
-        "name": "杉本隼都"
-      },
-      {
-        "name": "野田飛翔"
-      },
-      {
-        "name": "宮脇海里"
       }
     ],
     "featured": false
@@ -743,23 +705,6 @@
         "end_time": "09:40"
       }
     ],
-    "leader": {
-      "name": "福島海音"
-    },
-    "members": [
-      {
-        "name": "笠井謙"
-      },
-      {
-        "name": "橋本琉空"
-      },
-      {
-        "name": "市川悠人"
-      },
-      {
-        "name": "堀川明人"
-      }
-    ],
     "featured": false
   },
   {
@@ -780,20 +725,6 @@
         "day": "day2",
         "start_time": "09:00",
         "end_time": "09:20"
-      }
-    ],
-    "leader": {
-      "name": "高木咲衣"
-    },
-    "members": [
-      {
-        "name": "船木玲"
-      },
-      {
-        "name": "杉本隼都"
-      },
-      {
-        "name": "緒方彩羽"
       }
     ],
     "featured": false
@@ -818,26 +749,6 @@
         "end_time": "10:10"
       }
     ],
-    "leader": {
-      "name": "瀧澤拓朗"
-    },
-    "members": [
-      {
-        "name": "青木あまね"
-      },
-      {
-        "name": "小林赳翔"
-      },
-      {
-        "name": "首藤琴音"
-      },
-      {
-        "name": "服部花音"
-      },
-      {
-        "name": "櫻井映之進"
-      }
-    ],
     "featured": false
   },
   {
@@ -858,26 +769,6 @@
         "day": "day1",
         "start_time": "10:50",
         "end_time": "11:10"
-      }
-    ],
-    "leader": {
-      "name": "河内奏人"
-    },
-    "members": [
-      {
-        "name": "有澤直都"
-      },
-      {
-        "name": "福島漣音"
-      },
-      {
-        "name": "宮下大雅"
-      },
-      {
-        "name": "石崎敬"
-      },
-      {
-        "name": "粂内將太朗"
       }
     ],
     "featured": false
@@ -902,17 +793,6 @@
         "end_time": "11:40"
       }
     ],
-    "leader": {
-      "name": "岡本真弥"
-    },
-    "members": [
-      {
-        "name": "丸山優香"
-      },
-      {
-        "name": "川村美裕"
-      }
-    ],
     "featured": false
   },
   {
@@ -933,20 +813,6 @@
         "day": "day1",
         "start_time": "11:50",
         "end_time": "12:10"
-      }
-    ],
-    "leader": {
-      "name": "細見和生"
-    },
-    "members": [
-      {
-        "name": "秋田悠友"
-      },
-      {
-        "name": "岩崎元気"
-      },
-      {
-        "name": "矢田釉月"
       }
     ],
     "featured": false
@@ -971,18 +837,6 @@
         "end_time": "12:40"
       }
     ],
-    "leader": {
-      "name": "船木玲"
-    },
-    "members": [
-      {
-        "name": "杉本隼都"
-      },
-      {
-        "name": "草川琉翔",
-        "affiliation": "高田短期大学"
-      }
-    ],
     "featured": false
   },
   {
@@ -1003,17 +857,6 @@
         "day": "day1",
         "start_time": "12:50",
         "end_time": "13:10"
-      }
-    ],
-    "leader": {
-      "name": "藤井英音"
-    },
-    "members": [
-      {
-        "name": "伊藤嵐"
-      },
-      {
-        "name": "竹浪陽太"
       }
     ],
     "featured": false
@@ -1038,20 +881,6 @@
         "end_time": "10:40"
       }
     ],
-    "leader": {
-      "name": "福島海音"
-    },
-    "members": [
-      {
-        "name": "笠井謙"
-      },
-      {
-        "name": "カエ"
-      },
-      {
-        "name": "市川悠人"
-      }
-    ],
     "featured": false
   },
   {
@@ -1072,23 +901,6 @@
         "day": "day2",
         "start_time": "09:30",
         "end_time": "09:50"
-      }
-    ],
-    "leader": {
-      "name": "片岡宥人"
-    },
-    "members": [
-      {
-        "name": "田中爽太"
-      },
-      {
-        "name": "小林夢明"
-      },
-      {
-        "name": "細見和生"
-      },
-      {
-        "name": "竹浪陽太"
       }
     ],
     "featured": false
@@ -1113,26 +925,6 @@
         "end_time": "10:20"
       }
     ],
-    "leader": {
-      "name": "矢田釉月"
-    },
-    "members": [
-      {
-        "name": "川村承太郎"
-      },
-      {
-        "name": "小林蒼也"
-      },
-      {
-        "name": "眞田朱"
-      },
-      {
-        "name": "川合可恋"
-      },
-      {
-        "name": "丸山優香"
-      }
-    ],
     "featured": false
   },
   {
@@ -1155,17 +947,6 @@
         "end_time": "10:50"
       }
     ],
-    "leader": {
-      "name": "勝田翔万"
-    },
-    "members": [
-      {
-        "name": "田中柊灯"
-      },
-      {
-        "name": "五藤翔"
-      }
-    ],
     "featured": false
   },
   {
@@ -1186,23 +967,6 @@
         "day": "day2",
         "start_time": "11:00",
         "end_time": "11:20"
-      }
-    ],
-    "leader": {
-      "name": "中澤翼"
-    },
-    "members": [
-      {
-        "name": "石川龍"
-      },
-      {
-        "name": "片山賢"
-      },
-      {
-        "name": "栗山偉生"
-      },
-      {
-        "name": "原田祐樹"
       }
     ],
     "featured": false
@@ -1247,20 +1011,6 @@
         "end_time": "10:20"
       }
     ],
-    "leader": {
-      "name": "石場心寧"
-    },
-    "members": [
-      {
-        "name": "市川心晴"
-      },
-      {
-        "name": "足立ケイト"
-      },
-      {
-        "name": "出口結愛"
-      }
-    ],
     "featured": false
   },
   {
@@ -1281,23 +1031,6 @@
         "day": "day1",
         "start_time": "10:30",
         "end_time": "10:50"
-      }
-    ],
-    "leader": {
-      "name": "舟木蒼真"
-    },
-    "members": [
-      {
-        "name": "豊田瑛太"
-      },
-      {
-        "name": "森川慧大"
-      },
-      {
-        "name": "矢野翔太"
-      },
-      {
-        "name": "方田奏太"
       }
     ],
     "featured": false
@@ -1322,23 +1055,6 @@
         "end_time": "11:20"
       }
     ],
-    "leader": {
-      "name": "内山惟翔"
-    },
-    "members": [
-      {
-        "name": "笠野哲平"
-      },
-      {
-        "name": "寺村駿志"
-      },
-      {
-        "name": "岡田来美"
-      },
-      {
-        "name": "浦田圭祐"
-      }
-    ],
     "featured": false
   },
   {
@@ -1361,24 +1077,6 @@
         "end_time": "11:50"
       }
     ],
-    "leader": {
-      "name": "伊藤嵐"
-    },
-    "members": [
-      {
-        "name": "安藤颯祐"
-      },
-      {
-        "name": "平畑果愛"
-      },
-      {
-        "name": "地主藍里"
-      },
-      {
-        "name": "加藤颯馬",
-        "affiliation": "亀山高校"
-      }
-    ],
     "featured": false
   },
   {
@@ -1399,23 +1097,6 @@
         "day": "day1",
         "start_time": "12:00",
         "end_time": "12:20"
-      }
-    ],
-    "leader": {
-      "name": "勝田翔万"
-    },
-    "members": [
-      {
-        "name": "尾竹凌"
-      },
-      {
-        "name": "田中爽太"
-      },
-      {
-        "name": "豊田桧規"
-      },
-      {
-        "name": "五藤翔"
       }
     ],
     "featured": false
@@ -1507,26 +1188,6 @@
         "end_time": "16:20"
       }
     ],
-    "leader": {
-      "name": "濱田圭太郎"
-    },
-    "members": [
-      {
-        "name": "竹野萌花"
-      },
-      {
-        "name": "井上高志"
-      },
-      {
-        "name": "宮脇海里"
-      },
-      {
-        "name": "橋本琉空"
-      },
-      {
-        "name": "川村承太郎"
-      }
-    ],
     "featured": false
   },
   {
@@ -1568,23 +1229,6 @@
         "day": "day1",
         "start_time": "16:35",
         "end_time": "16:50"
-      }
-    ],
-    "leader": {
-      "name": "眞田朱"
-    },
-    "members": [
-      {
-        "name": "中澤翼"
-      },
-      {
-        "name": "田中爽太"
-      },
-      {
-        "name": "三浦大輝"
-      },
-      {
-        "name": "丸山優香"
       }
     ],
     "featured": false
