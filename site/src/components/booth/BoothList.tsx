@@ -116,7 +116,8 @@ export default function BoothList({ entries }: Props) {
   const permanentEntries = getPermanentEntries(entries)
     .slice()
     .sort((a, b) => Number(!!b.featured) - Number(!!a.featured));
-  const regularEntries = tabEntries.filter((entry) => !entry.isPermanent);
+  // 常設は上の別枠に出す。hideFromBooth は timetable の表にだけ載せる枠（紹介枠等）
+  const regularEntries = tabEntries.filter((entry) => !entry.isPermanent && !entry.hideFromBooth);
   const filtered =
     selectedTags.length === 0
       ? regularEntries

@@ -13,6 +13,7 @@ import EntryNotes from "../../components/entry/EntryNotes.astro";
 import EntryApply from "../../components/entry/EntryApply.astro";
 import EntryResources from "../../components/entry/EntryResources.astro";
 import EntryPartSection from "../../components/entry/EntryPartSection.astro";
+import EntryRelated from "../../components/entry/EntryRelated.astro";
 import { entries } from "../../lib/loadEntries";
 import { optimizeEntryPhoto } from "../../lib/entryPhotos";
 import { dayColorClass, formatDayLabel } from "../../lib/eventDate";
@@ -35,6 +36,13 @@ const { entry } = Astro.props;
 const displayTags = toDisplayTags(entry.tags);
 
 const photo = entry.image ? await optimizeEntryPhoto(entry.image) : null;
+
+// 記事内でリンクカードにする別の企画。id の書き間違いは本番で黙ってカードが消えるので、ビルドを止める
+const related = (entry.related ?? []).map((id) => {
+  const found = entries.find((candidate) => candidate.id === id);
+  if (!found) throw new Error(`[entry] ${entry.id} の related に書かれた "${id}" という企画がありません`);
+  return found;
+});
 
 // 代表者を先頭に並べる（ラベルは付けない）。データでは代表者とその他を分けて持っている
 const members = [...(entry.leader ? [entry.leader] : []), ...(entry.members ?? [])];
@@ -106,6 +114,8 @@ const PART_TILTS = [-1.2, 1, -0.8, 1.2];
     }
 
     {entry.description && <p class="desc">{entry.description}</p>}
+
+    <EntryRelated entries={related} />
 
     {
       /* 企画ごとの欄へのページ内リンク。スマホでは記事が縦に長くなるので、

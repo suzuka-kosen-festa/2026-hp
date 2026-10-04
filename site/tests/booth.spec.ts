@@ -117,3 +117,12 @@ test("タグは1つだけ選べ、中夜祭の企画は日付の絞り込みに�
   await expect(chuyasai).toHaveAttribute("aria-pressed", "true");
   await expect(page.locator(".bl-card", { hasText: "r04 NotFound" })).toHaveCount(1);
 });
+
+/** hideFromBooth の枠（わらしべ長者・バザーGPの紹介枠）は、timetable の表にだけ載せて booth には出さない */
+test("timetable専用の枠は booth の一覧に出ない", async ({ page }) => {
+  test.skip(boothHidden, "/booth/ が準備中のため（src/data/release.json）");
+
+  await page.goto("/booth/?tab=イベント", { waitUntil: "networkidle" });
+  await expect(page.locator(".bl-card").first()).toBeVisible();
+  await expect(page.locator(".bl-card", { hasText: "紹介" })).toHaveCount(0);
+});
