@@ -82,3 +82,67 @@ export function getOngoingEntries(entries: Entry[]): Entry[] {
 export function getFeaturedEntries(entries: Entry[]): Entry[] {
   return entries.filter((entry) => entry.featured);
 }
+
+/**
+ * timetableに載せるステージ（列の並び順）。載せるのはこの列の企画だけ（requirements.md §3.5）。
+ * 時刻を持っていてもステージ以外で開催する企画（ワークショップ等）は意図的に落としている
+ */
+export const DAY_STAGES = ["MainStage", "LiveStage", "SubStage"];
+/** 中夜祭は第一体育館のライブステージとT字ステージだけで行う */
+export const CHUYASAI_STAGES = ["LiveStage", "T字ステージ"];
+
+/** timetable のタブ（日タブ／中夜祭） */
+export type TimetableTabId = Day | "chuyasai";
+
+/** その回がどのタブ・どのステージ（列）に載るか。表に載らない回は null */
+function placeOf(entry: Entry, occurrence: Occurrence): { tab: TimetableTabId; stage: string } | null {
+  const tab: TimetableTabId = isOutsideDayTabs(entry) ? "chuyasai" : occurrence.day;
+  const stage = slotLocation({ entry, occurrence });
+  const stages = tab === "chuyasai" ? CHUYASAI_STAGES : DAY_STAGES;
+  return stage && stages.includes(stage) ? { tab, stage } : null;
+}
+
+/** 記事ページの「前の企画／次の企画」の1段ぶん（同じタブ・同じステージの並びの中での前後） */
+export interface StageNeighbors {
+  tab: TimetableTabId;
+  day: Day;
+  stage: string;
+  prev: ScheduledSlot | null;
+  next: ScheduledSlot | null;
+}
+
+/**
+ * 記事ページ用: その企画の前後に同じステージで行う企画。
+ *
+ * つながる範囲は「timetable の同じタブ × 同じステージ」。来場者は1つのステージに居続けることが
+ * 多く、知りたいのは「この次に何が出るか」なので、日をまたいだりステージをまたいだりはしない。
+ * 1日目の LiveStage の昼のバンドと中夜祭の LiveStage は、表のタブどおり別の並びとして扱う。
+ * 両日に出る企画（よさこい等）は、出番ごとに1段ずつ返す。表に載らない企画は空配列
+ */
+export function getStageNeighbors(entries: Entry[], entry: Entry): StageNeighbors[] {
+  const result: StageNeighbors[] = [];
+  for (const occurrence of entry.occurrences) {
+    if (!occurrence.start_time || !occurrence.end_time) continue;
+    const place = placeOf(entry, occurrence);
+    if (!place) continue;
+
+    const slots = (place.tab === "chuyasai" ? getChuyasaiSlots(entries) : getScheduledSlots(entries, place.tab)).filter(
+      (slot) => {
+        const other = placeOf(slot.entry, slot.occurrence);
+        return other !== null && other.tab === place.tab && other.stage === place.stage;
+      },
+    );
+    const index = slots.findIndex(
+      (slot) => slot.entry.id === entry.id && slot.occurrence.start_time === occurrence.start_time,
+    );
+    if (index === -1) continue;
+    result.push({
+      tab: place.tab,
+      day: occurrence.day,
+      stage: place.stage,
+      prev: slots[index - 1] ?? null,
+      next: slots[index + 1] ?? null,
+    });
+  }
+  return result;
+}

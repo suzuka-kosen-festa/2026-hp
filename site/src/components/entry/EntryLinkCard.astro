@@ -1,0 +1,155 @@
+---
+// 記事ページから別の企画へ飛ばす横長のカード（左に写真、右に名前など）。
+// 見た目は timetable の常設セクションのカードに揃える。紹介枠の関連企画（EntryRelated）と
+// 前後の企画（EntryNeighbors）の両方で使う。カードの中に別のリンクを持たないので、カードごと <a> で包む
+import { optimizeEntryPhoto } from "../../lib/entryPhotos";
+import type { Entry } from "../../types/content";
+
+interface Props {
+  entry: Entry;
+  /** 名前の上に添える小さな一行（「← 前 09:50-10:10」等） */
+  eyebrow?: string;
+  /** eyebrow の色。ステージの色を渡す（未指定は青） */
+  accent?: string;
+  /** 要約（summary）を出すか */
+  showSummary?: boolean;
+  /** 次の企画のカードは、右へ進む向きが伝わるよう文字を右寄せにする */
+  align?: "start" | "end";
+  /** 「view more →」の誘導を添える（カード全体がリンクなので、これ自体は飾り） */
+  more?: boolean;
+}
+
+const { entry, eyebrow, accent, showSummary = true, align = "start", more = false } = Astro.props;
+const photo = entry.image ? await optimizeEntryPhoto(entry.image) : null;
+---
+
+<a
+  class:list={["link-card", { "is-end": align === "end" }]}
+  href={`/entry/${entry.id}/`}
+  style={accent ? { "--accent": accent } : undefined}
+>
+  {/* 写真が無い企画は写真枠ごと出さない（boothのカード・常設セクションと同じ方針） */}
+  {
+    photo && (
+      <span class="link-photo">
+        <img
+          src={photo.src}
+          srcset={photo.srcset}
+          sizes="110px"
+          width={photo.width}
+          height={photo.height}
+          alt=""
+          loading="lazy"
+          decoding="async"
+        />
+      </span>
+    )
+  }
+  <span class="link-body">
+    {eyebrow && <span class="link-eyebrow num">{eyebrow}</span>}
+    <span class="link-name">{entry.name}</span>
+    {showSummary && entry.summary && <span class="link-summary">{entry.summary}</span>}
+    {
+      more && (
+        <span class="link-more num" aria-hidden="true">
+          view more →
+        </span>
+      )
+    }
+  </span>
+</a>
+
+<style>
+  .link-card {
+    display: flex;
+    height: 100%;
+    background: #fff;
+    border: 2px solid var(--ink);
+    box-shadow: 5px 5px 0 var(--ink);
+    overflow: hidden;
+    color: inherit;
+    text-decoration: none;
+    transition:
+      transform 0.12s ease,
+      box-shadow 0.12s ease;
+  }
+
+  .link-card:active {
+    transform: translate(2px, 2px);
+    box-shadow: 3px 3px 0 var(--ink);
+  }
+
+  .link-card:focus-visible {
+    outline: 3px solid var(--blue);
+    outline-offset: 4px;
+  }
+
+  .link-photo {
+    display: flex;
+    flex: 0 0 110px;
+    min-height: 72px;
+    background: #f3ebd9;
+    border-right: 2px solid var(--ink);
+  }
+
+  .link-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .link-body {
+    flex: 1;
+    min-width: 0;
+    padding: 10px 14px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 3px;
+  }
+
+  .is-end .link-body {
+    align-items: flex-end;
+    text-align: right;
+  }
+
+  .link-eyebrow {
+    font-size: 14px;
+    color: var(--accent, var(--blue));
+  }
+
+  .link-name {
+    font-size: 15px;
+    font-weight: 800;
+    line-height: 1.35;
+  }
+
+  .link-summary {
+    font-size: 12.5px;
+    line-height: 1.6;
+    color: #444;
+  }
+
+  .link-more {
+    align-self: flex-start;
+    margin-top: 4px;
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    color: var(--blue);
+    border-bottom: 2px solid var(--blue);
+    line-height: 1.1;
+  }
+
+  @media (hover: hover) {
+    .link-card:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: 6px 6px 0 var(--ink);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .link-card {
+      transition: none;
+    }
+  }
+</style>

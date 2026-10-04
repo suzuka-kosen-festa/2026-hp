@@ -268,3 +268,36 @@ for (const entry of withParts) {
     await expect(page.locator("article.entry > .facts .fact", { hasText: "開催" })).toHaveCount(0);
   });
 }
+
+/**
+ * 記事ページの「前の企画／次の企画」。同じ timetable のタブ × 同じステージの並びの前後をつなぐ。
+ * 端の企画は行き止まりにせず、そのステージのタイムテーブルへ戻す。
+ * データ（出演順）が変わっても追従するよう、表の並びを決める本番データから期待値を作らず、
+ * 「前後のカードがあること」「押すと別の企画へ進むこと」「端ではタイムテーブルへ戻れること」を見る
+ */
+test.describe("entry の前後の企画", () => {
+  test("ステージの並びの前後へ進め、端ではタイムテーブルへ戻れる", async ({ page }) => {
+    await page.goto("/timetable/");
+    // 1日目の LiveStage の最初の出番から始める
+    const firstLive = page.locator(".tl-col-body.tl-stage-live .tl-block").first();
+    const firstHref = await firstLive.getAttribute("href");
+    await page.goto(firstHref!);
+
+    const nav = page.locator("nav.neighbors").first();
+    await expect(nav, "前後の企画がありません").toBeVisible();
+    await expect(nav).toContainText("LiveStage");
+    // 最初の出番なので「前」は無く、タイムテーブルへ戻す導線になる
+    await expect(nav.locator(".neighbors-back")).toHaveAttribute("href", "/timetable/?tab=day1");
+
+    // 「次」で2番目の出番へ進み、そこから「前」で戻ってこられる
+    await nav.locator(".link-card").last().click();
+    await expect(page).not.toHaveURL(new RegExp(`${firstHref}$`));
+    await page.locator("nav.neighbors").first().locator(".link-card").first().click();
+    await expect(page).toHaveURL(new RegExp(`${firstHref}$`));
+  });
+
+  test("ステージで行わない企画には前後の企画を出さない", async ({ page }) => {
+    await page.goto("/entry/workshop-drone/");
+    await expect(page.locator("nav.neighbors")).toHaveCount(0);
+  });
+});

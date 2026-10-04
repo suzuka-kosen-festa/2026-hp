@@ -14,7 +14,9 @@ import EntryApply from "../../components/entry/EntryApply.astro";
 import EntryResources from "../../components/entry/EntryResources.astro";
 import EntryPartSection from "../../components/entry/EntryPartSection.astro";
 import EntryRelated from "../../components/entry/EntryRelated.astro";
+import EntryNeighbors from "../../components/entry/EntryNeighbors.astro";
 import { entries } from "../../lib/loadEntries";
+import { getStageNeighbors } from "../../lib/entries";
 import { optimizeEntryPhoto } from "../../lib/entryPhotos";
 import { dayColorClass, formatDayLabel } from "../../lib/eventDate";
 import { displayTags as toDisplayTags, tagColor, tagLabel } from "../../lib/tags";
@@ -36,6 +38,9 @@ const { entry } = Astro.props;
 const displayTags = toDisplayTags(entry.tags);
 
 const photo = entry.image ? await optimizeEntryPhoto(entry.image) : null;
+
+// 同じステージ・同じタブの並びでの前後の企画（timetable に載る企画だけ。出番ごとに1段）
+const neighbors = getStageNeighbors(entries, entry);
 
 // 記事内でリンクカードにする別の企画。id の書き間違いは本番で黙ってカードが消えるので、ビルドを止める
 const related = (entry.related ?? []).map((id) => {
@@ -172,6 +177,8 @@ const PART_TILTS = [-1.2, 1, -0.8, 1.2];
         </div>
       )
     }
+
+    <EntryNeighbors neighbors={neighbors} />
   </article>
 <script>
   import { statusAt } from "../../lib/application";

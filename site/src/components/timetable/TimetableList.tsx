@@ -2,7 +2,15 @@ import { type CSSProperties, useEffect, useRef, useState } from "react";
 import "./TimetableList.css";
 import EntryPhotoImg from "../EntryPhotoImg";
 import TabTagFilter, { type TabConfig } from "../filter/TabTagFilter";
-import { getChuyasaiSlots, getOngoingEntries, getScheduledSlots, slotLocation } from "../../lib/entries";
+import {
+  CHUYASAI_STAGES,
+  DAY_STAGES,
+  getChuyasaiSlots,
+  getOngoingEntries,
+  getScheduledSlots,
+  slotLocation,
+  type TimetableTabId,
+} from "../../lib/entries";
 import { buildFilterUrl, parseFilterParams } from "../../lib/deepLink";
 import { formatDayLabel } from "../../lib/eventDate";
 import { isOccurrenceNow } from "../../lib/now";
@@ -13,16 +21,14 @@ interface Props {
   entries: Entry[];
 }
 
-/**
- * timetableに載せるのは各タブの`stages`に並べたステージの企画だけ（requirements.md §3.5）。
+/*
+ * timetableに載せるのは各タブの`stages`に並べたステージの企画だけ（requirements.md §3.5。
+ * ステージの一覧は記事ページの「前後の企画」と共有するので lib/entries.ts が持つ）。
  * 時刻を持っていてもステージ以外で開催する企画（ワークショップ等）は、
  * ここで**意図的に**落としている。バグではないので、載っていない企画を見つけても
  * このフィルタを緩めないこと。会場内の特定ステージに紐づかない企画は、
  * トップのpickupやnewsで扱う方針。
  */
-const DAY_STAGES = ["MainStage", "LiveStage", "SubStage"];
-/** 中夜祭は第一体育館のライブステージとT字ステージだけで行う */
-const CHUYASAI_STAGES = ["LiveStage", "T字ステージ"];
 
 /** 列の色分け用のclass名。locationの値（日本語を含む）をそのままclassにしないための対応表 */
 const STAGE_CLASS: Record<string, string> = {
@@ -32,7 +38,7 @@ const STAGE_CLASS: Record<string, string> = {
   T字ステージ: "t",
 };
 
-type TabId = Day | "chuyasai";
+type TabId = TimetableTabId;
 
 interface TimetableTab {
   id: TabId;
