@@ -322,7 +322,7 @@
     "name": "ダンスバトル",
     "group": null,
     "summary": "6チームがダンスで競い、観客の投票で優勝を決める。",
-    "description": "6チームが順番にダンスを披露し、観客のみなさんの投票（5段階評価）で優勝チームを決めます。優勝チームは中夜祭のステージにも出場します。",
+    "description": "6チームが順番にダンスを披露し、観客のみなさんの投票（5段階評価）で優勝チームを決めます。最後に出場した全チームがステージに集まって結果発表と表彰式を行い、優勝チームにトロフィーを贈ります。優勝チームは中夜祭のステージにも出場します。",
     "tags": [
       "day1"
     ],
@@ -332,33 +332,12 @@
       {
         "day": "day1",
         "start_time": "10:20",
-        "end_time": "11:10"
+        "end_time": "11:20"
       }
     ],
     "participation": "出場者の募集は終了しました。投票はどなたでも参加できます",
     "notes": [
       "三脚を使った撮影はご遠慮ください"
-    ],
-    "featured": false
-  },
-  {
-    "id": "main-dance-battle-award",
-    "category": "イベント",
-    "name": "ダンスバトル表彰式",
-    "group": null,
-    "summary": "ダンスバトルの結果発表と表彰式。",
-    "description": "ダンスバトルの結果発表と表彰式です。出場した全チームがステージに集まり、優勝チームにトロフィーを贈ります。",
-    "tags": [
-      "day1"
-    ],
-    "location": "MainStage",
-    "image": "/entries/main-dance-battle.webp",
-    "occurrences": [
-      {
-        "day": "day1",
-        "start_time": "11:10",
-        "end_time": "11:20"
-      }
     ],
     "featured": false
   },

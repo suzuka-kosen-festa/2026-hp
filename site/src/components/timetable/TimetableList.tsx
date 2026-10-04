@@ -222,6 +222,9 @@ export default function TimetableList({ entries }: Props) {
                   className="tl-block"
                   style={{ top: `${top}px`, height: `${height}px` }}
                   href={`/entry/${entry.id}/`}
+                  // スマホにはホバーが無いので、指が触れた時点で先読みする（表の枠は1画面に20以上あるので、
+                  // 画面に入った時点で全部を先読みはしない）
+                  data-astro-prefetch="tap"
                   title={entry.name}
                 >
                   <span className="tl-block-time num">

@@ -26,6 +26,7 @@ const photo = entry.image ? await optimizeEntryPhoto(entry.image) : null;
 <a
   class:list={["link-card", { "is-end": align === "end" }]}
   href={`/entry/${entry.id}/`}
+  data-astro-prefetch="viewport"
   style={accent ? { "--accent": accent } : undefined}
 >
   {/* 写真が無い企画は写真枠ごと出さない（boothのカード・常設セクションと同じ方針） */}
