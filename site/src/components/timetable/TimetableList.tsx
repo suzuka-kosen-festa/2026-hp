@@ -1,6 +1,7 @@
 import { type CSSProperties, type ReactNode, useEffect, useRef, useState } from "react";
 import "./TimetableList.css";
 import EntryPhotoImg from "../EntryPhotoImg";
+import EntryLinkCta from "../EntryLinkCta";
 import TabTagFilter, { type TabConfig } from "../filter/TabTagFilter";
 import {
   CHUYASAI_STAGES,
@@ -294,11 +295,8 @@ export default function TimetableList({ entries }: Props) {
                     <p className="tl-permanent-name">{entry.name}</p>
                     {entry.summary && <p className="tl-permanent-summary">{entry.summary}</p>}
                   </a>
-                  {entry.link && (
-                    <a className="tl-permanent-cta" href={entry.link}>
-                      {entry.linkLabel ?? "やってみる →"}
-                    </a>
-                  )}
+                  {/* 公開日の出し分けは booth と共通（EntryLinkCta） */}
+                  <EntryLinkCta entry={entry} className="tl-permanent-cta" />
                 </div>
               </li>
             ))}

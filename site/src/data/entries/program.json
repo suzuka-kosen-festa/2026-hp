@@ -447,10 +447,11 @@
       }
     ],
     "period": "10/31・11/1 の2日間（投票受付）",
-    "participation": "どなたでも投票できます（申込不要）。パンフレットのQRコードか、下のボタンから投票してください",
+    "participation": "どなたでも投票できます（申込不要）。投票の受付は開催日の10/31から。パンフレットのQRコードか、このページに出る投票ボタンから投票してください",
     "featured": false,
     "link": "https://docs.google.com/forms/d/e/1FAIpQLScxYlx_uv9bh0pLt1gYIu2fBQf0PLJPwLbJqeZi_2ngYCf3LQ/viewform",
-    "linkLabel": "投票する →"
+    "linkLabel": "投票する →",
+    "linkOpens": "2026-10-31"
   },
   {
     "id": "main-hayaoshi-quiz",

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import "./BoothList.css";
 import EntryPhotoImg from "../EntryPhotoImg";
+import EntryLinkCta from "../EntryLinkCta";
 import TabTagFilter, { type TabConfig } from "../filter/TabTagFilter";
 import PromoCard from "../motion/PromoCard";
 import { getByCategory, getPermanentEntries } from "../../lib/entries";
@@ -138,12 +139,9 @@ export default function BoothList({ entries }: Props) {
                 <a className="bl-permanent-link" href={`/entry/${entry.id}/`}>
                   <PromoCard entry={entry} more />
                 </a>
-                {/* カードの外に出す。中に入れるとリンクの入れ子になる */}
-                {entry.link && (
-                  <a className="bl-permanent-cta" href={entry.link}>
-                    {entry.linkLabel ?? "やってみる →"}
-                  </a>
-                )}
+                {/* カードの外に出す。中に入れるとリンクの入れ子になる。
+                    公開日の出し分けは timetable と共通（EntryLinkCta） */}
+                <EntryLinkCta entry={entry} className="bl-permanent-cta" />
               </li>
             ))}
           </ul>
