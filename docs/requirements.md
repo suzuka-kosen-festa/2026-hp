@@ -146,6 +146,7 @@
 - 対象は`category`が「イベント」「ライブ」のエントリの、指定`day`かつ時刻が揃っている`occurrence`。`location`でグルーピングし`start_time`順にソートする（出店・学科展示も`occurrences`に営業時間を持てるが、`category`で除外されるためtimetableには載らない）
 - 「常設」セクションは`isPermanent: true`のエントリ（`occurrences`が空で時間軸を持たない）と、`period`を持つエントリを表示する（`getOngoingEntries`）
 - バザーグランプリ（投票）・わらしべ長者（物々交換）のように**参加は期間中いつでもできて、結果発表だけステージの時刻に決まっている企画**は、1エントリにまとめて`period`（参加できる期間）を持たせ、発表の回を`occurrences`に`note`（「中間発表」等）付きで入れる。グリッドには「バザーGP 中間発表」のように企画名＋noteで載り、常設セクションにも出る
+- 企画自体の場所とステージで行う回の場所が違う企画（わらしべ長者は本部テント、結果発表だけ MainStage）は、`location` に企画の場所、その回の`occurrences`に`location`を書く。timetable は回の場所で列を決める（`slotLocation`）
 - 当日その場で参加できる企画は`tags`に「当日参加OK」を付け、`participation`に参加方法を書く（出場者を事前募集した企画は「募集は終了しました」と書く）
 - 決勝バンドは`location: "MainStage"` / `occurrences: [{ day: "day2", ... }]` / `tags: ["決勝バンド", "day2"]`（MainStageのDay2セクションに掲載）
 - 中夜祭は**在校生限定だが timetable に公開する**（2026-09 判断。当初は学外の方が来場できないため対象外としていた）。一般の来場者が体育館へ向かわないよう、中夜祭タブの先頭に「在校生限定」の注意書きを必ず出す。開場〜入場（`site.json` の `chuyasai.doorsOpen`〜`admissionEnd`）は人が出る枠ではないので企画エントリにはせず、全列にまたがる帯で表示する

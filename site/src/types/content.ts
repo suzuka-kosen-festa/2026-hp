@@ -12,6 +12,12 @@ export interface Occurrence {
   end_time: string | null;
   /** 「雨天中止」など回ごとの補足。timetableの行に添える */
   note?: string | null;
+  /**
+   * この回だけ企画の場所（Entry.location）と違う場所で行うときの場所。
+   * わらしべ長者のように、企画自体は本部テントだが結果発表だけ MainStage で行う場合に使う。
+   * timetable はこちらを優先して列を決める
+   */
+  location?: string | null;
 }
 
 /**

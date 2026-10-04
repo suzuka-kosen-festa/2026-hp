@@ -2,7 +2,7 @@ import { type CSSProperties, useEffect, useRef, useState } from "react";
 import "./TimetableList.css";
 import EntryPhotoImg from "../EntryPhotoImg";
 import TabTagFilter, { type TabConfig } from "../filter/TabTagFilter";
-import { getChuyasaiSlots, getOngoingEntries, getScheduledSlots } from "../../lib/entries";
+import { getChuyasaiSlots, getOngoingEntries, getScheduledSlots, slotLocation } from "../../lib/entries";
 import { buildFilterUrl, parseFilterParams } from "../../lib/deepLink";
 import { formatDayLabel } from "../../lib/eventDate";
 import { isOccurrenceNow } from "../../lib/now";
@@ -112,7 +112,7 @@ export default function TimetableList({ entries }: Props) {
   const tab = TABS.find((t) => t.id === activeTab) ?? TABS[0];
   const isChuyasai = tab.id === "chuyasai";
   const slots = (isChuyasai ? getChuyasaiSlots(entries) : getScheduledSlots(entries, tab.id as Day)).filter((slot) =>
-    tab.stages.includes(slot.entry.location ?? ""),
+    tab.stages.includes(slotLocation(slot) ?? ""),
   );
 
   const starts = slots.map((slot) => toMinutes(slot.occurrence.start_time as string));
@@ -128,7 +128,7 @@ export default function TimetableList({ entries }: Props) {
   const columns = tab.stages.map((stage) => {
     let prevBottom = -Infinity;
     const blocks = slots
-      .filter((slot) => slot.entry.location === stage)
+      .filter((slot) => slotLocation(slot) === stage)
       .map((slot) => {
         const start = toMinutes(slot.occurrence.start_time as string);
         const end = toMinutes(slot.occurrence.end_time as string);

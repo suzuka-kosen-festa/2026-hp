@@ -50,6 +50,12 @@ function formatTime(occurrence: Occurrence) {
   return occurrence.end_time ? `${occurrence.start_time}-${occurrence.end_time}` : `${occurrence.start_time}〜`;
 }
 
+/** 回に添える補足。企画の場所と違う場所で行う回は、その場所も添える */
+function slotNote(o: Occurrence) {
+  const place = o.location && o.location !== location ? o.location : null;
+  return [o.note, place].filter(Boolean).join("・");
+}
+
 const dayGroups = groupByDay(occurrences);
 const hasSchedule = isPermanent || dayGroups.length > 0;
 const closesLabel = application?.closes ? formatApplicationDate(application.closes) : "定員に達し次第締切";
@@ -80,7 +86,8 @@ const closesLabel = application?.closes ? formatApplicationDate(application.clos
                     {group.items.map((o) => (
                       <span class="slot">
                         <span class="num">{formatTime(o)}</span>
-                        {o.note && <span class="slot-note">（{o.note}）</span>}
+                        {/* 回ごとの補足と、企画の場所と違う場所で行う回の場所（結果発表だけ MainStage 等） */}
+                        {slotNote(o) && <span class="slot-note">（{slotNote(o)}）</span>}
                       </span>
                     ))}
                   </span>

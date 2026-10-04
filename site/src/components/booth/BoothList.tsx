@@ -13,7 +13,7 @@ interface Props {
   entries: Entry[];
 }
 
-function formatOccurrenceTimes(occurrences: Occurrence[]) {
+function formatOccurrenceTimes(occurrences: Occurrence[], location: string | null) {
   const order: Day[] = ["day1", "day2"];
   return order
     .map((day) => {
@@ -22,7 +22,12 @@ function formatOccurrenceTimes(occurrences: Occurrence[]) {
       // 回ごとの補足（胸骨圧迫の展示の「実演」等）は詳細ページと同じく括弧で添える。
       // 添えないと、営業時間と実演時間が「9:00-15:00・13:00-15:00」と並んで区別できない
       const times = items
-        .map((o) => `${o.end_time ? `${o.start_time}-${o.end_time}` : `${o.start_time}〜`}${o.note ? `（${o.note}）` : ""}`)
+        .map((o) => {
+          // 企画の場所と違う場所で行う回（わらしべ長者の結果発表は MainStage 等）は、その場所も添える
+          const place = o.location && o.location !== location ? o.location : null;
+          const extra = [o.note, place].filter(Boolean).join("・");
+          return `${o.end_time ? `${o.start_time}-${o.end_time}` : `${o.start_time}〜`}${extra ? `（${extra}）` : ""}`;
+        })
         .join("・");
       return { day, times };
     })
@@ -184,7 +189,7 @@ export default function BoothList({ entries }: Props) {
                 )}
                 {entry.occurrences.length > 0 && (
                   <ul className="bl-times">
-                    {formatOccurrenceTimes(entry.occurrences).map((g) => (
+                    {formatOccurrenceTimes(entry.occurrences, entry.location).map((g) => (
                       <li key={g.day}>
                         <span className={`bl-day num ${dayColorClass(g.day) ?? ""}`}>{formatDayLabel(g.day)}</span>
                         <span className="bl-time num">{g.times}</span>

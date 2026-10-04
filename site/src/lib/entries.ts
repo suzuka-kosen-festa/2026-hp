@@ -29,6 +29,11 @@ export interface ScheduledSlot {
   occurrence: Occurrence;
 }
 
+/** その回を行う場所。回ごとの指定（結果発表だけステージ等）があればそちらを優先する */
+export function slotLocation({ entry, occurrence }: ScheduledSlot): string | null {
+  return occurrence.location ?? entry.location;
+}
+
 /** 「イベント」「ライブ」の、時刻が揃っている公演を1件ずつに展開してstart_time順に並べる */
 function toSlots(entries: Entry[], day: Day): ScheduledSlot[] {
   return entries

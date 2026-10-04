@@ -50,3 +50,15 @@ test.describe("timetable の常設カード", () => {
     await cta.click({ trial: true });
   });
 });
+
+/**
+ * 企画の場所と回の場所が違う企画（わらしべ長者は本部テント、結果発表だけ MainStage）は、
+ * 回の場所（occurrence.location）で列に載る。企画の場所で判定すると表から消える。
+ */
+test("回ごとに場所を指定した回は、その場所の列に載る", async ({ page }) => {
+  test.skip(!showsContent("/timetable/"), "timetable が準備中のため");
+
+  await page.goto("/timetable/?tab=day2");
+  const mainStage = page.locator(".tl-col-body.tl-stage-main");
+  await expect(mainStage.locator(".tl-block", { hasText: "わらしべ長者" })).toHaveCount(1);
+});
