@@ -1,6 +1,7 @@
 import type { Entry } from "../../types/content";
 import { requiresApplication } from "../../lib/application";
 import "./PromoCard.css";
+import EntryPhotoImg from "../EntryPhotoImg";
 
 interface Props {
   entry: Entry;
@@ -27,7 +28,7 @@ export default function PromoCard({ entry, more = false }: Props) {
           「NO IMAGE」の空枠を出すと、写真ブロックごと省く詳細ページと食い違う（Issue #60） */}
       {entry.image && (
         <div className="pc__photo">
-          <img src={entry.image} alt="" loading="lazy" />
+          <EntryPhotoImg entry={entry} sizes="(min-width: 900px) 240px, 84px" />
         </div>
       )}
       <div className="pc__body">

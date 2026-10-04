@@ -15,3 +15,13 @@
 /_astro/*
   ! Cache-Control
   Cache-Control: public, max-age=31536000, immutable
+
+# 企画の記事ページだけは1分間、確認なしで使ってよいことにする。
+# timetable や記事の前後カードから先読み（Astro の prefetch）した記事を、iPhone の Safari でも
+# 押した瞬間に出せるようにするため。Safari は rel=prefetch に対応しておらず普通の読み込みで先読みするので、
+# 上の max-age=0 のままだと表示時に確認の通信が1往復かかり、先読みの効果が薄れる。
+# デプロイ後に古い記事が最大1分残るが、記事の公開・非公開は /entry/ 単位でまとめて切り替える運用なので許容する。
+# s-maxage は付けない（エッジに長く残った事故は上のコメント参照）
+/entry/*
+  ! Cache-Control
+  Cache-Control: public, max-age=60

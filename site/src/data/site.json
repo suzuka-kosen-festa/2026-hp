@@ -6,6 +6,11 @@
   "dateLabel": "2026. 10/31 SAT・11/1 SUN",
   "day1Date": "2026-10-31",
   "day2Date": "2026-11-01",
+  "chuyasai": {
+    "venue": "第一体育館",
+    "doorsOpen": "15:00",
+    "admissionEnd": "15:30"
+  },
   "venue": "in Suzuka Kosen",
   "contactEmail": "snctfesta.contact@gmail.com",
   "individualSponsorFormUrl": "https://forms.gle/vgvRbGAmfEGoBbxBA",

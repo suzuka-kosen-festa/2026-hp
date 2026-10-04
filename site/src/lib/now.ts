@@ -37,5 +37,10 @@ export function isEntryNow(entry: Entry, now: Date = new Date()): boolean {
 
 /** 指定locationで現在進行中のエントリを1件返す（mapページのライブ表示用） */
 export function getCurrentEntry(entries: Entry[], location: string, now: Date = new Date()): Entry | null {
-  return entries.find((entry) => entry.location === location && isEntryNow(entry, now)) ?? null;
+  // 回ごとに場所が違う企画（わらしべ長者の結果発表だけ MainStage 等）があるので、回単位で場所を見る
+  return (
+    entries.find((entry) =>
+      entry.occurrences.some((o) => (o.location ?? entry.location) === location && isOccurrenceNow(o, now)),
+    ) ?? null
+  );
 }

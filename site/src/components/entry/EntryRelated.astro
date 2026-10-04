@@ -1,0 +1,35 @@
+---
+// 記事内に並べる、別の企画へのリンクカード（entry.related）。
+// わらしべ長者・バザーグランプリの紹介枠のように、記事の中身が「別の企画の案内」になっている
+// ときに使う。カード自体は前後の企画と共通の EntryLinkCard
+import EntryLinkCard from "./EntryLinkCard.astro";
+import type { Entry } from "../../types/content";
+
+interface Props {
+  entries: Entry[];
+}
+
+const { entries } = Astro.props;
+---
+
+{
+  entries.length > 0 && (
+    <ul class="related">
+      {entries.map((entry) => (
+        <li>
+          <EntryLinkCard entry={entry} more />
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+<style>
+  .related {
+    list-style: none;
+    margin-top: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+</style>

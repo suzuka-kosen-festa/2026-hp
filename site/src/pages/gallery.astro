@@ -13,12 +13,16 @@ import Reveal from "../components/motion/Reveal";
 import PromoList from "../components/motion/PromoList";
 import { getFeaturedEntries } from "../lib/entries";
 import { entries } from "../lib/loadEntries";
+import { withEntryPhotos } from "../lib/entryPhotos";
 
-const featured = getFeaturedEntries(entries);
+const featured = await withEntryPhotos(getFeaturedEntries(entries));
 
-// 実データは現在すべて image が無く、画像ありの見え方をレビューできない。
-// 比較用に1件だけ写真を差した複製を作る（画像は本番でも配信している /ogp.png を借用）。
-const featuredWithImage = featured.slice(0, 1).map((entry) => ({ ...entry, image: "/ogp.png" }));
+// 画像あり／なしの見え方を並べて比べるための見本。featured の1件目に、実在する企画写真を差した複製を作る
+// （写真は src/assets/entries/ の最適化済みのものが要るので、写真を持つ企画から借りる）
+const samplePhoto = (await withEntryPhotos(entries)).find((entry) => entry.photo);
+const featuredWithImage = featured
+  .slice(0, 1)
+  .map((entry) => ({ ...entry, image: samplePhoto?.image ?? null, photo: samplePhoto?.photo }));
 ---
 
 <BaseLayout title="部品ギャラリー（開発用）" noindex>

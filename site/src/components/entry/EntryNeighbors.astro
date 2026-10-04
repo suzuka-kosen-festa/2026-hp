@@ -1,0 +1,140 @@
+---
+// 記事ページの下の「前の企画／次の企画」。同じ timetable のタブ × 同じステージの並びの中で前後をつなぐ
+// （範囲の考え方は lib/entries.ts の getStageNeighbors）。
+// スワイプでのページ送りは、iOS の端スワイプ（戻る）や横スクロールとぶつかるので使わず、カードで出す。
+// カードは関連企画と共通の横長カード（EntryLinkCard）。スマホは縦に2段、PCは左に前・右に次の2列
+import EntryLinkCard from "./EntryLinkCard.astro";
+import { formatDayLabel } from "../../lib/eventDate";
+import type { ScheduledSlot, StageNeighbors } from "../../lib/entries";
+
+interface Props {
+  neighbors: StageNeighbors[];
+}
+
+const { neighbors } = Astro.props;
+
+/** ステージの色。timetable の列見出しと同じ（Main 赤／Live 青／Sub 緑／T字 墨。TimetableList.css 参照） */
+const STAGE_COLOR: Record<string, string> = {
+  MainStage: "var(--red)",
+  LiveStage: "var(--blue)",
+  SubStage: "#0b7d34",
+  T字ステージ: "var(--ink)",
+};
+
+function timeOf({ occurrence }: ScheduledSlot) {
+  return `${occurrence.start_time}-${occurrence.end_time}`;
+}
+---
+
+{
+  neighbors.map((group) => {
+    const color = STAGE_COLOR[group.stage] ?? "var(--ink)";
+    const timetableHref = `/timetable/?tab=${group.tab}`;
+    return (
+      <nav class="neighbors" aria-label={`${group.stage}の前後の企画`} style={{ "--stage": color }}>
+        <p class="neighbors-head">
+          <span class="num">{group.tab === "chuyasai" ? "中夜祭" : formatDayLabel(group.day)}</span>
+          <span class="neighbors-dot" aria-hidden="true">・</span>
+          <span>{group.stage}</span>
+        </p>
+        <div class="neighbors-grid">
+          {group.prev ? (
+            <EntryLinkCard
+              entry={group.prev.entry}
+              eyebrow={`← 前　${timeOf(group.prev)}`}
+              accent={color}
+              showSummary={false}
+              replaceHistory
+            />
+          ) : (
+            <a class="neighbors-back" href={timetableHref}>
+              このステージのタイムテーブルへ ↑
+            </a>
+          )}
+          {group.next ? (
+            <EntryLinkCard
+              entry={group.next.entry}
+              eyebrow={`次 →　${timeOf(group.next)}`}
+              accent={color}
+              showSummary={false}
+              align="end"
+              replaceHistory
+            />
+          ) : (
+            <a class="neighbors-back" href={timetableHref}>
+              このステージのタイムテーブルへ ↑
+            </a>
+          )}
+        </div>
+      </nav>
+    );
+  })
+}
+
+{
+  /*
+   * 前後の企画への移動は履歴を積まずにページを置き換える。積むと「← 戻る」やブラウザの戻るが
+   * 1つ前の企画に戻るだけになり、何回か進むと元のタイムテーブル（や booth）まで何回も戻る羽目になる。
+   * 別タブで開く操作（Cmd/Ctrl/Shift+クリック・中クリック）はブラウザに任せる。
+   * 検索やQRから記事に直接来たとき（サイト内から来ていない）は、置き換えると「戻る」で
+   * サイトの外まで戻ってしまうので、普通に履歴を積む。JSが動かなければ普通のリンクとして移動する
+   */
+}
+<script is:inline>
+  document.addEventListener("click", (event) => {
+    const link = event.target instanceof Element ? event.target.closest("a[data-replace-history]") : null;
+    if (!link || event.defaultPrevented || event.button !== 0) return;
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    if (!document.referrer.startsWith(location.origin + "/")) return;
+    event.preventDefault();
+    location.replace(link.href);
+  });
+</script>
+
+<style>
+  .neighbors {
+    margin-top: 36px;
+  }
+
+  /* 「10/31 SAT ・ LiveStage」。どのステージの並びかを、表の列見出しと同じ色で示す */
+  .neighbors-head {
+    display: flex;
+    align-items: baseline;
+    gap: 2px;
+    padding-bottom: 6px;
+    margin-bottom: 14px;
+    border-bottom: 2px solid var(--stage);
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--stage);
+  }
+
+  .neighbors-head .num {
+    font-size: 16px;
+  }
+
+  .neighbors-grid {
+    display: grid;
+    gap: 14px;
+  }
+
+  /* 端の企画は前か次が無いので、行き止まりにせずタイムテーブルへ戻す */
+  .neighbors-back {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 56px;
+    padding: 10px 14px;
+    border: 2px dashed rgba(17, 17, 17, 0.35);
+    font-size: 13px;
+    font-weight: 700;
+    color: #555;
+    text-decoration: underline;
+  }
+
+  @media (min-width: 900px) {
+    .neighbors-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>

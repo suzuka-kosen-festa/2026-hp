@@ -14,7 +14,11 @@ import EntryNotes from "../../components/entry/EntryNotes.astro";
 import EntryApply from "../../components/entry/EntryApply.astro";
 import EntryResources from "../../components/entry/EntryResources.astro";
 import EntryPartSection from "../../components/entry/EntryPartSection.astro";
+import EntryRelated from "../../components/entry/EntryRelated.astro";
+import EntryNeighbors from "../../components/entry/EntryNeighbors.astro";
 import { entries } from "../../lib/loadEntries";
+import { getStageNeighbors } from "../../lib/entries";
+import { optimizeEntryPhoto } from "../../lib/entryPhotos";
 import { dayColorClass, formatDayLabel } from "../../lib/eventDate";
 import { displayTags as toDisplayTags, tagColor, tagLabel } from "../../lib/tags";
 import type { Entry } from "../../types/content";
@@ -34,6 +38,21 @@ const { entry } = Astro.props;
 // 落とす判定と表示名・色は lib/tags.ts が唯一の持ち主（Issue #53）
 const displayTags = toDisplayTags(entry.tags);
 
+const photo = entry.image ? await optimizeEntryPhoto(entry.image) : null;
+
+// 同じステージ・同じタブの並びでの前後の企画（timetable に載る企画だけ。出番ごとに1段）
+const neighbors = getStageNeighbors(entries, entry);
+
+// 記事内でリンクカードにする別の企画。id の書き間違いは本番で黙ってカードが消えるので、ビルドを止める
+const related = (entry.related ?? []).map((id) => {
+  const found = entries.find((candidate) => candidate.id === id);
+  if (!found) throw new Error(`[entry] ${entry.id} の related に書かれた "${id}" という企画がありません`);
+  return found;
+});
+
+// 代表者を先頭に並べる（ラベルは付けない）。データでは代表者とその他を分けて持っている
+const members = [...(entry.leader ? [entry.leader] : []), ...(entry.members ?? [])];
+
 // 複数の企画を載せる記事（ゲーム大会等）。開催・定員・申込は企画ごとの欄に出すので、
 // 記事全体の欄には場所・対象などの共通部分だけを出す
 const parts = entry.parts ?? [];
@@ -42,7 +61,7 @@ const hasParts = parts.length > 0;
 const PART_TILTS = [-1.2, 1, -0.8, 1.2];
 ---
 
-<BaseLayout title={`${entry.name} | ${site.eventName}`} description={entry.summary ?? entry.description ?? undefined}>
+<BaseLayout title={`${entry.name} | ${site.eventName}`} description={entry.summary ?? entry.description ?? entry.comment ?? undefined}>
   <article class="entry">
     {/* 履歴が無いときはトップへ。一覧の /booth/ は準備中のことがあるため（MTG 2026-09-06） */}
     <BackLink fallback="/" />
@@ -50,6 +69,7 @@ const PART_TILTS = [-1.2, 1, -0.8, 1.2];
     <header class="head">
       <Tape color="blue" rotate={-1.5} as="p" class="cat">{entry.categoryLabel ?? entry.category}</Tape>
       <h1 class="name">{entry.name}</h1>
+      {entry.reading && <p class="reading">{entry.reading}</p>}
       {entry.group && <p class="group">{entry.group}</p>}
       {
         displayTags.length > 0 && (
@@ -67,15 +87,37 @@ const PART_TILTS = [-1.2, 1, -0.8, 1.2];
     {
       /* 写真を用意できない企画は今後も存在するので、画像なしを正式なレイアウトとして扱う。
          「NO IMAGE」の空枠を出すと、16:9ぶんの高さがそのまま無駄になる（Issue #56） */
-      entry.image && (
+      photo && (
         <div class="photo">
-          <img src={entry.image} alt="" loading="eager" fetchpriority="high" />
+          {/* 本文幅（SPは画面幅−40px、PCは最大700px）。寸法を付けて、読み込み中に本文がずれないようにする */}
+          <img
+            src={photo.src}
+            srcset={photo.srcset}
+            sizes="(min-width: 900px) 700px, calc(100vw - 40px)"
+            width={photo.width}
+            height={photo.height}
+            alt=""
+            loading="eager"
+            fetchpriority="high"
+          />
           <Star class="photo-star" color="var(--yellow)" size="30px" rotate={-12} />
         </div>
       )
     }
 
+    {
+      /* 出演者本人の言葉なので、企画説明（description）とは見た目を分けて引用として出す */
+      entry.comment && (
+        <figure class="comment">
+          <Tape color="yellow" rotate={-2} as="figcaption" class="comment-label">ひとこと</Tape>
+          <blockquote>{entry.comment}</blockquote>
+        </figure>
+      )
+    }
+
     {entry.description && <p class="desc">{entry.description}</p>}
+
+    <EntryRelated entries={related} />
 
     {
       /* 企画ごとの欄へのページ内リンク。スマホでは記事が縦に長くなるので、
@@ -102,6 +144,9 @@ const PART_TILTS = [-1.2, 1, -0.8, 1.2];
     }
 
     <EntryFacts
+      period={entry.period}
+      participation={entry.participation}
+      members={members}
       occurrences={hasParts ? [] : entry.occurrences}
       isPermanent={entry.isPermanent}
       location={entry.location}
@@ -124,11 +169,13 @@ const PART_TILTS = [-1.2, 1, -0.8, 1.2];
       entry.link && (
         <div class="cta">
           <Button href={entry.link} color="yellow" rotate={-1}>
-            やってみる →
+            {entry.linkLabel ?? "やってみる →"}
           </Button>
         </div>
       )
     }
+
+    <EntryNeighbors neighbors={neighbors} />
   </article>
 <script>
   import { statusAt } from "../../lib/application";
@@ -163,6 +210,13 @@ const PART_TILTS = [-1.2, 1, -0.8, 1.2];
     line-height: 1.35;
   }
 
+  .reading {
+    margin-top: 4px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #555;
+  }
+
   .group {
     margin-top: 8px;
     font-size: 13px;
@@ -178,12 +232,10 @@ const PART_TILTS = [-1.2, 1, -0.8, 1.2];
     margin-top: 14px;
   }
 
+  /* 枠は写真の縦横比に合わせる。16:9に固定して切り抜くと、バンドのロゴ画像（正方形）や
+     縦長の集合写真で文字やメンバーが切れる */
   .photo {
     position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    aspect-ratio: 16 / 9;
     margin-top: 22px;
     background: #f3ebd9;
     border: 2px solid var(--ink);
@@ -191,14 +243,37 @@ const PART_TILTS = [-1.2, 1, -0.8, 1.2];
     rotate: -0.8deg;
   }
   .photo img {
+    display: block;
     width: 100%;
-    height: 100%;
-    object-fit: cover;
+    height: auto;
   }
   .photo :global(.photo-star) {
     position: absolute;
     top: -14px;
     right: -10px;
+  }
+
+  .comment {
+    position: relative;
+    margin-top: 30px;
+    padding: 20px 18px 16px;
+    background: #fff;
+    border: 2px solid var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
+  }
+  .comment :global(.comment-label) {
+    position: absolute;
+    top: -14px;
+    left: 12px;
+    padding: 4px 14px;
+    font-size: 11px;
+  }
+  .comment blockquote {
+    font-size: 14.5px;
+    font-weight: 700;
+    line-height: 1.8;
+    /* 出演者が入れた改行をそのまま活かす */
+    white-space: pre-line;
   }
 
   .desc {

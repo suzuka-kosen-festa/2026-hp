@@ -1,4 +1,5 @@
 import type { Entry } from "../types/content";
+import { isOutsideDayTabs } from "./entries";
 
 /** チップの色。Chip.astro / .bl-chip が持っているのはこの2色 */
 export type TagColor = "red" | "blue";
@@ -15,7 +16,7 @@ export type TagColor = "red" | "blue";
  * 色が変わり、同じタグがカードごとに違う色になっていた。
  *
  * 色の使い分け:
- *   赤 … 飲食と、ライブの特別枠（中夜祭・決勝バンド）。目を引かせたいもの
+ *   赤 … 飲食と、ライブの特別枠（中夜祭・野外ライブ）、当日参加OK。目を引かせたいもの
  *   青 … それ以外（学科展示・物販・展示・レク・常設）
  */
 export const TAG_META: Record<string, { label: string; color: TagColor }> = {
@@ -37,7 +38,8 @@ export const TAG_META: Record<string, { label: string; color: TagColor }> = {
   // イベント・ライブ
   常設: { label: "常設", color: "blue" },
   中夜祭: { label: "中夜祭", color: "red" },
-  決勝バンド: { label: "決勝バンド", color: "red" },
+  当日参加OK: { label: "当日参加OK", color: "red" },
+  野外ライブ: { label: "野外ライブ", color: "red" },
 };
 
 /**
@@ -76,7 +78,8 @@ export function displayTags(tags: string[]) {
  * データ側で day タグを書き忘れても絞り込みから漏れなくなる。
  */
 export function matchesTag(entry: Entry, tag: string) {
-  if (isDayTag(tag)) return entry.occurrences.some((occurrence) => occurrence.day === tag);
+  // 中夜祭は day1 の夜に開催されるが、日付では絞り込まず「中夜祭」タグでだけ出す（timetable の日タブと同じ扱い）
+  if (isDayTag(tag)) return !isOutsideDayTabs(entry) && entry.occurrences.some((occurrence) => occurrence.day === tag);
 
   return entry.tags.includes(tag);
 }

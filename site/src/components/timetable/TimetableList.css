@@ -3,8 +3,7 @@
 }
 
 .tl-permanent {
-  margin-top: 20px;
-  margin-bottom: 20px;
+  margin-top: 40px;
   padding: 0 10px;
 }
 .tl-permanent-title {
@@ -23,6 +22,8 @@
   gap: 16px;
 }
 .tl-permanent-card {
+  /* カード全体を押せるようにするための基準（.tl-permanent-link::after がこの範囲に広がる） */
+  position: relative;
   display: flex;
   background: #fff;
   border: 2px solid var(--ink);
@@ -43,11 +44,6 @@
   height: 100%;
   object-fit: cover;
 }
-.tl-no-image {
-  font-size: 12px;
-  letter-spacing: 0.05em;
-  color: #999;
-}
 .tl-permanent-body {
   flex: 1;
   min-width: 0;
@@ -59,6 +55,23 @@
 }
 .tl-permanent-link {
   display: block;
+}
+/*
+ * カード全体を詳細ページへのリンクにする。「投票する →」が別のリンクとしてカード内にあり、
+ * カードごと <a> で包むとリンクの入れ子になるので、名前のリンクの押せる範囲を疑似要素で
+ * カード全面に広げる（写真や余白を押しても飛べるように）。CTA はその上に重ねる
+ */
+.tl-permanent-link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+.tl-permanent-link:focus-visible {
+  outline: none;
+}
+.tl-permanent-card:has(.tl-permanent-link:focus-visible) {
+  outline: 3px solid var(--blue);
+  outline-offset: 4px;
 }
 .tl-permanent-name {
   font-weight: 800;
@@ -76,7 +89,8 @@
 }
 .tl-permanent-cta {
   position: relative;
-  z-index: 0;
+  /* カード全面に広げたリンク（.tl-permanent-link::after）より上に出して、ボタンとして押せるようにする */
+  z-index: 1;
   display: inline-block;
   color: var(--ink);
   font-weight: 800;
@@ -104,24 +118,94 @@
 }
 .tl-grid {
   display: grid;
-  grid-template-columns: 20px repeat(3, minmax(0, 1fr));
+  /* 列数はタブごとに違う（日タブは3ステージ、中夜祭は2ステージ）。TSX側で--stage-countを渡す */
+  grid-template-columns: 20px repeat(var(--stage-count, 3), minmax(0, 1fr));
   column-gap: 6px;
 }
 .tl-corner {
   grid-row: 1;
 }
+
+/* 中夜祭タブの注意書き。一般の来場者が体育館へ向かわないよう、グリッドより先に目に入れる */
+.tl-notice {
+  margin-top: 20px;
+  padding: 14px 16px;
+  border: 2px solid var(--red);
+  background: #fff;
+  font-size: 13px;
+  line-height: 1.7;
+}
+.tl-notice-title {
+  display: inline-block;
+  margin-bottom: 6px;
+  padding: 2px 10px;
+  font-size: 12px;
+  font-weight: 800;
+  color: #fff;
+  background: var(--red);
+}
+.tl-notice-venue {
+  margin-top: 4px;
+  font-weight: 800;
+}
+
+/*
+ * 開場〜入場の帯。全ステージ列にまたがって重ねる（列本体と同じ行・ステージ列全体に置く）。
+ * 人が出る枠ではないので企画カードのような枠や色は付けず、ページと同じ紙色で塗って背景に馴染ませる。
+ * 透明にしないのは、ステージ間の縦線や時刻線が帯の文字を横切ってノイズになるため（紙色で隠す）。
+ * 紙の質感は body::after が上から全体に掛けているので、紙色で塗っても帯だけ浮かない。
+ */
+.tl-marker-layer {
+  grid-row: 2;
+  grid-column: 2 / -1;
+  position: relative;
+  pointer-events: none;
+}
+.tl-marker {
+  position: absolute;
+  left: 1px;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: var(--paper);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+/*
+ * ステージごとのテーマ色。見出し・見出しの下線・枠の時刻に使う。
+ * 緑はパレット（global.css）に無いのでここだけで持つ。赤・青と同じ深さの緑にし、
+ * 10px台の時刻でも白地で読めるコントラスト（5.25:1）を確保している。
+ * パレットの黄色は白地の文字だと約1.5:1で読めないため、SubStageには使わない（検証済み）。
+ * 中夜祭のT字ステージは墨（既定の色）のまま。
+ */
+.tl-stage-main {
+  --stage-color: var(--red);
+}
+.tl-stage-live {
+  --stage-color: var(--blue);
+}
+.tl-stage-sub {
+  --stage-color: #0b7d34;
+}
+
 .tl-col-header {
   font-size: 10.5px;
   font-weight: 800;
   text-align: center;
+  color: var(--stage-color, var(--ink));
   padding-bottom: 6px;
-  border-bottom: 2px solid var(--ink);
+  border-bottom: 2px solid var(--stage-color, var(--ink));
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 .tl-axis-body {
   position: relative;
+  grid-row: 2;
+  grid-column: 1;
 }
 .tl-hour-label {
   position: absolute;
@@ -134,6 +218,7 @@
 }
 .tl-col-body {
   position: relative;
+  grid-row: 2;
   border-left: 1px solid #eee;
 }
 .tl-hour-line {
@@ -159,7 +244,7 @@
 .tl-block-time {
   flex-shrink: 0;
   font-size: 10px;
-  color: var(--blue);
+  color: var(--stage-color, var(--blue));
   white-space: nowrap;
 }
 .tl-time-sep {
@@ -170,9 +255,13 @@
   font-size: 10.5px;
   font-weight: 800;
   line-height: 1.25;
-  white-space: nowrap;
+  /* 枠の高さに収まる行数まで改行し、超えたら「…」（行数は TSX が -webkit-line-clamp で渡す）。
+     日本語の途中では折らず「＆」「・」の後ろ（<wbr>）で折る。それでも収まらない語は任意の位置で折る */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
   overflow: hidden;
-  text-overflow: ellipsis;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
 }
 .tl-now {
   position: relative;
@@ -201,7 +290,7 @@
     padding: 0 8px;
   }
   .tl-grid {
-    grid-template-columns: 30px repeat(3, 1fr);
+    grid-template-columns: 30px repeat(var(--stage-count, 3), 1fr);
     column-gap: 12px;
   }
   .tl-col-header {
