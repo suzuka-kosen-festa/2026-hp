@@ -60,7 +60,9 @@ const individuals = ordered("individual");
     </div>
   </div>
 
-  <Reveal client:visible>
+  {/* Reveal は既定で -1° 傾くが、ここは本文と協賛グリッドを丸ごと包んでいるので
+      ページ全体が斜めに見えてしまう。傾きは見出しのテープだけに任せる */}
+  <Reveal client:visible rotate={0}>
   <Tape color="black" rotate={-1.2} as="h2" class="sec-title">SPONSORS</Tape>
 
   <div class="sponsor-group">
