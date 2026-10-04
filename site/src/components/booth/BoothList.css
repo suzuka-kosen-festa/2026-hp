@@ -111,6 +111,8 @@
 /* リンクしないカード（出店）は紹介文を省略しない。続きを読む先が無いため */
 .bl-summary.is-full {
   display: block;
+  /* バンドの一言は本人が入れた改行を活かす（MIKASA等） */
+  white-space: pre-line;
   -webkit-line-clamp: unset;
   line-clamp: unset;
   overflow: visible;

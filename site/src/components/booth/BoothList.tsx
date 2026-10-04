@@ -76,10 +76,10 @@ const TABS: TabConfig[] = [
 ];
 
 /**
- * カードから詳細ページへ飛ばすか。出店と学科展示は、名前・団体・紹介文・写真がカードで
- * 出きっていて、詳細ページに行っても増える情報が無いので飛ばさない
+ * カードから詳細ページへ飛ばすか。出店・学科展示・ライブは、名前・団体・紹介文（バンドは一言）・
+ * 写真・時刻がカードで出きっていて、詳細ページに行っても増える情報が無いので飛ばさない
  */
-const CARD_ONLY_CATEGORIES: Category[] = ["出店", "学科展示"];
+const CARD_ONLY_CATEGORIES: Category[] = ["出店", "学科展示", "ライブ"];
 function hasDetailPage(entry: Entry) {
   return !CARD_ONLY_CATEGORIES.includes(entry.category);
 }
@@ -154,10 +154,11 @@ export default function BoothList({ entries }: Props) {
 
       <ul className="bl-grid">
         {filtered.map((entry, i) => {
-          // 出店は紹介文と写真がカードで全部見えていて、詳細ページに行っても増える情報が無いので
-          // リンクにせず、紹介文も省略しないで出す。場内マップができたら、ここから場所へ飛ばしたい
+          // 出店・学科展示・ライブは詳細ページに行っても増える情報が無いので、リンクにせず
+          // 紹介文も省略しないで出す。場内マップができたら、ここから場所へ飛ばしたい。
+          // バンドは紹介文の代わりに本人の一言（comment）を出す
           const linked = hasDetailPage(entry);
-          const summary = entry.summary ?? entry.description;
+          const summary = entry.summary ?? entry.description ?? entry.comment;
           const card = (
             <div className="bl-card" style={{ transform: `rotate(${i % 2 === 0 ? -0.8 : 0.9}deg)` }}>
               {/* 写真が無い企画（学科展示など）は写真枠ごと出さず、文字だけのカードにする。
