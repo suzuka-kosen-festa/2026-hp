@@ -8,6 +8,7 @@ import Tape from "../../components/ui/Tape.astro";
 import Chip from "../../components/ui/Chip.astro";
 import Button from "../../components/ui/Button.astro";
 import Star from "../../components/ui/Star.astro";
+import BackLink from "../../components/ui/BackLink.astro";
 import EntryFacts from "../../components/entry/EntryFacts.astro";
 import EntryNotes from "../../components/entry/EntryNotes.astro";
 import EntryApply from "../../components/entry/EntryApply.astro";
@@ -43,12 +44,8 @@ const PART_TILTS = [-1.2, 1, -0.8, 1.2];
 
 <BaseLayout title={`${entry.name} | ${site.eventName}`} description={entry.summary ?? entry.description ?? undefined}>
   <article class="entry">
-    {/* 「企画一覧へ」の決め打ちだと、/booth/ が準備中のあいだは準備中ページに
-        着地する。実際にトップのPICK UPから入った人が戻れなくなっていた
-        （MTG 2026-09-06）。素直に元いたページへ帰す。
-        履歴が無いとき（検索やQRからの直接着地）はトップへ。行き先が毎回変わるので
-        ラベルは「戻る」にしてある */}
-    <p class="crumb"><a href="/" data-back>← 戻る</a></p>
+    {/* 履歴が無いときはトップへ。一覧の /booth/ は準備中のことがあるため（MTG 2026-09-06） */}
+    <BackLink fallback="/" />
 
     <header class="head">
       <Tape color="blue" rotate={-1.5} as="p" class="cat">{entry.categoryLabel ?? entry.category}</Tape>
@@ -136,16 +133,6 @@ const PART_TILTS = [-1.2, 1, -0.8, 1.2];
 <script>
   import { statusAt } from "../../lib/application";
 
-  /* JSが動かなくても href="/" の普通のリンクとして機能する。
-     サイト内から来たときだけ履歴を1つ戻す */
-  document.querySelector<HTMLAnchorElement>("a[data-back]")?.addEventListener("click", (event) => {
-    const sameOrigin = document.referrer.startsWith(`${location.origin}/`);
-    if (!sameOrigin || history.length <= 1) return;
-
-    event.preventDefault();
-    history.back();
-  });
-
   /* 申込ボタンの出し分けを閲覧時の時刻で合わせ直す。
      複数の企画を載せる記事では企画ごとに締切が違うので、1つずつ判定する */
   document.querySelectorAll<HTMLElement>("[data-apply]").forEach((apply) => {
@@ -162,15 +149,6 @@ const PART_TILTS = [-1.2, 1, -0.8, 1.2];
     max-width: var(--content-sp);
     margin: 0 auto;
     padding: 24px 20px 64px;
-  }
-
-  .crumb {
-    font-size: 12px;
-    font-weight: 700;
-    margin-bottom: 20px;
-  }
-  .crumb a {
-    text-decoration: underline;
   }
 
   /* Tape/Chip/Star にpropsで渡したclassは子コンポーネント側のスコープになるため

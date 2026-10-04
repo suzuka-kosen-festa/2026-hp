@@ -85,6 +85,23 @@ test.describe("entry の戻る導線", () => {
     await page.locator("a[data-back]").click();
     await expect(page, "元いた一覧ではなくトップに戻っています").toHaveURL(/\/booth\/$/);
   });
+
+  /**
+   * 戻る処理は ui/BackLink.astro のインラインスクリプトで、HTMLを読んだその場で効く。
+   * 以前はページ末尾のモジュールに入れていて、JSファイルの読み込みが終わる前に押すと
+   * fallback（トップ）へ飛んでいた。JSファイルを読み込ませない状態で、その競合を再現して検査する
+   */
+  test("JSファイルの読み込みが間に合わなくても元のページへ戻る", async ({ page }) => {
+    test.skip(!showsContent("/booth/"), "/booth/ が準備中のため");
+
+    await page.goto("/booth/");
+    await page.route("**/_astro/*.js", (route) => route.abort());
+    await page.locator('a[href^="/entry/"]').first().click();
+    await expect(page).toHaveURL(/\/entry\//);
+
+    await page.locator("a[data-back]").click();
+    await expect(page, "JSの読み込み前に押すとトップへ飛んでいます").toHaveURL(/\/booth\/$/);
+  });
 });
 
 /**

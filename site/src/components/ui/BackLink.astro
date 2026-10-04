@@ -1,0 +1,47 @@
+---
+// 詳細ページの「← 戻る」。元いたページへ帰す（Issue #94）。
+//
+// 「企画一覧へ」「お知らせ一覧へ」の決め打ちだと、トップの PICK UP や NEWS 枠から入った人が
+// 一覧に飛ばされて元の場所に戻れない（#84・#93）。サイト内から来たときは履歴を1つ戻し、
+// 履歴が無いとき（検索・QR・SNSからの直接着地）は fallback へ。行き先が毎回変わるのでラベルは「戻る」。
+// JSが動かなくても fallback への普通のリンクとして機能する。
+interface Props {
+  /** 履歴が無いときの行き先（企画はトップ、お知らせは一覧） */
+  fallback: string;
+}
+
+const { fallback } = Astro.props;
+---
+
+<p class="crumb"><a href={fallback} data-back>← 戻る</a></p>
+{
+  /*
+   * リンクの直後にインラインで置き、HTMLを読んだその場で効かせる。
+   * 以前はページ末尾のモジュール <script> に入れていたため、別ファイルの読み込みが終わる前に
+   * 押すと fallback へ飛んでいた（表示直後に押す人や、負荷の高い環境のE2Eで起きた）。
+   * ページ全体から探すと最初の1つしか拾えないので、自分の直前のリンクだけに付ける
+   */
+}
+<script is:inline>
+  (() => {
+    const link = document.currentScript?.previousElementSibling?.querySelector("a[data-back]");
+    link?.addEventListener("click", (event) => {
+      const sameOrigin = document.referrer.startsWith(location.origin + "/");
+      if (!sameOrigin || history.length <= 1) return;
+      event.preventDefault();
+      history.back();
+    });
+  })();
+</script>
+
+<style>
+  .crumb {
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+
+  .crumb a {
+    text-decoration: underline;
+  }
+</style>
