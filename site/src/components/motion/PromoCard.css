@@ -114,15 +114,18 @@
 }
 
 /*
- * PCは写真を本文の高さいっぱいに伸ばし、幅は16:9から決める（紙片の縦の長さが本文で揃う）。
- * flexだと「写真の幅←本文の高さ←本文の幅←写真の幅」の循環で高さを拾えないので grid にし、
+ * PCは写真を本文の高さいっぱいに伸ばす（紙片の縦の長さが本文で揃う）。
+ * 写真の幅は 240px 固定。幅を高さ（16:9）から決めると「写真の幅←本文の高さ←本文の幅←写真の幅」
+ * が循環し、ブラウザは循環を1周しか解かないため、本文が狭まって要約が折り返した分だけ
+ * 写真が列からはみ出していた（ドローン体験のカード）。
  * 写真は height:0 + min-height:100% で「行の高さの決定には参加せず、決まった高さに合わせる」。
- * 列幅は写真の幅（aspect-ratio）で後から決まる
+ * 行の最低の高さは 240px の16:9。本文がそれより高いときは object-fit:cover で上下を詰める
  */
 @media (min-width: 900px) {
   .pc--compact {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-columns: minmax(0, 1fr) 240px;
+    grid-template-rows: minmax(135px, auto);
     align-items: stretch;
     column-gap: 24px;
   }
@@ -135,10 +138,12 @@
     grid-row: 1;
     height: 0;
     min-height: 100%;
-    aspect-ratio: 16 / 9;
-    /* 高さから幅を割り出せないブラウザでも写真が潰れて消えないための下限。
-       本文は最低でも約95pxあるので、16:9なら通常はこれより広くなり効かない */
-    min-width: 160px;
+    aspect-ratio: auto;
+  }
+  /* 画像なしは写真の列と最低の高さを持たない（空の240pxが右に残るため） */
+  .pc--compact.pc--noimg {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto;
   }
 }
 
