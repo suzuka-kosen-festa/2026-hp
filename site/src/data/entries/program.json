@@ -776,8 +776,8 @@
     "occurrences": [
       {
         "day": "day1",
-        "start_time": "10:50",
-        "end_time": "11:10"
+        "start_time": "12:20",
+        "end_time": "12:40"
       }
     ],
     "featured": false
@@ -842,8 +842,8 @@
     "occurrences": [
       {
         "day": "day1",
-        "start_time": "12:20",
-        "end_time": "12:40"
+        "start_time": "10:50",
+        "end_time": "11:10"
       }
     ],
     "featured": false
