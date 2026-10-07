@@ -225,31 +225,6 @@
     "featured": false
   },
   {
-    "id": "food-basketball",
-    "category": "出店",
-    "name": "みたらし団子",
-    "group": "バスケ部",
-    "description": "文化祭の食べ歩きならコレ！タレのツヤと焦げ目が食欲をそそる、バスケ部特製のみたらし団子をどうぞ！",
-    "tags": [
-      "飲食-スイーツ"
-    ],
-    "location": null,
-    "image": "/entries/food-basketball.webp",
-    "occurrences": [
-      {
-        "day": "day1",
-        "start_time": "09:00",
-        "end_time": "14:30"
-      },
-      {
-        "day": "day2",
-        "start_time": "09:00",
-        "end_time": "15:50"
-      }
-    ],
-    "featured": false
-  },
-  {
     "id": "food-yosakoi",
     "category": "出店",
     "name": "フランクフルト",
@@ -302,7 +277,7 @@
   {
     "id": "food-volleyball",
     "category": "出店",
-    "name": "焼きドーナッツ",
+    "name": "焼きドーナツ",
     "group": "女子バレーボール部",
     "description": "ふんわり食感でシンプルな味わい！バニラ味とココア味のドーナツを販売します！",
     "tags": [
