@@ -1,5 +1,15 @@
+import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 import { expect, test } from "@playwright/test";
 import { describePage, showsContent } from "./_shared";
+
+type RawEntry = { id: string; category: string; isPermanent?: boolean; hideFromBooth?: boolean; linkFromBooth?: boolean };
+const entries = ["booth", "department", "program"].flatMap(
+  (name) =>
+    JSON.parse(
+      readFileSync(fileURLToPath(new URL(`../src/data/entries/${name}.json`, import.meta.url)), "utf8"),
+    ) as RawEntry[],
+);
 
 /** /booth/ が準備中のあいだは中身が無いので、ページ固有の検査は飛ばす（showsContent 参照） */
 const boothHidden = !showsContent("/booth/");
@@ -125,4 +135,18 @@ test("timetable専用の枠は booth の一覧に出ない", async ({ page }) =>
   await page.goto("/booth/?tab=イベント", { waitUntil: "networkidle" });
   await expect(page.locator(".bl-card").first()).toBeVisible();
   await expect(page.locator(".bl-card", { hasText: "紹介" })).toHaveCount(0);
+});
+
+/**
+ * linkFromBooth の企画は、出店など既定でリンクにしないカテゴリでもカードから詳細ページへ飛べる。
+ * 企画を決め打ちせずデータから拾うので、該当する企画が無い間だけ skip になる
+ */
+test("linkFromBooth の企画はカードから詳細ページへ飛べる", async ({ page }) => {
+  const linked = entries.find((entry) => entry.linkFromBooth && !entry.isPermanent && !entry.hideFromBooth);
+  test.skip(boothHidden || !linked, "/booth/ が準備中、または linkFromBooth の企画が無いため");
+
+  await page.goto(`/booth/?tab=${encodeURIComponent(linked!.category)}`, { waitUntil: "networkidle" });
+  const card = page.locator(`a[href="/entry/${linked!.id}/"]`);
+  await expect(card).toHaveCount(1);
+  await expect(card).toContainText("view more");
 });
