@@ -3,7 +3,15 @@ import { fileURLToPath } from "node:url";
 import { expect, test } from "@playwright/test";
 import { describePage, showsContent } from "./_shared";
 
-type RawEntry = { id: string; category: string; isPermanent?: boolean; hideFromBooth?: boolean; linkFromBooth?: boolean };
+type RawEntry = {
+  id: string;
+  category: string;
+  name: string;
+  tags: string[];
+  isPermanent?: boolean;
+  hideFromBooth?: boolean;
+  linkFromBooth?: boolean;
+};
 const entries = ["booth", "department", "program"].flatMap(
   (name) =>
     JSON.parse(
@@ -112,6 +120,14 @@ test("カードのチップに内部キーが出ない", async ({ page }) => {
 test("タグは1つだけ選べ、中夜祭の企画は日付の絞り込みに混ざらない", async ({ page }) => {
   test.skip(boothHidden, "/booth/ が準備中のため（src/data/release.json）");
 
+  // 中夜祭にだけ出るバンドで確かめる。r04 NotFound のように昼のステージにも出るバンドがいるので、
+  // 名前を決め打ちせずデータから選ぶ（出演者が入れ替わってもテストが壊れないように）
+  const lives = entries.filter((e) => e.category === "ライブ");
+  const band = lives.find(
+    (e) => e.tags.includes("中夜祭") && !lives.some((o) => o.name === e.name && o.tags.includes("day1")),
+  )?.name;
+  expect(band, "中夜祭にだけ出るバンドがデータにいません").toBeDefined();
+
   await page.goto("/booth/", { waitUntil: "networkidle" });
   await page.getByRole("tab", { name: "ライブ" }).click();
 
@@ -120,12 +136,12 @@ test("タグは1つだけ選べ、中夜祭の企画は日付の絞り込みに�
 
   await day1.click();
   await expect(page.locator(".bl-card").first()).toBeVisible();
-  await expect(page.locator(".bl-card", { hasText: "r04 NotFound" }), "中夜祭のバンドが10/31に出ています").toHaveCount(0);
+  await expect(page.locator(".bl-card", { hasText: band }), "中夜祭のバンドが10/31に出ています").toHaveCount(0);
 
   await chuyasai.click();
   await expect(day1, "2つ目のタグを押したら1つ目は外れる").toHaveAttribute("aria-pressed", "false");
   await expect(chuyasai).toHaveAttribute("aria-pressed", "true");
-  await expect(page.locator(".bl-card", { hasText: "r04 NotFound" })).toHaveCount(1);
+  await expect(page.locator(".bl-card", { hasText: band })).toHaveCount(1);
 });
 
 /** hideFromBooth の枠（わらしべ長者・バザーGPの紹介枠）は、timetable の表にだけ載せて booth には出さない */
