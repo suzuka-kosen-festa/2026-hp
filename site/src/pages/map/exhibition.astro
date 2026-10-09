@@ -108,7 +108,7 @@ const gameRoom = gameBuilding.rooms.find((room) => room.entryIds.includes("game-
       requestAnimationFrame(() => target.focus());
     }
     showRoom();
-    window.addEventListener("hashchange", showRoom);
+    // ページ内リンクでも popstate が発火する。hashchange も聞くと focus が二重に走り、Tab で進んだ直後に教室へ引き戻されるため popstate だけで扱う。
     window.addEventListener("popstate", () => {
       const requested = new URL(location.href).searchParams.get("floor");
       selectFloor(tabs.some((tab) => tab.dataset.floorTab === requested) ? requested! : tabs[0].dataset.floorTab!);
