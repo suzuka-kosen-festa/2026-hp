@@ -1045,18 +1045,18 @@
     "featured": false
   },
   {
-    "id": "sub-shilli-shally",
+    "id": "sub-r04-notfound",
     "category": "ライブ",
-    "name": "Shilli-shally",
-    "reading": "しりーしゃりー",
+    "name": "r04 NotFound",
+    "reading": "あーるぜろよんのっとふぁうんど",
     "group": null,
-    "description": null,
-    "comment": "未熟者全力最高の熱をお届けします!!",
+    "description": "オーディション1位のバンド。1日目は中夜祭（LiveStage 16:05〜）にも出演します。SubStageと中夜祭では違う曲を演奏するので、両方のステージでお楽しみください。",
+    "comment": null,
     "tags": [
       "day1"
     ],
     "location": "SubStage",
-    "image": "/entries/sub-shilli-shally.webp",
+    "image": "/entries/live-r04-notfound.webp",
     "occurrences": [
       {
         "day": "day1",
@@ -1183,8 +1183,8 @@
     "name": "r04 NotFound",
     "reading": "あーるぜろよんのっとふぁうんど",
     "group": null,
-    "description": null,
-    "comment": "頑張ります！！",
+    "description": "オーディション1位のバンド。1日目はSubStage（11:00〜）にも出演します。中夜祭ではSubStageとは違う曲を演奏するので、両方のステージでお楽しみください。",
+    "comment": null,
     "tags": [
       "中夜祭"
     ],

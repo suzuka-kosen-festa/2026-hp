@@ -83,11 +83,12 @@ const TABS: TabConfig[] = [
 
 /**
  * カードから詳細ページへ飛ばすか。出店・学科展示・ライブは、名前・団体・紹介文（バンドは一言）・
- * 写真・時刻がカードで出きっていて、詳細ページに行っても増える情報が無いので飛ばさない
+ * 写真・時刻がカードで出きっていて、詳細ページに行っても増える情報が無いので飛ばさない。
+ * ただし linkFromBooth の企画は、カテゴリに関係なく飛ばす
  */
 const CARD_ONLY_CATEGORIES: Category[] = ["出店", "学科展示", "ライブ"];
 function hasDetailPage(entry: Entry) {
-  return !CARD_ONLY_CATEGORIES.includes(entry.category);
+  return entry.linkFromBooth || !CARD_ONLY_CATEGORIES.includes(entry.category);
 }
 
 export default function BoothList({ entries }: Props) {

@@ -1,6 +1,7 @@
 # MAPと掲載データの差分確認
 
 初回確認：2026-10-07／現在の状態へ更新：2026-10-09
+提出時の補足（2026-10-10）：みたらし団子と関連画像はmainのPR #120で削除済みです。最新mainの共有データをそのまま取り込み、本MAPのPRでは `booth.json`・`program.json` を変更しません。以下の削除・照合記録は統合前の経緯です。
 対象：出店・企画データの担当者、MAP担当者
 
 現在の状態：校内20企画は更新版の[教室配置2026.xlsx](https://docs.google.com/spreadsheets/d/1cpnaTE-jhHtYFmtKD7y6n_yUBxeyDOHI/edit)と追加確認に合わせ、すべて教室へ配置済みです。§4の校内会場は従来の確認記録で、最新の教室・セルは[校内図の対応表](map-indoor-alignment.md)と `site/src/data/map-indoor.json` を参照してください。Excel原本とFigmaの配置原図は変更していません。実装確認用の[スマホ5画面](https://www.figma.com/design/USj2vcyNX2syrxtzulfnQ6/Untitled?node-id=1442-2426)は、Figma内に別フレームとして追加済みです。

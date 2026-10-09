@@ -1,5 +1,30 @@
 [
   {
+    "id": "food-handball",
+    "category": "出店",
+    "name": "チュロス",
+    "group": "ハンドボール部",
+    "description": "文化祭定番のサクサクチュロス！食べ歩きには欠かせない一本をあなた好みの味で楽しめます！",
+    "tags": [
+      "飲食-スイーツ"
+    ],
+    "location": null,
+    "image": "/entries/food-handball.webp",
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "09:00",
+        "end_time": "14:30"
+      },
+      {
+        "day": "day2",
+        "start_time": "09:00",
+        "end_time": "15:50"
+      }
+    ],
+    "featured": false
+  },
+  {
     "id": "food-kyudo",
     "category": "出店",
     "name": "シューアイス",
@@ -250,34 +275,9 @@
     "featured": false
   },
   {
-    "id": "food-handball",
-    "category": "出店",
-    "name": "チュロス",
-    "group": "ハンドボール部",
-    "description": "文化祭定番のサクサクチュロス！食べ歩きには欠かせない一本をあなた好みの味で楽しめます！",
-    "tags": [
-      "飲食-スイーツ"
-    ],
-    "location": null,
-    "image": "/entries/food-handball.webp",
-    "occurrences": [
-      {
-        "day": "day1",
-        "start_time": "09:00",
-        "end_time": "14:30"
-      },
-      {
-        "day": "day2",
-        "start_time": "09:00",
-        "end_time": "15:50"
-      }
-    ],
-    "featured": false
-  },
-  {
     "id": "food-volleyball",
     "category": "出店",
-    "name": "焼きドーナッツ",
+    "name": "焼きドーナツ",
     "group": "女子バレーボール部",
     "description": "ふんわり食感でシンプルな味わい！バニラ味とココア味のドーナツを販売します！",
     "tags": [
@@ -1041,5 +1041,22 @@
       }
     ],
     "featured": false
+  },
+  {
+    "id": "lounge-seiho",
+    "category": "出店",
+    "categoryLabel": "休憩スペース",
+    "name": "休憩スペース（青峰同窓会ラウンジ）",
+    "group": "青峰同窓会",
+    "summary": "60周年記念の歴代写真などを展示した部屋を、休憩スペースとして開放します。",
+    "description": "本校60周年を記念し、歴代の写真や歴代校長の写真などを展示した部屋を、高専祭当日は休憩スペースとして開放いたします。青峰同窓会のOB・OGの皆様が懐かしい思い出を振り返りながら、ひと息つける空間です。在学生・来場者の皆様もぜひお気軽にお立ち寄りください。",
+    "tags": [
+      "展示"
+    ],
+    "location": "イノベーション交流プラザ 60周年記念展示室",
+    "image": null,
+    "occurrences": [],
+    "featured": false,
+    "linkFromBooth": true
   }
 ]

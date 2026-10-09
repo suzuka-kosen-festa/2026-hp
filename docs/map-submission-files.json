@@ -1,11 +1,12 @@
 {
   "schemaVersion": 1,
   "checkedOn": "2026-10-10",
-  "status": "candidate-only-not-staged-or-committed",
-  "integrationGate": "local-verification-passed-not-staged-or-committed",
+  "status": "scoped-pr-submission-prepared",
+  "integrationGate": "latest-main-integration-verification-passed",
   "branch": "feature/map-page",
-  "baseCommit": "83cfb9afc115c6d7b4ca9fc5e68b46b4d639f72e",
-  "purpose": "Explicit MAP submission candidates, including one authorized home OP test-only exception. Other contributors' changes are excluded. Refresh this snapshot if implementation files change.",
+  "baseCommit": "4002b992aa3f9a81033d5a3baf08a74892c1cf90",
+  "initialBaseCommit": "83cfb9afc115c6d7b4ca9fc5e68b46b4d639f72e",
+  "purpose": "Explicit MAP PR scope after latest-main integration, including one authorized home OP test-only exception. Per-file status labels record the initial working-tree audit, not current Git status. Historical verification records retain their original base and counts. Other contributors' files remain excluded.",
   "excludedChangedFilesAtAudit": 50,
   "excludedPatterns": [
     "**/*-hayato.*",
@@ -247,12 +248,6 @@
       "sha256": "98f95b672f6aac85a3cfb3f42907d057af3ee783316fccb86abcc0dd58b8be8a"
     },
     {
-      "path": "site/src/data/entries/booth.json",
-      "status": "modified",
-      "group": "shared-exceptions",
-      "sha256": "bfc8769da9443b601c50b6c71c5e77559654645b7c0323e56d975bc26bfdfca3"
-    },
-    {
       "path": "site/src/data/map.json",
       "status": "untracked",
       "group": "map-runtime",
@@ -321,15 +316,15 @@
   "verification": {
     "sourceHashAudit": {
       "result": "passed",
-      "checkedSourceFiles": 37,
-      "candidateFileCount": 53,
+      "checkedSourceFiles": 36,
+      "candidateFileCount": 52,
       "missingFiles": 0,
       "hashMismatches": 0,
       "duplicatePaths": 0,
       "excludedPatternMatches": 0,
-      "stagedFilesAtAudit": 0
+      "scope": "Final 52-file diff against latest main; 36 source hashes match the workspace and verified integration copy"
     },
-    "candidateIsolation": {
+    "candidateIsolationBeforeMainIntegration": {
       "base": "git archive of baseCommit",
       "overlaidSiteFiles": 37,
       "otherContributorsWorkingTreeFilesIncluded": false,
@@ -481,7 +476,7 @@
       "configPath": "C:/Users/cadix/AppData/Local/Temp/map-submission-qa-3b74261ec189452882212d71e0932815/playwright.a11y-full.config.ts",
       "resultPath": "C:/Users/cadix/AppData/Local/Temp/map-submission-qa-3b74261ec189452882212d71e0932815/test-results-a11y-full/.last-run.json"
     },
-    "candidateFullSuite": {
+    "candidateFullSuiteBeforeMainIntegration": {
       "checkedOn": "2026-10-10",
       "result": "passed",
       "total": 161,
@@ -562,6 +557,34 @@
       "otherContributorsFilesExcluded": 50,
       "stagedFiles": 0,
       "integrationDecision": "Await explicit user instruction before committing the scoped candidates; no push, PR, merge or publication performed"
+    },
+    "latestMainIntegration": {
+      "checkedOn": "2026-10-10",
+      "baseCommit": "4002b992aa3f9a81033d5a3baf08a74892c1cf90",
+      "result": "passed",
+      "candidateFiles": 52,
+      "overlaidSiteFiles": 36,
+      "integratedTrackedSiteFilesCompared": 279,
+      "integratedSiteMismatchesIgnoringLineEndings": 0,
+      "sourceHashMismatches": 0,
+      "otherContributorsFilesExcluded": 50,
+      "upstreamDataPreserved": "booth.json and program.json exactly match latest main; no shared entry-data or upstream image deletion is part of this PR diff",
+      "candidateFullSuite": {
+        "command": "npm run test:e2e -- --config ../playwright.integration.config.ts",
+        "total": 162,
+        "passed": 161,
+        "failed": 0,
+        "skipped": 1,
+        "mapTestsPassed": 55,
+        "duration": "4.3 minutes",
+        "workers": 2,
+        "skippedReason": "Existing release.spec.ts:52 production-only test is excluded when APPLY_RELEASE is unset",
+        "motionSafetyCheck": "npm run check passed; 12 TSX files checked",
+        "configPath": "C:/Users/cadix/AppData/Local/Temp/map-pr-integration-8be56f8ea3f0405ea806d3368e84c236/playwright.integration.config.ts"
+      },
+      "independentReview": "Read-only scoped review: zero Critical or Important findings; PR text and manifest corrected for latest main. Literal test port 4325 remains a nonblocking portability limitation.",
+      "authorization": "User requested a review PR; scoped commits and push are authorized. No merge into main or release publication.",
+      "projectsStatus": "Manual In Review update required; GitHub CLI account lacks read:project scope"
     },
     "realDevice": "not-verified",
     "publicationPerformed": false
