@@ -1,0 +1,569 @@
+{
+  "schemaVersion": 1,
+  "checkedOn": "2026-10-10",
+  "status": "candidate-only-not-staged-or-committed",
+  "integrationGate": "local-verification-passed-not-staged-or-committed",
+  "branch": "feature/map-page",
+  "baseCommit": "83cfb9afc115c6d7b4ca9fc5e68b46b4d639f72e",
+  "purpose": "Explicit MAP submission candidates, including one authorized home OP test-only exception. Other contributors' changes are excluded. Refresh this snapshot if implementation files change.",
+  "excludedChangedFilesAtAudit": 50,
+  "excludedPatterns": [
+    "**/*-hayato.*",
+    ".claude/**",
+    ".superpowers/**",
+    "site/public/entries/**",
+    "docs/*-hayato.md"
+  ],
+  "files": [
+    {
+      "path": "docs/map-assets-export.json",
+      "status": "untracked",
+      "group": "documentation"
+    },
+    {
+      "path": "docs/map-content-differences.md",
+      "status": "untracked",
+      "group": "documentation"
+    },
+    {
+      "path": "docs/map-data-audit.md",
+      "status": "untracked",
+      "group": "documentation"
+    },
+    {
+      "path": "docs/map-entry-mapping.draft.json",
+      "status": "untracked",
+      "group": "documentation"
+    },
+    {
+      "path": "docs/map-figma-handoff.json",
+      "status": "untracked",
+      "group": "documentation"
+    },
+    {
+      "path": "docs/map-indoor-alignment.md",
+      "status": "untracked",
+      "group": "documentation"
+    },
+    {
+      "path": "docs/map-indoor-bindings.json",
+      "status": "untracked",
+      "group": "documentation"
+    },
+    {
+      "path": "docs/map-materials-guide.md",
+      "status": "untracked",
+      "group": "documentation"
+    },
+    {
+      "path": "docs/map-plaza-export.json",
+      "status": "untracked",
+      "group": "documentation"
+    },
+    {
+      "path": "docs/map-pr-draft.md",
+      "status": "untracked",
+      "group": "documentation"
+    },
+    {
+      "path": "docs/requirements.md",
+      "status": "modified",
+      "group": "documentation"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-10-02-map-figma-ux.md",
+      "status": "untracked",
+      "group": "documentation"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-10-07-map-entry-alignment.md",
+      "status": "untracked",
+      "group": "documentation"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-10-07-map-only-implementation.md",
+      "status": "untracked",
+      "group": "documentation"
+    },
+    {
+      "path": "docs/superpowers/specs/2026-10-02-map-ux-design.md",
+      "status": "untracked",
+      "group": "documentation"
+    },
+    {
+      "path": "site/scripts/affected-pages.mjs",
+      "status": "modified",
+      "group": "tests-ci",
+      "sha256": "1907c9ad256f6324cb232197cd614d8eed6299891373ce395d541a25fc747ac3"
+    },
+    {
+      "path": "site/src/assets/map/figma/grass.png",
+      "status": "untracked",
+      "group": "map-assets",
+      "sha256": "90d69e00a9eddc0d4cc24c5ff5b74165efb44a0df3035c7d89330f14fa744ee7"
+    },
+    {
+      "path": "site/src/assets/map/figma/gym-blue.png",
+      "status": "untracked",
+      "group": "map-assets",
+      "sha256": "f388a681a5d01f1071fb82ef02a2b9a1455f83da573e95afae3930b440d2ea82"
+    },
+    {
+      "path": "site/src/assets/map/figma/headquarters-yellow.png",
+      "status": "untracked",
+      "group": "map-assets",
+      "sha256": "bde98db48d268450c5a7b98f790c8fbe03521f9811fa09e7044434a1073fc825"
+    },
+    {
+      "path": "site/src/assets/map/figma/multimedia-blue.png",
+      "status": "untracked",
+      "group": "map-assets",
+      "sha256": "22149b11855d19410f2c8948dd75c530d039ffcc03003cc91be3443dc96b7915"
+    },
+    {
+      "path": "site/src/assets/map/figma/plaza-route.svg",
+      "status": "untracked",
+      "group": "map-assets",
+      "sha256": "d339b9e19405c23d550c5de62d7fa74c5d13749cf8ffdace5657eb958f9c99f3"
+    },
+    {
+      "path": "site/src/assets/map/figma/school-blue.png",
+      "status": "untracked",
+      "group": "map-assets",
+      "sha256": "3968001e190cf03e6475358e4b856eeb4f8060aca7ceef40c4ed4c546843a566"
+    },
+    {
+      "path": "site/src/assets/map/figma/school-blue-vertical.png",
+      "status": "untracked",
+      "group": "map-assets",
+      "sha256": "1cfdea318b31d225ad6a6767d998233963573891f4424d1070548748b011f374"
+    },
+    {
+      "path": "site/src/assets/map/figma/school-red.png",
+      "status": "untracked",
+      "group": "map-assets",
+      "sha256": "32f97cda936e841e7eef6cbc6ba826d5756978eb1884e44aa898eda229124ff2"
+    },
+    {
+      "path": "site/src/assets/map/figma/stage-red.png",
+      "status": "untracked",
+      "group": "map-assets",
+      "sha256": "1eba4bfb8170911cd94067615f076ea5a00c02ba2d33d13091fbd749fef00069"
+    },
+    {
+      "path": "site/src/assets/map/figma/stage-yellow.png",
+      "status": "untracked",
+      "group": "map-assets",
+      "sha256": "fe45987918c85dd235fdedea14993a8ee2f4e453bd3460803f89092a0b7d4f59"
+    },
+    {
+      "path": "site/src/assets/map/figma/stall-red.png",
+      "status": "untracked",
+      "group": "map-assets",
+      "sha256": "a3694cc74537324d3f73046f9ef49922581fa0a27c3e0ffce8ce155acbc27120"
+    },
+    {
+      "path": "site/src/assets/map/indoor/paper.svg",
+      "status": "untracked",
+      "group": "map-assets",
+      "sha256": "4defc246acf27dfda92640dfd4a04b65d2a23ba2ce101c9766e3851f2adc7612"
+    },
+    {
+      "path": "site/src/assets/map/indoor/shadow.svg",
+      "status": "untracked",
+      "group": "map-assets",
+      "sha256": "0412641b4185c80f493b44cdb8e608f206ab9be383e2b2d2d3565868b37b6c4b"
+    },
+    {
+      "path": "site/src/assets/map/indoor/underline.svg",
+      "status": "untracked",
+      "group": "map-assets",
+      "sha256": "29d4df0f8ef24a6795a92cb0d96d99483482145f0cf554649f084788bd6a5be7"
+    },
+    {
+      "path": "site/src/assets/map/indoor/underline-c.svg",
+      "status": "untracked",
+      "group": "map-assets",
+      "sha256": "fb7eb649453d9eddf54f12922ba517548f44554c3ef036b5af4f15973dcffe7b"
+    },
+    {
+      "path": "site/src/components/map/BazaarMap.astro",
+      "status": "untracked",
+      "group": "map-runtime",
+      "sha256": "490ab814697d3c5b5ba472463e36e71ccf9eab6df1853f3bb473365e6dcfd0a0"
+    },
+    {
+      "path": "site/src/components/map/CampusMap.astro",
+      "status": "untracked",
+      "group": "map-runtime",
+      "sha256": "1940e17513ac86b6e2a907690d1d7b3d4674d2e194b359bc2b6baf950a85a03b"
+    },
+    {
+      "path": "site/src/components/map/indoor.ts",
+      "status": "untracked",
+      "group": "map-runtime",
+      "sha256": "32afb3273ae19b2a3564f6b981bd628959958e7e1a25d8ccb37dbcc6f8127918"
+    },
+    {
+      "path": "site/src/components/map/IndoorMap.astro",
+      "status": "untracked",
+      "group": "map-runtime",
+      "sha256": "e2a2e068e9bd7b0947a0fdccc109542174e6e0e37badf6daf6201c5fb4ea096b"
+    },
+    {
+      "path": "site/src/components/map/MapEntryList.astro",
+      "status": "untracked",
+      "group": "map-runtime",
+      "sha256": "1783f19140471b0ca28bb7cfa34fad3537b5133f630211fa54ca24885165f9a5"
+    },
+    {
+      "path": "site/src/components/map/MapGuide.astro",
+      "status": "untracked",
+      "group": "map-runtime",
+      "sha256": "b653e4f714f0e3d74002352436586b021a62ab8bcfcd962dfcbd66f8f89877e8"
+    },
+    {
+      "path": "site/src/components/map/MapSubpage.astro",
+      "status": "untracked",
+      "group": "map-runtime",
+      "sha256": "c5e918b020d9d8a62b8677e8c8ab1681225ecafad34aa37fa2d2a7e21e8ac970"
+    },
+    {
+      "path": "site/src/components/map/model.ts",
+      "status": "untracked",
+      "group": "map-runtime",
+      "sha256": "011b1b6301b9dbb6de18ed9ebf5f6ee8a21cfd1eb4ff807dfd02413d100d0b12"
+    },
+    {
+      "path": "site/src/components/map/StallBadge.astro",
+      "status": "untracked",
+      "group": "map-runtime",
+      "sha256": "64bb8a79b6f06a668f1a785f439b23e03551c774cfda90a0c4ccac2c6eb3e5ee"
+    },
+    {
+      "path": "site/src/components/timetable/TimetableList.tsx",
+      "status": "modified",
+      "group": "shared-exceptions",
+      "sha256": "98f95b672f6aac85a3cfb3f42907d057af3ee783316fccb86abcc0dd58b8be8a"
+    },
+    {
+      "path": "site/src/data/entries/booth.json",
+      "status": "modified",
+      "group": "shared-exceptions",
+      "sha256": "bfc8769da9443b601c50b6c71c5e77559654645b7c0323e56d975bc26bfdfca3"
+    },
+    {
+      "path": "site/src/data/map.json",
+      "status": "untracked",
+      "group": "map-runtime",
+      "sha256": "5020823f8e75e252097d0e3e1f1401967321e52065ae63bdac0e0fe2313ec7b2"
+    },
+    {
+      "path": "site/src/data/map-indoor.json",
+      "status": "untracked",
+      "group": "map-runtime",
+      "sha256": "3fad4977b85fd3fe8f8aa2bd6b1cae868422ae76c268a809a4bc7f0456442ed1"
+    },
+    {
+      "path": "site/src/pages/map.astro",
+      "status": "modified",
+      "group": "map-runtime",
+      "sha256": "7524e30fb2f7f735a07cb357255464a8889aea7c3f526b03e68462462468c662"
+    },
+    {
+      "path": "site/src/pages/map/exhibition.astro",
+      "status": "untracked",
+      "group": "map-runtime",
+      "sha256": "330d200fb2a86302dad6b8ca561bed5808274cfef4b446c71b6b7fc5e8e3bddf"
+    },
+    {
+      "path": "site/src/pages/map/food.astro",
+      "status": "untracked",
+      "group": "map-runtime",
+      "sha256": "e3633bbdf510ccda56e01fb6f2bcf5d0670c63ef6f4252db6bb245a4a2fdd4ec"
+    },
+    {
+      "path": "site/src/pages/map/headquarters.astro",
+      "status": "untracked",
+      "group": "map-runtime",
+      "sha256": "20dd7eca9f6f8fa1c49c45be36a4228396bc1557371bc5e85ea619160184020c"
+    },
+    {
+      "path": "site/src/pages/map/innovation-plaza.astro",
+      "status": "untracked",
+      "group": "map-runtime",
+      "sha256": "50d165a5d22046a5003c56bc5e13b42c57df6de618379de902434195888c9d32"
+    },
+    {
+      "path": "site/src/pages/map/multimedia.astro",
+      "status": "untracked",
+      "group": "map-runtime",
+      "sha256": "9fd7202d54bcdd2c3e1955d7e38eedd7545c7f4dece5d197ab2c546473b4d556"
+    },
+    {
+      "path": "site/tests/map.spec.ts",
+      "status": "modified",
+      "group": "tests-ci",
+      "sha256": "7f6b0d2e4c9f176c840498429362d472245d28277e264ef9c116b76479d79cc5"
+    },
+    {
+      "path": "site/tests/home.spec.ts",
+      "status": "modified",
+      "group": "test-only-exception",
+      "sha256": "418c83fcb5fbaeb4edede9bfb572aafea525aa752d4b1d955befed6784ad693c"
+    },
+    {
+      "path": "docs/map-submission-files.json",
+      "status": "untracked",
+      "group": "documentation"
+    }
+  ],
+  "verification": {
+    "sourceHashAudit": {
+      "result": "passed",
+      "checkedSourceFiles": 37,
+      "candidateFileCount": 53,
+      "missingFiles": 0,
+      "hashMismatches": 0,
+      "duplicatePaths": 0,
+      "excludedPatternMatches": 0,
+      "stagedFilesAtAudit": 0
+    },
+    "candidateIsolation": {
+      "base": "git archive of baseCommit",
+      "overlaidSiteFiles": 37,
+      "otherContributorsWorkingTreeFilesIncluded": false,
+      "candidateCopyHashMismatches": 0,
+      "dependencies": "Existing node_modules reused without installation or lockfile changes"
+    },
+    "candidateBuild": {
+      "result": "passed",
+      "command": "npm run build",
+      "scope": "Clean base plus the candidate site files; normal preview build, not release publication"
+    },
+    "candidateMapTests": {
+      "result": "passed",
+      "passed": 52,
+      "failed": 0,
+      "skipped": 0,
+      "duration": "1.9 minutes",
+      "runner": "Existing test:e2e script with a temporary candidate config, one worker, Chrome",
+      "baseURL": "http://localhost:4325",
+      "scope": "MAP tests only, against the isolated candidate copy",
+      "diagnosticNote": "The initial run on port 4341 passed 49 tests and failed three JS-disabled tests that explicitly use port 4325. Aligning only the temporary config to 4325 resolved all three; repository tests and application code were not changed."
+    },
+    "sharedRegression": {
+      "checkedOn": "2026-10-09",
+      "result": "passed",
+      "specs": ["booth.spec.ts", "entry.spec.ts", "timetable.spec.ts"],
+      "passed": 51,
+      "failed": 0,
+      "skipped": 0,
+      "duration": "1.4 minutes",
+      "scope": "Same isolated candidate copy; separate run from the 52 MAP tests",
+      "motionSafetyCheck": "npm run check passed; 12 TSX files checked",
+      "boothDataAudit": "HEAD contains 42 entries. Removing only food-basketball yields exactly the current 41 entries. Its source image remains.",
+      "renderedChecks": {
+        "routes": ["/booth/", "/entry/workshop-ai-sorting-robot/", "/timetable/"],
+        "viewportWidths": [375, 1280],
+        "checkedViews": 6,
+        "pageAndConsoleErrors": 0,
+        "horizontalOverflow": 0,
+        "missingImagesAfterScroll": 0,
+        "frameworkOverlays": 0,
+        "interaction": "Ordinary timetable visit switches to day2, updates URL and selected tab, and does not add a stage hash",
+        "browserRouting": "Browser plugin not available; regular Playwright with installed Chrome",
+        "diagnosticNote": "The initial supplemental image check counted unloaded, offscreen lazy images as missing. Scrolling before checking confirmed all images load; no application change was required."
+      }
+    },
+    "candidateFullSuiteBeforeOpTestFix": {
+      "checkedOn": "2026-10-09",
+      "result": "failed",
+      "total": 158,
+      "passed": 156,
+      "failed": 1,
+      "skipped": 1,
+      "mapTestsPassed": 52,
+      "duration": "3.1 minutes",
+      "workers": 2,
+      "scope": "All existing page tests against the isolated candidate copy, freshly built; normal preview mode",
+      "skippedReason": "Existing release.spec.ts:52 production-only test is excluded when APPLY_RELEASE is unset",
+      "failure": {
+        "test": "home.spec.ts:366 candidate2 OP transition",
+        "assertion": "home.spec.ts:377 expects logo opacity 1 once wipe animation reaches 3300ms; received null and timed out after 5000ms",
+        "singleTestDiagnostic": "Same unmodified test also failed when run alone with one worker",
+        "sourceAudit": "OpSplash.tsx, OpCandidate2.tsx, OpCandidate2.css, opVariants.ts and home.spec.ts match HEAD in both workspace and candidate copy",
+        "hypothesis": "The transient animation-state check may miss the interval between 3300ms and the 4000ms OP removal; root cause not confirmed",
+        "applicationOrTestFixApplied": false,
+        "tracePath": "C:/Users/cadix/AppData/Local/Temp/map-submission-qa-3b74261ec189452882212d71e0932815/test-results-submission-full/home-候補2は学科柄と黄色いワイプからロゴへ切り替わる/trace.zip"
+      },
+      "integrationDecision": "Do not claim all tests pass or proceed to integration; home OP investigation and any fix require a separate scope decision"
+    },
+    "opTestFix": {
+      "checkedOn": "2026-10-09",
+      "path": "site/tests/home.spec.ts",
+      "scope": "One candidate2 OP test only; user continuation authorized investigation and fix as a MAP-external exception",
+      "strategy": "Assert initial logo opacity 0, pause actual native subtree animations at 3300ms, assert logo opacity 1, retain real parent-timer splash removal assertion",
+      "coverageLimit": "Checks the actual rendered animation state at a deterministic timeline position, not natural wall-clock playback timing",
+      "productionOpFilesUnchanged": true,
+      "skipRetryOrTimeoutIncreases": false,
+      "repeatedRun": {
+        "passed": 10,
+        "failed": 0,
+        "workers": 2,
+        "duration": "57.5 seconds"
+      },
+      "negativeCheck": "In the temporary candidate copy only, changing the logo's final opacity from 1 to 0 caused the opacity assertion to fail as expected. The temporary source was restored before the final full-suite build.",
+      "rejectedAttempt": "Shortening the old polling interval to 100ms still failed once in 10 runs; that change was not retained",
+      "independentReview": {
+        "scope": "Read-only review of the home.spec.ts diff and its production OP context, not the entire MAP change set",
+        "criticalFindings": 0,
+        "importantFindings": 0,
+        "minorFindings": 0,
+        "assessment": "Narrow test change ready to merge; actual keyframes and parent exit timer preserved",
+        "limits": "Reviewer inspected code but did not rerun supplied verification; natural playback pacing, other browsers and broader MAP changes were not reviewed"
+      }
+    },
+    "candidateFullSuiteAfterOpTestFix": {
+      "checkedOn": "2026-10-09",
+      "result": "passed",
+      "total": 158,
+      "passed": 157,
+      "failed": 0,
+      "skipped": 1,
+      "mapTestsPassed": 52,
+      "duration": "3.1 minutes",
+      "workers": 2,
+      "scope": "Freshly built isolated base plus 37 candidate site files, after the OP test-only fix; other contributors' uncommitted changes excluded",
+      "skippedReason": "Existing release.spec.ts:52 production-only test is excluded when APPLY_RELEASE is unset",
+      "motionSafetyCheck": "npm run check passed; 12 TSX files checked",
+      "configPath": "C:/Users/cadix/AppData/Local/Temp/map-submission-qa-3b74261ec189452882212d71e0932815/playwright.submission-full-after-op.config.ts",
+      "resultPath": "C:/Users/cadix/AppData/Local/Temp/map-submission-qa-3b74261ec189452882212d71e0932815/test-results-submission-full-after-op-fix/.last-run.json"
+    },
+    "mapAccessibilityCheck": {
+      "checkedOn": "2026-10-09",
+      "scope": "Eight MAP views, including each indoor floor; main-content keyboard traversal and accessibility representation, not actual screen-reader speech",
+      "environment": "Installed Chrome at http://localhost:4336; Browser plugin not available",
+      "viewportWidths": [375, 1280],
+      "checkedViews": 16,
+      "keyboardStopsPerViewport": 104,
+      "unnamedControls": 0,
+      "focusIssues": 0,
+      "pageAndConsoleErrors": 0,
+      "pageIdentityBlankAndOverlayChecks": "All 16 views contained the expected URL, title, main heading and content; no framework overlay",
+      "interaction": "Keyboard Enter on food0 opens /entry/food-5e/ with its heading; browser Back restores /map/food/",
+      "contrastSample": "Sampled area/venue labels, stall badges and captions had contrast ratios from 4.72 to 17.78; this is not a whole-site conformance audit",
+      "fix": "Only the two decorative, empty legend badges are excluded from accessibility output. Visible category labels remain. All numbered pins and list badges preserve their group text and names; CSS and placement data unchanged.",
+      "regressionTest": "New legend ARIA snapshot test failed before the fix with duplicated category names, then passed after the fix",
+      "independentReview": "Read-only review of the two changed MAP components and new test; no Critical, Important or Minor findings",
+      "evidencePaths": [
+        "C:/Users/cadix/AppData/Local/Temp/map-a11y-check-20261009-375.json",
+        "C:/Users/cadix/AppData/Local/Temp/map-a11y-check-20261009-1280.json",
+        "C:/Users/cadix/AppData/Local/Temp/map-a11y-food-375.png",
+        "C:/Users/cadix/AppData/Local/Temp/map-a11y-focus-1280.png"
+      ],
+      "limits": "Real devices, Safari, assistive-technology speech and first-time visitor understanding remain unverified"
+    },
+    "candidateFullSuiteBeforeTypographyPolish": {
+      "checkedOn": "2026-10-09",
+      "result": "passed",
+      "total": 159,
+      "passed": 158,
+      "failed": 0,
+      "skipped": 1,
+      "mapTestsPassed": 53,
+      "duration": "3.6 minutes",
+      "workers": 2,
+      "scope": "Freshly built isolated base plus 37 candidate site files, after the MAP legend accessibility fix; other contributors' uncommitted changes excluded",
+      "finalHandoffRerun": "Repeated after documentation handoff preparation with the same verified source hashes; 158 passed, zero failed, one existing production-only skip",
+      "skippedReason": "Existing release.spec.ts:52 production-only test is excluded when APPLY_RELEASE is unset",
+      "motionSafetyCheck": "npm run check passed in the candidate copy; 12 TSX files checked",
+      "configPath": "C:/Users/cadix/AppData/Local/Temp/map-submission-qa-3b74261ec189452882212d71e0932815/playwright.a11y-full.config.ts",
+      "resultPath": "C:/Users/cadix/AppData/Local/Temp/map-submission-qa-3b74261ec189452882212d71e0932815/test-results-a11y-full/.last-run.json"
+    },
+    "candidateFullSuite": {
+      "checkedOn": "2026-10-10",
+      "result": "passed",
+      "total": 161,
+      "passed": 160,
+      "failed": 0,
+      "skipped": 1,
+      "mapTestsPassed": 55,
+      "duration": "5.0 minutes",
+      "workers": 2,
+      "scope": "Fresh isolated candidate build after MAP typography and internal-link cue improvements; all 37 source hashes match the workspace and candidate copy",
+      "skippedReason": "Existing release.spec.ts:52 production-only test is excluded when APPLY_RELEASE is unset",
+      "motionSafetyCheck": "npm run check passed; 12 TSX files checked",
+      "configPath": "C:/Users/cadix/AppData/Local/Temp/map-submission-qa-3b74261ec189452882212d71e0932815/playwright.a11y-full.config.ts",
+      "resultPath": "C:/Users/cadix/AppData/Local/Temp/map-submission-qa-3b74261ec189452882212d71e0932815/test-results-a11y-full/.last-run.json"
+    },
+    "mapTypographyReview": {
+      "checkedOn": "2026-10-10",
+      "scope": "Existing MAP label typography and area-list hierarchy; no building/stall placement data, shared components or release settings changed",
+      "changes": "Area names 12px on mobile and 14px on desktop; area-list titles 18px, locations/actions 14px; blue right arrows for internal navigation",
+      "placementCorrection": "Adjusted only narrow-width label padding, MainStage two-line leading and 01/03 label offsets to accommodate larger text",
+      "redGreenProof": "Two new tests failed before the implementation and passed in the final full-suite run",
+      "denseWidthAudit": {
+        "widths": 580,
+        "range": "320 through 899px",
+        "labelCollisions": 0,
+        "mainStageLabelStallOcclusion": 0,
+        "labelsOutsideMap": 0,
+        "horizontalOverflow": 0
+      },
+      "renderedChecks": "Eight views at 375/1280px: expected URL/title/heading, no blank page/framework overlay/runtime or console errors/overflow; area03 opens the food-map heading",
+      "browserRouting": "Browser plugin not available; installed Chrome through Playwright, local candidate preview at http://localhost:4337",
+      "diagnosticNote": "Initial larger text exposed label geometry regressions, resolved by measured label-only adjustments. Three separate JS-disabled failures were caused by temporary port 4338 conflicting with tests' literal 4325 URLs; the final run used the existing 4325 configuration without changing those tests.",
+      "evidencePaths": [
+        "C:/Users/cadix/AppData/Local/Temp/map-design-review-20261009.json",
+        "C:/Users/cadix/AppData/Local/Temp/map-design-dense-20261010.json",
+        "C:/Users/cadix/AppData/Local/Temp/map-design-campus-375-final.png",
+        "C:/Users/cadix/AppData/Local/Temp/map-design-guide-375-final.png"
+      ],
+      "designAssessment": "Award-level not reached in the agent's assessment: collage building assets convey the theme, but label/list paper treatment remains uniform and first-time comprehension is unverified. Functional passing results do not establish award-level excellence.",
+      "criteriaReference": "https://www.webbyawards.com/judging-criteria/",
+      "limits": "Not an award-jury judgment, award guarantee, comparison with winning entries, real-device/Safari/assistive-speech audit or newcomer/onsite validation"
+    },
+    "mapNetworkFallbackCheck": {
+      "checkedOn": "2026-10-09",
+      "result": "passed",
+      "checkedCases": 24,
+      "environment": "Installed Chrome at http://localhost:4336; Browser plugin not available; separate fresh contexts abort either font or image requests",
+      "viewportWidths": [320, 375, 1280],
+      "routes": ["/map/", "/map/food/", "/map/exhibition/?floor=2F", "/map/innovation-plaza/"],
+      "blockedResourceTypes": ["font", "image"],
+      "informationPreserved": "Seven area-list links, 21 stall-list links, seven 2F entry links and three written plaza route steps remain readable",
+      "interactions": [
+        "Area-list03 opens the food map",
+        "Food0 and sweets0 text-list links open their corresponding detail headings",
+        "AI workshop retains its experiment-room label, opens its detail and restores 2F on browser Back",
+        "Drone text-list link opens its detail and returns to the plaza route"
+      ],
+      "pageRuntimeErrors": 0,
+      "unexpectedConsoleErrors": 0,
+      "expectedNetworkErrors": "Deliberately aborted font/image requests produce expected network-error logs; these were identified by their exact intercepted URLs, not silently ignored",
+      "horizontalOverflowCases": 0,
+      "campusLabelOverlapCases": 0,
+      "applicationChangesRequired": false,
+      "sourceHashesStillMatch": true,
+      "evidencePaths": [
+        "C:/Users/cadix/AppData/Local/Temp/map-network-fallback-check-20261009.json",
+        "C:/Users/cadix/AppData/Local/Temp/map-fallback-font-food-375.png",
+        "C:/Users/cadix/AppData/Local/Temp/map-fallback-image-plaza-375.png"
+      ],
+      "diagnosticNote": "The first supplemental script used a nonexistent .map-entry-list selector. Inspecting MapEntryList.astro confirmed .entry-list; correcting only the temporary script allowed all 24 cases to pass.",
+      "limits": "Resource-failure recovery only, not offline support, bandwidth/latency performance, real-device testing or proof of reaching the venue. Missing images lose the map's visual representation; readable text alternatives and navigation remain."
+    },
+    "handoffPreparation": {
+      "checkedOn": "2026-10-09",
+      "planImplementationChecklist": "Eight completed initial implementation/verification tasks marked complete against existing execution records",
+      "userValidationProtocol": "Three first-time-user tasks of one minute each added to map-pr-draft.md; observer answers and fields are provided, no participant results fabricated",
+      "candidateFiles": 53,
+      "otherContributorsFilesExcluded": 50,
+      "stagedFiles": 0,
+      "integrationDecision": "Await explicit user instruction before committing the scoped candidates; no push, PR, merge or publication performed"
+    },
+    "realDevice": "not-verified",
+    "publicationPerformed": false
+  }
+}

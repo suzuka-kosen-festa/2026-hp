@@ -1,0 +1,58 @@
+---
+import { indoorBuildings } from "./indoor";
+import paper from "../../assets/map/indoor/paper.svg?url";
+import shadow from "../../assets/map/indoor/shadow.svg?url";
+import underline from "../../assets/map/indoor/underline.svg?url";
+import underlineC from "../../assets/map/indoor/underline-c.svg?url";
+interface Props { floor: string }
+const { floor } = Astro.props;
+const buildings = indoorBuildings.filter((building) => building.floor === floor);
+const hasConnection = buildings.some((building) => building.connectionRange);
+const stairsPath = "M-6 2h3v-1h3v-1h3v-1h3v-1";
+const description = buildings.map((building) => `${building.building}：${building.rooms.filter((room) => room.room).map((room) => `${room.room}${room.note ? `（${room.note}）` : ""}`).join("、")}`).join("。 ");
+---
+
+<figure class="indoor-map">
+  <svg viewBox="0 0 335 204" role="img" aria-labelledby={`indoor-title-${floor}`} aria-describedby={`indoor-desc-${floor}`}>
+    <title id={`indoor-title-${floor}`}>{floor}の教室配置図</title>
+    <desc id={`indoor-desc-${floor}`}>左がI科棟、右がC科棟。3FはC科棟のみ。{description}。{hasConnection && "C科棟とI科棟は通路でつながっています。I科棟の階段は接続通路の横です。"}黄色は掲載企画の教室。灰色はトイレと階段。縮尺なし。</desc>
+    <image href={shadow} x="4" y="4" width="327" height="194" />
+    <image href={paper} x="0" y="0" width="330.027" height="196.001" />
+    <image href={floor === "3F" ? underlineC : underline} x={floor === "3F" ? 101 : 12} y="32" width={floor === "3F" ? 210 : 299} height="5" />
+    {buildings.map((building) => <g data-building-diagram={building.building}>
+      <text class="building-name" x={building.building === "I科棟" ? 12 : 101} y="25">{building.building}</text>
+      <rect x={building.bounds[0]} y={building.bounds[1]} width={building.bounds[2]} height={building.bounds[3]} class="corridor building-outline" />
+      {building.rooms.filter((room) => room.kind !== "passage").map((room) => <g data-room={room.room || undefined} data-source-range={room.range}>
+        <rect x={room.bounds[0]} y={room.bounds[1]} width={room.bounds[2]} height={room.bounds[3]} class:list={["room", { "has-entry": room.entries.length > 0, facility: room.kind === "facility", passage: room.kind === "passage" || room.kind === "hall" }]} />
+        {room.room === "階段" && <path data-stairs-symbol class="stairs-symbol" aria-hidden="true" transform={`translate(${room.bounds[0] + room.bounds[2] / 2} ${room.bounds[1] + room.bounds[3] / 2})`} d={stairsPath} />}
+        {room.short && room.room !== "階段" && !(building.building === "I科棟" && room.kind === "facility") && <text class:list={["room-code", { "facility-code": room.kind === "facility", "i-room-code": building.building === "I科棟" && room.kind !== "facility", "compact-code": building.building === "I科棟" && /^[1-5][CEIMS]$/.test(room.short) }]} x={room.bounds[0] + room.bounds[2] / 2} y={room.bounds[1] + room.bounds[3] / 2} dominant-baseline="central" text-anchor="middle">{room.short}</text>}
+      </g>)}
+    </g>)}
+    <rect class="corridor" x="13" y="155" width="14" height="14" />
+    <text class="legend-text" x="37" y="167">廊下</text>
+    <rect class="room has-entry" x="102" y="155" width="14" height="14" />
+    <text class="legend-text" x="124" y="167">掲載企画の教室</text>
+  </svg>
+  <figcaption>教室配置図（縮尺なし）。教室名と企画は下の一覧で確認できます。灰色はトイレ・階段です。<svg class="stairs-legend" viewBox="-8 -4 16 8" aria-hidden="true"><path data-stairs-key class="stairs-symbol" d={stairsPath} /></svg>＝階段。{hasConnection && "C科棟とI科棟は通路でつながっています。I科棟の階段は接続通路の横です。"}</figcaption>
+</figure>
+
+<style>
+  .indoor-map { margin: 16px 0 24px; }
+  svg { display: block; width: 100%; height: auto; }
+  text { fill: var(--ink); font-family: var(--font-body); }
+  .building-name, .legend-text { font-size: 13px; }
+  .room-code { font-size: 13px; font-weight: 700; }
+  .i-room-code { font-size: 11px; }
+  /* 和文フォントの広い上下余白を避け、狭い区画でも英数字を大きく示す。 */
+  .compact-code { font-family: var(--font-num); font-weight: 400; }
+  .facility-code { font-size: 8px; font-weight: 400; }
+  .stairs-symbol { fill: none; stroke: var(--ink); stroke-width: .8px; }
+  .stairs-legend { display: inline-block; width: 1.8em; height: .9em; vertical-align: -.1em; }
+  .corridor { fill: var(--blue); }
+  .building-outline { stroke: var(--ink); stroke-width: .8px; }
+  .room { fill: var(--paper); stroke: var(--ink); stroke-width: .8px; }
+  .has-entry { fill: var(--yellow); }
+  .facility { fill: #e6e6e6; }
+  .passage { fill: var(--paper); }
+  figcaption { margin-top: 10px; font-size: 13px; overflow-wrap: anywhere; }
+</style>

@@ -1,0 +1,51 @@
+---
+// 飲食バザーの屋台配置図。全体MAPと同じFigma素材と座標を使い、屋台の並ぶ範囲だけを切り出す。
+// 番号札は既存の屋台詳細へのリンク。一覧からも同じ詳細へ進める。
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+import StallBadge from "./StallBadge.astro";
+import { data, stalls, placementStyle, anchorStyle } from "./model";
+const assets = import.meta.glob<{ default: ImageMetadata }>("../../assets/map/figma/*.png", { eager: true });
+const imageFor = (key: string) => assets[`../../assets/map/figma/${key}.png`].default;
+
+// 屋台の素材（x 215〜1075、y 315〜912）と下段の操作範囲が切れない余白。
+const view = [195, 300, 900, 630] as const;
+const inView = (b: number[]) => b[0] < view[0] + view[2] && b[0] + b[2] > view[0] && b[1] < view[1] + view[3] && b[1] + b[3] > view[1];
+// 全体MAPの入口表示と同じ位置
+const entrance = [data.size[0] * 0.647, data.size[1] * 0.857, 0, 0];
+---
+
+<figure class="bazaar-figure" aria-describedby="bazaar-caption">
+  <p class="bazaar-legend"><span><StallBadge group="food" decorative />フード</span><span><StallBadge group="sweets" decorative />スイーツ</span></p>
+  <div class="bazaar-map" style={`aspect-ratio: ${view[2]} / ${view[3]}`}>
+    <div class="bazaar-art" aria-hidden="true">
+      {data.placements.filter((piece) => inView(piece.bounds)).map((piece) => <div class="art-piece" style={placementStyle(piece.bounds, view)}>
+        <Image src={imageFor(piece.asset)} alt="" format="webp" loading="eager" />
+      </div>)}
+      <span class="entrance" style={anchorStyle(entrance, view)}><span>↑</span>入口</span>
+    </div>
+    {stalls.map((slot) => <a class="badge-pin" href={`/entry/${slot.entryId}/`} style={anchorStyle(slot.label, view)} aria-label={`${slot.group === "food" ? "フード" : "スイーツ"}${slot.code} ${slot.entry.name}の詳細を見る`}><StallBadge group={slot.group as "food" | "sweets"} code={slot.code} /></a>)}
+  </div>
+  <figcaption id="bazaar-caption">番号を押すと屋台の詳細を確認できます。店舗名は下の一覧にも載せています。</figcaption>
+</figure>
+
+<style>
+  .bazaar-figure { margin: 8px 0 32px; }
+  .bazaar-legend { display: flex; gap: 20px; font-size: 13px; font-weight: 700; margin-bottom: 12px; --badge-size: 20px; }
+  .bazaar-legend > span { display: inline-flex; align-items: center; gap: 6px; }
+  /* 図全体を画面幅に収め、番号と操作範囲は図幅に合わせて調整する。 */
+  .bazaar-map { position: relative; width: 100%; container-type: inline-size; overflow: hidden; border: 1.5px solid var(--ink); background: var(--paper); --badge-size: clamp(22px, 6cqw, 30px); }
+  .bazaar-art { position: absolute; inset: 0; }
+  .art-piece { position: absolute; }
+  .art-piece :global(img) { width: 100%; height: 100%; object-fit: fill; }
+  .badge-pin { position: absolute; left: var(--x); top: var(--y); transform: translate(-50%, -50%); display: grid; place-items: center; width: clamp(24px, 8cqw, 44px); height: clamp(24px, 8cqw, 44px); touch-action: manipulation; }
+  .badge-pin:hover :global(.stall-badge), .badge-pin:active :global(.stall-badge) { box-shadow: 2px 2px var(--ink); }
+  .badge-pin:focus-visible { outline: 3px solid var(--blue); outline-offset: -2px; border-radius: 4px; }
+  .entrance { position: absolute; left: var(--x); top: var(--y); transform: translate(-50%, 0); display: grid; text-align: center; color: var(--blue); font-weight: 700; font-size: 12px; line-height: 1.2; }
+  .entrance > span { font-size: 18px; line-height: 1; }
+  figcaption { font-size: 12px; color: #555; margin-top: 10px; }
+  @media (min-width: 700px) {
+    .entrance { font-size: 15px; }
+    .entrance > span { font-size: 26px; }
+  }
+</style>

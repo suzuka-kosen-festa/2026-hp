@@ -132,9 +132,17 @@ export default function TimetableList({ entries }: Props) {
       isFirstSync.current = false;
       return;
     }
-    const url = buildFilterUrl("/timetable/", { tab: activeTab });
+    const stageAnchor = window.location.hash.startsWith("#stage-") ? window.location.hash.slice(1) : undefined;
+    const url = buildFilterUrl("/timetable/", { tab: activeTab, scrollTo: stageAnchor });
     window.history.replaceState(null, "", url);
   }, [activeTab]);
+
+  // MAPから指定したステージへ。通常の訪問・タブ操作のスクロールは変えない。
+  useEffect(() => {
+    if (!window.location.hash.startsWith("#stage-")) return;
+    const target = document.getElementById(window.location.hash.slice(1));
+    target?.scrollIntoView({ block: "start", inline: "nearest", behavior: "instant" });
+  }, [activeTab, isDesktop]);
 
   const permanentEntries = getOngoingEntries(entries);
   const tab = TABS.find((t) => t.id === activeTab) ?? TABS[0];
@@ -215,7 +223,7 @@ export default function TimetableList({ entries }: Props) {
         <div className="tl-grid" style={{ "--stage-count": tab.stages.length } as CSSProperties}>
           <div className="tl-corner" aria-hidden="true" />
           {tab.stages.map((stage) => (
-            <div key={stage} className={`tl-col-header tl-stage-${STAGE_CLASS[stage]}`}>
+            <div key={stage} id={`stage-${stage}`} className={`tl-col-header tl-stage-${STAGE_CLASS[stage]}`} style={{ scrollMarginTop: "160px" }}>
               {stage}
             </div>
           ))}

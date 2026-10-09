@@ -1,0 +1,62 @@
+---
+import { areas, nowEntries, stageInformationPublished } from "./model";
+---
+<section aria-labelledby="area-heading">
+  <h2 id="area-heading">エリアを選ぶ</h2>
+  <ol class="map-area-list">
+    {areas.map((area) => <li><a href={area.href} data-area={area.code}>
+      <span class="area-number">{area.code}</span>
+      <span class="area-copy"><strong>{area.name}</strong><span>{area.location}</span><small>{area.comingSoon ? "リンク先は準備中" : area.actionLabel}</small>
+        {area.stage && <span class="map-now" data-now-stage={area.stage} hidden></span>}
+      </span><span class="action-arrow" aria-hidden="true">→</span>
+    </a></li>)}
+  </ol>
+</section>
+<script type="application/json" id="map-now-data" set:html={JSON.stringify({ entries: nowEntries, published: stageInformationPublished }).replace(/</g, "\\u003c")} />
+<script>
+  import { getCurrentEntry } from "../../lib/now";
+  import { DAY_DATES } from "../../lib/eventDate";
+  import type { Entry } from "../../types/content";
+  const nowSource = document.getElementById("map-now-data");
+  if (nowSource) {
+    const source = JSON.parse(nowSource.textContent ?? "{}") as { entries: Entry[]; published: boolean };
+    function refreshNow() {
+      const now = new Date();
+      const parts = new Intl.DateTimeFormat("en", { timeZone: "Asia/Tokyo", year: "numeric", month: "2-digit", day: "2-digit" }).formatToParts(now);
+      const date = ["year", "month", "day"].map((type) => parts.find((part) => part.type === type)?.value).join("-");
+      const tab = date === DAY_DATES.day2 ? "day2" : "day1";
+      document.querySelectorAll<HTMLAnchorElement>(".map-page a[href^='/timetable/']").forEach((link) => {
+        const url = new URL(link.href);
+        url.searchParams.set("tab", tab);
+        link.setAttribute("href", `${url.pathname}${url.search}${url.hash}`);
+      });
+      document.querySelectorAll<HTMLElement>("[data-now-stage]").forEach((label) => {
+        const current = source.published ? getCurrentEntry(source.entries, label.dataset.nowStage!, now) : null;
+        label.hidden = !current;
+        label.textContent = current ? `開催中 · ${current.name}` : "";
+        label.title = current?.name ?? "";
+      });
+    }
+    refreshNow();
+    window.setInterval(refreshNow, 30_000);
+    document.addEventListener("visibilitychange", () => { if (!document.hidden) refreshNow(); });
+  }
+</script>
+<style>
+  h2 { font-size: 20px; font-weight: 900; margin-bottom: 18px; }
+  .map-area-list { list-style: none; }
+  .map-area-list { display: grid; gap: 12px; }
+  .map-area-list > li > a { display: flex; align-items: center; gap: 14px; padding: 16px 14px; border: 1.5px solid var(--ink); background: var(--paper); box-shadow: 3px 3px var(--ink); }
+  .area-number { --map-label-on-blue: #fff; display: grid; place-items: center; font-family: var(--font-num); background: var(--blue); color: var(--map-label-on-blue); font-size: 24px; line-height: 1; flex: 0 0 1.5em; min-height: 1.5em; border: 1px solid var(--ink); box-shadow: 2px 2px var(--ink); }
+  .area-copy { display: grid; gap: 4px; flex: 1; min-width: 0; overflow-wrap: anywhere; }
+  .area-copy > strong { font-size: 18px; line-height: 1.4; }
+  .area-copy > span:not(.map-now) { font-size: 14px; line-height: 1.6; }
+  .area-copy > small { font-size: 14px; line-height: 1.6; color: #555; }
+  .action-arrow { font-size: 22px; flex-shrink: 0; color: var(--blue); }
+  .map-now:not([hidden]) { display: block; font-size: 12px; color: var(--red); font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  a:hover strong, a:active strong { text-decoration: underline; }
+  a:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
+  @media (min-width: 900px) {
+    .map-area-list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+</style>

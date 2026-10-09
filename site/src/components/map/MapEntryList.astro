@@ -1,0 +1,27 @@
+---
+// 案内ページの企画一覧。既存entriesを参照し、確定した名称・団体名の差分だけmodelで上書きする。
+import StallBadge from "./StallBadge.astro";
+interface Props {
+  items: { href: string; name: string; sub?: string | null; stall?: { group: "food" | "sweets"; code: string } }[];
+}
+
+const { items } = Astro.props;
+---
+
+<ul class="entry-list">
+  {items.map((item) => <li><a href={item.href}>
+    {item.stall && <StallBadge group={item.stall.group} code={item.stall.code} />}
+    <span><strong>{item.name}</strong>{item.sub && <small>{item.sub}</small>}</span>
+    <span class="entry-arrow" aria-hidden="true">→</span>
+  </a></li>)}
+</ul>
+
+<style>
+  .entry-list { list-style: none; margin-bottom: 24px; --badge-size: 30px; }
+  .entry-list a { display: flex; align-items: center; gap: 12px; padding: 14px 4px; border-bottom: 1px dashed #888; min-height: 52px; }
+  .entry-list strong { font-size: 14px; overflow-wrap: anywhere; }
+  .entry-list small { display: block; font-size: 12px; }
+  .entry-arrow { margin-left: auto; }
+  a:hover strong, a:active strong { text-decoration: underline; }
+  a:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
+</style>

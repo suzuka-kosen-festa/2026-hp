@@ -1,0 +1,106 @@
+---
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+import { data, areas, venues, placementStyle, anchorStyle } from "./model";
+const assets = import.meta.glob<{ default: ImageMetadata }>("../../assets/map/figma/*.png", { eager: true });
+const imageFor = (key: string) => assets[`../../assets/map/figma/${key}.png`].default;
+---
+<figure class="campus-figure" aria-describedby="map-caption">
+  <div class="campus-map" aria-label="会場全体の配置">
+    <div class="campus-art" aria-hidden="true">
+      {data.placements.map((piece) => <div class="art-piece" style={placementStyle(piece.bounds)} data-node-id={piece.nodeId}>
+        <Image src={imageFor(piece.asset)} alt="" format="webp" loading="eager" />
+      </div>)}
+      <span class="entrance" style="left:64.7%;top:85.7%"><span>↑</span>入口</span>
+    </div>
+    {areas.filter((area) => area.label).map((area) => <a class="area-label" href={area.href} data-area={area.code} style={anchorStyle(area.label!)} aria-label={`${area.code} ${area.name}・${area.location}。${area.comingSoon ? "遷移先は準備中" : area.actionLabel}`}><span class="label-paper"><b>{area.code}</b><span class="area-name">{area.code === "02" ? <>{area.name.slice(0, 4)}<wbr />{area.name.slice(4)}</> : area.name}{area.code === "07" ? " ←" : ""}</span></span></a>)}
+    {venues.map((venue) => {
+      const bounds = [venue.bounds[0], venue.bounds[1] + venue.bounds[3] - 32, venue.bounds[2], 32];
+      return <a class="venue-label" data-venue={venue.key} href={venue.href} style={anchorStyle(bounds)} aria-label={`${venue.name}の案内を見る`}><span class="label-paper"><span class="venue-long">{venue.key === "multimedia" ? <>{venue.name.slice(0, 3)}<wbr />{venue.name.slice(3)}</> : venue.name}</span></span></a>;
+    })}
+  </div>
+  <figcaption id="map-caption">番号や建物名の札から各案内へ。エリアは地図の下の一覧からも選べます。<span>建物の位置関係を示した案内図です。</span></figcaption>
+</figure>
+  <div class="outside-map-guide">
+    <p>この図の範囲外にある会場</p>
+    <a href="/map/innovation-plaza/" aria-label="イノベーション交流プラザへの行き方">
+      <strong>イノベーション交流プラザ</strong>
+      <span>行き方を見る <span aria-hidden="true">→</span></span>
+    </a>
+    <small>マルチメディア棟・LiveStage側から</small>
+  </div>
+<style>
+  .campus-figure { --map-label-gap: 2px; --map-label-pad-y: 3px; --map-label-pad-x: 6px; --map-label-on-blue: #fff; margin: 24px 0 32px; container-type: inline-size; }
+  .campus-map { position: relative; width: 100%; aspect-ratio: 1264 / 911.972; isolation: isolate; }
+  .campus-art { position: absolute; inset: 0; pointer-events: none; }
+  .art-piece { position: absolute; }
+  .art-piece :global(img) { width: 100%; height: 100%; object-fit: fill; }
+  .area-label, .venue-label { position: absolute; left: clamp(22px, var(--x), calc(100% - 22px)); top: var(--y); transform: translate(-50%, -50%); display: flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; font-size: 12px; font-weight: 700; white-space: nowrap; }
+  .label-paper { display: flex; gap: 6px; align-items: center; background: var(--paper); border: 1.5px solid var(--ink); box-shadow: 2px 2px var(--ink); padding: var(--map-label-pad-y) var(--map-label-pad-x); }
+  .area-label .label-paper { flex-direction: column; gap: var(--map-label-gap); }
+  .area-label[data-area="01"] { top: calc(46.6624cqw + 22px); align-items: flex-start; }
+  /* PCはMainStage直下、狭幅は屋台を避けた左下に札を置く。 */
+  .area-label[data-area="02"] { left: auto; right: 16.1%; top: calc(55.1% + 18.5px); transform: translate(0, -50%); width: max-content; }
+  .area-label[data-area="02"] .label-paper { flex-direction: row; padding-block: 4px; }
+  .area-label b { display: grid; place-items: center; min-width: 28px; height: 22px; background: var(--blue); color: var(--map-label-on-blue); font-family: var(--font-num); font-size: 20px; line-height: 1; }
+  .area-name { font-size: 12px; line-height: 1.2; }
+  .venue-long { font-size: 12px; line-height: 1.3; text-align: center; }
+  .venue-label .label-paper { padding: 3px 4px; }
+  /* Figmaの棟の足元に小さな札を置く。狭い幅でもMainStageの屋根と影が重ならない。 */
+  .venue-label[data-venue="multimedia"] { left: auto; right: 2px; top: min(calc(24cqw + 8.6px), calc(30.2388cqw - 10.6px)); transform: translate(0, -50%); }
+  .venue-label[data-venue="multimedia"] .label-paper { border-width: 1px; padding: 1px 4px; }
+  .venue-label[data-venue="multimedia"] .venue-long { width: 8em; flex-shrink: 0; font-size: 11px; line-height: 1.2; white-space: nowrap; }
+  .area-label:hover .label-paper, .venue-label:hover .label-paper, .area-label:active .label-paper, .venue-label:active .label-paper { background: var(--yellow); }
+  .area-label:focus-visible, .venue-label:focus-visible { outline: 3px solid var(--blue); outline-offset: 4px; z-index: 3; }
+  .entrance { position: absolute; color: var(--blue); font-weight: 700; font-size: 12px; display: grid; text-align: center; transform: translate(-50%, 0); }
+  .entrance > span { font-size: 18px; line-height: 1; }
+  figcaption { font-size: 12px; line-height: 1.8; margin-top: 18px; }
+  figcaption > span { display: block; color: #555; }
+  .outside-map-guide { display: grid; justify-items: end; gap: 6px; margin-top: 18px; }
+  .outside-map-guide > p, .outside-map-guide > small { font-size: 12px; }
+  .outside-map-guide a { display: grid; gap: 4px; padding: 12px 14px; max-width: 100%; min-height: 44px; background: var(--yellow); border: 2px solid var(--ink); box-shadow: 3px 3px var(--ink); overflow-wrap: anywhere; }
+  .outside-map-guide strong { font-size: 18px; }
+  .outside-map-guide a > span { font-size: 14px; font-weight: 700; }
+  .outside-map-guide a:hover strong { text-decoration: underline; }
+  .outside-map-guide a:focus-visible { outline: 3px solid var(--blue); outline-offset: 4px; }
+  @container (min-width: 760px) {
+    .area-label .label-paper { flex-direction: row; gap: 6px; }
+    .area-label b { min-width: 32px; height: 26px; font-size: 24px; }
+    .area-name { font-size: 14px; }
+    .venue-long { display: inline; }
+    .venue-long { font-size: inherit; }
+    .label-paper, .venue-label .label-paper { padding: 6px 10px; }
+    .entrance { font-size: 16px; }
+    .entrance > span { font-size: 28px; }
+  }
+  @container (max-width: 680px) {
+    /* 2026-10-09: ユーザー許可により札だけを調整。建物・屋台の座標と番号の対応は維持。 */
+    .area-label { left: clamp(38px, var(--x), calc(100% - 38px)); top: clamp(24px, var(--y), calc(100% - 24px)); }
+    .area-label[data-area="04"] { left: 52%; top: min(var(--y), max(22px, calc(24.23cqw - 49.6px))); }
+    .area-label[data-area="05"] { left: 23%; top: 12.8%; }
+    .area-label[data-area="01"] { left: auto; right: 2px; top: calc(46.6624cqw + 23.3px); transform: translate(0, -50%); }
+    /* 名称を省略せず2行に収め、44pxの操作領域とステージへの短い案内線を確保。 */
+    .area-label[data-area="02"] { --stage-guide-width: calc(1.8582cqw + 4px); left: calc(70.2146% - 2px); right: auto; top: calc(39.7114cqw + 1px); transform: translate(-100%, 0); align-items: flex-start; }
+    .area-label[data-area="02"] .label-paper { flex-direction: row; padding: 0 3px; gap: 4px; margin-top: max(4px, calc(1.34cqw - 0.5px)); }
+    /* 欧文二行の行送りは維持。文字だけ12pxにし、上下の屋台との間に収める。 */
+    .area-label[data-area="02"] .area-name { width: 3em; line-height: 11px; white-space: normal; }
+    .area-label[data-area="02"]::after { content: ""; position: absolute; left: calc(100% + 2px); top: -5px; width: var(--stage-guide-width); height: 9px; border-right: 2px solid var(--blue); border-bottom: 2px solid var(--blue); pointer-events: none; }
+    .area-label[data-area="03"] { top: max(var(--y), calc(55.1% + 69.2px)); }
+    .area-label[data-area="07"] { top: 65%; }
+    .venue-label[data-venue="headquarters"] { --headquarters-y: max(113.1875px, calc(24.23cqw + 41px)); --headquarters-overlap: max(0px, calc(var(--headquarters-y) - 39.7114cqw + 21px)); left: calc(var(--x) + 5px); top: min(var(--headquarters-y), calc(39.7114cqw - 21px)); align-items: flex-end; }
+    .venue-label[data-venue="headquarters"] .label-paper { margin-bottom: max(0px, calc(10.2px - var(--headquarters-overlap))); }
+  }
+  @container (max-width: 370px) {
+    /* 直下の屋台の上端を避け、札と影を通路の左側に収める。 */
+    .area-label[data-area="02"] { --stage-guide-width: calc(8.7418cqw + 4px); left: calc(63.331% - 2px); }
+  }
+  @container (max-width: 320px) {
+    /* 最狭幅でも札同士が接触しないよう、全エリア札の上下余白を同じ量だけ縮める。 */
+    .area-label { --map-label-pad-y: 2px; --map-label-pad-x: 3px; }
+    .area-label[data-area="04"] { top: 22px; }
+    .venue-label[data-venue="headquarters"] .label-paper { padding-block: 1px; }
+    /* 狭い画面では本部側へ透明な操作領域を伸ばさず、棟側に44pxを確保する。文字もリンクとして押せる。 */
+    .venue-label[data-venue="multimedia"] { width: 44px; }
+    .venue-label[data-venue="multimedia"] .label-paper { position: absolute; right: 0; top: 50%; transform: translateY(-50%); }
+  }
+</style>

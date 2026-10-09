@@ -1,0 +1,18 @@
+---
+import MapSubpage from "../../components/map/MapSubpage.astro";
+import MapEntryList from "../../components/map/MapEntryList.astro";
+import BazaarMap from "../../components/map/BazaarMap.astro";
+import { areaByKey, stalls } from "../../components/map/model";
+const area = areaByKey("food-bazaar");
+const groups = [{ key: "food", label: "フード" }, { key: "sweets", label: "スイーツ" }] as const;
+---
+
+<MapSubpage name={area.name} code={area.code} location={area.location} description="第61回鈴鹿高専祭の飲食バザー。屋外の屋台の番号と店舗をご案内します。">
+  <p class="detail-note">屋外の屋台は、フードとスイーツで番号が分かれています。</p>
+  <BazaarMap />
+  {groups.map((group) => <section data-stall-group={group.key}>
+    <h2>{group.label}</h2>
+    <MapEntryList items={stalls.filter((slot) => slot.group === group.key).map((slot) => ({ href: `/entry/${slot.entryId}/`, name: slot.entry.name, sub: slot.entry.group, stall: { group: group.key, code: slot.code } }))} />
+  </section>)}
+  <p>茶道部の出店は<a class="text-link" href="/map/multimedia/">マルチメディア棟1F</a>です。</p>
+</MapSubpage>

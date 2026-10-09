@@ -1,0 +1,105 @@
+---
+import MapSubpage from "../../components/map/MapSubpage.astro";
+import MapEntryList from "../../components/map/MapEntryList.astro";
+import { areaByKey, data } from "../../components/map/model";
+import IndoorMap from "../../components/map/IndoorMap.astro";
+import { indoorBuildings, unplacedIndoor } from "../../components/map/indoor";
+const area = areaByKey("exhibition");
+const floors = ["1F", "2F", "3F"];
+const buildingsOn = (floor: string) => indoorBuildings.filter((building) => building.floor === floor);
+---
+
+<MapSubpage name={area.name} code={area.code} location={area.location} description="第61回鈴鹿高専祭の展示・レク。校内の棟・階ごとに企画をご案内します。">
+  <p class="detail-note">階を選び、教室名を図と一覧で確認してください。同じ教室で複数の企画を行う場合は、まとめて案内しています。</p>
+  <div class="floor-tabs" role="tablist" aria-label="階の選択" data-floor-tabs hidden>
+    {floors.map((floor, index) => <button type="button" role="tab" id={`floor-tab-${floor}`} aria-controls={`floor-${floor}`} aria-selected={index === 0 ? "true" : "false"} tabindex={index === 0 ? 0 : -1} data-floor-tab={floor}>{floor}</button>)}
+  </div>
+  {floors.map((floor) => <section class="floor-panel" id={`floor-${floor}`} aria-labelledby={`floor-heading-${floor}`} data-floor-panel={floor}>
+    <h2 id={`floor-heading-${floor}`}>{floor}</h2>
+    <IndoorMap floor={floor} />
+    {buildingsOn(floor).map(({ building, rooms }) => <section data-building={building}>
+      <h3>{building}</h3>
+      {rooms.filter((room) => room.entries.some((venue) => venue.entryId !== "game-tournament")).map((room) => <section data-room-list={room.key} class="room-list">
+        <h4>{room.room === "第三合併講義室" ? "③ " : ""}{room.room}{room.entries.length > 1 && <span class="shared-room">共用</span>}</h4>
+        <MapEntryList items={room.entries.map((venue) => ({ href: `/entry/${venue.entryId}/`, name: venue.entry.name, sub: [venue.entryId in data.groupOverrides ? venue.entry.group : null, `${building} ${floor}・${room.room}`].filter(Boolean).join("／") }))} />
+        {room.note && <p class="room-key">{room.note}</p>}
+      </section>)}
+      {rooms.some((room) => room.note && !room.entries.some((venue) => venue.entryId !== "game-tournament")) && <dl class="room-uses">
+        {rooms.filter((room) => room.note && !room.entries.some((venue) => venue.entryId !== "game-tournament")).map((room) => <div>
+          <dt>{room.room === "第一合併講義室" ? "① " : room.room === "第二合併講義室" ? "② " : room.room === "第二講義室" ? "講 " : ""}{room.room}</dt>
+          <dd>{room.note}</dd>
+        </div>)}
+      </dl>}
+    </section>)}
+    {unplacedIndoor.some((venue) => venue.floor === floor) && <section data-unplaced-entries>
+      <h3>教室の位置を確認中の企画</h3>
+      <p>以下は図に配置せず、現在確認できている会場を案内しています。</p>
+      {[...new Set(unplacedIndoor.filter((venue) => venue.floor === floor).map((venue) => venue.building))].map((building) => <div data-building={building}>
+        <MapEntryList items={unplacedIndoor.filter((venue) => venue.floor === floor && venue.building === building).map((venue) => ({ href: `/entry/${venue.entryId}/`, name: venue.entry.name, sub: `${venue.building} ${venue.floor}${venue.room ? `・${venue.room}` : ""}` }))} />
+      </div>)}
+    </section>}
+  </section>)}
+</MapSubpage>
+
+<script>
+  // 階切替。JSが動くときだけタブにし、動かなければ全階を見出し付きで並べたままにする。
+  // 選んだ階はURL（?floor=2F）に残し、企画から戻ったときや共有したときに同じ階を開く。
+  const tabList = document.querySelector<HTMLElement>("[data-floor-tabs]");
+  if (tabList) {
+    const tabs = [...tabList.querySelectorAll<HTMLButtonElement>("[data-floor-tab]")];
+    const panels = [...document.querySelectorAll<HTMLElement>("[data-floor-panel]")];
+    function selectFloor(floor: string, { focus = false, remember = false } = {}) {
+      tabs.forEach((tab) => {
+        const active = tab.dataset.floorTab === floor;
+        tab.setAttribute("aria-selected", String(active));
+        tab.tabIndex = active ? 0 : -1;
+        if (active && focus) tab.focus();
+      });
+      panels.forEach((panel) => { panel.hidden = panel.dataset.floorPanel !== floor; });
+      if (remember) {
+        const url = new URL(location.href);
+        url.searchParams.set("floor", floor);
+        history.replaceState(history.state, "", url);
+      }
+    }
+    panels.forEach((panel) => {
+      panel.setAttribute("role", "tabpanel");
+      panel.setAttribute("aria-labelledby", `floor-tab-${panel.dataset.floorPanel}`);
+      // 図が最初の内容なので、企画リンクの前に配置図を確認できる停止点を設ける。
+      panel.tabIndex = 0;
+    });
+    document.documentElement.classList.add("is-floor-tabbed");
+    tabList.hidden = false;
+    tabs.forEach((tab, index) => {
+      tab.addEventListener("click", () => selectFloor(tab.dataset.floorTab!, { remember: true }));
+      tab.addEventListener("keydown", (event) => {
+        const step = { ArrowRight: 1, ArrowLeft: -1 }[event.key];
+        const edge = { Home: 0, End: tabs.length - 1 }[event.key];
+        if (step === undefined && edge === undefined) return;
+        event.preventDefault();
+        const next = edge ?? (index + step! + tabs.length) % tabs.length;
+        selectFloor(tabs[next].dataset.floorTab!, { focus: true, remember: true });
+      });
+    });
+    const requested = new URL(location.href).searchParams.get("floor");
+    selectFloor(tabs.some((tab) => tab.dataset.floorTab === requested) ? requested! : tabs[0].dataset.floorTab!);
+  }
+</script>
+
+<style>
+  h4 { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 15px; margin: 18px 0 6px; }
+  .shared-room { background: var(--yellow); padding: 0 6px; font-size: 12px; }
+  .room-key { margin: 12px 0; overflow-wrap: anywhere; }
+  .room-uses { margin: 18px 0; }
+  .room-uses > div { margin: 10px 0; }
+  .room-uses dt { font-weight: 700; }
+  .room-uses dd { margin: 0; overflow-wrap: anywhere; }
+  /* 他ページのタブ（駐車場・タイムテーブル）と同じく、選択中は赤い下線で示す */
+  .floor-tabs:not([hidden]) { display: flex; gap: 6px; border-bottom: 2px solid var(--ink); margin-bottom: 8px; }
+  .floor-tabs button { min-width: 64px; min-height: 44px; padding: 8px 16px; font-family: "Bebas Neue", var(--font-body); font-size: 20px; font-synthesis: none; color: var(--ink); background: transparent; border: 0; border-bottom: 3px solid transparent; cursor: pointer; }
+  .floor-tabs button[aria-selected="true"] { border-bottom-color: var(--red); color: var(--blue); }
+  .floor-tabs button:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+  .floor-panel:focus-visible { outline: 3px solid var(--blue); outline-offset: 4px; }
+  /* タブ表示中は選択中の階がタブで分かるので、階の見出しは読み上げ用に残して見た目だけ隠す */
+  :global(.is-floor-tabbed) .floor-panel > h2 { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+</style>

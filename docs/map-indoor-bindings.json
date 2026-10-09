@@ -1,0 +1,523 @@
+{
+  "version": 1,
+  "checkedOn": "2026-10-08",
+  "status": "draft-not-for-publication",
+  "purpose": "既存の校内図の区画線とExcel正本の教室を対応づけた記録。サイトはこのファイルを読み込まない。",
+  "source": {
+    "fileId": "1cpnaTE-jhHtYFmtKD7y6n_yUBxeyDOHI",
+    "url": "https://docs.google.com/spreadsheets/d/1cpnaTE-jhHtYFmtKD7y6n_yUBxeyDOHI/edit",
+    "sha256": "CF4CF7E72BEC1FE113C9DB00CC48A327C6833AE7EB0026F01F833CE4A78CC935"
+  },
+  "method": "正本の結合セル・教室の並びと、参照図の企画記号・壁線、編集用図の壁線の幅に対する位置を照合。教室・区画・企画の配置はExcelを優先し、C科棟とI科棟の向き・位置関係と紙の見た目は編集用Figmaを維持する。",
+  "sourcePolicy": {
+    "confirmedOn": "2026-10-08",
+    "roomArrangement": "excel",
+    "roomBoundaries": "excel",
+    "entryPlacement": "excel",
+    "buildingOrientationAndRelativePosition": "editable-figma-user-confirmed",
+    "appearance": "editable-figma"
+  },
+  "importGates": {
+    "figmaLabelsAdded": false,
+    "boundaryRepairsApplied": false,
+    "mobileLayoutVerified": false,
+    "readyForSiteImport": false
+  },
+  "bindings": [
+    {
+      "roomKey": "C:1F:1M",
+      "building": "C科棟",
+      "floor": "1F",
+      "room": "1M",
+      "entryIds": [
+        "rec-ecocar"
+      ],
+      "canonical": {
+        "sheet": "C科棟",
+        "cell": "D15",
+        "mergedRange": "D15:E15"
+      },
+      "reference": {
+        "fileKey": "yHxFTvhmA7nNsLEk4mGdIG",
+        "floorNodeId": "878:2028",
+        "wallNodeId": "201:505"
+      },
+      "editable": {
+        "fileKey": "USj2vcyNX2syrxtzulfnQ6",
+        "frameNodeId": "1022:2277",
+        "outlineNodeId": "1080:2021",
+        "coordinateSpace": "floor-frame-local",
+        "observedBounds": {
+          "x": 142.551,
+          "y": 90.93,
+          "width": 33.69,
+          "height": 24.144
+        },
+        "boundsKind": "existing-room",
+        "boundaryStatus": "correlated"
+      },
+      "status": "draft-not-approved-for-site"
+    },
+    {
+      "roomKey": "C:1F:1E",
+      "building": "C科棟",
+      "floor": "1F",
+      "room": "1E",
+      "entryIds": [
+        "rec-robocon",
+        "rec-shashin"
+      ],
+      "canonical": {
+        "sheet": "C科棟",
+        "cell": "F15",
+        "mergedRange": "F15:G15"
+      },
+      "reference": {
+        "fileKey": "yHxFTvhmA7nNsLEk4mGdIG",
+        "floorNodeId": "878:2028",
+        "wallNodeId": "201:505"
+      },
+      "editable": {
+        "fileKey": "USj2vcyNX2syrxtzulfnQ6",
+        "frameNodeId": "1022:2277",
+        "outlineNodeId": "1080:2021",
+        "coordinateSpace": "floor-frame-local",
+        "observedBounds": {
+          "x": 176.241,
+          "y": 90.93,
+          "width": 33.69,
+          "height": 24.144
+        },
+        "boundsKind": "existing-room",
+        "boundaryStatus": "correlated"
+      },
+      "status": "draft-not-approved-for-site"
+    },
+    {
+      "roomKey": "C:1F:1I",
+      "building": "C科棟",
+      "floor": "1F",
+      "room": "1I",
+      "entryIds": [
+        "rec-ongaku"
+      ],
+      "canonical": {
+        "sheet": "C科棟",
+        "cell": "H15",
+        "mergedRange": "H15:I15"
+      },
+      "reference": {
+        "fileKey": "yHxFTvhmA7nNsLEk4mGdIG",
+        "floorNodeId": "878:2028",
+        "wallNodeId": "201:505"
+      },
+      "editable": {
+        "fileKey": "USj2vcyNX2syrxtzulfnQ6",
+        "frameNodeId": "1022:2277",
+        "outlineNodeId": "1080:2021",
+        "coordinateSpace": "floor-frame-local",
+        "observedBounds": {
+          "x": 209.93,
+          "y": 90.93,
+          "width": 33.69,
+          "height": 24.144
+        },
+        "boundsKind": "existing-room",
+        "boundaryStatus": "correlated"
+      },
+      "status": "draft-not-approved-for-site"
+    },
+    {
+      "roomKey": "C:1F:第二合併講義室",
+      "building": "C科棟",
+      "floor": "1F",
+      "room": "第二合併講義室",
+      "entryIds": [
+        "game-tournament"
+      ],
+      "canonical": {
+        "sheet": "C科棟",
+        "cell": "L13",
+        "mergedRange": "L13:M14"
+      },
+      "reference": {
+        "fileKey": "yHxFTvhmA7nNsLEk4mGdIG",
+        "floorNodeId": "878:2028",
+        "wallNodeId": "201:505"
+      },
+      "editable": {
+        "fileKey": "USj2vcyNX2syrxtzulfnQ6",
+        "frameNodeId": "1022:2277",
+        "outlineNodeId": "1080:2021",
+        "coordinateSpace": "floor-frame-local",
+        "observedBounds": {
+          "x": 277.31,
+          "y": 58.925,
+          "width": 33.69,
+          "height": 56.15
+        },
+        "boundsKind": "container-to-split",
+        "boundaryStatus": "needs-repair"
+      },
+      "status": "draft-not-approved-for-site"
+    },
+    {
+      "roomKey": "C:2F:1S",
+      "building": "C科棟",
+      "floor": "2F",
+      "room": "1S",
+      "entryIds": [
+        "rec-wandervogel"
+      ],
+      "canonical": {
+        "sheet": "C科棟",
+        "cell": "D10",
+        "mergedRange": "D10:E10"
+      },
+      "reference": {
+        "fileKey": "yHxFTvhmA7nNsLEk4mGdIG",
+        "floorNodeId": "870:1747",
+        "wallNodeId": "341:774"
+      },
+      "editable": {
+        "fileKey": "USj2vcyNX2syrxtzulfnQ6",
+        "frameNodeId": "1024:2352",
+        "outlineNodeId": "1078:2014",
+        "coordinateSpace": "floor-frame-local",
+        "observedBounds": {
+          "x": 143,
+          "y": 90.92,
+          "width": 33.6,
+          "height": 24.08
+        },
+        "boundsKind": "existing-room",
+        "boundaryStatus": "correlated"
+      },
+      "status": "draft-not-approved-for-site"
+    },
+    {
+      "roomKey": "C:2F:2M",
+      "building": "C科棟",
+      "floor": "2F",
+      "room": "2M",
+      "entryIds": [
+        "rec-seibutsu"
+      ],
+      "canonical": {
+        "sheet": "C科棟",
+        "cell": "F10",
+        "mergedRange": "F10:G10"
+      },
+      "reference": {
+        "fileKey": "yHxFTvhmA7nNsLEk4mGdIG",
+        "floorNodeId": "870:1747",
+        "wallNodeId": "341:774"
+      },
+      "editable": {
+        "fileKey": "USj2vcyNX2syrxtzulfnQ6",
+        "frameNodeId": "1024:2352",
+        "outlineNodeId": "1078:2014",
+        "coordinateSpace": "floor-frame-local",
+        "observedBounds": {
+          "x": 176.6,
+          "y": 90.92,
+          "width": 33.6,
+          "height": 24.08
+        },
+        "boundsKind": "existing-room",
+        "boundaryStatus": "correlated"
+      },
+      "status": "draft-not-approved-for-site"
+    },
+    {
+      "roomKey": "C:2F:2E",
+      "building": "C科棟",
+      "floor": "2F",
+      "room": "2E",
+      "entryIds": [
+        "rec-gcon"
+      ],
+      "canonical": {
+        "sheet": "C科棟",
+        "cell": "H10",
+        "mergedRange": "H10:I10"
+      },
+      "reference": {
+        "fileKey": "yHxFTvhmA7nNsLEk4mGdIG",
+        "floorNodeId": "870:1747",
+        "wallNodeId": "341:774"
+      },
+      "editable": {
+        "fileKey": "USj2vcyNX2syrxtzulfnQ6",
+        "frameNodeId": "1024:2352",
+        "outlineNodeId": "1078:2014",
+        "coordinateSpace": "floor-frame-local",
+        "observedBounds": {
+          "x": 210.2,
+          "y": 90.92,
+          "width": 33.6,
+          "height": 24.08
+        },
+        "boundsKind": "existing-room",
+        "boundaryStatus": "correlated"
+      },
+      "status": "draft-not-approved-for-site"
+    },
+    {
+      "roomKey": "C:2F:2I",
+      "building": "C科棟",
+      "floor": "2F",
+      "room": "2I",
+      "entryIds": [
+        "rec-procon"
+      ],
+      "canonical": {
+        "sheet": "C科棟",
+        "cell": "H8",
+        "mergedRange": "H8:I8"
+      },
+      "reference": {
+        "fileKey": "yHxFTvhmA7nNsLEk4mGdIG",
+        "floorNodeId": "870:1747",
+        "wallNodeId": "341:774"
+      },
+      "editable": {
+        "fileKey": "USj2vcyNX2syrxtzulfnQ6",
+        "frameNodeId": "1024:2352",
+        "outlineNodeId": "1078:2014",
+        "coordinateSpace": "floor-frame-local",
+        "observedBounds": {
+          "x": 210.2,
+          "y": 59,
+          "width": 33.6,
+          "height": 24.08
+        },
+        "boundsKind": "existing-room",
+        "boundaryStatus": "correlated"
+      },
+      "status": "draft-not-approved-for-site"
+    },
+    {
+      "roomKey": "C:3F:2C",
+      "building": "C科棟",
+      "floor": "3F",
+      "room": "2C",
+      "entryIds": [
+        "rec-douga"
+      ],
+      "canonical": {
+        "sheet": "C科棟",
+        "cell": "D5",
+        "mergedRange": "D5:E5"
+      },
+      "reference": {
+        "fileKey": "yHxFTvhmA7nNsLEk4mGdIG",
+        "floorNodeId": "870:1746",
+        "wallNodeId": "117:962"
+      },
+      "editable": {
+        "fileKey": "USj2vcyNX2syrxtzulfnQ6",
+        "frameNodeId": "1078:2030",
+        "outlineNodeId": "1078:2080",
+        "coordinateSpace": "floor-frame-local",
+        "observedBounds": {
+          "x": 142.662,
+          "y": 90.941,
+          "width": 33.78,
+          "height": 24.209
+        },
+        "boundsKind": "existing-room",
+        "boundaryStatus": "correlated"
+      },
+      "status": "draft-not-approved-for-site"
+    },
+    {
+      "roomKey": "C:3F:2S",
+      "building": "C科棟",
+      "floor": "3F",
+      "room": "2S",
+      "entryIds": [
+        "rec-5i",
+        "rec-2a"
+      ],
+      "canonical": {
+        "sheet": "C科棟",
+        "cell": "F5",
+        "mergedRange": "F5:G5"
+      },
+      "reference": {
+        "fileKey": "yHxFTvhmA7nNsLEk4mGdIG",
+        "floorNodeId": "870:1746",
+        "wallNodeId": "117:962"
+      },
+      "editable": {
+        "fileKey": "USj2vcyNX2syrxtzulfnQ6",
+        "frameNodeId": "1078:2030",
+        "outlineNodeId": "1078:2080",
+        "coordinateSpace": "floor-frame-local",
+        "observedBounds": {
+          "x": 176.442,
+          "y": 90.941,
+          "width": 33.78,
+          "height": 24.209
+        },
+        "boundsKind": "existing-room",
+        "boundaryStatus": "correlated"
+      },
+      "status": "draft-not-approved-for-site"
+    },
+    {
+      "roomKey": "C:3F:3S",
+      "building": "C科棟",
+      "floor": "3F",
+      "room": "3S",
+      "entryIds": [
+        "rec-suiei"
+      ],
+      "canonical": {
+        "sheet": "C科棟",
+        "cell": "E3",
+        "mergedRange": "E3:F3"
+      },
+      "reference": {
+        "fileKey": "yHxFTvhmA7nNsLEk4mGdIG",
+        "floorNodeId": "870:1746",
+        "wallNodeId": "117:962"
+      },
+      "editable": {
+        "fileKey": "USj2vcyNX2syrxtzulfnQ6",
+        "frameNodeId": "1078:2030",
+        "outlineNodeId": "1078:2080",
+        "coordinateSpace": "floor-frame-local",
+        "observedBounds": {
+          "x": 151.67,
+          "y": 58.85,
+          "width": 41.662,
+          "height": 24.209
+        },
+        "boundsKind": "existing-room",
+        "boundaryStatus": "correlated"
+      },
+      "status": "draft-not-approved-for-site"
+    },
+    {
+      "roomKey": "C:3F:4S",
+      "building": "C科棟",
+      "floor": "3F",
+      "room": "4S",
+      "entryIds": [
+        "rec-rigaku",
+        "rec-kanko"
+      ],
+      "canonical": {
+        "sheet": "C科棟",
+        "cell": "H3",
+        "mergedRange": "H3:I3"
+      },
+      "reference": {
+        "fileKey": "yHxFTvhmA7nNsLEk4mGdIG",
+        "floorNodeId": "870:1746",
+        "wallNodeId": "117:962"
+      },
+      "editable": {
+        "fileKey": "USj2vcyNX2syrxtzulfnQ6",
+        "frameNodeId": "1078:2030",
+        "outlineNodeId": "1078:2080",
+        "coordinateSpace": "floor-frame-local",
+        "observedBounds": {
+          "x": 210.223,
+          "y": 58.85,
+          "width": 33.78,
+          "height": 24.209
+        },
+        "boundsKind": "existing-room",
+        "boundaryStatus": "correlated"
+      },
+      "status": "draft-not-approved-for-site"
+    },
+    {
+      "roomKey": "C:3F:第三合併講義室",
+      "building": "C科棟",
+      "floor": "3F",
+      "room": "第三合併講義室",
+      "entryIds": [
+        "rec-kagaku-magic"
+      ],
+      "canonical": {
+        "sheet": "C科棟",
+        "cell": "L3",
+        "mergedRange": "L3:M5"
+      },
+      "reference": {
+        "fileKey": "yHxFTvhmA7nNsLEk4mGdIG",
+        "floorNodeId": "870:1746",
+        "wallNodeId": "117:962"
+      },
+      "editable": {
+        "fileKey": "USj2vcyNX2syrxtzulfnQ6",
+        "frameNodeId": "1078:2030",
+        "outlineNodeId": "1078:2080",
+        "coordinateSpace": "floor-frame-local",
+        "observedBounds": {
+          "x": 277.783,
+          "y": 58.85,
+          "width": 33.217,
+          "height": 56.3
+        },
+        "boundsKind": "split-container-to-merge",
+        "boundaryStatus": "needs-repair"
+      },
+      "status": "draft-not-approved-for-site"
+    }
+  ],
+  "boundaryRepairs": [
+    {
+      "floor": "1F",
+      "outlineNodeId": "1080:2021",
+      "action": "split-right-container",
+      "reason": "現在の右端は一つの区画。正本L13:M14の第二合併講義室とL15:M15の第一合併講義室は別室。参照壁線201:505には仕切りがある。",
+      "relatedEntryIds": [
+        "game-tournament"
+      ]
+    },
+    {
+      "floor": "3F",
+      "outlineNodeId": "1078:2080",
+      "overlappingOutlineNodeId": "1078:2050",
+      "action": "merge-right-container",
+      "reason": "正本L3:M5と参照壁線117:962は一つの第三合併講義室。編集用には上下仕切りと上側だけを囲む重複枠がある。両方を点検する。",
+      "relatedEntryIds": [
+        "rec-kagaku-magic"
+      ]
+    }
+  ],
+  "unresolved": [
+    {
+      "entryId": "rec-bijutsu",
+      "reason": "正本はI科棟1F・3C。棟の向き・位置関係はユーザー確認済み。Excelの教室配置と編集用I科棟の区画範囲の対応づけは未実施。",
+      "editableBounds": null
+    },
+    {
+      "entryId": "rec-kyokotsu-appaku",
+      "reason": "正本の課題研究とのID対応が未確定。",
+      "editableBounds": null
+    },
+    {
+      "entryId": "rec-1a",
+      "reason": "正本で記載を特定できず。I科棟の区画対応も未確認。",
+      "editableBounds": null
+    },
+    {
+      "entryId": "workshop-ai-sorting-robot",
+      "reason": "正本で記載を特定できず。実験室の区画対応も未確認。",
+      "editableBounds": null
+    }
+  ],
+  "notIncluded": [
+    "企画名・紹介文・日時の複製",
+    "教室内の左右分割",
+    "未確認の入口・経路",
+    "サイトのタップ領域",
+    "Figmaの書き換え"
+  ]
+}
