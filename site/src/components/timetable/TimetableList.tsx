@@ -223,7 +223,7 @@ export default function TimetableList({ entries }: Props) {
         <div className="tl-grid" style={{ "--stage-count": tab.stages.length } as CSSProperties}>
           <div className="tl-corner" aria-hidden="true" />
           {tab.stages.map((stage) => (
-            <div key={stage} id={`stage-${stage}`} className={`tl-col-header tl-stage-${STAGE_CLASS[stage]}`} style={{ scrollMarginTop: "160px" }}>
+            <div key={stage} id={`stage-${stage}`} className={`tl-col-header tl-stage-${STAGE_CLASS[stage]}`} style={{ scrollMarginTop: "var(--map-stage-offset, 160px)" }}>
               {stage}
             </div>
           ))}

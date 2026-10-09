@@ -26,7 +26,8 @@ export const indoorBuildings = layout.floors.map((building) => {
     const bounds = isI ? [x + top * width, y + (1 - right) * height, (bottom - top) * width, (right - left) * height]
       : [x + left * width, y + top * height, (right - left) * width, (bottom - top) * height];
     const key = `${building.building.startsWith("C") ? "C" : "I"}:${building.floor}:${room.room}`;
-    return { ...room, key, bounds, entries: room.entryIds.map((id) => ({ entryId: id, entry: mapEntry(id) })) };
+    const listId = `room-${isI ? "I" : "C"}-${building.floor}-${room.range.replace(":", "-")}`;
+    return { ...room, key, listId, bounds, entries: room.entryIds.map((id) => ({ entryId: id, entry: mapEntry(id) })) };
   });
   return { ...building, rooms };
 });

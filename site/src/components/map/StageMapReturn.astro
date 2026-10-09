@@ -1,0 +1,32 @@
+<p class="stage-map-return" hidden><a href="/map/">← 会場マップに戻る</a></p>
+<script is:inline>
+  (() => {
+    const block = document.currentScript?.previousElementSibling;
+    const link = block?.querySelector("a");
+    if (!block || !link) return;
+    block.hidden = !["#stage-MainStage", "#stage-LiveStage", "#stage-SubStage"].includes(location.hash);
+    link.addEventListener("click", (event) => {
+      if (!document.referrer) return;
+      const source = new URL(document.referrer);
+      if (source.origin !== location.origin || source.pathname !== "/map/" || history.length <= 1) return;
+      event.preventDefault();
+      history.back();
+    });
+  })();
+</script>
+<noscript><style is:inline>html { scroll-behavior: auto; }</style><p><a href="/map/">← 会場マップに戻る</a></p></noscript>
+
+<style>
+  /* ネイティブのハッシュ移動とReactの位置合わせを競合させない。 */
+  :global(html:has(.timetable .stage-map-return:not([hidden]))) { scroll-behavior: auto; }
+  .stage-map-return { position: sticky; top: var(--header-offset-sp); z-index: 60; background: var(--paper); margin: 0 -20px; padding: 0 20px 8px; }
+  a { display: inline-flex; align-items: center; min-height: 44px; color: var(--blue); font-size: 14px; font-weight: 700; text-decoration: underline; }
+  a:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+  :global(.timetable:has(.stage-map-return:not([hidden]))) { --map-stage-offset: calc(196px + var(--safe-top)); }
+  :global(.timetable:has(.stage-map-return:not([hidden])) .tab-tag-filter) { top: calc(var(--header-offset-sp) + 52px); }
+  @media (min-width: 900px) {
+    :global(.timetable:has(.stage-map-return:not([hidden]))) { --map-stage-offset: 196px; }
+    .stage-map-return { top: var(--header-height-pc-shrunk); margin-inline: -24px; padding-inline: 24px; }
+    :global(.timetable:has(.stage-map-return:not([hidden])) .tab-tag-filter) { top: calc(var(--header-height-pc-shrunk) + 52px); }
+  }
+</style>

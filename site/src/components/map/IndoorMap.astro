@@ -13,7 +13,7 @@ const description = buildings.map((building) => `${building.building}：${buildi
 ---
 
 <figure class="indoor-map">
-  <svg viewBox="0 0 335 204" role="img" aria-labelledby={`indoor-title-${floor}`} aria-describedby={`indoor-desc-${floor}`}>
+  <svg viewBox="0 0 335 204" role="group" aria-labelledby={`indoor-title-${floor}`} aria-describedby={`indoor-desc-${floor}`}>
     <title id={`indoor-title-${floor}`}>{floor}の教室配置図</title>
     <desc id={`indoor-desc-${floor}`}>左がI科棟、右がC科棟。3FはC科棟のみ。{description}。{hasConnection && "C科棟とI科棟は通路でつながっています。I科棟の階段は接続通路の横です。"}黄色は掲載企画の教室。灰色はトイレと階段。縮尺なし。</desc>
     <image href={shadow} x="4" y="4" width="327" height="194" />
@@ -22,18 +22,20 @@ const description = buildings.map((building) => `${building.building}：${buildi
     {buildings.map((building) => <g data-building-diagram={building.building}>
       <text class="building-name" x={building.building === "I科棟" ? 12 : 101} y="25">{building.building}</text>
       <rect x={building.bounds[0]} y={building.bounds[1]} width={building.bounds[2]} height={building.bounds[3]} class="corridor building-outline" />
-      {building.rooms.filter((room) => room.kind !== "passage").map((room) => <g data-room={room.room || undefined} data-source-range={room.range}>
+      {building.rooms.filter((room) => room.kind !== "passage").map((room) => {
+        const Room = room.entries.length ? "a" : "g";
+        return <Room data-room={room.room || undefined} data-source-range={room.range} data-room-target={room.entries.length ? room.listId : undefined} data-selected-room={room.entryIds.includes("game-tournament") ? "true" : undefined} href={room.entries.length ? `#${room.listId}` : undefined} aria-label={room.entries.length ? `${building.building} ${floor}・${room.room}の企画を見る` : undefined}>
         <rect x={room.bounds[0]} y={room.bounds[1]} width={room.bounds[2]} height={room.bounds[3]} class:list={["room", { "has-entry": room.entries.length > 0, facility: room.kind === "facility", passage: room.kind === "passage" || room.kind === "hall" }]} />
         {room.room === "階段" && <path data-stairs-symbol class="stairs-symbol" aria-hidden="true" transform={`translate(${room.bounds[0] + room.bounds[2] / 2} ${room.bounds[1] + room.bounds[3] / 2})`} d={stairsPath} />}
         {room.short && room.room !== "階段" && !(building.building === "I科棟" && room.kind === "facility") && <text class:list={["room-code", { "facility-code": room.kind === "facility", "i-room-code": building.building === "I科棟" && room.kind !== "facility", "compact-code": building.building === "I科棟" && /^[1-5][CEIMS]$/.test(room.short) }]} x={room.bounds[0] + room.bounds[2] / 2} y={room.bounds[1] + room.bounds[3] / 2} dominant-baseline="central" text-anchor="middle">{room.short}</text>}
-      </g>)}
+      </Room>; })}
     </g>)}
     <rect class="corridor" x="13" y="155" width="14" height="14" />
     <text class="legend-text" x="37" y="167">廊下</text>
     <rect class="room has-entry" x="102" y="155" width="14" height="14" />
     <text class="legend-text" x="124" y="167">掲載企画の教室</text>
   </svg>
-  <figcaption>教室配置図（縮尺なし）。教室名と企画は下の一覧で確認できます。灰色はトイレ・階段です。<svg class="stairs-legend" viewBox="-8 -4 16 8" aria-hidden="true"><path data-stairs-key class="stairs-symbol" d={stairsPath} /></svg>＝階段。{hasConnection && "C科棟とI科棟は通路でつながっています。I科棟の階段は接続通路の横です。"}</figcaption>
+  <figcaption>教室配置図（縮尺なし）。黄色の教室を押すと、その教室の企画一覧へ移動します。灰色はトイレ・階段です。<svg class="stairs-legend" viewBox="-8 -4 16 8" aria-hidden="true"><path data-stairs-key class="stairs-symbol" d={stairsPath} /></svg>＝階段。{hasConnection && "C科棟とI科棟は通路でつながっています。I科棟の階段は接続通路の横です。"}</figcaption>
 </figure>
 
 <style>
@@ -52,6 +54,9 @@ const description = buildings.map((building) => `${building.building}：${buildi
   .building-outline { stroke: var(--ink); stroke-width: .8px; }
   .room { fill: var(--paper); stroke: var(--ink); stroke-width: .8px; }
   .has-entry { fill: var(--yellow); }
+  a { cursor: pointer; }
+  a:hover .room, a:focus-visible .room, a[data-selected-room] .room { fill: #fff; stroke: var(--red); stroke-width: 2px; }
+  a:focus-visible { outline: none; }
   .facility { fill: #e6e6e6; }
   .passage { fill: var(--paper); }
   figcaption { margin-top: 10px; font-size: 13px; overflow-wrap: anywhere; }

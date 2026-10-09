@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "checkedOn": "2026-10-10",
-  "status": "scoped-pr-submission-prepared",
-  "integrationGate": "latest-main-integration-verification-passed",
+  "status": "navigation-follow-up-verified-for-pr124",
+  "integrationGate": "navigation-follow-up-verified",
   "branch": "feature/map-page",
   "baseCommit": "4002b992aa3f9a81033d5a3baf08a74892c1cf90",
   "initialBaseCommit": "83cfb9afc115c6d7b4ca9fc5e68b46b4d639f72e",
@@ -203,13 +203,13 @@
       "path": "site/src/components/map/indoor.ts",
       "status": "untracked",
       "group": "map-runtime",
-      "sha256": "32afb3273ae19b2a3564f6b981bd628959958e7e1a25d8ccb37dbcc6f8127918"
+      "sha256": "e11c3302615ac0778250cd84759686212c689b39ecb6aad398a4f95b5f2ebf91"
     },
     {
       "path": "site/src/components/map/IndoorMap.astro",
       "status": "untracked",
       "group": "map-runtime",
-      "sha256": "e2a2e068e9bd7b0947a0fdccc109542174e6e0e37badf6daf6201c5fb4ea096b"
+      "sha256": "e6fe6a36d0cbdc41ac65fc749bc945ce663fd52998d0db8d2f5359693c802341"
     },
     {
       "path": "site/src/components/map/MapEntryList.astro",
@@ -233,7 +233,7 @@
       "path": "site/src/components/map/model.ts",
       "status": "untracked",
       "group": "map-runtime",
-      "sha256": "011b1b6301b9dbb6de18ed9ebf5f6ee8a21cfd1eb4ff807dfd02413d100d0b12"
+      "sha256": "b5dc1f6fbe6b28f30e52ed4a57493932df96594ce27924f7f38555456358a4b5"
     },
     {
       "path": "site/src/components/map/StallBadge.astro",
@@ -245,7 +245,7 @@
       "path": "site/src/components/timetable/TimetableList.tsx",
       "status": "modified",
       "group": "shared-exceptions",
-      "sha256": "98f95b672f6aac85a3cfb3f42907d057af3ee783316fccb86abcc0dd58b8be8a"
+      "sha256": "b0474ab4359f853dc3d39bbd213ed591641589c61bdb78192215ccfee915cd1a"
     },
     {
       "path": "site/src/data/map.json",
@@ -269,7 +269,7 @@
       "path": "site/src/pages/map/exhibition.astro",
       "status": "untracked",
       "group": "map-runtime",
-      "sha256": "330d200fb2a86302dad6b8ca561bed5808274cfef4b446c71b6b7fc5e8e3bddf"
+      "sha256": "1c861b0b0ad6fe81fba3a59a6c21d88e6abd5fdefb9d12ab4a40d5e554ecac27"
     },
     {
       "path": "site/src/pages/map/food.astro",
@@ -299,13 +299,25 @@
       "path": "site/tests/map.spec.ts",
       "status": "modified",
       "group": "tests-ci",
-      "sha256": "7f6b0d2e4c9f176c840498429362d472245d28277e264ef9c116b76479d79cc5"
+      "sha256": "d70717e638003166797ccfc9878f593ebf98d04e72fa8f98e663a4d7267a7364"
     },
     {
       "path": "site/tests/home.spec.ts",
       "status": "modified",
       "group": "test-only-exception",
       "sha256": "418c83fcb5fbaeb4edede9bfb572aafea525aa752d4b1d955befed6784ad693c"
+    },
+    {
+      "path": "site/src/components/map/StageMapReturn.astro",
+      "status": "uncommitted-follow-up",
+      "group": "map-runtime",
+      "sha256": "83c929229957dbb9c643281c0ebdc6d62886490b200b091c70b61aab17f99bea"
+    },
+    {
+      "path": "site/src/pages/timetable.astro",
+      "status": "uncommitted-follow-up",
+      "group": "map-return-wiring-exception",
+      "sha256": "20577305238ce7e7fdb60ad1ba3eec9aeb7b18c5a14a95db5bf979c0c071ea12"
     },
     {
       "path": "docs/map-submission-files.json",
@@ -316,13 +328,13 @@
   "verification": {
     "sourceHashAudit": {
       "result": "passed",
-      "checkedSourceFiles": 36,
-      "candidateFileCount": 52,
+      "checkedSourceFiles": 38,
+      "candidateFileCount": 54,
       "missingFiles": 0,
       "hashMismatches": 0,
       "duplicatePaths": 0,
       "excludedPatternMatches": 0,
-      "scope": "Final 52-file diff against latest main; 36 source hashes match the workspace and verified integration copy"
+      "scope": "54-file MAP PR scope against main including the user-authorized navigation follow-up; 38 source hashes"
     },
     "candidateIsolationBeforeMainIntegration": {
       "base": "git archive of baseCommit",
@@ -585,6 +597,134 @@
       "independentReview": "Read-only scoped review: zero Critical or Important findings; PR text and manifest corrected for latest main. Literal test port 4325 remains a nonblocking portability limitation.",
       "authorization": "User requested a review PR; scoped commits and push are authorized. No merge into main or release publication.",
       "projectsStatus": "Manual In Review update required; GitHub CLI account lacks read:project scope"
+    },
+    "navigationFollowUp": {
+      "checkedOn": "2026-10-10",
+      "status": "authorized-follow-up-for-pr124",
+      "submissionAuthorization": {
+        "checkedOn": "2026-10-10",
+        "userApproved": "Commit and push the 11 follow-up files to the existing PR #124",
+        "mergeOrPublicationAuthorized": false
+      },
+      "changes": [
+        "Stage landing includes a return link to the original MAP position; direct visits fall back to /map/.",
+        "Interactive indoor classroom links open that classroom's existing event list, then its detail; floor URL and browser Back are preserved.",
+        "Area05 first shows C building 1F, the red-outlined second merged lecture room (②), then the existing game detail."
+      ],
+      "candidateFiles": 54,
+      "checkedSourceFiles": 38,
+      "candidateCopyHashMismatches": 0,
+      "otherContributorsFilesExcluded": 50,
+      "excludedFilesChanged": 0,
+      "sharedEntryAndPlacementDataChanged": false,
+      "fullSuiteBeforeScrollFix": {
+        "result": "failed",
+        "total": 168,
+        "passed": 166,
+        "failed": 1,
+        "skipped": 1,
+        "mapTestsPassed": 60,
+        "duration": "3.8 minutes",
+        "command": "npm run test:e2e -- --config ../playwright.integration.config.ts",
+        "skippedReason": "Existing release.spec.ts:52 production-only check is excluded when APPLY_RELEASE is unset",
+        "motionSafetyCheck": "npm run check passed; 12 TSX files checked"
+      },
+      "renderedChecks": {
+        "viewportWidths": [
+          375,
+          1280
+        ],
+        "checkedViews": 6,
+        "pageAndConsoleErrors": 0,
+        "horizontalOverflow": 0,
+        "frameworkOverlays": 0,
+        "interactions": "Normal safe-top: stage return/fallback, shared-room list/detail/Back, game location/detail/Back. Keyboard and JS-disabled checks passed in the full suite.",
+        "pcHeaderFinding": "The initial PC screenshot caught the shrink transition with the return link covered. Read-only settled check showed linkTop46, headerBottom46 and the return link as the actual hit target. Final supplemental QA waits for the hit target; no further production change applied."
+      },
+      "priorStageFailure": {
+        "test": "map.spec.ts:13 stage landing return",
+        "assertion": "Stage heading top must remain below day tabs with simulated --safe-top:44px; map.spec.ts:33 still receives false.",
+        "attempts": 3,
+        "rejectedAssumption": "Scroll margin plus a font-ready re-scroll is sufficient to stabilize stage landing position.",
+        "action": "Stopped implementation after three failed fixes per project instructions. Do not claim completion or update PR with this follow-up until landing stability is diagnosed.",
+        "tracePathAtFailure": "C:/Users/cadix/AppData/Local/Temp/map-pr-integration-8be56f8ea3f0405ea806d3368e84c236/test-results-integration/map-MAP案内-ステージへ移動した画面から会場マップの元の一覧へ戻れる/trace.zip"
+      },
+      "independentReview": {
+        "scope": "Read-only review of navigation changes and final stage CSS fix; no Critical/Important findings. The font-ready delayed correction was removed.",
+        "minorLimits": "The frame sample does not guarantee future layout changes; modified-click on the return link still uses history Back when coming from MAP."
+      },
+      "stageScrollResolution": {
+        "resumedAtUserRequest": true,
+        "rootCause": "Native smooth fragment scrolling continued after the existing React instant position correction. Stopping that native animation resolved the conflicting scroll positions.",
+        "differentialDiagnostic": {
+          "defaultSmooth": {
+            "navigations": 12,
+            "failures": 4
+          },
+          "autoScroll": {
+            "navigations": 12,
+            "failures": 0
+          },
+          "scope": "Temporary browser-only comparison, without production changes"
+        },
+        "fix": "Only html with a visible .timetable .stage-map-return uses scroll-behavior:auto. Ordinary timetable visits retain smooth scrolling. Removed the ineffective font-ready second scroll; the existing React stage effect now matches HEAD.",
+        "redGreen": {
+          "beforeFix": "Strengthened stage test: 4 passed, 1 failed in 5 independent repeats",
+          "afterFix": {
+            "passed": 10,
+            "failed": 0,
+            "duration": "54.3 seconds",
+            "workers": 2
+          }
+        },
+        "safeAreaRenderedChecks": {
+          "viewportWidths": [
+            375,
+            1280
+          ],
+          "simulatedSafeTop": 44,
+          "stageNavigations": 4,
+          "minimumHeadingGapPx": {
+            "mobile": 20,
+            "desktop": 24
+          },
+          "returnLinkActualHitTarget": true,
+          "ordinaryTimetableScrollingAndDay2TabUnchanged": true,
+          "pageAndConsoleErrors": 0,
+          "horizontalOverflow": 0
+        },
+        "diagnosticTrace": "C:/Users/cadix/AppData/Local/Temp/map-navigation-red-results/map-MAP案内-ステージへ移動した画面から会場マップの元の一覧へ戻れる-repeat4/trace.zip"
+      },
+      "fullSuite": {
+        "result": "passed",
+        "total": 168,
+        "passed": 167,
+        "failed": 0,
+        "skipped": 1,
+        "mapTestsPassed": 61,
+        "duration": "3.7 minutes",
+        "command": "npm run test:e2e -- --config ../playwright.integration.config.ts",
+        "scope": "Fresh isolated build matching all 38 candidate source hashes; other contributors' 50 files excluded",
+        "skippedReason": "Existing release.spec.ts:52 production-only check is excluded when APPLY_RELEASE is unset",
+        "motionSafetyCheck": "npm run check passed; 12 TSX files checked"
+      },
+      "prPreparationRerun": {
+        "checkedOn": "2026-10-10",
+        "localFollowUpFiles": 11,
+        "candidateFilesAgainstMain": 54,
+        "sourceHashMismatches": 0,
+        "result": "passed",
+        "passed": 167,
+        "failed": 0,
+        "skipped": 1,
+        "duration": "3.4 minutes",
+        "motionSafetyCheck": "npm run check passed; 12 TSX files checked",
+        "pr": "https://github.com/suzuka-kosen-festa/2026-hp/pull/124",
+        "remoteStateAtRead": "open; base main; head 6fd7c0f; 52 files",
+        "handoff": "Updated local map-pr-draft.md only; no staging, commit, push or remote PR update"
+      },
+      "limits": "Real-device Safari, assistive-technology speech, newcomer/onsite validation and award-level assessment not performed.",
+      "publicationPerformed": false
     },
     "realDevice": "not-verified",
     "publicationPerformed": false

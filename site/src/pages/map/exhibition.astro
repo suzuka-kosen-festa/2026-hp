@@ -7,25 +7,33 @@ import { indoorBuildings, unplacedIndoor } from "../../components/map/indoor";
 const area = areaByKey("exhibition");
 const floors = ["1F", "2F", "3F"];
 const buildingsOn = (floor: string) => indoorBuildings.filter((building) => building.floor === floor);
+const gameBuilding = indoorBuildings.find((building) => building.rooms.some((room) => room.entryIds.includes("game-tournament")))!;
+const gameRoom = gameBuilding.rooms.find((room) => room.entryIds.includes("game-tournament"))!;
 ---
 
 <MapSubpage name={area.name} code={area.code} location={area.location} description="第61回鈴鹿高専祭の展示・レク。校内の棟・階ごとに企画をご案内します。">
-  <p class="detail-note">階を選び、教室名を図と一覧で確認してください。同じ教室で複数の企画を行う場合は、まとめて案内しています。</p>
+  <p class="detail-note">階を選び、黄色の教室を押すと企画一覧を確認できます。同じ教室で複数の企画を行う場合は、まとめて案内しています。</p>
   <div class="floor-tabs" role="tablist" aria-label="階の選択" data-floor-tabs hidden>
     {floors.map((floor, index) => <button type="button" role="tab" id={`floor-tab-${floor}`} aria-controls={`floor-${floor}`} aria-selected={index === 0 ? "true" : "false"} tabindex={index === 0 ? 0 : -1} data-floor-tab={floor}>{floor}</button>)}
   </div>
   {floors.map((floor) => <section class="floor-panel" id={`floor-${floor}`} aria-labelledby={`floor-heading-${floor}`} data-floor-panel={floor}>
     <h2 id={`floor-heading-${floor}`}>{floor}</h2>
+    {floor === gameBuilding.floor && <aside class="game-location" id="game-location" tabindex="-1" data-game-room={gameRoom.listId}>
+      <strong>05 ゲーム大会の会場</strong>
+      <p>{gameBuilding.building} {floor}・{gameRoom.room}</p>
+      <p>下の図の「②」が会場です。赤枠で示しています。建物内の入口・縮尺は示していません。</p>
+      <a class="text-link" href={`#${gameRoom.listId}`}>ゲーム大会の企画を見る →</a>
+    </aside>}
     <IndoorMap floor={floor} />
     {buildingsOn(floor).map(({ building, rooms }) => <section data-building={building}>
       <h3>{building}</h3>
-      {rooms.filter((room) => room.entries.some((venue) => venue.entryId !== "game-tournament")).map((room) => <section data-room-list={room.key} class="room-list">
-        <h4>{room.room === "第三合併講義室" ? "③ " : ""}{room.room}{room.entries.length > 1 && <span class="shared-room">共用</span>}</h4>
+      {rooms.filter((room) => room.entries.length).map((room) => <section id={room.listId} tabindex="-1" data-room-list={room.key} class="room-list">
+        <h4>{room.room === "第三合併講義室" ? "③ " : room.room === "第二合併講義室" ? "② " : ""}{room.room}{room.entries.length > 1 && <span class="shared-room">共用</span>}</h4>
         <MapEntryList items={room.entries.map((venue) => ({ href: `/entry/${venue.entryId}/`, name: venue.entry.name, sub: [venue.entryId in data.groupOverrides ? venue.entry.group : null, `${building} ${floor}・${room.room}`].filter(Boolean).join("／") }))} />
         {room.note && <p class="room-key">{room.note}</p>}
       </section>)}
-      {rooms.some((room) => room.note && !room.entries.some((venue) => venue.entryId !== "game-tournament")) && <dl class="room-uses">
-        {rooms.filter((room) => room.note && !room.entries.some((venue) => venue.entryId !== "game-tournament")).map((room) => <div>
+      {rooms.some((room) => room.note && !room.entries.length) && <dl class="room-uses">
+        {rooms.filter((room) => room.note && !room.entries.length).map((room) => <div>
           <dt>{room.room === "第一合併講義室" ? "① " : room.room === "第二合併講義室" ? "② " : room.room === "第二講義室" ? "講 " : ""}{room.room}</dt>
           <dd>{room.note}</dd>
         </div>)}
@@ -59,6 +67,8 @@ const buildingsOn = (floor: string) => indoorBuildings.filter((building) => buil
       if (remember) {
         const url = new URL(location.href);
         url.searchParams.set("floor", floor);
+        const targetFloor = document.getElementById(url.hash.slice(1))?.closest<HTMLElement>("[data-floor-panel]")?.dataset.floorPanel;
+        if (targetFloor && targetFloor !== floor) url.hash = "";
         history.replaceState(history.state, "", url);
       }
     }
@@ -83,12 +93,40 @@ const buildingsOn = (floor: string) => indoorBuildings.filter((building) => buil
     });
     const requested = new URL(location.href).searchParams.get("floor");
     selectFloor(tabs.some((tab) => tab.dataset.floorTab === requested) ? requested! : tabs[0].dataset.floorTab!);
+    function showRoom() {
+      const id = location.hash.slice(1);
+      const target = document.getElementById(id);
+      const panel = target?.closest<HTMLElement>("[data-floor-panel]");
+      const game = document.getElementById("game-location");
+      const selected = id === "game-location" ? game?.dataset.gameRoom : id;
+      document.querySelectorAll<HTMLElement>("[data-room-target]").forEach((room) => {
+        if (room.dataset.roomTarget === selected || room.dataset.roomTarget === game?.dataset.gameRoom) room.dataset.selectedRoom = "true";
+        else delete room.dataset.selectedRoom;
+      });
+      if (!panel || !target) return;
+      selectFloor(panel.dataset.floorPanel!, { remember: true });
+      requestAnimationFrame(() => target.focus());
+    }
+    showRoom();
+    window.addEventListener("hashchange", showRoom);
+    window.addEventListener("popstate", () => {
+      const requested = new URL(location.href).searchParams.get("floor");
+      selectFloor(tabs.some((tab) => tab.dataset.floorTab === requested) ? requested! : tabs[0].dataset.floorTab!);
+      showRoom();
+    });
   }
 </script>
 
 <style>
+  /* 教室リンクは一覧を即座に表示する。JSなしでも移動中のスクロールを待たずに操作できる。 */
+  :global(html:has(.floor-panel)) { scroll-behavior: auto; }
   h4 { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 15px; margin: 18px 0 6px; }
   .shared-room { background: var(--yellow); padding: 0 6px; font-size: 12px; }
+  .room-list, .game-location { scroll-margin-top: calc(var(--header-height-pc) + 16px); }
+  .room-list:target, .room-list:focus { outline: 2px solid var(--blue); outline-offset: 4px; }
+  .game-location { border-left: 4px solid var(--red); padding: 10px 14px; margin-top: 16px; background: var(--paper); }
+  .game-location a { display: inline-flex; align-items: center; min-height: 44px; }
+  .game-location:focus-visible { outline: 3px solid var(--blue); }
   .room-key { margin: 12px 0; overflow-wrap: anywhere; }
   .room-uses { margin: 18px 0; }
   .room-uses > div { margin: 10px 0; }

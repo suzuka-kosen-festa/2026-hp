@@ -16,10 +16,11 @@ export function mapEntry(id: string) {
 }
 export const areas = data.areas.map((area) => {
   const href = area.stage ? buildFilterUrl("/timetable/", { tab: "day1", scrollTo: `stage-${area.stage}` })
+    : area.entryId === "game-tournament" ? "/map/exhibition/?floor=1F#game-location"
     : area.entryId ? `/entry/${area.entryId}/`
     : area.key === "department" ? buildFilterUrl("/booth/", { tab: "学科展示", scrollTo: "list" })
     : area.key === "food-bazaar" ? "/map/food/" : "/map/exhibition/";
-  const actionLabel = area.stage ? "ステージの時間を見る" : area.entryId ? "ゲーム大会の詳細を見る"
+  const actionLabel = area.stage ? "ステージの時間を見る" : area.entryId === "game-tournament" ? "教室の場所とゲーム詳細を見る" : area.entryId ? "ゲーム大会の詳細を見る"
     : area.key === "department" ? "学科展示を見る" : area.key === "food-bazaar" ? "店舗と番号を見る" : "棟・階の案内を見る";
   // MAP内の案内ページは全体MAPと同じ公開状態になるので、準備中の判定はMAP外の行き先だけに掛ける。
   return { ...area, href, actionLabel, comingSoon: !href.startsWith("/map/") && isComingSoon(href.split(/[?#]/)[0]) };
