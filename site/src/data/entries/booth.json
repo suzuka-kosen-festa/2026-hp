@@ -1,5 +1,30 @@
 [
   {
+    "id": "food-handball",
+    "category": "出店",
+    "name": "チュロス",
+    "group": "ハンドボール部",
+    "description": "文化祭定番のサクサクチュロス！食べ歩きには欠かせない一本をあなた好みの味で楽しめます！",
+    "tags": [
+      "飲食-スイーツ"
+    ],
+    "location": null,
+    "image": "/entries/food-handball.webp",
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "09:00",
+        "end_time": "14:30"
+      },
+      {
+        "day": "day2",
+        "start_time": "09:00",
+        "end_time": "15:50"
+      }
+    ],
+    "featured": false
+  },
+  {
     "id": "food-kyudo",
     "category": "出店",
     "name": "シューアイス",
@@ -235,31 +260,6 @@
     ],
     "location": null,
     "image": "/entries/food-yosakoi.webp",
-    "occurrences": [
-      {
-        "day": "day1",
-        "start_time": "09:00",
-        "end_time": "14:30"
-      },
-      {
-        "day": "day2",
-        "start_time": "09:00",
-        "end_time": "15:50"
-      }
-    ],
-    "featured": false
-  },
-  {
-    "id": "food-handball",
-    "category": "出店",
-    "name": "チュロス",
-    "group": "ハンドボール部",
-    "description": "文化祭定番のサクサクチュロス！食べ歩きには欠かせない一本をあなた好みの味で楽しめます！",
-    "tags": [
-      "飲食-スイーツ"
-    ],
-    "location": null,
-    "image": "/entries/food-handball.webp",
     "occurrences": [
       {
         "day": "day1",
