@@ -10,6 +10,57 @@ const site = JSON.parse(readFileSync(new URL("../src/data/site.json", import.met
 
 test.describe("MAP案内", () => {
   test.skip(!showsContent("/map/"), "公開設定による準備中。通常プレビューでは実行する");
+  test("学科展示からMAPへ戻れ、通常のBOOTH訪問にはMAP用の戻る導線を出さない", async ({ page }) => {
+    await page.goto("/map/");
+    const source = page.locator(".map-area-list [data-area='07']");
+    await source.click();
+    await expect(page.getByRole("tab", { name: "学科展示", exact: true })).toHaveAttribute("aria-selected", "true");
+    const back = page.getByRole("link", { name: "← MAPに戻る", exact: true });
+    await expect(back).toBeInViewport();
+    await back.click();
+    await expect(page).toHaveURL(/\/map\/$/);
+    await expect(source).toBeInViewport();
+    await page.goto("/booth/");
+    await expect(page.locator("[data-map-return='department']")).toBeHidden();
+  });
+  test("バザーは種類を切り替えて全店を一画面に収め、詳細から同じ種類へ戻れる", async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 812 });
+    await page.goto("/map/food/");
+    for (const [group, name, count] of [["food", "フード", 12], ["sweets", "スイーツ", 9]] as const) {
+      await page.getByRole("tab", { name: new RegExp(name) }).click();
+      const panel = page.getByRole("tabpanel", { name: new RegExp(name) });
+      await expect(panel.getByRole("link")).toHaveCount(count);
+      await expect(page.getByRole("tabpanel")).toHaveCount(1);
+      const geometry = await panel.evaluate((el) => ({ bottom: el.getBoundingClientRect().bottom, height: innerHeight, scroll: document.documentElement.scrollWidth - innerWidth }));
+      expect(geometry.bottom).toBeLessThanOrEqual(geometry.height);
+      expect(geometry.scroll).toBeLessThanOrEqual(1);
+      await panel.getByRole("link").first().click();
+      await page.getByRole("link", { name: "← MAPに戻る", exact: true }).click();
+      await expect(page).toHaveURL(new RegExp(`group=${group}`));
+      await expect(page.getByRole("tab", { name: new RegExp(name) })).toHaveAttribute("aria-selected", "true");
+    }
+    await page.getByRole("tab", { name: /スイーツ/ }).focus();
+    await page.keyboard.press("ArrowLeft");
+    await expect(page.getByRole("tab", { name: /フード/ })).toBeFocused();
+    await page.reload();
+    await expect(page.getByRole("tab", { name: /フード/ })).toHaveAttribute("aria-selected", "true");
+  });
+  test("控室と運営用の用途を表示せず、飲食スペースと来場者向け会場案内は残す", async ({ page }) => {
+    await page.goto("/map/exhibition/");
+    await expect(page.locator("main")).not.toContainText(/控室|一時避難場所/);
+    await expect(page.locator("#floor-1F")).toContainText("飲食スペース");
+    await page.getByRole("tab", { name: "2F", exact: true }).click();
+    await expect(page.locator("#floor-2F")).toContainText("雨天時のアコギ会場");
+    await expect(page.locator("#floor-2F [data-stairs-symbol]").first()).toBeVisible();
+  });
+  test("教室リンクでページ内を移動した後もMAPに戻るボタンは全体図へ戻る", async ({ page }) => {
+    await page.goto("/map/");
+    await page.locator(".map-area-list [data-area='04']").click();
+    await page.locator("#floor-1F .indoor-map").getByRole("link").first().click();
+    await expect(page).toHaveURL(/#room-/);
+    await page.getByRole("link", { name: "← MAPに戻る", exact: true }).first().click();
+    await expect(page).toHaveURL(/\/map\/$/);
+  });
   test("ステージへ移動した画面から会場マップの元の一覧へ戻れる", async ({ page }) => {
     // ノッチの余白がある端末でもステージ名が固定帯の下へ隠れない。
     await page.addInitScript(() => {
@@ -24,7 +75,7 @@ test.describe("MAP案内", () => {
       await page.goto("/map/");
       const source = page.locator(`.map-area-list [data-area='${code}']`);
       await source.click();
-      const back = page.getByRole("link", { name: "会場マップに戻る", exact: false });
+      const back = page.getByRole("link", { name: "MAPに戻る", exact: false });
       await expect(back).toBeInViewport();
       await expect.poll(async () => page.evaluate((stage) => {
         const target = document.getElementById(`stage-${stage}`)!.getBoundingClientRect();
@@ -47,7 +98,7 @@ test.describe("MAP案内", () => {
       await expect(source).toBeInViewport();
     }
     await page.goto("/timetable/");
-    await expect(page.getByRole("link", { name: "会場マップに戻る", exact: false })).toHaveCount(0);
+    await expect(page.getByRole("link", { name: "MAPに戻る", exact: false })).toHaveCount(0);
   });
   test("教室を押すとその教室の企画一覧を見て詳細へ進める", async ({ page }) => {
     await page.goto("/map/exhibition/?floor=1F");
@@ -59,26 +110,29 @@ test.describe("MAP案内", () => {
     await expect(list.locator("a")).toHaveCount(2);
     await list.locator("a[href='/entry/rec-shashin/']").click();
     await expect(page).toHaveURL(/\/entry\/rec-shashin\/$/);
-    await page.getByRole("link", { name: "← 戻る", exact: true }).click();
+    await page.getByRole("link", { name: "← MAPに戻る", exact: true }).click();
     await expect(page.getByRole("tab", { name: "1F", exact: true })).toHaveAttribute("aria-selected", "true");
     await expect(list).toBeInViewport();
   });
   test("05からゲーム会場の教室を確認して詳細へ進める", async ({ page }) => {
     await page.goto("/map/");
     await page.locator(".campus-map [data-area='05']").click();
-    await expect(page).toHaveURL(/\/map\/exhibition\/\?floor=1F#game-location$/);
-    await expect(page.locator("#game-location")).toBeInViewport();
-    await expect(page.locator("#floor-1F .indoor-map")).toBeInViewport();
-    await page.locator("#game-location a").click();
-    const list = page.locator("[data-room-list='C:1F:第二合併講義室']");
-    await expect(list).toBeInViewport();
-    await expect(list).toContainText("C科棟 1F・第二合併講義室");
-    const room = page.locator("#floor-1F [data-room='第二合併講義室']");
+    await expect(page).toHaveURL(/\/map\/game\/$/);
+    await expect(page.locator(".indoor-map")).toBeInViewport();
+    await expect(page.locator(".map-location")).toContainText("C科棟1F・第二合併講義室");
+    const room = page.locator("[data-room='第二合併講義室']");
     await expect(room).toHaveAttribute("data-selected-room", "true");
-    await list.locator("a[href='/entry/game-tournament/']").click();
+    await room.click();
+    const info = page.locator("#game-info");
+    await expect(info).toBeInViewport();
+    await expect(page.locator("[data-game-part]")).toHaveCount(2);
+    await expect(info).toContainText("受付 9:45〜10:45");
+    await expect(info).toContainText("最大64人");
+    expect(await page.locator(".indoor-map").evaluate((el) => Boolean(el.compareDocumentPosition(document.querySelector("#game-info")!) & Node.DOCUMENT_POSITION_FOLLOWING))).toBe(true);
+    await info.locator("a[href='/entry/game-tournament/']").click();
     await expect(page).toHaveURL(/\/entry\/game-tournament\/$/);
-    await page.getByRole("link", { name: "← 戻る", exact: true }).click();
-    await expect(list).toBeInViewport();
+    await page.getByRole("link", { name: "← MAPに戻る", exact: true }).click();
+    await expect(page.locator("#game-info")).toBeInViewport();
   });
   test("教室を選んだ後に階を変えて再読み込みしても新しい階を開く", async ({ page }) => {
     await page.goto("/map/exhibition/?floor=2F");
@@ -93,15 +147,15 @@ test.describe("MAP案内", () => {
     const context = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 375, height: 812 } });
     try {
       const page = await context.newPage();
-      await page.goto("http://localhost:4325/map/exhibition/?floor=1F#game-location");
-      const room = page.locator("#floor-1F [data-room='第二合併講義室']");
+      await page.goto("http://localhost:4325/map/game/");
+      const room = page.locator("[data-room='第二合併講義室']");
       await expect(room).toHaveAttribute("data-selected-room", "true");
       await room.click();
-      await expect(page.locator("[data-room-list='C:1F:第二合併講義室']")).toBeInViewport();
-      await page.locator("[data-room-list='C:1F:第二合併講義室'] a").click();
+      await expect(page.locator("#game-info")).toBeInViewport();
+      await page.locator("#game-info a[href='/entry/game-tournament/']").click();
       await expect(page).toHaveURL(/\/entry\/game-tournament\/$/);
       await page.goto("http://localhost:4325/timetable/?tab=day1#stage-LiveStage");
-      await page.getByRole("link", { name: "会場マップに戻る", exact: false }).click();
+      await page.getByRole("link", { name: "MAPに戻る", exact: false }).click();
       await expect(page).toHaveURL(/\/map\/$/);
     } finally { await context.close(); }
   });
@@ -249,7 +303,7 @@ test.describe("MAP案内", () => {
   test("Excelの用途は企画IDがなくても教室案内に残す", async ({ page }) => {
     await page.goto("/map/exhibition/");
     const first = page.locator("[data-floor-panel='1F']");
-    for (const name of ["ダイソウ", "飲食スペース", "自衛隊展示", "バザーの一時避難場所", "本部控室2"]) await expect(first).toContainText(name);
+    for (const name of ["ダイソウ", "飲食スペース", "自衛隊展示"]) await expect(first).toContainText(name);
     await page.getByRole("tab", { name: "2F", exact: true }).click();
     const second = page.locator("[data-floor-panel='2F']");
     await expect(second).toContainText("課題研究");
@@ -344,7 +398,7 @@ test.describe("MAP案内", () => {
     await expect(page.locator(".route-steps")).toContainText("寮と学食の間");
     await expect(page.locator("main")).toContainText("2F サイエンス教育支援室");
     await expect(page.locator("main a[href='/entry/workshop-drone/']")).toBeVisible();
-    await page.getByRole("link", { name: "← 会場マップに戻る" }).click();
+    await page.getByRole("link", { name: "← MAPに戻る" }).first().click();
     await expect(page).toHaveURL(/\/map\/$/);
   });
   test("プラザの補助図と道順はスマホ・文字拡大・JSなしでも読める", async ({ browser }) => {
@@ -392,7 +446,7 @@ test.describe("MAP案内", () => {
     await page.goBack();
     await expect(page.locator(".campus-map [data-area='03']")).toBeVisible();
     await page.locator(".campus-map [data-area='05']").click();
-    await expect(page).toHaveURL(/\/map\/exhibition\/\?floor=1F#game-location$/);
+    await expect(page).toHaveURL(/\/map\/game\/$/);
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
     await page.goBack();
     await expect(page.locator(".campus-map [data-area='05']")).toBeVisible();
@@ -728,14 +782,14 @@ test.describe("MAP案内", () => {
     await expect(page.locator("main")).toContainText("教室配置図");
     await page.getByRole("tab", { name: "3F" }).click();
     await expect(page.locator("main a[href='/entry/rec-kagaku-magic/']")).toContainText("C科棟 3F・第三合併講義室");
-    await page.getByRole("link", { name: "← 会場マップに戻る" }).click();
+    await page.getByRole("link", { name: "← MAPに戻る" }).first().click();
     await expect(page).toHaveURL(/\/map\/$/);
 
     await page.locator(".campus-map [data-venue='multimedia']").click();
     await expect(page.locator("main")).toContainText("入ってすぐ左側");
     await expect(page.locator("main a[href='/entry/food-sado/']")).toBeVisible();
     await expect(page.locator("main a[href='/entry/rec-kado/']")).toBeVisible();
-    await page.getByRole("link", { name: "← 戻る" }).click();
+    await page.getByRole("link", { name: "← MAPに戻る" }).first().click();
     await expect(page).toHaveURL(/\/map\/$/);
 
     await page.locator(".campus-map [data-venue='headquarters']").click();
@@ -980,7 +1034,7 @@ test.describe("MAP案内", () => {
     await page.goto("http://localhost:4325/map/");
     await expect(page.locator(".map-area-list > li")).toHaveCount(7);
     await expect(page.locator(".campus-map [data-area='03']")).toHaveAttribute("href", "/map/food/");
-    await expect(page.locator(".campus-map [data-area='05']")).toHaveAttribute("href", "/map/exhibition/?floor=1F#game-location");
+    await expect(page.locator(".campus-map [data-area='05']")).toHaveAttribute("href", "/map/game/");
     await page.goto("http://localhost:4325/map/multimedia/");
     await expect(page.locator("main a[href='/entry/rec-kado/']")).toBeVisible();
     // 階の切替はJSで動くので、JSなしではタブを出さずに全階を並べる

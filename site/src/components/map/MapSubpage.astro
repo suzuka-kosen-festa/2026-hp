@@ -1,7 +1,7 @@
 ---
 // MAPの各案内ページの枠。全体MAPの下に案内を積むと地図へ戻りにくくなるので、案内ごとにページを分けている。
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import BackLink from "../ui/BackLink.astro";
+import MapReturn from "./MapReturn.astro";
 import site from "../../data/site.json";
 
 interface Props {
@@ -17,14 +17,14 @@ const { name, code, location, description } = Astro.props;
 
 <BaseLayout title={`${name} | MAP | ${site.eventName}`} description={description}>
   <section class="map-subpage">
-    <BackLink fallback="/map/" />
+    <MapReturn />
     <header>
       <span class="map-eyebrow num" aria-hidden="true">MAP{code && <span class="map-code"> {code}</span>}</span>
       <h1>{name}</h1>
       {location && <p class="map-location">{location}</p>}
     </header>
     <slot />
-    <a class="map-return" href="/map/">← 会場マップに戻る</a>
+    <MapReturn />
   </section>
 </BaseLayout>
 
@@ -34,8 +34,6 @@ const { name, code, location, description } = Astro.props;
   .map-eyebrow { color: var(--blue); font-size: 28px; }
   h1 { font-size: 24px; font-weight: 900; margin-top: 4px; }
   .map-location { font-size: 13px; margin-top: 4px; }
-  .map-return { display: inline-flex; align-items: center; min-height: 44px; margin-top: 16px; color: var(--blue); text-decoration: underline; font-weight: 700; }
-  .map-return:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
   .map-subpage :global(.preparing) { display: inline-block; background: var(--yellow); padding: 6px 10px; font-weight: 700; margin-bottom: 12px; }
   .map-subpage :global(.detail-note) { margin-bottom: 24px; }
   .map-subpage :global(h2) { font-size: 18px; font-weight: 900; margin: 28px 0 12px; }

@@ -1,6 +1,6 @@
 ---
 import MapSubpage from "../../components/map/MapSubpage.astro";
-import MapEntryList from "../../components/map/MapEntryList.astro";
+import StallBadge from "../../components/map/StallBadge.astro";
 import BazaarMap from "../../components/map/BazaarMap.astro";
 import { areaByKey, stalls } from "../../components/map/model";
 const area = areaByKey("food-bazaar");
@@ -8,11 +8,85 @@ const groups = [{ key: "food", label: "フード" }, { key: "sweets", label: "�
 ---
 
 <MapSubpage name={area.name} code={area.code} location={area.location} description="第61回鈴鹿高専祭の飲食バザー。屋外の屋台の番号と店舗をご案内します。">
-  <p class="detail-note">屋外の屋台は、フードとスイーツで番号が分かれています。</p>
-  <BazaarMap />
-  {groups.map((group) => <section data-stall-group={group.key}>
-    <h2>{group.label}</h2>
-    <MapEntryList items={stalls.filter((slot) => slot.group === group.key).map((slot) => ({ href: `/entry/${slot.entryId}/`, name: slot.entry.name, sub: slot.entry.group, stall: { group: group.key, code: slot.code } }))} />
-  </section>)}
-  <p>茶道部の出店は<a class="text-link" href="/map/multimedia/">マルチメディア棟1F</a>です。</p>
+  <div class="bazaar-browser" data-bazaar-browser>
+    <BazaarMap />
+    <div class="stall-tabs" role="tablist" aria-label="屋台の種類" data-stall-tabs hidden>
+      {groups.map((group, index) => <button type="button" id={`stall-tab-${group.key}`} role="tab" aria-controls={`stalls-${group.key}`} aria-selected={index === 0 ? "true" : "false"} tabindex={index === 0 ? 0 : -1} data-stall-tab={group.key}>{group.label}<span>{stalls.filter((slot) => slot.group === group.key).length}</span></button>)}
+    </div>
+    {groups.map((group) => <section id={`stalls-${group.key}`} data-stall-group={group.key} aria-labelledby={`stall-heading-${group.key}`}>
+      <h2 id={`stall-heading-${group.key}`}>{group.label}</h2>
+      <ul class="stall-menu">
+        {stalls.filter((slot) => slot.group === group.key).map((slot) => <li><a href={`/entry/${slot.entryId}/`}>
+          <StallBadge group={group.key} code={slot.code} /><strong>{slot.entry.name}</strong>
+        </a></li>)}
+      </ul>
+    </section>)}
+  </div>
+  <p class="tea-note">茶道部は<a class="text-link" href="/map/multimedia/">マルチメディア棟1F</a>です。</p>
 </MapSubpage>
+<script>
+  const browser = document.querySelector<HTMLElement>("[data-bazaar-browser]");
+  if (browser) {
+    const tabs = [...browser.querySelectorAll<HTMLButtonElement>("[data-stall-tab]")];
+    const panels = [...browser.querySelectorAll<HTMLElement>("[data-stall-group]")];
+    function select(group: string, remember = false) {
+      tabs.forEach((tab) => {
+        const active = tab.dataset.stallTab === group;
+        tab.setAttribute("aria-selected", String(active));
+        tab.tabIndex = active ? 0 : -1;
+      });
+      panels.forEach((panel) => { panel.hidden = panel.dataset.stallGroup !== group; });
+      if (remember) {
+        const url = new URL(location.href);
+        url.searchParams.set("group", group);
+        history.replaceState(history.state, "", url);
+      }
+    }
+    panels.forEach((panel) => {
+      panel.setAttribute("role", "tabpanel");
+      panel.setAttribute("aria-labelledby", `stall-tab-${panel.dataset.stallGroup}`);
+    });
+    const restore = () => select(new URL(location.href).searchParams.get("group") === "sweets" ? "sweets" : "food");
+    restore();
+    browser.classList.add("is-tabbed");
+    browser.querySelector<HTMLElement>("[data-stall-tabs]")!.hidden = false;
+    tabs.forEach((tab, index) => {
+      tab.addEventListener("click", () => select(tab.dataset.stallTab!, true));
+      tab.addEventListener("keydown", (event) => {
+        const next = event.key === "Home" ? 0 : event.key === "End" ? tabs.length - 1 : ["ArrowLeft", "ArrowRight"].includes(event.key) ? (index + 1) % tabs.length : null;
+        if (next === null) return;
+        event.preventDefault();
+        select(tabs[next].dataset.stallTab!, true);
+        tabs[next].focus();
+      });
+    });
+    window.addEventListener("pageshow", restore);
+    window.addEventListener("popstate", restore);
+  }
+</script>
+<style>
+  .stall-tabs:not([hidden]) { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 2px solid var(--ink); gap: 12px; }
+  .stall-tabs button { display: flex; justify-content: center; align-items: center; gap: 8px; min-height: 44px; border: 0; border-bottom: 3px solid transparent; background: transparent; color: var(--ink); font: inherit; font-weight: 800; cursor: pointer; }
+  .stall-tabs button[aria-selected="true"] { border-bottom-color: var(--red); color: var(--blue); }
+  .stall-tabs button span { font-size: 12px; }
+  .stall-tabs button:focus-visible, .stall-menu a:focus-visible { outline: 3px solid var(--blue); outline-offset: -2px; }
+  .is-tabbed [data-stall-group] > h2 { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  [data-stall-group][hidden] { display: none; }
+  .stall-menu { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); list-style: none; margin-top: 4px; --badge-size: 24px; }
+  .stall-menu a { display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 4px; border-bottom: 1px dashed #aaa; }
+  .stall-menu strong { font-size: 12px; line-height: 1.4; overflow-wrap: anywhere; }
+  .tea-note { font-size: 12px; margin: 8px 0; }
+  .bazaar-browser :global(.bazaar-figure) { margin: 0 0 8px; }
+  .bazaar-browser :global(.bazaar-legend) { margin-bottom: 4px; }
+  .bazaar-browser :global(.bazaar-map) { max-width: 270px; margin-inline: auto; }
+  .bazaar-browser :global(figcaption) { margin-top: 4px; }
+  :global(.map-subpage:has(.bazaar-browser)) { padding-top: 8px; }
+  :global(.map-subpage:has(.bazaar-browser) > header) { margin-bottom: 8px; }
+  :global(.map-subpage:has(.bazaar-browser) .map-eyebrow) { display: none; }
+  @media (min-width: 900px) {
+    .bazaar-browser { display: grid; grid-template-columns: 1fr 1fr; gap: 0 24px; }
+    .bazaar-browser :global(.bazaar-figure) { grid-row: 1 / 3; }
+    .bazaar-browser :global(.bazaar-map) { max-width: none; }
+    [data-stall-group] { grid-column: 2; }
+  }
+</style>

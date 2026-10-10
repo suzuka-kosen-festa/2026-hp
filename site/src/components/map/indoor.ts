@@ -27,7 +27,9 @@ export const indoorBuildings = layout.floors.map((building) => {
       : [x + left * width, y + top * height, (right - left) * width, (bottom - top) * height];
     const key = `${building.building.startsWith("C") ? "C" : "I"}:${building.floor}:${room.room}`;
     const listId = `room-${isI ? "I" : "C"}-${building.floor}-${room.range.replace(":", "-")}`;
-    return { ...room, key, listId, bounds, entries: room.entryIds.map((id) => ({ entryId: id, entry: mapEntry(id) })) };
+    // 正本の運営情報は保持し、来場者向け表示に必要な用途だけを取り出す。
+    const note = room.note.split("・").filter((text) => !/控室|一時避難場所|全体マップの05/.test(text)).join("・");
+    return { ...room, note, key, listId, bounds, entries: room.entryIds.map((id) => ({ entryId: id, entry: mapEntry(id) })) };
   });
   return { ...building, rooms };
 });

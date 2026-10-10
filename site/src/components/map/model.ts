@@ -16,7 +16,7 @@ export function mapEntry(id: string) {
 }
 export const areas = data.areas.map((area) => {
   const href = area.stage ? buildFilterUrl("/timetable/", { tab: "day1", scrollTo: `stage-${area.stage}` })
-    : area.entryId === "game-tournament" ? "/map/exhibition/?floor=1F#game-location"
+    : area.entryId === "game-tournament" ? "/map/game/"
     : area.entryId ? `/entry/${area.entryId}/`
     : area.key === "department" ? buildFilterUrl("/booth/", { tab: "学科展示", scrollTo: "list" })
     : area.key === "food-bazaar" ? "/map/food/" : "/map/exhibition/";

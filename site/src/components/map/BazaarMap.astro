@@ -26,7 +26,7 @@ const entrance = [data.size[0] * 0.647, data.size[1] * 0.857, 0, 0];
     </div>
     {stalls.map((slot) => <a class="badge-pin" href={`/entry/${slot.entryId}/`} style={anchorStyle(slot.label, view)} aria-label={`${slot.group === "food" ? "フード" : "スイーツ"}${slot.code} ${slot.entry.name}の詳細を見る`}><StallBadge group={slot.group as "food" | "sweets"} code={slot.code} /></a>)}
   </div>
-  <figcaption id="bazaar-caption">番号を押すと屋台の詳細を確認できます。店舗名は下の一覧にも載せています。</figcaption>
+  <figcaption id="bazaar-caption">番号または店舗名を押すと詳細を確認できます。</figcaption>
 </figure>
 
 <style>

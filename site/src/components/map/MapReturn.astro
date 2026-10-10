@@ -1,0 +1,49 @@
+---
+interface Props { context?: "map" | "department" | "entry" }
+const { context = "map" } = Astro.props;
+---
+<p class:list={["map-back", { "department-map-back": context === "department" }]} data-map-return={context} hidden={context !== "map"}>
+  <a href="/map/">← MAPに戻る</a>
+</p>
+<script is:inline>
+  (() => {
+    const block = document.currentScript?.previousElementSibling;
+    const link = block?.querySelector("a");
+    if (!block || !link) return;
+    const source = document.referrer ? new URL(document.referrer) : null;
+    let navigatedWithinPage = false;
+    window.addEventListener("popstate", () => { navigatedWithinPage = true; });
+    window.addEventListener("hashchange", () => { navigatedWithinPage = true; });
+    const fromMap = source?.origin === location.origin && source.pathname.startsWith("/map/");
+    const context = block.dataset.mapReturn;
+    if (context === "department") block.hidden = new URLSearchParams(location.search).get("tab") !== "学科展示" && !fromMap;
+    if (context === "entry") {
+      block.hidden = !fromMap;
+      if (fromMap) {
+        // BackLinkの直後のインラインscriptも挟まるため、記事内の元の戻るリンクを探す。
+        block.parentElement?.querySelector(".crumb")?.setAttribute("hidden", "");
+        link.href = source.pathname + source.search + source.hash;
+      }
+    }
+    link.addEventListener("click", (event) => {
+      if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      // 教室リンクなどでページ内の履歴が増えた場合は、明示したMAPへのhrefを使う。
+      if (navigatedWithinPage || !fromMap || (context !== "entry" && source.pathname !== "/map/") || history.length <= 1) return;
+      event.preventDefault();
+      history.back();
+    });
+  })();
+</script>
+{context === "department" && <noscript><p><a href="/map/">← MAPに戻る</a></p></noscript>}
+<style>
+  .map-back { margin: 0 0 8px; }
+  .map-back[hidden] { display: none; }
+  a { display: inline-flex; align-items: center; min-height: 44px; color: var(--blue); font-size: 14px; font-weight: 700; text-decoration: underline; }
+  a:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
+  .department-map-back { position: sticky; top: var(--header-offset-sp); z-index: 60; background: var(--paper); margin-inline: -20px; padding-inline: 20px; }
+  :global(.booth:has(.department-map-back:not([hidden])) .tab-tag-filter) { top: calc(var(--header-offset-sp) + 44px); }
+  @media (min-width: 900px) {
+    .department-map-back { top: var(--header-height-pc-shrunk); }
+    :global(.booth:has(.department-map-back:not([hidden])) .tab-tag-filter) { top: calc(var(--header-height-pc-shrunk) + 44px); }
+  }
+</style>

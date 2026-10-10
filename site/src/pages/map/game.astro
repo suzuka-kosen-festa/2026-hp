@@ -1,0 +1,34 @@
+---
+import MapSubpage from "../../components/map/MapSubpage.astro";
+import IndoorMap from "../../components/map/IndoorMap.astro";
+import EntryFacts from "../../components/entry/EntryFacts.astro";
+import { areaByKey, mapEntry } from "../../components/map/model";
+const area = areaByKey("game");
+const entry = mapEntry("game-tournament");
+---
+<MapSubpage name={area.name} code={area.code} location={area.location} description={entry.summary ?? entry.name}>
+  <IndoorMap floor="1F" entryId={entry.id} />
+  <section id="game-info" tabindex="-1" aria-labelledby="game-title">
+    <h2 id="game-title">{entry.name}</h2>
+    <p class="game-description">{entry.description}</p>
+    {entry.audience && <p class="audience">対象：{entry.audience}</p>}
+    {(entry.parts ?? []).map((part) => <section class="game-part" data-game-part={part.id}>
+      <h3>{part.name}</h3>
+      <EntryFacts occurrences={part.occurrences} capacity={part.capacity} />
+      <a class="game-details" href={`/entry/${entry.id}/#${part.id}`}>参加方法・ルール・申込を見る →</a>
+    </section>)}
+    {entry.notes?.[0] && <p class="application-note">{entry.notes[0]}</p>}
+    <a class="game-details" href={`/entry/${entry.id}/`}>大会全体の案内・参加者規約を見る →</a>
+  </section>
+</MapSubpage>
+<style>
+  :global(html:has(#game-info)) { scroll-behavior: auto; }
+  #game-info { scroll-margin-top: calc(var(--header-height-pc) + 16px); }
+  #game-info:focus-visible { outline: 3px solid var(--blue); outline-offset: 4px; }
+  .game-description { white-space: pre-line; }
+  .audience { margin-top: 16px; font-weight: 700; }
+  .game-part { margin-top: 24px; border-top: 2px solid var(--ink); }
+  .game-details { display: inline-flex; align-items: center; min-height: 44px; color: var(--blue); font-weight: 700; text-decoration: underline; }
+  .game-details:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
+  .application-note { margin-top: 24px; }
+</style>

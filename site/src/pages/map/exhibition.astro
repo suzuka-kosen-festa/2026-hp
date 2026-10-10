@@ -7,8 +7,6 @@ import { indoorBuildings, unplacedIndoor } from "../../components/map/indoor";
 const area = areaByKey("exhibition");
 const floors = ["1F", "2F", "3F"];
 const buildingsOn = (floor: string) => indoorBuildings.filter((building) => building.floor === floor);
-const gameBuilding = indoorBuildings.find((building) => building.rooms.some((room) => room.entryIds.includes("game-tournament")))!;
-const gameRoom = gameBuilding.rooms.find((room) => room.entryIds.includes("game-tournament"))!;
 ---
 
 <MapSubpage name={area.name} code={area.code} location={area.location} description="第61回鈴鹿高専祭の展示・レク。校内の棟・階ごとに企画をご案内します。">
@@ -18,12 +16,6 @@ const gameRoom = gameBuilding.rooms.find((room) => room.entryIds.includes("game-
   </div>
   {floors.map((floor) => <section class="floor-panel" id={`floor-${floor}`} aria-labelledby={`floor-heading-${floor}`} data-floor-panel={floor}>
     <h2 id={`floor-heading-${floor}`}>{floor}</h2>
-    {floor === gameBuilding.floor && <aside class="game-location" id="game-location" tabindex="-1" data-game-room={gameRoom.listId}>
-      <strong>05 ゲーム大会の会場</strong>
-      <p>{gameBuilding.building} {floor}・{gameRoom.room}</p>
-      <p>下の図の「②」が会場です。赤枠で示しています。建物内の入口・縮尺は示していません。</p>
-      <a class="text-link" href={`#${gameRoom.listId}`}>ゲーム大会の企画を見る →</a>
-    </aside>}
     <IndoorMap floor={floor} />
     {buildingsOn(floor).map(({ building, rooms }) => <section data-building={building}>
       <h3>{building}</h3>
@@ -97,10 +89,8 @@ const gameRoom = gameBuilding.rooms.find((room) => room.entryIds.includes("game-
       const id = location.hash.slice(1);
       const target = document.getElementById(id);
       const panel = target?.closest<HTMLElement>("[data-floor-panel]");
-      const game = document.getElementById("game-location");
-      const selected = id === "game-location" ? game?.dataset.gameRoom : id;
       document.querySelectorAll<HTMLElement>("[data-room-target]").forEach((room) => {
-        if (room.dataset.roomTarget === selected || room.dataset.roomTarget === game?.dataset.gameRoom) room.dataset.selectedRoom = "true";
+        if (room.dataset.roomTarget === id) room.dataset.selectedRoom = "true";
         else delete room.dataset.selectedRoom;
       });
       if (!panel || !target) return;
@@ -122,11 +112,8 @@ const gameRoom = gameBuilding.rooms.find((room) => room.entryIds.includes("game-
   :global(html:has(.floor-panel)) { scroll-behavior: auto; }
   h4 { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 15px; margin: 18px 0 6px; }
   .shared-room { background: var(--yellow); padding: 0 6px; font-size: 12px; }
-  .room-list, .game-location { scroll-margin-top: calc(var(--header-height-pc) + 16px); }
+  .room-list { scroll-margin-top: calc(var(--header-height-pc) + 16px); }
   .room-list:target, .room-list:focus { outline: 2px solid var(--blue); outline-offset: 4px; }
-  .game-location { border-left: 4px solid var(--red); padding: 10px 14px; margin-top: 16px; background: var(--paper); }
-  .game-location a { display: inline-flex; align-items: center; min-height: 44px; }
-  .game-location:focus-visible { outline: 3px solid var(--blue); }
   .room-key { margin: 12px 0; overflow-wrap: anywhere; }
   .room-uses { margin: 18px 0; }
   .room-uses > div { margin: 10px 0; }

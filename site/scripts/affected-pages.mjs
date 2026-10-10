@@ -64,6 +64,7 @@ const PAGE_RULES = [
   { pattern: /^site\/src\/pages\/news/, page: "news" },
   { pattern: /^site\/src\/pages\/timetable/, page: "timetable" },
   { pattern: /^site\/src\/pages\/map/, page: "map" },
+  { pattern: /^site\/src\/(pages\/map\/game\.astro|components\/map\/)/, page: "map-game" },
   { pattern: /^site\/src\/pages\/access/, page: "access" },
   { pattern: /^site\/src\/pages\/sponsors/, page: "sponsors" },
 ];

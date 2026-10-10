@@ -9,6 +9,7 @@ import Chip from "../../components/ui/Chip.astro";
 import Button from "../../components/ui/Button.astro";
 import Star from "../../components/ui/Star.astro";
 import BackLink from "../../components/ui/BackLink.astro";
+import MapReturn from "../../components/map/MapReturn.astro";
 import EntryFacts from "../../components/entry/EntryFacts.astro";
 import EntryNotes from "../../components/entry/EntryNotes.astro";
 import EntryApply from "../../components/entry/EntryApply.astro";
@@ -72,6 +73,7 @@ const linkHiddenAtBuild = !isLinkOpen(entry.linkOpens, Date.now());
   <article class="entry">
     {/* 履歴が無いときはトップへ。一覧の /booth/ は準備中のことがあるため（MTG 2026-09-06） */}
     <BackLink fallback="/" />
+    <MapReturn context="entry" />
 
     <header class="head">
       <Tape color="blue" rotate={-1.5} as="p" class="cat">{entry.categoryLabel ?? entry.category}</Tape>
