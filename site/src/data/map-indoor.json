@@ -1,0 +1,132 @@
+{
+  "source": {
+    "fileId": "1cpnaTE-jhHtYFmtKD7y6n_yUBxeyDOHI",
+    "sha256": "0CAAB9661163965E01BB0C271D2CB7197A6A1274936FE7AA172B2BD454CDFE9E",
+    "checkedOn": "2026-10-08"
+  },
+  "figma": {
+    "fileKey": "USj2vcyNX2syrxtzulfnQ6",
+    "floorNodes": {
+      "1F": "1022:2277",
+      "2F": "1024:2352",
+      "3F": "1078:2030"
+    }
+  },
+  "floors": [
+    {
+      "floor": "1F",
+      "building": "C科棟",
+      "bounds": [101,58,210,58],
+      "sourceRows": [13,15],
+      "rooms": [
+        {"range":"B13","room":"男子トイレ","short":"WC","kind":"facility","entryIds":[],"note":""},
+        {"range":"C13","room":"階段","short":"階","kind":"facility","entryIds":[],"note":""},
+        {"range":"D13:F13","room":"","short":"","kind":"room","entryIds":[],"note":""},
+        {"range":"G13","room":"","short":"","kind":"room","entryIds":[],"note":""},
+        {"range":"H13","room":"","short":"","kind":"room","entryIds":[],"note":""},
+        {"range":"I13:J13","room":"1C","short":"1C","kind":"room","entryIds":[],"note":"本部控室2"},
+        {"range":"K13","room":"","short":"","kind":"room","entryIds":[],"note":""},
+        {"range":"L13:M14","room":"第二合併講義室","short":"②","kind":"room","entryIds":["game-tournament"],"note":"ゲームイベント（全体マップの05から案内）"},
+        {"range":"B15:C15","room":"ホール","short":"","kind":"hall","entryIds":[],"note":""},
+        {"range":"D15:E15","room":"1M","short":"1M","kind":"room","entryIds":["rec-ecocar"],"note":""},
+        {"range":"F15:G15","room":"1E","short":"1E","kind":"room","entryIds":["rec-robocon","rec-shashin"],"note":""},
+        {"range":"H15:I15","room":"1I","short":"1I","kind":"room","entryIds":["rec-ongaku"],"note":""},
+        {"range":"J15","room":"","short":"","kind":"room","entryIds":[],"note":""},
+        {"range":"K15","room":"階段","short":"階","kind":"facility","entryIds":[],"note":""},
+        {"range":"L15:M15","room":"第一合併講義室","short":"①","kind":"room","entryIds":[],"note":"本部控室1"}
+      ]
+    },
+    {
+      "floor": "2F",
+      "building": "C科棟",
+      "bounds": [101,58,210,58],
+      "sourceRows": [8,10],
+      "rooms": [
+        {"range":"B8","room":"女子トイレ","short":"WC","kind":"facility","entryIds":[],"note":""},
+        {"range":"C8","room":"階段","short":"階","kind":"facility","entryIds":[],"note":""},
+        {"range":"D8:G8","room":"","short":"","kind":"room","entryIds":[],"note":""},
+        {"range":"H8:I8","room":"2I","short":"2I","kind":"room","entryIds":["rec-procon"],"note":""},
+        {"range":"J8","room":"","short":"","kind":"room","entryIds":[],"note":""},
+        {"range":"K8","room":"階段","short":"階","kind":"facility","entryIds":[],"note":""},
+        {"range":"L8:M8","room":"","short":"","kind":"room","entryIds":[],"note":""},
+        {"range":"B10","room":"","short":"","kind":"room","entryIds":[],"note":""},
+        {"range":"C10","room":"","short":"","kind":"room","entryIds":[],"note":""},
+        {"range":"D10:E10","room":"1S","short":"1S","kind":"room","entryIds":["rec-wandervogel","rec-kyokotsu-appaku"],"note":""},
+        {"range":"F10:G10","room":"2M","short":"2M","kind":"room","entryIds":["rec-seibutsu"],"note":""},
+        {"range":"H10:I10","room":"2E","short":"2E","kind":"room","entryIds":["rec-gcon"],"note":""},
+        {"range":"J10","room":"","short":"","kind":"room","entryIds":[],"note":""},
+        {"range":"K10","room":"階段","short":"階","kind":"facility","entryIds":[],"note":""},
+        {"range":"L9:M10","room":"第二講義室","short":"講","kind":"room","entryIds":[],"note":"雨天時のアコギ会場"}
+      ]
+    },
+    {
+      "floor": "3F",
+      "building": "C科棟",
+      "bounds": [101,58,210,58],
+      "sourceRows": [3,5],
+      "rooms": [
+        {"range":"B3","room":"男子トイレ","short":"WC","kind":"facility","entryIds":[],"note":""},
+        {"range":"C3","room":"階段","short":"階","kind":"facility","entryIds":[],"note":""},
+        {"range":"D3","room":"","short":"","kind":"room","entryIds":[],"note":""},
+        {"range":"E3:F3","room":"3S","short":"3S","kind":"room","entryIds":["rec-suiei"],"note":""},
+        {"range":"G3","room":"","short":"","kind":"room","entryIds":[],"note":""},
+        {"range":"H3:I3","room":"4S","short":"4S","kind":"room","entryIds":["rec-rigaku","rec-kanko"],"note":""},
+        {"range":"J3","room":"","short":"","kind":"room","entryIds":[],"note":""},
+        {"range":"K3:K5","room":"階段","short":"階","kind":"facility","entryIds":[],"note":""},
+        {"range":"L3:M5","room":"第三合併講義室","short":"③","kind":"room","entryIds":["rec-kagaku-magic"],"note":""},
+        {"range":"B5","room":"","short":"","kind":"room","entryIds":[],"note":""},
+        {"range":"C5","room":"","short":"","kind":"room","entryIds":[],"note":""},
+        {"range":"D5:E5","room":"2C","short":"2C","kind":"room","entryIds":["rec-douga"],"note":""},
+        {"range":"F5:G5","room":"2S","short":"2S","kind":"room","entryIds":["rec-5i","rec-2a"],"note":""},
+        {"range":"H5:I5","room":"5S","short":"5S","kind":"room","entryIds":[],"note":"中勢自動車"},
+        {"range":"J5","room":"","short":"","kind":"room","entryIds":[],"note":""}
+      ]
+    },
+    {
+      "floor": "1F",
+      "building": "I科棟",
+      "bounds": [12,50,85,74],
+      "sourceRows": [8,10],
+      "rotation": -90,
+      "connectionRange": "G10",
+      "rooms": [
+        {"range":"B8:C8","room":"3E","short":"3E","kind":"room","entryIds":[],"note":"協賛ブース・ダイソウ"},
+        {"range":"D8","room":"出口","short":"","kind":"exit","entryIds":[],"note":""},
+        {"range":"E8:F8","room":"4E","short":"4E","kind":"room","entryIds":[],"note":"飲食スペース・一時避難場所"},
+        {"range":"G8:H8","room":"5E","short":"5E","kind":"room","entryIds":[],"note":"自衛隊展示"},
+        {"range":"I8:J8","room":"5C","short":"5C","kind":"room","entryIds":[],"note":"バザーの一時避難場所"},
+        {"range":"K8:L8","room":"","short":"","kind":"room","entryIds":[],"note":""},
+        {"range":"B9:K9","room":"通路","short":"","kind":"passage","entryIds":[],"note":""},
+        {"range":"L9","room":"出口","short":"","kind":"passage","entryIds":[],"note":""},
+        {"range":"B10:C10","room":"3C","short":"3C","kind":"room","entryIds":["rec-bijutsu"],"note":""},
+        {"range":"D10:E10","room":"ホール・出口","short":"","kind":"hall","entryIds":[],"note":""},
+        {"range":"F10","room":"階段","short":"階","kind":"facility","entryIds":[],"note":""},
+        {"range":"G10","room":"通路","short":"","kind":"passage","entryIds":[],"note":""},
+        {"range":"H10","room":"トイレ","short":"WC","kind":"facility","entryIds":[],"note":""},
+        {"range":"I10:J10","room":"","short":"","kind":"room","entryIds":[],"note":""},
+        {"range":"K10:L10","room":"","short":"","kind":"room","entryIds":[],"note":""}
+      ]
+    },
+    {
+      "floor": "2F",
+      "building": "I科棟",
+      "bounds": [12,50,85,74],
+      "sourceRows": [3,5],
+      "rotation": -90,
+      "connectionRange": "G5",
+      "rooms": [
+        {"range":"B3:C3","room":"4I","short":"4I","kind":"room","entryIds":[],"note":""},
+        {"range":"D3:F3","room":"5I","short":"5I","kind":"room","entryIds":["rec-1a"],"note":"専攻科展示"},
+        {"range":"G3:H3","room":"","short":"","kind":"room","entryIds":[],"note":""},
+        {"range":"I3","room":"","short":"","kind":"room","entryIds":[],"note":""},
+        {"range":"J3:L4","room":"電子情報工学実験室","short":"実験室","kind":"room","entryIds":["workshop-ai-sorting-robot"],"note":""},
+        {"range":"I5:L5","room":"通路","short":"","kind":"passage","entryIds":[],"note":""},
+        {"range":"B5:C5","room":"3I","short":"3I","kind":"room","entryIds":[],"note":"よさこい控室"},
+        {"range":"D5:E5","room":"ホール","short":"","kind":"hall","entryIds":[],"note":""},
+        {"range":"F5","room":"階段","short":"階","kind":"facility","entryIds":[],"note":""},
+        {"range":"G5","room":"通路","short":"","kind":"passage","entryIds":[],"note":""},
+        {"range":"H5","room":"トイレ","short":"WC","kind":"facility","entryIds":[],"note":""}
+      ]
+    }
+  ]
+}

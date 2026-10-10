@@ -1,0 +1,42 @@
+---
+import MapSubpage from "../../components/map/MapSubpage.astro";
+import MapEntryList from "../../components/map/MapEntryList.astro";
+import route from "../../assets/map/figma/plaza-route.svg?url";
+import { mapEntry } from "../../components/map/model";
+import { isComingSoon } from "../../lib/release";
+const entry = mapEntry("workshop-drone");
+const href = `/entry/${entry.id}/`;
+---
+
+<MapSubpage name="イノベーション交流プラザ" location="入口までの行き方" description="マルチメディア棟・LiveStage側からイノベーション交流プラザ入口までの道順と、会場の企画をご案内します。">
+  <p class="plaza-note">マルチメディア棟・LiveStage側から、赤い線の道順でプラザ入口へ進んでください。</p>
+  <figure class="plaza-route">
+    <img src={route} width="670" height="480" alt="マルチメディア棟とLiveStage側を出発し、テニスコート沿いから寮と学食の間を通って、右下のプラザ入口へ進む案内図。" />
+    <figcaption>赤い線＝進む道筋、黄色い丸＝プラザ入口。縮尺のない案内図です。寮は道順の目印として表示しています。</figcaption>
+  </figure>
+  <section aria-labelledby="route-heading">
+    <h2 id="route-heading">道順</h2>
+    <ol class="route-steps">
+      <li>マルチメディア棟・LiveStage側から、テニスコート沿いの通路を進みます。</li>
+      <li>テニスコートの先の曲がり角を道なりに進み、寮と学食の間の通路へ。</li>
+      <li>学食の先で、図の黄色い丸の位置にあるプラザ入口へ進みます。</li>
+    </ol>
+  </section>
+  <section aria-labelledby="plaza-event-heading">
+    <h2 id="plaza-event-heading">プラザで開催する企画</h2>
+    <p class="plaza-location">会場：{entry.location}</p>
+    {isComingSoon(href) && <p class="preparing">企画の詳細ページは準備中です</p>}
+    <MapEntryList items={[{ href, name: entry.name, sub: "内容・開催時間・参加方法を見る" }]} />
+  </section>
+</MapSubpage>
+
+<style>
+  .plaza-note { margin-bottom: 16px; }
+  .plaza-route { margin: 0; }
+  .plaza-route img { display: block; max-width: 100%; height: auto; }
+  figcaption { font-size: 12px; line-height: 1.8; margin-top: 12px; }
+  .route-steps { padding-left: 1.6em; }
+  .route-steps li { padding-left: 4px; margin-bottom: 12px; }
+  .route-steps li::marker { color: var(--blue); font-weight: 900; }
+  .plaza-location { margin-bottom: 8px; }
+</style>

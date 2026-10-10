@@ -370,10 +370,15 @@ test("候補2は学科柄と黄色いワイプからロゴへ切り替わる", a
   await expect(splash.locator(".op-candidate2 .opening-paper")).toHaveCount(3);
   await expect(splash.locator(".op2-third circle")).toHaveCount(6);
   await expect(splash.locator(".op-candidate2 .op2-wipe")).toHaveCount(1);
-  await expect.poll(() => splash.locator(".op2-wipe").evaluate(el => {
-    const progress = el.getAnimations()[0]?.currentTime;
-    if (typeof progress !== "number" || progress < 3300) return null;
-    return Number(getComputedStyle(document.querySelector(".op2-hero")!).opacity);
-  }), { timeout: 5000 }).toBe(1);
+  const hero = splash.locator(".op2-hero");
+  await expect(hero).toHaveCSS("opacity", "0");
+  // 実際のキーフレームを3.3秒の状態へ進め、短い表示区間の取り逃しを避ける。
+  await splash.locator(".op-candidate2").evaluate(stage => {
+    for (const animation of stage.getAnimations({ subtree: true })) {
+      animation.pause();
+      animation.currentTime = 3300;
+    }
+  });
+  await expect(hero).toHaveCSS("opacity", "1");
   await expect(splash).toHaveCount(0, { timeout: 6500 });
 });

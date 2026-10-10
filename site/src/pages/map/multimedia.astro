@@ -1,0 +1,11 @@
+---
+import MapSubpage from "../../components/map/MapSubpage.astro";
+import MapEntryList from "../../components/map/MapEntryList.astro";
+import { venues, mapEntry } from "../../components/map/model";
+const venue = venues.find((item) => item.key === "multimedia")!;
+---
+
+<MapSubpage name={venue.name} location="1F" description="第61回鈴鹿高専祭のマルチメディア棟。開催する企画をご案内します。">
+  <p class="detail-note">1F・入ってすぐ左側の開けたスペースを、2区画に分けて開催します。</p>
+  <MapEntryList items={venue.entryIds.map((id) => ({ href: `/entry/${id}/`, name: mapEntry(id).name, sub: mapEntry(id).group }))} />
+</MapSubpage>

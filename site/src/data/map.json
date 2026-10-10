@@ -1,0 +1,798 @@
+{
+  "version": 1,
+  "source": {
+    "fileKey": "USj2vcyNX2syrxtzulfnQ6",
+    "nodeId": "1005:106"
+  },
+  "size": [
+    1264,
+    911.9718856811523
+  ],
+  "placements": [
+    {
+      "nodeId": "1005:113",
+      "asset": "school-blue",
+      "bounds": [
+        179,
+        0,
+        769,
+        331.631
+      ]
+    },
+    {
+      "nodeId": "1005:134",
+      "asset": "school-blue-vertical",
+      "bounds": [
+        127,
+        236.272,
+        99.36,
+        231.34
+      ]
+    },
+    {
+      "nodeId": "1005:152",
+      "asset": "school-red",
+      "bounds": [
+        376,
+        486.272,
+        406.4,
+        175.26
+      ]
+    },
+    {
+      "nodeId": "1005:224",
+      "asset": "gym-blue",
+      "bounds": [
+        1067,
+        424.272,
+        186,
+        165.54
+      ]
+    },
+    {
+      "nodeId": "1005:235",
+      "asset": "stage-red",
+      "bounds": [
+        911,
+        382.272,
+        149.6,
+        119.68
+      ]
+    },
+    {
+      "nodeId": "1005:269",
+      "asset": "stage-yellow",
+      "bounds": [
+        70,
+        671.272,
+        149.6,
+        119.68
+      ]
+    },
+    {
+      "nodeId": "1274:2056",
+      "asset": "stall-red",
+      "bounds": [
+        987.518,
+        563.272,
+        87.412,
+        89.7
+      ]
+    },
+    {
+      "nodeId": "1274:2069",
+      "asset": "stall-red",
+      "bounds": [
+        887.518,
+        560.272,
+        87.412,
+        89.7
+      ]
+    },
+    {
+      "nodeId": "1274:2082",
+      "asset": "stall-red",
+      "bounds": [
+        800.518,
+        609.272,
+        87.412,
+        89.7
+      ]
+    },
+    {
+      "nodeId": "1279:2196",
+      "asset": "multimedia-blue",
+      "bounds": [
+        1021,
+        156.272,
+        243,
+        160
+      ]
+    },
+    {
+      "nodeId": "1285:2266",
+      "asset": "headquarters-yellow",
+      "bounds": [
+        699.444,
+        306.272,
+        100.861,
+        103.5
+      ]
+    },
+    {
+      "nodeId": "1285:2298",
+      "asset": "stall-red",
+      "bounds": [
+        592.518,
+        316.272,
+        87.412,
+        89.7
+      ]
+    },
+    {
+      "nodeId": "1285:2311",
+      "asset": "stall-red",
+      "bounds": [
+        489.518,
+        315.272,
+        87.412,
+        89.7
+      ]
+    },
+    {
+      "nodeId": "1285:2324",
+      "asset": "stall-red",
+      "bounds": [
+        393.518,
+        320.272,
+        87.412,
+        89.7
+      ]
+    },
+    {
+      "nodeId": "1285:2337",
+      "asset": "stall-red",
+      "bounds": [
+        308.518,
+        323.272,
+        87.412,
+        89.7
+      ]
+    },
+    {
+      "nodeId": "1285:2350",
+      "asset": "stall-red",
+      "bounds": [
+        215.518,
+        318.272,
+        87.412,
+        89.7
+      ]
+    },
+    {
+      "nodeId": "1285:2363",
+      "asset": "stall-red",
+      "bounds": [
+        601.518,
+        429.272,
+        87.412,
+        89.7
+      ]
+    },
+    {
+      "nodeId": "1285:2376",
+      "asset": "stall-red",
+      "bounds": [
+        456.518,
+        422.272,
+        87.412,
+        89.7
+      ]
+    },
+    {
+      "nodeId": "1285:2389",
+      "asset": "stall-red",
+      "bounds": [
+        363.518,
+        423.272,
+        87.412,
+        89.7
+      ]
+    },
+    {
+      "nodeId": "1285:2402",
+      "asset": "stall-red",
+      "bounds": [
+        318.518,
+        641.272,
+        87.412,
+        89.7
+      ]
+    },
+    {
+      "nodeId": "1297:2519",
+      "asset": "stall-red",
+      "bounds": [
+        700.518,
+        822.272,
+        87.412,
+        89.7
+      ]
+    },
+    {
+      "nodeId": "1285:2415",
+      "asset": "stall-red",
+      "bounds": [
+        415.518,
+        649.272,
+        87.412,
+        89.7
+      ]
+    },
+    {
+      "nodeId": "1285:2428",
+      "asset": "stall-red",
+      "bounds": [
+        504.518,
+        642.272,
+        87.412,
+        89.7
+      ]
+    },
+    {
+      "nodeId": "1285:2441",
+      "asset": "stall-red",
+      "bounds": [
+        605.518,
+        642.272,
+        87.412,
+        89.7
+      ]
+    },
+    {
+      "nodeId": "1285:2454",
+      "asset": "stall-red",
+      "bounds": [
+        707.518,
+        642.272,
+        87.412,
+        89.7
+      ]
+    },
+    {
+      "nodeId": "1297:2467",
+      "asset": "stall-red",
+      "bounds": [
+        409.518,
+        822.272,
+        87.412,
+        89.7
+      ]
+    },
+    {
+      "nodeId": "1297:2480",
+      "asset": "stall-red",
+      "bounds": [
+        304.518,
+        821.272,
+        87.412,
+        89.7
+      ]
+    },
+    {
+      "nodeId": "1297:2493",
+      "asset": "stall-red",
+      "bounds": [
+        513.518,
+        822.272,
+        87.412,
+        89.7
+      ]
+    },
+    {
+      "nodeId": "1297:2506",
+      "asset": "stall-red",
+      "bounds": [
+        611.518,
+        821.272,
+        87.412,
+        89.7
+      ]
+    },
+    {
+      "nodeId": "1271:1961",
+      "asset": "grass",
+      "bounds": [
+        887.375,
+        646.272,
+        202.5,
+        103.125
+      ]
+    }
+  ],
+  "stalls": [
+    {
+      "key": "food:0",
+      "entryId": "food-5e",
+      "label": [
+        225.8,
+        364.272,
+        66.2,
+        29
+      ]
+    },
+    {
+      "key": "food:1",
+      "entryId": "food-5m",
+      "label": [
+        318.8,
+        369.272,
+        66.2,
+        29
+      ]
+    },
+    {
+      "key": "food:2",
+      "entryId": "food-5c",
+      "label": [
+        403.8,
+        366.272,
+        66.2,
+        29
+      ]
+    },
+    {
+      "key": "food:3",
+      "entryId": "food-takkyu",
+      "label": [
+        499.8,
+        361.272,
+        66.2,
+        29
+      ]
+    },
+    {
+      "key": "food:4",
+      "entryId": "food-baseball",
+      "label": [
+        602.8,
+        362.272,
+        66.2,
+        29
+      ]
+    },
+    {
+      "key": "food:5",
+      "entryId": "food-rugby",
+      "label": [
+        373.8,
+        469.272,
+        66.2,
+        29
+      ]
+    },
+    {
+      "key": "food:6",
+      "entryId": "food-ecocar",
+      "label": [
+        466.8,
+        468.272,
+        66.2,
+        29
+      ]
+    },
+    {
+      "key": "food:7",
+      "entryId": "food-soft-tennis",
+      "label": [
+        611.8,
+        475.272,
+        66.2,
+        29
+      ]
+    },
+    {
+      "key": "food:8",
+      "entryId": "food-karate",
+      "label": [
+        314.8,
+        867.272,
+        66.2,
+        29
+      ]
+    },
+    {
+      "key": "food:9",
+      "entryId": "food-koshiki-tennis",
+      "label": [
+        419.8,
+        868.272,
+        66.2,
+        29
+      ]
+    },
+    {
+      "key": "food:10",
+      "entryId": "food-ongaku",
+      "label": [
+        520.3,
+        868.272,
+        73.2,
+        29
+      ]
+    },
+    {
+      "key": "food:11",
+      "entryId": "food-yosakoi",
+      "label": [
+        618.3,
+        867.272,
+        73.2,
+        29
+      ]
+    },
+    {
+      "key": "sweets:0",
+      "entryId": "food-badminton",
+      "label": [
+        323.8,
+        687.272,
+        76.2,
+        29
+      ]
+    },
+    {
+      "key": "sweets:1",
+      "entryId": "food-handball",
+      "label": [
+        420.8,
+        695.272,
+        76.2,
+        29
+      ]
+    },
+    {
+      "key": "sweets:2",
+      "entryId": "food-kyudo",
+      "label": [
+        509.8,
+        688.272,
+        76.2,
+        29
+      ]
+    },
+    {
+      "key": "sweets:3",
+      "entryId": "food-shashin",
+      "label": [
+        610.8,
+        688.272,
+        76.2,
+        29
+      ]
+    },
+    {
+      "key": "sweets:4",
+      "entryId": "food-rikujo",
+      "label": [
+        712.8,
+        688.272,
+        76.2,
+        29
+      ]
+    },
+    {
+      "key": "sweets:5",
+      "entryId": "food-soccer",
+      "label": [
+        705.8,
+        868.272,
+        76.2,
+        29
+      ]
+    },
+    {
+      "key": "sweets:6",
+      "entryId": "food-procon",
+      "label": [
+        805.8,
+        655.272,
+        76.2,
+        29
+      ]
+    },
+    {
+      "key": "sweets:7",
+      "entryId": "food-kendo",
+      "label": [
+        892.8,
+        606.272,
+        76.2,
+        29
+      ]
+    },
+    {
+      "key": "sweets:8",
+      "entryId": "food-volleyball",
+      "label": [
+        992.8,
+        609.272,
+        76.2,
+        29
+      ]
+    }
+  ],
+  "excludedEntryIds": [
+    "food-basketball"
+  ],
+  "nameOverrides": {
+    "food-5e": "ベーコンチーズ巻き",
+    "food-volleyball": "焼きドーナツ",
+    "rec-suiei": "射的・輪投げ",
+    "rec-douga": "教員カードゲーム",
+    "rec-5i": "シール"
+  },
+  "groupOverrides": {
+    "rec-suiei": "水泳部",
+    "rec-douga": "動画同好会",
+    "rec-5i": "5I"
+  },
+  "areas": [
+    {
+      "code": "01",
+      "key": "live-stage",
+      "name": "LiveStage",
+      "location": "第一体育館",
+      "action": "timetable-stage",
+      "stage": "LiveStage",
+      "entryId": null,
+      "label": [
+        1091,
+        579.272,
+        124.44,
+        39.4
+      ]
+    },
+    {
+      "code": "02",
+      "key": "main-stage",
+      "name": "MainStage",
+      "location": "屋外",
+      "action": "timetable-stage",
+      "stage": "MainStage",
+      "entryId": null,
+      "label": [
+        912,
+        499.272,
+        130.44,
+        39.4
+      ]
+    },
+    {
+      "code": "03",
+      "key": "food-bazaar",
+      "name": "飲食バザー",
+      "location": "屋外",
+      "action": "area-detail",
+      "stage": null,
+      "entryId": null,
+      "label": [
+        496,
+        734.272,
+        133.7,
+        41
+      ]
+    },
+    {
+      "code": "04",
+      "key": "exhibition",
+      "name": "展示・レク",
+      "location": "教室棟",
+      "action": "area-detail",
+      "stage": null,
+      "entryId": null,
+      "label": [
+        747,
+        96.272,
+        133.7,
+        41
+      ]
+    },
+    {
+      "code": "05",
+      "key": "game",
+      "name": "ゲームイベント",
+      "location": "C科棟1F・第二合併講義室",
+      "action": "entry",
+      "stage": null,
+      "entryId": "game-tournament",
+      "label": [
+        732,
+        178.272,
+        163.7,
+        41
+      ]
+    },
+    {
+      "code": "06",
+      "key": "sub-stage",
+      "name": "SubStage",
+      "location": "屋外",
+      "action": "timetable-stage",
+      "stage": "SubStage",
+      "entryId": null,
+      "label": [
+        69,
+        789.272,
+        123.44,
+        39.4
+      ]
+    },
+    {
+      "code": "07",
+      "key": "department",
+      "name": "学科展示",
+      "location": "第二体育館",
+      "action": "booth-tab",
+      "stage": null,
+      "entryId": null,
+      "label": [
+        66,
+        603.272,
+        133.86,
+        39.6
+      ]
+    }
+  ],
+  "indoor": [
+    {
+      "entryId": "rec-bijutsu",
+      "building": "I科棟",
+      "floor": "1F",
+      "room": "3C"
+    },
+    {
+      "entryId": "rec-robocon",
+      "building": "C科棟",
+      "floor": "1F",
+      "room": "1E"
+    },
+    {
+      "entryId": "rec-ongaku",
+      "building": "C科棟",
+      "floor": "1F",
+      "room": "1I"
+    },
+    {
+      "entryId": "rec-seibutsu",
+      "building": "C科棟",
+      "floor": "2F",
+      "room": "2M"
+    },
+    {
+      "entryId": "rec-gcon",
+      "building": "C科棟",
+      "floor": "2F",
+      "room": "2E"
+    },
+    {
+      "entryId": "rec-douga",
+      "building": "C科棟",
+      "floor": "3F",
+      "room": "2C"
+    },
+    {
+      "entryId": "rec-5i",
+      "building": "C科棟",
+      "floor": "3F",
+      "room": "2S"
+    },
+    {
+      "entryId": "rec-2a",
+      "building": "C科棟",
+      "floor": "3F",
+      "room": "2S"
+    },
+    {
+      "entryId": "rec-suiei",
+      "building": "C科棟",
+      "floor": "3F",
+      "room": "3S"
+    },
+    {
+      "entryId": "rec-rigaku",
+      "building": "C科棟",
+      "floor": "3F",
+      "room": "4S"
+    },
+    {
+      "entryId": "rec-kanko",
+      "building": "C科棟",
+      "floor": "3F",
+      "room": "4S"
+    },
+    {
+      "entryId": "rec-procon",
+      "building": "C科棟",
+      "floor": "2F",
+      "room": "2I"
+    },
+    {
+      "entryId": "rec-wandervogel",
+      "building": "C科棟",
+      "floor": "2F",
+      "room": "1S"
+    },
+    {
+      "entryId": "rec-shashin",
+      "building": "C科棟",
+      "floor": "1F",
+      "room": "1E"
+    },
+    {
+      "entryId": "rec-kyokotsu-appaku",
+      "building": "C科棟",
+      "floor": "2F",
+      "room": "1S"
+    },
+    {
+      "entryId": "rec-1a",
+      "building": "I科棟",
+      "floor": "2F",
+      "room": "5I"
+    },
+    {
+      "entryId": "rec-ecocar",
+      "building": "C科棟",
+      "floor": "1F",
+      "room": "1M"
+    },
+    {
+      "entryId": "rec-kagaku-magic",
+      "building": "C科棟",
+      "floor": "3F",
+      "room": "第三合併講義室"
+    },
+    {
+      "entryId": "workshop-ai-sorting-robot",
+      "building": "I科棟",
+      "floor": "2F",
+      "room": "電子情報工学実験室"
+    },
+    {
+      "entryId": "game-tournament",
+      "building": "C科棟",
+      "floor": "1F",
+      "room": "第二合併講義室"
+    }
+  ],
+  "venues": [
+    {
+      "key": "multimedia",
+      "name": "マルチメディア棟",
+      "bounds": [
+        1021,
+        156.272,
+        243,
+        160
+      ],
+      "entryIds": [
+        "food-sado",
+        "rec-kado"
+      ]
+    },
+    {
+      "key": "headquarters",
+      "name": "本部",
+      "bounds": [
+        699.444,
+        306.272,
+        100.861,
+        103.5
+      ],
+      "entryIds": [
+        "main-warashibe"
+      ]
+    }
+  ]
+}

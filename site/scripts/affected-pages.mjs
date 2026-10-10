@@ -55,13 +55,16 @@ const PAGE_RULES = [
   // ページ専用のコンポーネント置き場。ここを足さないと、components配下だけを直したときに
   // そのページのE2Eが1つも走らない（実装の大半がここに置かれるので取りこぼしが大きい）。
   // ページを追加してコンポーネントを components/<ページ名>/ に置くなら、ここにも足すこと
-  { pattern: /^site\/src\/components\/(booth|timetable|access|entry)\//, page: (m) => m[1] },
+  { pattern: /^site\/src\/components\/(booth|timetable|access|entry|map)\//, page: (m) => m[1] },
+  { pattern: /^site\/src\/assets\/map\//, page: "map" },
+  { pattern: /^site\/src\/data\/map(?:-indoor)?\.json$/, page: "map" },
 
   // 以降、ページを追加したらここに1行足して tests/<page>.spec.ts を作る
   { pattern: /^site\/src\/pages\/booth/, page: "booth" },
   { pattern: /^site\/src\/pages\/news/, page: "news" },
   { pattern: /^site\/src\/pages\/timetable/, page: "timetable" },
   { pattern: /^site\/src\/pages\/map/, page: "map" },
+  { pattern: /^site\/src\/(pages\/map\/game\.astro|components\/map\/)/, page: "map-game" },
   { pattern: /^site\/src\/pages\/access/, page: "access" },
   { pattern: /^site\/src\/pages\/sponsors/, page: "sponsors" },
 ];

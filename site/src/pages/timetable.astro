@@ -6,11 +6,13 @@ import TimetableList from "../components/timetable/TimetableList";
 import { entries } from "../lib/loadEntries";
 import { withEntryPhotos } from "../lib/entryPhotos";
 import site from "../data/site.json";
+import StageMapReturn from "../components/map/StageMapReturn.astro";
 ---
 
 <BaseLayout title={`TIMETABLE | ${site.eventName}`} description="2日間のタイムスケジュール">
   <section class="timetable">
     <h1 class="page-title">TIMETABLE</h1>
+    <StageMapReturn />
     <TimetableList client:load entries={await withEntryPhotos(entries)} />
   </section>
 </BaseLayout>

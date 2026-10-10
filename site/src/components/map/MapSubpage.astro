@@ -1,0 +1,46 @@
+---
+// MAPの各案内ページの枠。全体MAPの下に案内を積むと地図へ戻りにくくなるので、案内ごとにページを分けている。
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import MapReturn from "./MapReturn.astro";
+import site from "../../data/site.json";
+
+interface Props {
+  name: string;
+  /** 7エリアの番号。棟・本部の補足案内は番号を持たない */
+  code?: string;
+  location?: string;
+  description: string;
+}
+
+const { name, code, location, description } = Astro.props;
+---
+
+<BaseLayout title={`${name} | MAP | ${site.eventName}`} description={description}>
+  <section class="map-subpage">
+    <MapReturn />
+    <header>
+      <span class="map-eyebrow num" aria-hidden="true">MAP{code && <span class="map-code"> {code}</span>}</span>
+      <h1>{name}</h1>
+      {location && <p class="map-location">{location}</p>}
+    </header>
+    <slot />
+    <MapReturn />
+  </section>
+</BaseLayout>
+
+<style>
+  .map-subpage { max-width: var(--content-sp); margin: 0 auto; padding: 24px 20px 64px; font-size: 14px; line-height: 1.9; }
+  header { margin-bottom: 24px; }
+  .map-eyebrow { color: var(--blue); font-size: 28px; }
+  h1 { font-size: 24px; font-weight: 900; margin-top: 4px; }
+  .map-location { font-size: 13px; margin-top: 4px; }
+  .map-subpage :global(.preparing) { display: inline-block; background: var(--yellow); padding: 6px 10px; font-weight: 700; margin-bottom: 12px; }
+  .map-subpage :global(.detail-note) { margin-bottom: 24px; }
+  .map-subpage :global(h2) { font-size: 18px; font-weight: 900; margin: 28px 0 12px; }
+  .map-subpage :global(h3) { font-size: 15px; margin: 20px 0 4px; }
+  .map-subpage :global(.text-link) { text-decoration: underline; color: var(--blue); }
+  @media (min-width: 900px) {
+    .map-subpage { max-width: var(--content-narrow); padding: 40px 24px 96px; }
+    h1 { font-size: 32px; }
+  }
+</style>
