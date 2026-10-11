@@ -208,6 +208,11 @@ export interface Entry {
   parts?: EntryPart[];
   /** true: home等での特別扱い（バナー表示）対象 */
   featured?: boolean;
+  /**
+   * サイトのどこにも出さない（booth・timetable・PICK UP・記事ページのすべて）。
+   * 確認待ちなどで一旦下げたい企画用。データを消さずに戻せるよう、外すときは false にするか行ごと消す
+   */
+  hidden?: boolean;
   /** 外部Webアプリ等へのリンク（ミッションフォトラリー等）。未提供の間はnull */
   link?: string | null;
   /** link のボタンの文言。省略時は「やってみる →」（バザーグランプリの「投票する →」等） */

@@ -38,14 +38,14 @@ export function showsContent(path: string) {
  */
 export function gatedLinkEntries() {
   const dir = new URL("../src/data/entries/", import.meta.url);
-  const all: { id: string; name: string; link?: string; linkLabel?: string; linkOpens?: string }[] = [
+  const all: { id: string; name: string; link?: string; linkLabel?: string; linkOpens?: string; hidden?: boolean }[] = [
     "booth",
     "department",
     "program",
   ].flatMap((file) => JSON.parse(readFileSync(fileURLToPath(new URL(`${file}.json`, dir)), "utf8")));
 
   return all
-    .filter((entry) => entry.link && entry.linkOpens)
+    .filter((entry) => !entry.hidden && entry.link && entry.linkOpens)
     .map((entry) => ({
       ...entry,
       link: entry.link!,

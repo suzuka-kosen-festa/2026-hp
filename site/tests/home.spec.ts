@@ -197,7 +197,7 @@ const featuredEntries = ["booth", "department", "program"]
   .flatMap((name) =>
     JSON.parse(readFileSync(fileURLToPath(new URL(`../src/data/entries/${name}.json`, import.meta.url)), "utf8")),
   )
-  .filter((entry: { featured?: boolean }) => entry.featured) as {
+  .filter((entry: { featured?: boolean; hidden?: boolean }) => entry.featured && !entry.hidden) as {
   id: string;
   application?: unknown;
   parts?: { application?: unknown }[];

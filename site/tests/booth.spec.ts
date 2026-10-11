@@ -11,13 +11,17 @@ type RawEntry = {
   isPermanent?: boolean;
   hideFromBooth?: boolean;
   linkFromBooth?: boolean;
+  hidden?: boolean;
 };
-const entries = ["booth", "department", "program"].flatMap(
-  (name) =>
-    JSON.parse(
-      readFileSync(fileURLToPath(new URL(`../src/data/entries/${name}.json`, import.meta.url)), "utf8"),
-    ) as RawEntry[],
-);
+// hidden の企画はサイトに出ないので、検査対象から外す（lib/loadEntries.ts と同じ扱い）
+const entries = ["booth", "department", "program"]
+  .flatMap(
+    (name) =>
+      JSON.parse(
+        readFileSync(fileURLToPath(new URL(`../src/data/entries/${name}.json`, import.meta.url)), "utf8"),
+      ) as RawEntry[],
+  )
+  .filter((entry) => !entry.hidden);
 
 /** /booth/ が準備中のあいだは中身が無いので、ページ固有の検査は飛ばす（showsContent 参照） */
 const boothHidden = !showsContent("/booth/");
