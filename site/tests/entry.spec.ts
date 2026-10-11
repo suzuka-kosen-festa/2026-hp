@@ -12,9 +12,10 @@ describePage("entry", "/entry/workshop-ai-sorting-robot/");
  * 実データが入って画像の有無が変わっても追従するよう、データから引いて検査する。
  */
 const entriesDir = new URL("../src/data/entries/", import.meta.url);
-const entries: { id: string; image?: string; categoryLabel?: string }[] = ["booth", "department", "program"].flatMap((name) =>
-  JSON.parse(readFileSync(fileURLToPath(new URL(`${name}.json`, entriesDir)), "utf8")),
-);
+// hidden の企画は記事ページが作られないので、検査対象から外す（lib/loadEntries.ts と同じ扱い）
+const entries: { id: string; image?: string; categoryLabel?: string; hidden?: boolean }[] = ["booth", "department", "program"]
+  .flatMap((name) => JSON.parse(readFileSync(fileURLToPath(new URL(`${name}.json`, entriesDir)), "utf8")))
+  .filter((entry: { hidden?: boolean }) => !entry.hidden);
 
 const withoutImage = entries.find((entry) => !entry.image);
 const withImage = entries.find((entry) => entry.image);
