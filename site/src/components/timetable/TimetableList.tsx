@@ -67,6 +67,40 @@ const PX_PER_HOUR_SP = 140;
 const PX_PER_HOUR_PC = 170;
 const SAFETY_MIN_HEIGHT_SP = 36;
 const SAFETY_MIN_HEIGHT_PC = 46;
+/** スマホで名前が2行入る枠の高さ（時刻1行＋名前2行。nameLines が2を返す値） */
+const TWO_LINE_HEIGHT_SP = 49;
+
+/*
+ * スマホで名前が1行に収まらない短い枠への個別の対処。全部の枠を2行の高さにすると、
+ * 1行で足りる枠まで大きくなって表が間延びするので、見切れるものだけを1件ずつ扱う。
+ * 企画名や時刻が変わったら、ここに載せたものが今も必要か見直すこと。
+ *
+ * TWO_LINE_ENTRIES_SP: その企画の枠だけスマホで2行の高さにする。
+ *   同じ列の次の枠まで余裕があり、大きくしても他の枠を押し出さないものだけを載せる
+ *   （わらしべ長者 結果発表は次が12:30、Incident Syndrome・空きコマティータイムは次が30分後、
+ *   中夜祭のダンスバトル優勝チーム＆ヲタ芸は列の最後）。
+ * GRID_NOTE: 回の注記をスマホのグリッドでだけ縮める。バザーGPの発表は直後に次の枠（アタック25・メモリーズ）が
+ *   あり、2行にすると押し出してしまうので、文言を縮めて1行に収める。PC・booth・詳細ページは元の注記のまま
+ */
+const TWO_LINE_ENTRIES_SP = new Set([
+  "main-warashibe",
+  "live-incident-syndrome",
+  "sub-akikoma-teatime",
+  "chuyasai-dance-otagei",
+]);
+/*
+ * 別の列の企画のすぐ後に始まる企画を、その企画のカードの下端より下に置く（キー: 下げる企画, 値: 直前の企画）。
+ * 中夜祭のダンスバトル優勝チーム＆ヲタ芸は2行の高さにしたぶん実際の終了時刻（17:20）より下まで伸び、
+ * 隣の列で17:20に始まる格付けチェックのほうが先に始まるように見えるため。中夜祭は軸の終わり（18:00）まで余裕がある
+ */
+const PLACE_AFTER: Record<string, string> = {
+  "chuyasai-kakuzuke": "chuyasai-dance-otagei",
+};
+const GRID_NOTE: Record<string, string> = {
+  中間発表: "中間",
+  最終結果発表: "結果",
+};
+
 function toMinutes(time: string): number {
   const [h, m] = time.split(":").map(Number);
   return h * 60 + m;
@@ -161,12 +195,29 @@ export default function TimetableList({ entries }: Props) {
         const start = toMinutes(slot.occurrence.start_time as string);
         const end = toMinutes(slot.occurrence.end_time as string);
         const naturalTop = yFor(start);
-        const height = Math.max(yFor(end) - naturalTop - CARD_GAP, SAFETY_MIN_HEIGHT);
+        const minHeight =
+          !isDesktop && TWO_LINE_ENTRIES_SP.has(slot.entry.id) ? TWO_LINE_HEIGHT_SP : SAFETY_MIN_HEIGHT;
+        const height = Math.max(yFor(end) - naturalTop - CARD_GAP, minHeight);
         const top = Math.max(naturalTop, prevBottom);
         prevBottom = top + height + CARD_GAP;
         return { slot, top, height };
       });
+    return { stage, blocks };
+  });
 
+  // 別の列の企画の直後に置く企画（PLACE_AFTER）を、その企画の下端より下へ下げる。同じ列の後続も一緒に下げる
+  const allBlocks = columns.flatMap(({ blocks }) => blocks);
+  for (const { blocks } of columns) {
+    let prevBottom = -Infinity;
+    for (const block of blocks) {
+      const anchorId = PLACE_AFTER[block.slot.entry.id];
+      const anchor = anchorId && allBlocks.find((b) => b.slot.entry.id === anchorId);
+      block.top = Math.max(block.top, prevBottom, anchor ? anchor.top + anchor.height + CARD_GAP : -Infinity);
+      prevBottom = block.top + block.height + CARD_GAP;
+    }
+  }
+
+  for (const { blocks } of columns) {
     // 短い枠は最小の高さで下へ押し出されるので、そのままだと終盤の枠が軸の終わりからはみ出す
     // （2日目のフィナーレ→エンディング等）。後ろから詰め直して軸の終わりに収める。
     // 余裕のある長い枠（メモリーズ等）を見た目だけ縮めて吸収し、それでも足りなければ短い枠を少し上げる。
@@ -180,8 +231,7 @@ export default function TimetableList({ entries }: Props) {
       }
       limit = block.top - CARD_GAP;
     }
-    return { stage, blocks };
-  });
+  }
   const totalHeight = yFor(axisEnd);
 
   // 中夜祭の開場〜入場の時間帯。人が出る枠ではないので企画カードにはせず、全列にまたがる帯で見せる
@@ -257,7 +307,7 @@ export default function TimetableList({ entries }: Props) {
                   <span className="tl-block-name" style={{ WebkitLineClamp: nameLines(height, isDesktop) }}>
                     {withBreaks(gridName(entry.name))}
                     {/* 同じ企画の中の「どの回か」（バザーグランプリの中間発表／最終結果発表等） */}
-                    {occurrence.note && ` ${occurrence.note}`}
+                    {occurrence.note && ` ${(!isDesktop && GRID_NOTE[occurrence.note]) || occurrence.note}`}
                     {isOccurrenceNow(occurrence) && <span className="tl-now">NOW</span>}
                   </span>
                 </a>
