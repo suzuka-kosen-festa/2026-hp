@@ -29,7 +29,7 @@ test.describe("MAP案内", () => {
   test("バザーは種類を切り替えて全店を一画面に収め、詳細から同じ種類へ戻れる", async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 812 });
     await page.goto("/map/food/");
-    for (const [group, name, count] of [["food", "フード", 12], ["sweets", "スイーツ", 9]] as const) {
+    for (const [group, name, count] of [["food", "フード", 12], ["sweets", "スイーツ", 10]] as const) {
       await page.getByRole("tab", { name: new RegExp(name) }).click();
       const panel = page.getByRole("tabpanel", { name: new RegExp(name) });
       await expect(panel.getByRole("link")).toHaveCount(count);
@@ -556,7 +556,15 @@ test.describe("MAP案内", () => {
     await expect(page.locator("main")).not.toContainText("詳細配置は準備中");
     await expect(page.locator(".bazaar-map")).toBeVisible();
     await expect(page.locator("[data-stall-group='food'] a")).toHaveCount(12);
-    await expect(page.locator("[data-stall-group='sweets'] a")).toHaveCount(9);
+    await expect(page.locator("[data-stall-group='sweets'] a")).toHaveCount(10);
+    // 配布用マップのスイーツ9（茶道部）は図の範囲外のマルチメディア棟。一覧にだけ場所付きで載せる。
+    const tea = page.locator("[data-stall-group='sweets'] a[href='/entry/food-sado/']");
+    await expect(tea.locator(".stall-badge")).toHaveText(/スイーツ\s*9/);
+    await expect(tea).toContainText("マルチメディア棟1F");
+    await expect(page.locator(".bazaar-map a[href='/entry/food-sado/']")).toHaveCount(0);
+    await page.goto("/map/multimedia/");
+    await expect(page.locator("main a[href='/entry/food-sado/'] .stall-badge")).toHaveText(/スイーツ\s*9/);
+    await page.goto("/map/food/");
     await expect(page.locator("[data-stall-group='food'] a[href='/entry/food-5e/']")).toContainText("0");
     await expect(page.locator("[data-stall-group='sweets'] a[href='/entry/food-volleyball/']")).toContainText("8");
     await expect(page.locator("main a[href='/entry/food-basketball/']")).toHaveCount(0);
@@ -580,7 +588,7 @@ test.describe("MAP案内", () => {
     // 凡例と一覧も、図と同じ札でフードとスイーツを見分けられる
     await expect(page.locator(".bazaar-legend .stall-badge")).toHaveCount(2);
     await expect(page.locator("[data-stall-group='food'] a .stall-badge[data-group='food']")).toHaveCount(12);
-    await expect(page.locator("[data-stall-group='sweets'] a .stall-badge[data-group='sweets']")).toHaveCount(9);
+    await expect(page.locator("[data-stall-group='sweets'] a .stall-badge[data-group='sweets']")).toHaveCount(10);
     await expect(page.locator("[data-stall-group='food'] a[href='/entry/food-5e/'] .stall-badge")).toHaveText(/フード\s*0/);
     // 色だけに頼らず、形でも区別する
     const shape = (group: string) => map.locator(`.stall-badge[data-group='${group}']`).first().evaluate((el) => getComputedStyle(el).borderRadius);
@@ -609,11 +617,12 @@ test.describe("MAP案内", () => {
       ["フード", "2", "food-5c"], ["フード", "3", "food-takkyu"],
       ["フード", "4", "food-baseball"], ["フード", "5", "food-rugby"],
       ["フード", "6", "food-ecocar"], ["フード", "7", "food-soft-tennis"],
-      ["フード", "8", "food-karate"], ["フード", "9", "food-koshiki-tennis"],
-      ["フード", "10", "food-ongaku"], ["フード", "11", "food-yosakoi"],
-      ["スイーツ", "0", "food-badminton"], ["スイーツ", "1", "food-handball"],
-      ["スイーツ", "2", "food-kyudo"], ["スイーツ", "3", "food-shashin"],
-      ["スイーツ", "4", "food-rikujo"], ["スイーツ", "5", "food-soccer"],
+      // 2026-10-13 配布用マップの番号と団体
+      ["フード", "8", "food-koshiki-tennis"], ["フード", "9", "food-ongaku"],
+      ["フード", "10", "food-karate"], ["フード", "11", "food-yosakoi"],
+      ["スイーツ", "0", "food-handball"], ["スイーツ", "1", "food-kyudo"],
+      ["スイーツ", "2", "food-rikujo"], ["スイーツ", "3", "food-badminton"],
+      ["スイーツ", "4", "food-shashin"], ["スイーツ", "5", "food-soccer"],
       ["スイーツ", "6", "food-procon"], ["スイーツ", "7", "food-kendo"],
       ["スイーツ", "8", "food-volleyball"],
     ];
@@ -621,13 +630,26 @@ test.describe("MAP案内", () => {
     for (const [group, code, id] of expected) {
       await expect(map.getByRole("link", { name: new RegExp(`^${group}${code} `) })).toHaveAttribute("href", `/entry/${id}/`);
     }
+    // 校舎（赤）の下の2段は、配布用マップと同じくフードとスイーツが混ざって並ぶ。
+    const rows = await map.evaluate((root) => {
+      const pins = [...root.querySelectorAll("a")].map((a) => { const b = a.getBoundingClientRect(); return { name: a.getAttribute("aria-label")!.split(" ")[0], x: b.left, y: b.top + b.height / 2 }; });
+      const sorted = pins.sort((a, b) => a.y - b.y);
+      const grouped: { y: number; names: { name: string; x: number }[] }[] = [];
+      for (const pin of sorted) {
+        const row = grouped.find((item) => Math.abs(item.y - pin.y) < 5);
+        if (row) row.names.push(pin); else grouped.push({ y: pin.y, names: [pin] });
+      }
+      return grouped.map((row) => row.names.sort((a, b) => a.x - b.x).map((pin) => pin.name));
+    });
+    expect(rows.at(-2)).toEqual(["フード8", "スイーツ0", "スイーツ1", "フード9", "スイーツ2"]);
+    expect(rows.at(-1)).toEqual(["フード10", "スイーツ3", "フード11", "スイーツ4", "スイーツ5"]);
     await map.getByRole("link", { name: /^フード0 / }).click();
     await expect(page).toHaveURL(/\/entry\/food-5e\/$/);
     await expect(page.getByRole("heading", { level: 1 })).toContainText("ベーコンチーズ巻");
     await page.goBack();
     await map.getByRole("link", { name: /^スイーツ0 / }).click();
-    await expect(page).toHaveURL(/\/entry\/food-badminton\/$/);
-    await expect(page.getByRole("heading", { level: 1 })).toContainText("ワッフル");
+    await expect(page).toHaveURL(/\/entry\/food-handball\/$/);
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("チュロス");
     await page.goBack();
     const lastFood = map.getByRole("link", { name: /^フード11 / });
     await lastFood.focus();

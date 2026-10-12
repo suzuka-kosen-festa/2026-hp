@@ -82,6 +82,10 @@ const imageFor = (key: string) => assets[`../../assets/map/figma/${key}.png`].de
   .outside-map-guide a > span { font-size: 14px; font-weight: 700; }
   .outside-map-guide a:hover strong { text-decoration: underline; }
   .outside-map-guide a:focus-visible { outline: 3px solid var(--blue); outline-offset: 4px; }
+  /* PC幅では地図が画面より大きくなるので、ノートPCの画面に全体が収まる幅にして中央に置く（2026-10-13ユーザー指示）。 */
+  @media (min-width: 900px) {
+    .campus-figure, .outside-map-guide { max-width: 860px; margin-inline: auto; }
+  }
   @container (min-width: 760px) {
     .area-label .label-paper { flex-direction: row; gap: 6px; }
     .area-label b { min-width: 32px; height: 26px; font-size: 24px; }

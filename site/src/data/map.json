@@ -393,30 +393,30 @@
     },
     {
       "key": "food:8",
-      "entryId": "food-karate",
+      "entryId": "food-koshiki-tennis",
       "label": [
-        314.8,
-        867.272,
+        328.8,
+        687.272,
         66.2,
         29
       ]
     },
     {
       "key": "food:9",
-      "entryId": "food-koshiki-tennis",
+      "entryId": "food-ongaku",
       "label": [
-        419.8,
-        868.272,
+        615.8,
+        688.272,
         66.2,
         29
       ]
     },
     {
       "key": "food:10",
-      "entryId": "food-ongaku",
+      "entryId": "food-karate",
       "label": [
-        520.3,
-        868.272,
+        311.3,
+        867.272,
         73.2,
         29
       ]
@@ -425,24 +425,14 @@
       "key": "food:11",
       "entryId": "food-yosakoi",
       "label": [
-        618.3,
-        867.272,
+        520.3,
+        868.272,
         73.2,
         29
       ]
     },
     {
       "key": "sweets:0",
-      "entryId": "food-badminton",
-      "label": [
-        323.8,
-        687.272,
-        76.2,
-        29
-      ]
-    },
-    {
-      "key": "sweets:1",
       "entryId": "food-handball",
       "label": [
         420.8,
@@ -452,7 +442,7 @@
       ]
     },
     {
-      "key": "sweets:2",
+      "key": "sweets:1",
       "entryId": "food-kyudo",
       "label": [
         509.8,
@@ -462,21 +452,31 @@
       ]
     },
     {
-      "key": "sweets:3",
-      "entryId": "food-shashin",
+      "key": "sweets:2",
+      "entryId": "food-rikujo",
       "label": [
-        610.8,
+        712.8,
         688.272,
         76.2,
         29
       ]
     },
     {
-      "key": "sweets:4",
-      "entryId": "food-rikujo",
+      "key": "sweets:3",
+      "entryId": "food-badminton",
       "label": [
-        712.8,
-        688.272,
+        414.8,
+        868.272,
+        76.2,
+        29
+      ]
+    },
+    {
+      "key": "sweets:4",
+      "entryId": "food-shashin",
+      "label": [
+        616.8,
+        867.272,
         76.2,
         29
       ]
@@ -520,6 +520,11 @@
         76.2,
         29
       ]
+    },
+    {
+      "key": "sweets:9",
+      "entryId": "food-sado",
+      "place": "マルチメディア棟1F"
     }
   ],
   "excludedEntryIds": [

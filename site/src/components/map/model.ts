@@ -41,6 +41,8 @@ export const placementStyle = (b: number[], v: View = wholeView) => `left:${(b[0
 export const anchorStyle = (b: number[], v: View = wholeView) => `--x:${(b[0] + b[2] / 2 - v[0]) / v[2] * 100}%;--y:${(b[1] + b[3] / 2 - v[1]) / v[3] * 100}%`;
 export const venues = data.venues.map((venue) => ({ ...venue, href: `/map/${venue.key}/` }));
 export const areaByKey = (key: string) => areas.find((area) => area.key === key)!;
-export const stalls = data.stalls.map((slot) => ({ ...slot, entry: mapEntry(slot.entryId), group: slot.key.split(":")[0], code: slot.key.split(":")[1] }));
+// 図の範囲外の店（配布用マップのスイーツ9＝茶道部、マルチメディア棟）は label を持たず、place に場所を書く。
+type StallSlot = { key: string; entryId: string; label?: number[]; place?: string };
+export const stalls = (data.stalls as StallSlot[]).map((slot) => ({ ...slot, entry: mapEntry(slot.entryId), group: slot.key.split(":")[0], code: slot.key.split(":")[1] }));
 export const indoor = data.indoor.filter((venue) => !isHiddenEntry(venue.entryId)).map((venue) => ({ ...venue, entry: mapEntry(venue.entryId) }));
 export { data };
