@@ -1253,13 +1253,13 @@
     "tags": [
       "中夜祭"
     ],
-    "location": "T字ステージ",
+    "location": "LiveStage",
     "image": "/entries/main-vocal1-gp.webp",
     "occurrences": [
       {
         "day": "day1",
-        "start_time": "16:50",
-        "end_time": "16:55"
+        "start_time": "16:55",
+        "end_time": "17:00"
       }
     ],
     "featured": false
@@ -1279,8 +1279,8 @@
     "occurrences": [
       {
         "day": "day1",
-        "start_time": "16:55",
-        "end_time": "17:10"
+        "start_time": "17:00",
+        "end_time": "17:15"
       }
     ],
     "featured": false
@@ -1300,8 +1300,8 @@
     "occurrences": [
       {
         "day": "day1",
-        "start_time": "17:10",
-        "end_time": "17:20"
+        "start_time": "17:15",
+        "end_time": "17:25"
       }
     ],
     "featured": false
@@ -1322,8 +1322,8 @@
     "occurrences": [
       {
         "day": "day1",
-        "start_time": "17:20",
-        "end_time": "17:35"
+        "start_time": "17:25",
+        "end_time": "17:40"
       }
     ],
     "participation": "会場のみんなが参加できます（申込不要）",

@@ -11,6 +11,9 @@ const SESSION_KEY = "op-seen";
 const VARIANT_KEY = "op-variant";
 export const OP_REPLAY_EVENT = "op:replay";
 const LOAD_FAILSAFE_MS = 5000;
+// 数字の紙片を貼り終えるまでの時間。ワイプ以降はここから逆算する
+const PASTE_MS = 1300;
+const WIPE_AT = 60 + PASTE_MS + 240;
 
 type NetworkInformation = { saveData?: boolean; effectiveType?: string };
 function isSlowNetwork() {
@@ -65,8 +68,8 @@ function animateStage(stage: HTMLElement, day: string) {
   const animations: Animation[] = [];
   const size = sizeDigits(stage, day);
   if (!size) return () => undefined;
-  const interval = 3000 / (24 * day.length);
-  const landingDuration = Math.min(110, interval * .96);
+  const interval = PASTE_MS / (24 * day.length);
+  const landingDuration = Math.min(110, Math.max(60, interval * 1.6));
   const animate = (element: Element | null, frames: Keyframe[], delay: number, duration: number) => {
     if (element) animations.push(element.animate(frames, { delay, duration, fill: "both", easing: "linear" }));
   };
@@ -87,9 +90,9 @@ function animateStage(stage: HTMLElement, day: string) {
     { transform: "translateY(115%) rotate(-8deg)", easing: "ease-in-out" },
     { transform: "translateY(-2%) rotate(0)", offset: .5, easing: "ease-in-out" },
     { transform: "translateY(-115%) rotate(5deg)" },
-  ], 3400, 800);
-  animate(stage.querySelector(".op-finale"), [{ opacity: 0 }, { opacity: 1 }], 3800, 1);
-  animate(stage.querySelector(".op-finale img"), [{ transform: "scale(.97)" }, { transform: "none" }], 3800, 400);
+  ], WIPE_AT, 800);
+  animate(stage.querySelector(".op-finale"), [{ opacity: 0 }, { opacity: 1 }], WIPE_AT + 400, 1);
+  animate(stage.querySelector(".op-finale img"), [{ transform: "scale(.97)" }, { transform: "none" }], WIPE_AT + 400, 400);
   return () => animations.forEach((animation) => animation.cancel());
 }
 
