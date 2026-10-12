@@ -374,6 +374,6 @@ test("候補2は学科柄と黄色いワイプからロゴへ切り替わる", a
     const progress = el.getAnimations()[0]?.currentTime;
     if (typeof progress !== "number" || progress < 3300) return null;
     return Number(getComputedStyle(document.querySelector(".op2-hero")!).opacity);
-  }), { timeout: 5000 }).toBe(1);
+  }), { timeout: 5000, intervals: [100] }).toBe(1);
   await expect(splash).toHaveCount(0, { timeout: 6500 });
 });
