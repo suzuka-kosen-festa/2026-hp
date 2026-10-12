@@ -11,7 +11,7 @@ const imageFor = (key: string) => assets[`../../assets/map/figma/${key}.png`].de
       {data.placements.map((piece) => <div class="art-piece" style={placementStyle(piece.bounds)} data-node-id={piece.nodeId}>
         <Image src={imageFor(piece.asset)} alt="" format="webp" loading="eager" />
       </div>)}
-      <span class="entrance" style="left:64.7%;top:85.7%"><span>↑</span>入口</span>
+      <span class="entrance"><span>↑</span>入口</span>
     </div>
     {/* ステージ・棟・本部は、本部の絵の看板と同じく建物に名札を重ねる。ステージはタイムテーブル、棟と本部は案内ページへ進む。 */}
     {stages.map((stage) => <a class="stage-label" data-stage-name={stage.name} href={stage.href} style={anchorStyle([...stage.plate, 0, 0])} aria-label={`${stage.name}・${stage.location}。${stage.comingSoon ? "遷移先は準備中" : "ステージの時間を見る"}`}><span class="name-plate">{stage.name}</span></a>)}
@@ -71,7 +71,7 @@ const imageFor = (key: string) => assets[`../../assets/map/figma/${key}.png`].de
   .stage-label[data-stage-name="LiveStage"] { top: calc(var(--y) - var(--plate-h) / 2); transform: translate(-50%, 0); align-items: flex-start; }
   /* 本部は絵に描かれた看板（絵の幅の83%＝図の幅の6.6%）と同じ幅で重ねる。 */
   .venue-label[data-venue="headquarters"] .name-plate { min-width: 6.6cqw; }
-  .entrance { position: absolute; color: var(--blue); font-weight: 700; font-size: 12px; display: grid; text-align: center; transform: translate(-50%, 0); }
+  .entrance { position: absolute; left: 64.7%; top: 85.7%; color: var(--blue); font-weight: 700; font-size: 12px; display: grid; text-align: center; transform: translate(-50%, 0); }
   .entrance > span { font-size: 18px; line-height: 1; }
   figcaption { font-size: 12px; line-height: 1.8; margin-top: 18px; }
   figcaption > span { display: block; color: #555; }
@@ -108,6 +108,8 @@ const imageFor = (key: string) => assets[`../../assets/map/figma/${key}.png`].de
     /* 絵が小さいので名札も細くし、隣り合うMainStageと体育館の名札を上下にずらして重ねない。 */
     .stage-label, .venue-label { --half: 30px; }
     .campus-map { --plate-h: 14.1px; }
+    /* 入口の表示が右下の屋台に重なるので右へずらす（2026-10-13ユーザー指示）。飲食バザーの図も同じ位置。 */
+    .entrance { left: 68%; }
     .name-plate { padding: 0 2px; border-width: 1px; font-size: 11px; line-height: 1.1; }
     /* 棟の名札は建物より広いが、内側へ寄せずに建物の中心・下端（図の高さの33.42%）にそろえる（2026-10-12ユーザー決定）。はみ出しはページ余白に収まる。 */
     .venue-label[data-venue="multimedia"] { --half: 0px; top: 33.42%; transform: translate(-50%, -100%); align-items: flex-end; }

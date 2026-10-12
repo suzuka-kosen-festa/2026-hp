@@ -13,6 +13,8 @@ const view = [195, 300, 900, 650] as const;
 const inView = (b: number[]) => b[0] < view[0] + view[2] && b[0] + b[2] > view[0] && b[1] < view[1] + view[3] && b[1] + b[3] > view[1];
 // 全体MAPの入口表示と同じ位置
 const entrance = [data.size[0] * 0.647, data.size[1] * 0.857, 0, 0];
+// スマホ幅では全体MAPと同じく、屋台に重ならない位置（図の幅の68%）へ右にずらす
+const entranceStyle = `${anchorStyle(entrance, view)};--x-sp:${(data.size[0] * 0.68 - view[0]) / view[2] * 100}%`;
 ---
 
 <figure class="bazaar-figure" aria-describedby="bazaar-caption">
@@ -22,7 +24,7 @@ const entrance = [data.size[0] * 0.647, data.size[1] * 0.857, 0, 0];
       {data.placements.filter((piece) => inView(piece.bounds)).map((piece) => <div class="art-piece" style={placementStyle(piece.bounds, view)}>
         <Image src={imageFor(piece.asset)} alt="" format="webp" loading="eager" />
       </div>)}
-      <span class="entrance" style={anchorStyle(entrance, view)}><span>↑</span>入口</span>
+      <span class="entrance" style={entranceStyle}><span>↑</span>入口</span>
     </div>
     {stalls.filter((slot) => slot.label).map((slot) => <a class="badge-pin" href={`/entry/${slot.entryId}/`} style={anchorStyle(slot.label!, view)} aria-label={`${slot.group === "food" ? "フード" : "スイーツ"}${slot.code} ${slot.entry.name}の詳細を見る`}><StallBadge group={slot.group as "food" | "sweets"} code={slot.code} /></a>)}
   </div>
@@ -45,6 +47,10 @@ const entrance = [data.size[0] * 0.647, data.size[1] * 0.857, 0, 0];
   .entrance { position: absolute; left: var(--x); top: var(--y); transform: translate(-50%, 0); display: grid; text-align: center; color: var(--blue); font-weight: 700; font-size: 12px; line-height: 1.2; }
   .entrance > span { font-size: 18px; line-height: 1; }
   figcaption { font-size: 12px; color: #555; margin-top: 10px; }
+  /* 入口の表示が屋台5番に重なるので右へずらす（2026-10-13ユーザー指示）。 */
+  @media (max-width: 699px) {
+    .entrance { left: var(--x-sp); }
+  }
   @media (min-width: 700px) {
     .entrance { font-size: 15px; }
     .entrance > span { font-size: 26px; }
