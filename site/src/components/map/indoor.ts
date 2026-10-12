@@ -1,5 +1,5 @@
 import layout from "../../data/map-indoor.json";
-import { indoor, mapEntry } from "./model";
+import { indoor, isHiddenEntry, mapEntry } from "./model";
 
 // 教室の並び・結合はExcel、棟の向きと表示範囲はFigma。
 // セルの大きさは距離を意味しない。廊下を細くした、縮尺なしの配置図。
@@ -29,7 +29,8 @@ export const indoorBuildings = layout.floors.map((building) => {
     const listId = `room-${isI ? "I" : "C"}-${building.floor}-${room.range.replace(":", "-")}`;
     // 正本の運営情報は保持し、来場者向け表示に必要な用途だけを取り出す。
     const note = room.note.split("・").filter((text) => !/控室|一時避難場所|全体マップの05/.test(text)).join("・");
-    return { ...room, note, key, listId, bounds, entries: room.entryIds.map((id) => ({ entryId: id, entry: mapEntry(id) })) };
+    const entryIds = room.entryIds.filter((id) => !isHiddenEntry(id));
+    return { ...room, entryIds, note, key, listId, bounds, entries: entryIds.map((id) => ({ entryId: id, entry: mapEntry(id) })) };
   });
   return { ...building, rooms };
 });

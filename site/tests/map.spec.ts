@@ -7,6 +7,9 @@ import { test, expect } from "@playwright/test";
 import { showsContent } from "./_shared";
 import { readFileSync } from "node:fs";
 const site = JSON.parse(readFileSync(new URL("../src/data/site.json", import.meta.url), "utf8"));
+// ゲーム大会が hidden の間はMAPでも案内しない（lib/loadEntries.ts と同じ扱い）。hidden を外すと大会の検査が自動で有効に戻る。
+const gameHidden = (JSON.parse(readFileSync(new URL("../src/data/entries/program.json", import.meta.url), "utf8")) as { id: string; hidden?: boolean }[])
+  .some((entry) => entry.id === "game-tournament" && entry.hidden);
 
 test.describe("MAP案内", () => {
   test.skip(!showsContent("/map/"), "公開設定による準備中。通常プレビューでは実行する");
@@ -115,6 +118,7 @@ test.describe("MAP案内", () => {
     await expect(list).toBeInViewport();
   });
   test("05からゲーム会場の教室を確認して詳細へ進める", async ({ page }) => {
+    test.skip(gameHidden, "ゲーム大会は非公開中。hidden を外すと実行する");
     await page.goto("/map/");
     await page.locator(".campus-map [data-area='05']").click();
     await expect(page).toHaveURL(/\/map\/game\/$/);
@@ -147,13 +151,15 @@ test.describe("MAP案内", () => {
     const context = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 375, height: 812 } });
     try {
       const page = await context.newPage();
-      await page.goto("http://localhost:4325/map/game/");
-      const room = page.locator("[data-room='第二合併講義室']");
-      await expect(room).toHaveAttribute("data-selected-room", "true");
-      await room.click();
-      await expect(page.locator("#game-info")).toBeInViewport();
-      await page.locator("#game-info a[href='/entry/game-tournament/']").click();
-      await expect(page).toHaveURL(/\/entry\/game-tournament\/$/);
+      if (!gameHidden) {
+        await page.goto("http://localhost:4325/map/game/");
+        const room = page.locator("[data-room='第二合併講義室']");
+        await expect(room).toHaveAttribute("data-selected-room", "true");
+        await room.click();
+        await expect(page.locator("#game-info")).toBeInViewport();
+        await page.locator("#game-info a[href='/entry/game-tournament/']").click();
+        await expect(page).toHaveURL(/\/entry\/game-tournament\/$/);
+      }
       await page.goto("http://localhost:4325/timetable/?tab=day1#stage-LiveStage");
       await page.getByRole("link", { name: "MAPに戻る", exact: false }).click();
       await expect(page).toHaveURL(/\/map\/$/);
@@ -820,7 +826,7 @@ test.describe("MAP案内", () => {
     await expect(second.locator("[data-building='I科棟'] a[href='/entry/rec-1a/']")).toBeVisible();
     await expect(second.locator("[data-building='I科棟'] a[href='/entry/workshop-ai-sorting-robot/']")).toContainText("電子情報工学実験室");
     // 05のゲーム会場も1Fの教室別一覧で確認できる。
-    await expect(exhibition.locator("a[href='/entry/game-tournament/']")).toHaveCount(1);
+    await expect(exhibition.locator("a[href='/entry/game-tournament/']")).toHaveCount(gameHidden ? 0 : 1);
 
     await exhibition.getByRole("tab", { name: "2F" }).focus();
     await page.keyboard.press("ArrowRight");
@@ -881,7 +887,20 @@ test.describe("MAP案内", () => {
       await expect(link.locator("small")).toHaveText(location);
       await expect(link).toHaveCount(1);
     }
-    await expect(page.locator("main a[href='/entry/game-tournament/']")).toHaveCount(1);
+    await expect(page.locator("main a[href='/entry/game-tournament/']")).toHaveCount(gameHidden ? 0 : 1);
+  });
+
+  test("ゲーム大会が非公開の間は、05を準備中にして大会情報と教室のリンクを出さない", async ({ page }) => {
+    test.skip(!gameHidden, "ゲーム大会は公開中");
+    await page.goto("/map/");
+    await expect(page.locator(".campus-map [data-area='05']")).toHaveAttribute("aria-label", /遷移先は準備中/);
+    await expect(page.locator(".map-area-list [data-area='05']")).toContainText("リンク先は準備中");
+    await page.goto("/map/game/");
+    await expect(page.locator("main .preparing")).toBeVisible();
+    await expect(page.locator("#game-info")).toHaveCount(0);
+    await page.goto("/map/exhibition/?floor=1F");
+    await expect(page.locator("[data-floor-panel='1F'] a[href='/entry/game-tournament/']")).toHaveCount(0);
+    await expect(page.locator("[data-floor-panel='1F'] .indoor-map a[data-room='第二合併講義室']")).toHaveCount(0);
   });
 
   test("正本で3Fに訂正した化学マジックは詳細へ進んで同じ階へ戻れる", async ({ page }) => {

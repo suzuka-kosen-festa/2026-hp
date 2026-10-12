@@ -2,11 +2,13 @@
 import MapSubpage from "../../components/map/MapSubpage.astro";
 import IndoorMap from "../../components/map/IndoorMap.astro";
 import EntryFacts from "../../components/entry/EntryFacts.astro";
-import { areaByKey, mapEntry } from "../../components/map/model";
+import { areaByKey, isHiddenEntry, mapEntry } from "../../components/map/model";
 const area = areaByKey("game");
-const entry = mapEntry("game-tournament");
+// 企画が hidden の間は大会情報を出さず、準備中だけを案内する。
+const entry = isHiddenEntry("game-tournament") ? null : mapEntry("game-tournament");
 ---
-<MapSubpage name={area.name} code={area.code} location={area.location} description={entry.summary ?? entry.name}>
+<MapSubpage name={area.name} code={area.code} location={area.location} description={entry ? entry.summary ?? entry.name : `${area.name}の案内は準備中です。`}>
+  {!entry ? <p class="preparing">準備中</p> : <>
   <IndoorMap floor="1F" entryId={entry.id} />
   <section id="game-info" tabindex="-1" aria-labelledby="game-title">
     <h2 id="game-title">{entry.name}</h2>
@@ -20,6 +22,7 @@ const entry = mapEntry("game-tournament");
     {entry.notes?.[0] && <p class="application-note">{entry.notes[0]}</p>}
     <a class="game-details" href={`/entry/${entry.id}/`}>大会全体の案内・参加者規約を見る →</a>
   </section>
+  </>}
 </MapSubpage>
 <style>
   :global(html:has(#game-info)) { scroll-behavior: auto; }
