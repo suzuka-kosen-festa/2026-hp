@@ -865,6 +865,39 @@ test.describe("MAP案内", () => {
     }
   });
 
+  test("トイレを男女のマークで示し、凡例で説明する", async ({ page }) => {
+    for (const [floor, kind, room] of [["1F", "male", "男子トイレ"], ["2F", "female", "女子トイレ"], ["3F", "male", "男子トイレ"]]) {
+      await page.goto(`/map/exhibition/?floor=${floor}`);
+      const diagram = page.locator(`#floor-${floor} .indoor-map`);
+      const toilet = diagram.locator(`[data-building-diagram='C科棟'] [data-room='${room}']`);
+      await expect(toilet.locator(`[data-toilet='${kind}']`)).toHaveCount(1);
+      // 文字のWCは出さず、マークだけにする。
+      await expect(toilet.locator("text")).toHaveCount(0);
+      await expect(diagram.locator(`[data-toilet-key='${kind}']`)).toHaveCount(1);
+      await expect(diagram.locator("figcaption")).toContainText(`＝${room}`);
+      const colors = await diagram.evaluate((root, kind) => [root.querySelector(`[data-toilet='${kind}']`)!, root.querySelector(`[data-toilet-key='${kind}']`)!].map((el) => getComputedStyle(el).fill), kind);
+      expect(new Set(colors).size, `${floor} 図と凡例のマークを同じ色にする`).toBe(1);
+      expect(colors[0], `${floor} 男子は青・女子は赤`).toBe(kind === "male" ? "rgb(26, 51, 214)" : "rgb(227, 27, 35)");
+    }
+    // I科棟は通路を挟んで階段の反対側に男女両方のトイレがある。細い区画からマークがはみ出さない。
+    for (const floor of ["1F", "2F"]) {
+      await page.goto(`/map/exhibition/?floor=${floor}`);
+      const toilet = page.locator(`#floor-${floor} [data-building-diagram='I科棟'] [data-room='男子・女子トイレ']`);
+      await expect(toilet.locator("[data-toilet]")).toHaveCount(2);
+      const result = await toilet.evaluate((room) => {
+        const box = room.querySelector("rect")!.getBoundingClientRect();
+        return [...room.querySelectorAll<SVGGElement>("[data-toilet]")].map((mark) => {
+          const b = mark.getBoundingClientRect();
+          return { kind: mark.dataset.toilet, inside: b.left >= box.left && b.right <= box.right && b.top >= box.top && b.bottom <= box.bottom };
+        });
+      });
+      expect(result.map(({ kind }) => kind), `${floor} I科棟のトイレ`).toEqual(["male", "female"]);
+      expect(result.every(({ inside }) => inside), `${floor} マークが区画に収まる`).toBe(true);
+      await expect(page.locator(`#floor-${floor} figcaption`)).toContainText("＝男子トイレ");
+      await expect(page.locator(`#floor-${floor} figcaption`)).toContainText("＝女子トイレ");
+    }
+  });
+
   test("教室配置図の読み上げ用名称と詳しい説明を分けて伝える", async ({ page }) => {
     for (const floor of ["1F", "2F", "3F"]) {
       await page.goto(`/map/exhibition/?floor=${floor}`);

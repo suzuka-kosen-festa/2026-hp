@@ -13,7 +13,8 @@ export const indoorBuildings = layout.floors.map((building) => {
   const [x, y, width, height] = building.bounds;
   const isI = building.building === "I科棟";
   const endColumn = isI ? 12 : 13;
-  const columnWidths = Array.from({ length: endColumn - 1 }, (_, index) => isI && index + 2 === 4 ? 7.63 : 12.63);
+  // I科棟のH列（男女トイレ）は細くてマークが読めないので太くする（2026-10-12ユーザー指示）。ほかの列は少し細くなる。
+  const columnWidths = Array.from({ length: endColumn - 1 }, (_, index) => isI && index + 2 === 4 ? 7.63 : isI && index + 2 === 8 ? 24 : 12.63);
   const total = columnWidths.reduce((sum, value) => sum + value, 0);
   const columnPosition = (column: number) => columnWidths.slice(0, column - 2).reduce((sum, value) => sum + value, 0) / total;
   const rowPosition = (row: number) => row <= building.sourceRows[0] ? 0 : row >= building.sourceRows[1] + 1 ? 1 : row === building.sourceRows[1] ? .57 : .43;

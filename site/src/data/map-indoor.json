@@ -85,7 +85,7 @@
     {
       "floor": "1F",
       "building": "I科棟",
-      "bounds": [12,50,85,74],
+      "bounds": [12,50,85,84],
       "sourceRows": [8,10],
       "rotation": -90,
       "connectionRange": "G10",
@@ -102,7 +102,7 @@
         {"range":"D10:E10","room":"ホール・出口","short":"","kind":"hall","entryIds":[],"note":""},
         {"range":"F10","room":"階段","short":"階","kind":"facility","entryIds":[],"note":""},
         {"range":"G10","room":"通路","short":"","kind":"passage","entryIds":[],"note":""},
-        {"range":"H10","room":"トイレ","short":"WC","kind":"facility","entryIds":[],"note":""},
+        {"range":"H10","room":"男子・女子トイレ","short":"WC","kind":"facility","entryIds":[],"note":""},
         {"range":"I10:J10","room":"","short":"","kind":"room","entryIds":[],"note":""},
         {"range":"K10:L10","room":"","short":"","kind":"room","entryIds":[],"note":""}
       ]
@@ -110,7 +110,7 @@
     {
       "floor": "2F",
       "building": "I科棟",
-      "bounds": [12,50,85,74],
+      "bounds": [12,50,85,84],
       "sourceRows": [3,5],
       "rotation": -90,
       "connectionRange": "G5",
@@ -125,7 +125,7 @@
         {"range":"D5:E5","room":"ホール","short":"","kind":"hall","entryIds":[],"note":""},
         {"range":"F5","room":"階段","short":"階","kind":"facility","entryIds":[],"note":""},
         {"range":"G5","room":"通路","short":"","kind":"passage","entryIds":[],"note":""},
-        {"range":"H5","room":"トイレ","short":"WC","kind":"facility","entryIds":[],"note":""}
+        {"range":"H5","room":"男子・女子トイレ","short":"WC","kind":"facility","entryIds":[],"note":""}
       ]
     }
   ]
