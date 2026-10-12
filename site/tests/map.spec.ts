@@ -465,6 +465,24 @@ test.describe("MAP案内", () => {
       expect(result.scroll, `${width}px 横スクロール`).toBeLessThanOrEqual(1);
     }
   });
+  test("スマホ幅では02・03の札を校舎の屋根の幅に収め、屋根より上にはみ出さない", async ({ page }) => {
+    for (const width of [320, 340, 360, 375, 414, 600, 899]) {
+      await page.setViewportSize({ width, height: 812 });
+      await page.goto("/map/");
+      await page.evaluate(() => document.fonts.ready);
+      const result = await page.locator(".campus-map").evaluate((map) => {
+        const art = map.querySelector("[data-node-id='1005:113']")!.getBoundingClientRect();
+        // school-blue.png（1538×664）の青い屋根は x 19〜1463、y 92〜。
+        const roof = { left: art.left + art.width * 19 / 1538, right: art.left + art.width * 1463 / 1538, top: art.top + art.height * 92 / 664, bottom: art.bottom };
+        return ["02", "03"].map((code) => {
+          const b = map.querySelector(`[data-area='${code}'] .label-paper`)!.getBoundingClientRect();
+          return { code, inside: b.left >= roof.left && b.right <= roof.right && b.top >= roof.top && b.bottom <= roof.bottom };
+        });
+      });
+      for (const { code, inside } of result) expect(inside, `${width}px ${code}の札が校舎に収まる`).toBe(true);
+    }
+  });
+
   test("MainStageの絵を番号札で隠さない", async ({ page }) => {
     for (const width of [375, 320, 600, 768, 899, 900, 1024, 1280]) {
       await page.setViewportSize({ width, height: 812 });

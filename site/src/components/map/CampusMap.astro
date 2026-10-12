@@ -95,8 +95,10 @@ const imageFor = (key: string) => assets[`../../assets/map/figma/${key}.png`].de
   @container (max-width: 680px) {
     /* 2026-10-09: ユーザー許可により札だけを調整。建物・屋台の座標と番号の対応は維持。 */
     .area-label { left: clamp(38px, var(--x), calc(100% - 38px)); top: clamp(24px, var(--y), calc(100% - 24px)); }
-    .area-label[data-area="02"] { left: 52%; top: min(var(--y), max(22px, calc(24.23cqw - 49.6px))); }
-    .area-label[data-area="03"] { left: 23%; top: 12.8%; }
+    /* 02・03の札は校舎からはみ出さないよう、上端を青い屋根の上端（図の高さの5.05%）にそろえ、左右は屋根の幅（図の幅の14.9〜72.0%）に収める（2026-10-12ユーザー指示）。 */
+    .area-label:is([data-area="02"], [data-area="03"]) { top: calc(5.05% + 2px); transform: none; align-items: flex-start; }
+    .area-label[data-area="03"] { left: calc(14.9% + 3px); }
+    .area-label[data-area="02"] { left: auto; right: calc(28% + 3px); }
     .area-label[data-area="01"] { top: max(var(--y), calc(55.1% + 69.2px)); }
     .area-label[data-area="04"] { top: 65%; }
     /* 絵が小さいので名札も細くし、隣り合うMainStageと体育館の名札を上下にずらして重ねない。 */
@@ -111,11 +113,12 @@ const imageFor = (key: string) => assets[`../../assets/map/figma/${key}.png`].de
   @container (max-width: 320px) {
     /* 最狭幅でも札同士が接触しないよう、全エリア札の上下余白を同じ量だけ縮める。 */
     .area-label { --map-label-pad-y: 2px; --map-label-pad-x: 3px; }
-    .area-label[data-area="02"] { top: 22px; }
     /* SubStageの名札の押せる範囲（上へ伸ばす）と重ならないよう、04の札を少し上げる。 */
     .area-label[data-area="04"] { top: calc(65% - 8px); }
   }
   @container (max-width: 300px) {
+    /* 最狭幅では屋根の幅に02・03の2枚を並べるため、名称だけ1px小さくする。 */
+    .area-label:is([data-area="02"], [data-area="03"]) .area-name { font-size: 11px; }
     /* 最狭幅ではMainStageの名札が左の本部の札に触れないよう、名札だけ1px小さくする。 */
     .name-plate { font-size: 10px; }
     .campus-map { --plate-h: 13px; }
