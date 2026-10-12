@@ -24,7 +24,7 @@ test("初回訪問では1桁につき24枚の紙片で日数を作るOPを表示
   await expect(splash.locator("video")).toHaveCount(0);
 });
 
-test("OP終了を再生開始から4.2秒後に予約する", async ({ page }) => {
+test("OP終了を再生開始から3秒後に予約する", async ({ page }) => {
   await page.addInitScript(() => sessionStorage.setItem("op-variant", "current"));
   await page.addInitScript(() => {
     const scheduledTimeouts: number[] = [];
@@ -41,7 +41,7 @@ test("OP終了を再生開始から4.2秒後に予約する", async ({ page }) =
   const scheduledTimeouts = await page.evaluate(
     () => (window as Window & { __scheduledTimeouts: number[] }).__scheduledTimeouts,
   );
-  expect(scheduledTimeouts).toContain(4_200);
+  expect(scheduledTimeouts).toContain(3_000);
 
   const timing = await page.evaluate(() => {
     const animationTiming = (selector: string) => {
@@ -59,9 +59,9 @@ test("OP終了を再生開始から4.2秒後に予約する", async ({ page }) =
       paperEnd: Math.max(...paperAnimations),
     };
   });
-  expect(timing.wipe).toEqual({ delay: 3_400, duration: 800 });
-  expect(timing.logo).toEqual({ delay: 3_800, duration: 400 });
-  expect(timing.paperEnd).toBeLessThanOrEqual(3_100);
+  expect(timing.wipe).toEqual({ delay: 2_200, duration: 800 });
+  expect(timing.logo).toEqual({ delay: 2_600, duration: 400 });
+  expect(timing.paperEnd).toBeLessThanOrEqual(1_900);
 });
 
 test("OPをスキップすると同じセッションでは再表示しない", async ({ page }) => {
