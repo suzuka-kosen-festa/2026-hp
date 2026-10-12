@@ -48,6 +48,26 @@ test.describe("MAP案内", () => {
     await page.reload();
     await expect(page.getByRole("tab", { name: /フード/ })).toHaveAttribute("aria-selected", "true");
   });
+  test("フードとスイーツを切り替えても、タブ・一覧・その下の内容が上下しない", async ({ page }) => {
+    for (const width of [375, 1280]) {
+      await page.setViewportSize({ width, height: 812 });
+      await page.goto("/map/food/");
+      const measure = () => page.evaluate(() => ({
+        tabs: document.querySelector("[data-stall-tabs]")!.getBoundingClientRect().top,
+        list: document.querySelector("[data-stall-group]:not([hidden])")!.getBoundingClientRect().top,
+        note: document.querySelector(".tea-note")!.getBoundingClientRect().top,
+        page: document.documentElement.scrollHeight,
+      }));
+      const food = await measure();
+      await page.getByRole("tab", { name: /スイーツ/ }).click();
+      await expect(page.getByRole("tabpanel", { name: /スイーツ/ })).toBeVisible();
+      expect(await measure(), `${width}px`).toEqual(food);
+      // 選んでいない一覧は見えず、Tabでも移れない。
+      await expect(page.getByRole("tabpanel")).toHaveCount(1);
+      await expect(page.locator("[data-stall-group='food'] a").first()).toBeHidden();
+    }
+  });
+
   test("控室と運営用の用途を表示せず、飲食スペースと来場者向け会場案内は残す", async ({ page }) => {
     await page.goto("/map/exhibition/");
     await expect(page.locator("main")).not.toContainText(/控室|一時避難場所/);
