@@ -12,8 +12,8 @@ const VARIANT_KEY = "op-variant";
 export const OP_REPLAY_EVENT = "op:replay";
 const LOAD_FAILSAFE_MS = 5000;
 // 数字の紙片を貼り終えるまでの時間。ワイプ以降はここから逆算する
-const PASTE_MS = 1800;
-const WIPE_AT = 60 + PASTE_MS + 340;
+const PASTE_MS = 1300;
+const WIPE_AT = 60 + PASTE_MS + 240;
 
 type NetworkInformation = { saveData?: boolean; effectiveType?: string };
 function isSlowNetwork() {
@@ -69,7 +69,7 @@ function animateStage(stage: HTMLElement, day: string) {
   const size = sizeDigits(stage, day);
   if (!size) return () => undefined;
   const interval = PASTE_MS / (24 * day.length);
-  const landingDuration = Math.min(110, interval * 1.6);
+  const landingDuration = Math.min(110, Math.max(60, interval * 1.6));
   const animate = (element: Element | null, frames: Keyframe[], delay: number, duration: number) => {
     if (element) animations.push(element.animate(frames, { delay, duration, fill: "both", easing: "linear" }));
   };
