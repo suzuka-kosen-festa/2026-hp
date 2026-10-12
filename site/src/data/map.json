@@ -63,8 +63,8 @@
       "nodeId": "1005:269",
       "asset": "stage-yellow",
       "bounds": [
-        70,
-        671.272,
+        76,
+        732.272,
         149.6,
         119.68
       ]
@@ -540,41 +540,10 @@
   "areas": [
     {
       "code": "01",
-      "key": "live-stage",
-      "name": "LiveStage",
-      "location": "第一体育館",
-      "action": "timetable-stage",
-      "stage": "LiveStage",
-      "entryId": null,
-      "label": [
-        1091,
-        579.272,
-        124.44,
-        39.4
-      ]
-    },
-    {
-      "code": "02",
-      "key": "main-stage",
-      "name": "MainStage",
-      "location": "屋外",
-      "action": "timetable-stage",
-      "stage": "MainStage",
-      "entryId": null,
-      "label": [
-        912,
-        499.272,
-        130.44,
-        39.4
-      ]
-    },
-    {
-      "code": "03",
       "key": "food-bazaar",
       "name": "飲食バザー",
       "location": "屋外",
       "action": "area-detail",
-      "stage": null,
       "entryId": null,
       "label": [
         496,
@@ -584,12 +553,11 @@
       ]
     },
     {
-      "code": "04",
+      "code": "02",
       "key": "exhibition",
       "name": "展示・レク",
       "location": "教室棟",
       "action": "area-detail",
-      "stage": null,
       "entryId": null,
       "label": [
         747,
@@ -599,12 +567,11 @@
       ]
     },
     {
-      "code": "05",
+      "code": "03",
       "key": "game",
       "name": "ゲームイベント",
       "location": "C科棟1F・第二合併講義室",
       "action": "entry",
-      "stage": null,
       "entryId": "game-tournament",
       "label": [
         732,
@@ -614,33 +581,49 @@
       ]
     },
     {
-      "code": "06",
-      "key": "sub-stage",
-      "name": "SubStage",
-      "location": "屋外",
-      "action": "timetable-stage",
-      "stage": "SubStage",
-      "entryId": null,
-      "label": [
-        69,
-        789.272,
-        123.44,
-        39.4
-      ]
-    },
-    {
-      "code": "07",
+      "code": "04",
       "key": "department",
       "name": "学科展示",
       "location": "第二体育館",
       "action": "booth-tab",
-      "stage": null,
       "entryId": null,
       "label": [
         66,
         603.272,
         133.86,
         39.6
+      ]
+    }
+  ],
+  "stages": [
+    {
+      "key": "live-stage",
+      "name": "LiveStage",
+      "location": "第一体育館",
+      "nodeId": "1005:224",
+      "plate": [
+        1160.0,
+        553.393
+      ]
+    },
+    {
+      "key": "main-stage",
+      "name": "MainStage",
+      "location": "屋外",
+      "nodeId": "1005:235",
+      "plate": [
+        985.8,
+        483.402
+      ]
+    },
+    {
+      "key": "sub-stage",
+      "name": "SubStage",
+      "location": "屋外",
+      "nodeId": "1005:269",
+      "plate": [
+        150.8,
+        833.402
       ]
     }
   ],
@@ -779,6 +762,10 @@
       "entryIds": [
         "food-sado",
         "rec-kado"
+      ],
+      "plate": [
+        1141.25,
+        295.472
       ]
     },
     {
@@ -792,6 +779,10 @@
       ],
       "entryIds": [
         "main-warashibe"
+      ],
+      "plate": [
+        749.126,
+        388.772
       ]
     }
   ]

@@ -6,6 +6,10 @@ const venue = venues.find((item) => item.key === "multimedia")!;
 ---
 
 <MapSubpage name={venue.name} location="1F" description="第61回鈴鹿高専祭のマルチメディア棟。開催する企画をご案内します。">
-  <p class="detail-note">1F・入ってすぐ左側の開けたスペースを、2区画に分けて開催します。</p>
-  <MapEntryList items={venue.entryIds.map((id) => ({ href: `/entry/${id}/`, name: mapEntry(id).name, sub: mapEntry(id).group }))} />
+  <p class="detail-note">茶道部と華道同好会は、1F・入ってすぐ左側の開けたスペースを、2区画に分けて開催します。</p>
+  {/* 受験相談は企画データ・詳細ページがないため、リンクにせず名称だけを載せる（2026-10-12ユーザー指示）。 */}
+  <MapEntryList items={[
+    ...venue.entryIds.map((id) => ({ href: `/entry/${id}/`, name: mapEntry(id).name, sub: mapEntry(id).group })),
+    { name: "中学生向け受験相談" },
+  ]} />
 </MapSubpage>

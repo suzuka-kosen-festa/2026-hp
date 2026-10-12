@@ -15,7 +15,7 @@ test.describe("MAP案内", () => {
   test.skip(!showsContent("/map/"), "公開設定による準備中。通常プレビューでは実行する");
   test("学科展示からMAPへ戻れ、通常のBOOTH訪問にはMAP用の戻る導線を出さない", async ({ page }) => {
     await page.goto("/map/");
-    const source = page.locator(".map-area-list [data-area='07']");
+    const source = page.locator(".map-area-list [data-area='04']");
     await source.click();
     await expect(page.getByRole("tab", { name: "学科展示", exact: true })).toHaveAttribute("aria-selected", "true");
     const back = page.getByRole("link", { name: "← MAPに戻る", exact: true });
@@ -58,50 +58,11 @@ test.describe("MAP案内", () => {
   });
   test("教室リンクでページ内を移動した後もMAPに戻るボタンは全体図へ戻る", async ({ page }) => {
     await page.goto("/map/");
-    await page.locator(".map-area-list [data-area='04']").click();
+    await page.locator(".map-area-list [data-area='02']").click();
     await page.locator("#floor-1F .indoor-map").getByRole("link").first().click();
     await expect(page).toHaveURL(/#room-/);
     await page.getByRole("link", { name: "← MAPに戻る", exact: true }).first().click();
     await expect(page).toHaveURL(/\/map\/$/);
-  });
-  test("ステージへ移動した画面から会場マップの元の一覧へ戻れる", async ({ page }) => {
-    // ノッチの余白がある端末でもステージ名が固定帯の下へ隠れない。
-    await page.addInitScript(() => {
-      const observer = new MutationObserver(() => {
-        if (!document.documentElement) return;
-        document.documentElement.style.setProperty("--safe-top", "44px");
-        observer.disconnect();
-      });
-      observer.observe(document, { childList: true });
-    });
-    for (const code of ["01", "02"]) {
-      await page.goto("/map/");
-      const source = page.locator(`.map-area-list [data-area='${code}']`);
-      await source.click();
-      const back = page.getByRole("link", { name: "MAPに戻る", exact: false });
-      await expect(back).toBeInViewport();
-      await expect.poll(async () => page.evaluate((stage) => {
-        const target = document.getElementById(`stage-${stage}`)!.getBoundingClientRect();
-        const tabs = document.querySelector(".tab-tag-filter")!.getBoundingClientRect();
-        return target.top >= tabs.bottom - 1;
-      }, code === "01" ? "LiveStage" : "MainStage")).toBe(true);
-      // 一瞬だけ合っていても、その後のスクロールで固定帯に隠れない。
-      const gaps = await page.evaluate(async (stage) => {
-        await document.fonts.ready;
-        const gaps: number[] = [];
-        for (let frame = 0; frame < 30; frame++) {
-          await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
-          gaps.push(document.getElementById(`stage-${stage}`)!.getBoundingClientRect().top - document.querySelector(".tab-tag-filter")!.getBoundingClientRect().bottom);
-        }
-        return gaps;
-      }, code === "01" ? "LiveStage" : "MainStage");
-      expect(Math.min(...gaps)).toBeGreaterThanOrEqual(-1);
-      await back.click();
-      await expect(page).toHaveURL(/\/map\/$/);
-      await expect(source).toBeInViewport();
-    }
-    await page.goto("/timetable/");
-    await expect(page.getByRole("link", { name: "MAPに戻る", exact: false })).toHaveCount(0);
   });
   test("教室を押すとその教室の企画一覧を見て詳細へ進める", async ({ page }) => {
     await page.goto("/map/exhibition/?floor=1F");
@@ -117,10 +78,10 @@ test.describe("MAP案内", () => {
     await expect(page.getByRole("tab", { name: "1F", exact: true })).toHaveAttribute("aria-selected", "true");
     await expect(list).toBeInViewport();
   });
-  test("05からゲーム会場の教室を確認して詳細へ進める", async ({ page }) => {
+  test("03からゲーム会場の教室を確認して詳細へ進める", async ({ page }) => {
     test.skip(gameHidden, "ゲーム大会は非公開中。hidden を外すと実行する");
     await page.goto("/map/");
-    await page.locator(".campus-map [data-area='05']").click();
+    await page.locator(".campus-map [data-area='03']").click();
     await expect(page).toHaveURL(/\/map\/game\/$/);
     await expect(page.locator(".indoor-map")).toBeInViewport();
     await expect(page.locator(".map-location")).toContainText("C科棟1F・第二合併講義室");
@@ -179,17 +140,17 @@ test.describe("MAP案内", () => {
       await page.setViewportSize({ width, height: 812 });
       await page.goto("/map/");
       const names = await page.locator(".campus-map .area-name").evaluateAll((nodes) => nodes.map((node) => parseFloat(getComputedStyle(node).fontSize)));
-      expect(names).toHaveLength(7);
+      expect(names).toHaveLength(4);
       expect(names.every((size) => size >= (width === 375 ? 12 : 14))).toBe(true);
       const descriptions = await page.locator(".map-area-list .area-copy > small").evaluateAll((nodes) => nodes.map((node) => parseFloat(getComputedStyle(node).fontSize)));
-      expect(descriptions).toHaveLength(7);
+      expect(descriptions).toHaveLength(4);
       expect(descriptions.every((size) => size >= 14)).toBe(true);
     }
   });
   test("エリア一覧は内部の案内へ進む矢印で統一する", async ({ page }) => {
     await page.goto("/map/");
-    await expect(page.locator(".map-area-list .action-arrow")).toHaveText(Array(7).fill("→"));
-    await page.locator(".map-area-list [data-area='03']").click();
+    await expect(page.locator(".map-area-list .action-arrow")).toHaveText(Array(4).fill("→"));
+    await page.locator(".map-area-list [data-area='01']").click();
     await expect(page).toHaveURL(/\/map\/food\/$/);
     await expect(page.getByRole("heading", { level: 1 })).toHaveText("飲食バザー");
   });
@@ -427,14 +388,14 @@ test.describe("MAP案内", () => {
     }
     await context.close();
   });
-  test("人間が配置した7つのエリア札を図と一覧で同じ案内につなぐ", async ({ page }) => {
+  test("人間が配置した4つのエリア札を図と一覧で同じ案内につなぐ", async ({ page }) => {
     await page.goto("/map/");
     await expect(page.getByRole("heading", { name: "会場マップ", exact: true })).toBeVisible();
     await expect(page.locator(".campus-art img")).toHaveCount(30);
     await expect.poll(() => page.locator(".campus-art img").evaluateAll((els) => els.every((el) => (el as HTMLImageElement).complete && (el as HTMLImageElement).naturalWidth > 0))).toBe(true);
-    await expect(page.locator(".map-area-list > li")).toHaveCount(7);
-    await expect(page.locator(".campus-map .area-label")).toHaveCount(7);
-    for (const code of ["01", "02", "03", "04", "05", "06", "07"]) {
+    await expect(page.locator(".map-area-list > li")).toHaveCount(4);
+    await expect(page.locator(".campus-map .area-label")).toHaveCount(4);
+    for (const code of ["01", "02", "03", "04"]) {
       const diagram = page.locator(`.campus-map [data-area='${code}']`);
       const list = page.locator(`.map-area-list [data-area='${code}']`);
       expect(await diagram.getAttribute("href")).toBe(await list.getAttribute("href"));
@@ -443,25 +404,23 @@ test.describe("MAP案内", () => {
       expect(box?.height).toBeGreaterThanOrEqual(44);
     }
   });
-  test("03と05の地図札から案内へ進み、戻って同じ札を使える", async ({ page }) => {
+
+  test("01と03の地図札から案内へ進み、戻って同じ札を使える", async ({ page }) => {
     await page.goto("/map/");
-    await page.locator(".campus-map [data-area='03']").click();
+    await page.locator(".campus-map [data-area='01']").click();
     await expect(page).toHaveURL(/\/map\/food\/$/);
     await expect(page.getByRole("heading", { level: 1 })).toContainText("飲食バザー");
     await expect(page.locator(".bazaar-map")).toBeVisible();
     await page.goBack();
-    await expect(page.locator(".campus-map [data-area='03']")).toBeVisible();
-    await page.locator(".campus-map [data-area='05']").click();
+    await expect(page.locator(".campus-map [data-area='01']")).toBeVisible();
+    await page.locator(".campus-map [data-area='03']").click();
     await expect(page).toHaveURL(/\/map\/game\/$/);
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
     await page.goBack();
-    await expect(page.locator(".campus-map [data-area='05']")).toBeVisible();
+    await expect(page.locator(".campus-map [data-area='03']")).toBeVisible();
   });
-  test("スマホの地図だけで7エリアの名称を読めて、札同士を押し間違えない", async ({ page }) => {
-    const expected = [
-      ["01", "LiveStage"], ["02", "MainStage"], ["03", "飲食バザー"],
-      ["04", "展示・レク"], ["05", "ゲームイベント"], ["06", "SubStage"], ["07", "学科展示 ←"],
-    ];
+  test("地図だけでエリアとステージの名称を読めて、札同士を押し間違えない", async ({ page }) => {
+    const expected = [["01", "飲食バザー"], ["02", "展示・レク"], ["03", "ゲームイベント"], ["04", "学科展示 ←"]];
     for (const width of [375, 320, 600, 768, 899, 900, 1024, 1280]) {
       await page.setViewportSize({ width, height: 812 });
       await page.goto("/map/");
@@ -471,6 +430,7 @@ test.describe("MAP案内", () => {
         await expect(label).toBeVisible();
         await expect(label).toHaveText(name);
       }
+      for (const name of ["LiveStage", "MainStage", "SubStage"]) await expect(page.locator(`.campus-map [data-stage-name='${name}']`)).toHaveText(name);
       const result = await page.locator(".campus-map").evaluate((map) => {
         const frame = map.getBoundingClientRect();
         const boxes = [...map.querySelectorAll("a")].map((el) => ({ name: el.getAttribute("aria-label"), b: el.getBoundingClientRect() }));
@@ -492,7 +452,8 @@ test.describe("MAP案内", () => {
           })(),
           tooSmall: boxes.filter(({ b }) => b.width < 44 || b.height < 44).map(({ name }) => name),
           collisions: boxes.flatMap((a, i) => boxes.slice(i + 1).filter(({ b }) => a.b.left < b.right && a.b.right > b.left && a.b.top < b.bottom && a.b.bottom > b.top).map((b) => [a.name, b.name])),
-          outside: boxes.filter(({ b }) => b.left < frame.left - 1 || b.right > frame.right + 1 || b.top < frame.top - 1 || b.bottom > frame.bottom + 1).map(({ name }) => name),
+          // スマホ幅の棟の名札は建物の中心にそろえるため、図の右端からページ余白へはみ出してよい（横スクロールは scroll で見る）。
+          outside: boxes.filter(({ name, b }) => !(name?.startsWith("マルチメディア棟") && frame.width <= 680) && (b.left < frame.left - 1 || b.right > frame.right + 1 || b.top < frame.top - 1 || b.bottom > frame.bottom + 1)).map(({ name }) => name),
           scroll: document.documentElement.scrollWidth - innerWidth,
         };
       });
@@ -504,7 +465,7 @@ test.describe("MAP案内", () => {
       expect(result.scroll, `${width}px 横スクロール`).toBeLessThanOrEqual(1);
     }
   });
-  test("MainStageの絵を番号札で隠さず、札から時間を確認できる", async ({ page }) => {
+  test("MainStageの絵を番号札で隠さない", async ({ page }) => {
     for (const width of [375, 320, 600, 768, 899, 900, 1024, 1280]) {
       await page.setViewportSize({ width, height: 812 });
       await page.goto("/map/");
@@ -520,76 +481,9 @@ test.describe("MAP案内", () => {
       });
       expect(coveringLabels, `${width}px MainStageの絵を覆う札`).toEqual([]);
     }
-    await page.locator(".campus-map [data-area='02']").click();
-    await expect(page).toHaveURL(/\/timetable\/.*#stage-MainStage$/);
-    await expect(page.locator("#stage-MainStage")).toBeInViewport();
-  });
-  test("MainStageの番号と名称を一枚の紙札に収め、屋台を隠さずステージの時間へ進める", async ({ page }) => {
-    for (const width of [375, 320, 410, 411, 450, 480, 514, 515, 600, 768, 899, 900, 1024, 1280]) {
-      await page.setViewportSize({ width, height: 812 });
-      await page.goto("/map/");
-      await page.evaluate(() => document.fonts.ready);
-      const result = await page.locator(".campus-map").evaluate((map) => {
-        const anchor = map.querySelector("[data-area='02']")!;
-        const paper = anchor.querySelector(".label-paper")!.getBoundingClientRect();
-        const name = anchor.querySelector(".area-name")!.getBoundingClientRect();
-        const code = anchor.querySelector("b")!.getBoundingClientRect();
-        const stage = map.querySelector("[data-node-id='1005:235']")!.getBoundingClientRect();
-        const stalls = [...map.querySelectorAll(".art-piece")].filter((el) => el.querySelector("img")!.src.includes("stall-red"));
-        const coveredStalls = stalls.filter((el) => {
-          const stall = el.getBoundingClientRect();
-          return [paper, name].some((b, index) => Math.min(b.right + (index === 0 ? 2 : 0), stall.right) - Math.max(b.left, stall.left) > 0.5
-            && Math.min(b.bottom + (index === 0 ? 2 : 0), stall.bottom) - Math.max(b.top, stall.top) > 0.5);
-        }).map((el) => el.getAttribute("data-node-id"));
-        const outsidePaper = [code, name].filter((b) => b.left < paper.left || b.right > paper.right || b.top < paper.top || b.bottom > paper.bottom);
-        const stageGap = Math.hypot(Math.max(0, stage.left - paper.right, paper.left - stage.right), Math.max(0, stage.top - paper.bottom, paper.top - stage.bottom));
-        const style = getComputedStyle(anchor, "::after");
-        const box = anchor.getBoundingClientRect();
-        const pointer = map.getBoundingClientRect().width <= 680 ? {
-          x: box.left + parseFloat(style.left) + parseFloat(style.width) - 1,
-          gap: stage.bottom - (box.top + parseFloat(style.top)),
-        } : null;
-        return { coveredStalls, outsidePaper: outsidePaper.length, stageGap, belowStage: paper.top - stage.bottom, pointer, stageLeft: stage.left, stageRight: stage.right };
-      });
-      expect(result.outsidePaper, `${width}px 番号と名称が同じ紙札の中にある`).toBe(0);
-      expect(result.coveredStalls, `${width}px MainStageの札や名称が屋台を隠さない`).toEqual([]);
-      expect(result.stageGap, `${width}px 紙札がステージの近くにある`).toBeLessThanOrEqual(40);
-      expect(result.belowStage, `${width}px MainStageの札がステージの下にある`).toBeGreaterThanOrEqual(0);
-      if (result.pointer) {
-        expect(result.pointer.x).toBeGreaterThanOrEqual(result.stageLeft);
-        expect(result.pointer.x).toBeLessThanOrEqual(result.stageRight);
-        expect(result.pointer.gap, `${width}px 案内線がステージの下端だけを指す`).toBeGreaterThanOrEqual(3);
-        expect(result.pointer.gap).toBeLessThanOrEqual(5);
-      }
-      await page.locator(".campus-map [data-area='02'] .area-name").click();
-      await expect(page).toHaveURL(/\/timetable\/.*#stage-MainStage$/);
-      await expect(page.locator("#stage-MainStage")).toBeInViewport();
-    }
   });
 
-  test("マルチメディア棟の屋根と正面を札と影で隠さず、棟名から案内へ進める", async ({ page }) => {
-    for (const width of [375, 320, 600, 768, 899, 900, 1024, 1280]) {
-      await page.setViewportSize({ width, height: 812 });
-      await page.goto("/map/");
-      await page.evaluate(() => document.fonts.ready);
-      const covering = await page.locator(".campus-map").evaluate((map) => {
-        const art = map.querySelector("[data-node-id='1279:2196']")!.getBoundingClientRect();
-        return [...map.querySelectorAll(".label-paper")].filter((el) => {
-          const b = el.getBoundingClientRect();
-          // Figmaの新しい棟名札は建物の足元に配置。屋根と正面の上80%は隠さない。
-          const protectedBottom = el.closest("[data-venue='multimedia']") ? art.bottom - art.height * 0.2 : art.bottom;
-          return Math.min(b.right + 2, art.right) - Math.max(b.left, art.left) > 0.5
-            && Math.min(b.bottom + 2, protectedBottom) - Math.max(b.top, art.top) > 0.5;
-        }).map((el) => el.textContent);
-      });
-      expect(covering, `${width}px マルチメディア棟を覆う札`).toEqual([]);
-    }
-    await page.locator(".campus-map [data-venue='multimedia']").click();
-    await expect(page).toHaveURL(/\/map\/multimedia\/$/);
-    await expect(page.getByRole("heading", { level: 1 })).toHaveText("マルチメディア棟");
-  });
-
-  test("マルチメディア棟の小さな札を建物の足元に置き、正式名称を切らない", async ({ page }) => {
+  test("マルチメディア棟の名札を建物の中心・正面の下側に重ね、屋根を隠さずに案内へ進める", async ({ page }) => {
     for (const width of [375, 320, 600, 768, 899, 900, 1024, 1280]) {
       await page.setViewportSize({ width, height: 812 });
       await page.goto("/map/");
@@ -599,38 +493,31 @@ test.describe("MAP案内", () => {
       const result = await label.evaluate((anchor) => {
         const map = anchor.closest(".campus-map")!;
         const art = map.querySelector("[data-node-id='1279:2196']")!.getBoundingClientRect();
-        const paper = anchor.querySelector(".label-paper")!.getBoundingClientRect();
-        const range = document.createRange(); range.selectNodeContents(anchor.querySelector(".venue-long")!);
-        return { belowRoof: paper.top >= art.top + art.height * 0.8, gap: paper.top - art.bottom,
-          width: paper.width, height: paper.height,
-          clipped: [...range.getClientRects()].some((b) => b.left < paper.left || b.right > paper.right || b.top < paper.top || b.bottom > paper.bottom) };
+        const plate = anchor.querySelector(".name-plate")!.getBoundingClientRect();
+        const range = document.createRange(); range.selectNodeContents(anchor.querySelector(".name-plate")!);
+        // 番号札は棟の絵に掛からない（名札だけを重ねる）。
+        const coveringLabels = [...map.querySelectorAll(".label-paper")].filter((el) => {
+          const b = el.getBoundingClientRect();
+          return Math.min(b.right + 2, art.right) - Math.max(b.left, art.left) > 0.5 && Math.min(b.bottom + 2, art.bottom) - Math.max(b.top, art.top) > 0.5;
+        }).map((el) => el.textContent);
+        const center = (plate.left + plate.right) / 2 - (art.left + art.width * 240.5 / 486);
+        return { belowRoof: plate.top >= art.top + art.height * 0.5, onArt: plate.top < art.bottom, center,
+          scroll: document.documentElement.scrollWidth - innerWidth, inViewport: plate.left >= 0 && plate.right <= innerWidth,
+          // 欠けは横方向で見る（縦はフォントの上下余白が行の高さを超えるだけで、文字は切れない）。
+          clipped: [...range.getClientRects()].some((b) => b.left < plate.left - 0.5 || b.right > plate.right + 0.5),
+          coveringLabels };
       });
-      expect(result.belowRoof, `${width}px 棟の足元に札を置く`).toBe(true);
-      expect(result.gap, `${width}px 棟から離れない`).toBeLessThanOrEqual(8);
-      expect(result.width, `${width}px 小さな横長の札`).toBeLessThanOrEqual(100);
-      expect(result.height, `${width}px 札の高さ`).toBeLessThanOrEqual(20);
+      expect(result.belowRoof, `${width}px 屋根を隠さない`).toBe(true);
+      expect(Math.abs(result.center), `${width}px 名札の中心が建物の中心にそろう`).toBeLessThanOrEqual(1);
+      expect(result.inViewport, `${width}px 名札が画面内に収まる`).toBe(true);
+      expect(result.scroll, `${width}px 横スクロール`).toBeLessThanOrEqual(1);
+      expect(result.onArt, `${width}px 名札が棟の正面に重なる`).toBe(true);
       expect(result.clipped, `${width}px 正式名称の欠け`).toBe(false);
+      expect(result.coveringLabels, `${width}px マルチメディア棟を覆う番号札`).toEqual([]);
     }
-  });
-
-  test("LiveStageの01札を体育館の入口近くに置き、対応する時間へ進める", async ({ page }) => {
-    for (const width of [375, 320, 600, 768, 899, 900, 1024, 1280]) {
-      await page.setViewportSize({ width, height: 812 });
-      await page.goto("/map/");
-      await page.evaluate(() => document.fonts.ready);
-      const placement = await page.locator(".campus-map").evaluate((map) => {
-        const gym = map.querySelector("[data-node-id='1005:224']")!.getBoundingClientRect();
-        const label = map.querySelector("[data-area='01'] .label-paper")!.getBoundingClientRect();
-        return { gap: label.top - gym.bottom, center: label.left + label.width / 2, left: gym.left, right: gym.right };
-      });
-      expect(placement.gap, `${width}px 01札が体育館から離れすぎない`).toBeLessThanOrEqual(4);
-      expect(placement.gap, `${width}px 01札が体育館の下にある`).toBeGreaterThanOrEqual(-0.5);
-      expect(placement.center).toBeGreaterThanOrEqual(placement.left);
-      expect(placement.center).toBeLessThanOrEqual(placement.right);
-    }
-    await page.locator(".campus-map [data-area='01']").click();
-    await expect(page).toHaveURL(/\/timetable\/.*#stage-LiveStage$/);
-    await expect(page.locator("#stage-LiveStage")).toBeInViewport();
+    await page.locator(".campus-map [data-venue='multimedia']").click();
+    await expect(page).toHaveURL(/\/map\/multimedia\/$/);
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText("マルチメディア棟");
   });
 
   test("不要になった専攻科棟は図と案内から外し、ほかの会場は残す", async ({ page, request }) => {
@@ -645,7 +532,7 @@ test.describe("MAP案内", () => {
   });
   test("フードとスイーツの番号を分けて案内し、配置図を利用できる", async ({ page }) => {
     await page.goto("/map/");
-    await page.locator(".map-area-list [data-area='03']").click();
+    await page.locator(".map-area-list [data-area='01']").click();
     await expect(page).toHaveURL(/\/map\/food\/$/);
     await expect(page.getByRole("heading", { level: 1 })).toContainText("飲食バザー");
     await expect(page.locator("main")).not.toContainText("詳細配置は準備中");
@@ -780,10 +667,10 @@ test.describe("MAP案内", () => {
     await expect(page.locator(".stall-label")).toHaveCount(0);
 
     // 案内ページは全体MAPと同じ公開状態なので、MAPが見えているのに「リンク先は準備中」とは出さない
-    await expect(page.locator(".map-area-list [data-area='03']")).toContainText("店舗と番号を見る");
-    await expect(page.locator(".map-area-list [data-area='04']")).toContainText("棟・階の案内を見る");
+    await expect(page.locator(".map-area-list [data-area='01']")).toContainText("店舗と番号を見る");
+    await expect(page.locator(".map-area-list [data-area='02']")).toContainText("棟・階の案内を見る");
 
-    await page.locator(".map-area-list [data-area='04']").click();
+    await page.locator(".map-area-list [data-area='02']").click();
     await expect(page).toHaveURL(/\/map\/exhibition\/$/);
     await expect(page.locator("main")).toContainText("教室配置図");
     await page.getByRole("tab", { name: "3F" }).click();
@@ -795,6 +682,9 @@ test.describe("MAP案内", () => {
     await expect(page.locator("main")).toContainText("入ってすぐ左側");
     await expect(page.locator("main a[href='/entry/food-sado/']")).toBeVisible();
     await expect(page.locator("main a[href='/entry/rec-kado/']")).toBeVisible();
+    const consultation = page.locator("main .entry-row").filter({ hasText: "中学生向け受験相談" });
+    await expect(consultation).toBeVisible();
+    await expect(consultation.locator("xpath=self::a")).toHaveCount(0);
     await page.getByRole("link", { name: "← MAPに戻る" }).first().click();
     await expect(page).toHaveURL(/\/map\/$/);
 
@@ -890,11 +780,11 @@ test.describe("MAP案内", () => {
     await expect(page.locator("main a[href='/entry/game-tournament/']")).toHaveCount(gameHidden ? 0 : 1);
   });
 
-  test("ゲーム大会が非公開の間は、05を準備中にして大会情報と教室のリンクを出さない", async ({ page }) => {
+  test("ゲーム大会が非公開の間は、03を準備中にして大会情報と教室のリンクを出さない", async ({ page }) => {
     test.skip(!gameHidden, "ゲーム大会は公開中");
     await page.goto("/map/");
-    await expect(page.locator(".campus-map [data-area='05']")).toHaveAttribute("aria-label", /遷移先は準備中/);
-    await expect(page.locator(".map-area-list [data-area='05']")).toContainText("リンク先は準備中");
+    await expect(page.locator(".campus-map [data-area='03']")).toHaveAttribute("aria-label", /遷移先は準備中/);
+    await expect(page.locator(".map-area-list [data-area='03']")).toContainText("リンク先は準備中");
     await page.goto("/map/game/");
     await expect(page.locator("main .preparing")).toBeVisible();
     await expect(page.locator("#game-info")).toHaveCount(0);
@@ -928,15 +818,9 @@ test.describe("MAP案内", () => {
     await expect(exhibition.locator("a[href='/entry/rec-rigaku/']")).toBeVisible();
   });
 
-  test("ステージの列と学科展示タブに直接着地する", async ({ page }) => {
-    for (const [code, stage] of [["01", "LiveStage"], ["02", "MainStage"], ["06", "SubStage"]]) {
-      await page.goto("/map/");
-      await page.locator(`.map-area-list [data-area='${code}']`).click();
-      await expect(page).toHaveURL(new RegExp(`#stage-${stage}$`));
-      await expect(page.locator(`#stage-${stage}`)).toBeInViewport();
-    }
+  test("学科展示タブに直接着地する", async ({ page }) => {
     await page.goto("/map/");
-    await page.locator(".map-area-list [data-area='07']").click();
+    await page.locator(".map-area-list [data-area='04']").click();
     await expect(page.getByRole("tab", { name: "学科展示" })).toHaveAttribute("aria-selected", "true");
   });
 
@@ -1000,7 +884,7 @@ test.describe("MAP案内", () => {
         for (const { el, size } of sizes) el.style.fontSize = `${size * 2}px`;
       });
       const list = page.locator(".map-area-list");
-      await expect(list.getByRole("link")).toHaveCount(7);
+      await expect(list.getByRole("link")).toHaveCount(4);
       const result = await list.evaluate((root) => {
         const frame = root.getBoundingClientRect();
         const links = [...root.querySelectorAll("a")];
@@ -1033,12 +917,12 @@ test.describe("MAP案内", () => {
     await page.addStyleTag({ content: ".map-page { font-size: 200%; } .map-area-list strong { font-size: 200% !important; }" });
     const width = await page.evaluate(() => ({ full: document.documentElement.scrollWidth, view: innerWidth }));
     expect(width.full).toBeLessThanOrEqual(width.view + 1);
-    await expect(page.locator(".map-area-list [data-area='05']")).toBeVisible();
+    await expect(page.locator(".map-area-list [data-area='03']")).toBeVisible();
   });
 
   test("案内ページから戻ると全体MAPの一覧の位置に戻る", async ({ page }) => {
     await page.goto("/map/");
-    const card = page.locator(".map-area-list [data-area='04']");
+    const card = page.locator(".map-area-list [data-area='02']");
     await card.scrollIntoViewIfNeeded();
     await card.click();
     await expect(page).toHaveURL(/\/map\/exhibition\/$/);
@@ -1051,9 +935,9 @@ test.describe("MAP案内", () => {
     const context = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 375, height: 812 } });
     const page = await context.newPage();
     await page.goto("http://localhost:4325/map/");
-    await expect(page.locator(".map-area-list > li")).toHaveCount(7);
-    await expect(page.locator(".campus-map [data-area='03']")).toHaveAttribute("href", "/map/food/");
-    await expect(page.locator(".campus-map [data-area='05']")).toHaveAttribute("href", "/map/game/");
+    await expect(page.locator(".map-area-list > li")).toHaveCount(4);
+    await expect(page.locator(".campus-map [data-area='01']")).toHaveAttribute("href", "/map/food/");
+    await expect(page.locator(".campus-map [data-area='03']")).toHaveAttribute("href", "/map/game/");
     await page.goto("http://localhost:4325/map/multimedia/");
     await expect(page.locator("main a[href='/entry/rec-kado/']")).toBeVisible();
     // 階の切替はJSで動くので、JSなしではタブを出さずに全階を並べる
@@ -1065,19 +949,104 @@ test.describe("MAP案内", () => {
     await context.close();
   });
 
-  test("開催中表示とステージ導線は当日の日程を使い、中夜祭を混ぜない", async ({ page }) => {
+  test("ステージ・棟・本部は、本部の絵の看板と同じく建物に名札を重ねて示す", async ({ page }) => {
+    // ステージは番号を持たず、名札からタイムテーブルへ進む。棟と本部は案内ページへのリンク。
+    const plates = [
+      { name: "LiveStage", selector: "[data-stage-name='LiveStage'] .name-plate", art: "1005:224", link: true },
+      { name: "MainStage", selector: "[data-stage-name='MainStage'] .name-plate", art: "1005:235", link: true },
+      { name: "SubStage", selector: "[data-stage-name='SubStage'] .name-plate", art: "1005:269", link: true },
+      { name: "マルチメディア棟", selector: "[data-venue='multimedia'] .name-plate", art: "1279:2196", link: true },
+      { name: "本部", selector: "[data-venue='headquarters'] .name-plate", art: "1285:2266", link: true },
+    ];
+    for (const width of [320, 360, 375, 414, 600, 768, 899, 900, 1024, 1280]) {
+      await page.setViewportSize({ width, height: 812 });
+      await page.goto("/map/");
+      await page.evaluate(() => document.fonts.ready);
+      const result = await page.locator(".campus-map").evaluate((map, plates) => {
+        const frame = map.getBoundingClientRect();
+        const papers = [...map.querySelectorAll(".label-paper")].map((el) => el.getBoundingClientRect());
+        const all = [...map.querySelectorAll(".name-plate")];
+        const overlaps = (a: DOMRect, b: DOMRect) => Math.min(a.right, b.right) - Math.max(a.left, b.left) > 0.5 && Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top) > 0.5;
+        return plates.map(({ name, selector, art, link }) => {
+          const plate = map.querySelector(selector)!;
+          const box = plate.getBoundingClientRect();
+          const piece = map.querySelector(`[data-node-id='${art}']`)!.getBoundingClientRect();
+          const centerX = box.left + box.width / 2, centerY = box.top + box.height / 2;
+          return { name, text: plate.textContent, linkMatches: Boolean(plate.closest("a")) === link,
+            onArt: centerX > piece.left && centerX < piece.right && centerY > piece.top && centerY < piece.bottom,
+            coversLabel: papers.some((paper) => overlaps(box, paper)),
+            coversPlate: all.some((other) => other !== plate && overlaps(box, other.getBoundingClientRect())),
+            // スマホ幅の棟の名札は建物の中心にそろえるため、図の右端からページ余白へはみ出してよい（別の検査で画面内を確認）。
+            outside: (name === "マルチメディア棟" && frame.width <= 680 ? false : box.left < frame.left - 1 || box.right > frame.right + 1) || box.bottom > frame.bottom + 1,
+            fontSize: parseFloat(getComputedStyle(plate).fontSize) };
+        });
+      }, plates);
+      for (const { name, text, linkMatches, onArt, coversLabel, coversPlate, outside, fontSize } of result) {
+        expect(text, `${width}px ${name}の名札`).toBe(name);
+        expect(linkMatches, `${width}px ${name}のリンクの有無`).toBe(true);
+        expect(onArt, `${width}px ${name}の名札が絵の上にある`).toBe(true);
+        expect(coversLabel, `${width}px ${name}の名札が番号札に重ならない`).toBe(false);
+        expect(coversPlate, `${width}px ${name}の名札同士が重ならない`).toBe(false);
+        expect(outside, `${width}px ${name}の名札が図からはみ出さない`).toBe(false);
+        // 最狭幅を除き11px以上で読める。スマホ幅の本部は絵の看板と同じ幅にするため10px（2026-10-12ユーザー決定）。
+        expect(fontSize, `${width}px ${name}の名札の文字`).toBeGreaterThanOrEqual(width <= 320 || (name === "本部" && width < 900) ? 10 : 11);
+      }
+    }
+  });
+
+  test("ステージの名札からタイムテーブルの該当ステージへ進み、元の名札へ戻れる", async ({ page }) => {
+    // ノッチの余白がある端末でもステージ名が固定帯の下へ隠れない。
+    await page.addInitScript(() => {
+      const observer = new MutationObserver(() => {
+        if (!document.documentElement) return;
+        document.documentElement.style.setProperty("--safe-top", "44px");
+        observer.disconnect();
+      });
+      observer.observe(document, { childList: true });
+    });
+    for (const stage of ["LiveStage", "MainStage", "SubStage"]) {
+      await page.goto("/map/");
+      const source = page.locator(`.campus-map [data-stage-name='${stage}']`);
+      await source.click();
+      await expect(page).toHaveURL(new RegExp(`/timetable/.*#stage-${stage}$`));
+      const back = page.getByRole("link", { name: "MAPに戻る", exact: false });
+      await expect(back).toBeInViewport();
+      await expect.poll(async () => page.evaluate((stage) => {
+        const target = document.getElementById(`stage-${stage}`)!.getBoundingClientRect();
+        const tabs = document.querySelector(".tab-tag-filter")!.getBoundingClientRect();
+        return target.top >= tabs.bottom - 1;
+      }, stage)).toBe(true);
+      // 一瞬だけ合っていても、その後のスクロールで固定帯に隠れない。
+      const gaps = await page.evaluate(async (stage) => {
+        await document.fonts.ready;
+        const gaps: number[] = [];
+        for (let frame = 0; frame < 30; frame++) {
+          await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+          gaps.push(document.getElementById(`stage-${stage}`)!.getBoundingClientRect().top - document.querySelector(".tab-tag-filter")!.getBoundingClientRect().bottom);
+        }
+        return gaps;
+      }, stage);
+      expect(Math.min(...gaps)).toBeGreaterThanOrEqual(-1);
+      await back.click();
+      await expect(page).toHaveURL(/\/map\/$/);
+      await expect(source).toBeInViewport();
+    }
+    await page.goto("/timetable/");
+    await expect(page.getByRole("link", { name: "MAPに戻る", exact: false })).toHaveCount(0);
+  });
+
+  test("ステージの名札は当日の日程のタイムテーブルへ着地する", async ({ page }) => {
     await page.clock.setFixedTime(new Date(`${site.day2Date}T09:10:00+09:00`));
     await page.goto("/map/");
-    await expect(page.locator("[data-now-stage='MainStage']")).toContainText("開催中 · 音楽部コンサート");
-    await expect(page.locator(".map-area-list [data-area='02']")).toHaveAttribute("href", "/timetable/?tab=day2#stage-MainStage");
-    await page.locator(".map-area-list [data-area='02']").click();
-    await expect(page.getByRole("tab").filter({hasText:"11/1"})).toHaveAttribute("aria-selected", "true");
-    await page.clock.setFixedTime(new Date(`${site.day1Date}T18:00:00+09:00`));
-    await page.goto("/map/");
-    await expect(page.locator(".map-now:visible")).toHaveCount(0);
+    const stage = page.locator(".campus-map [data-stage-name='MainStage']");
+    await expect(stage).toHaveAttribute("href", "/timetable/?tab=day2#stage-MainStage");
+    await stage.click();
+    await expect(page.getByRole("tab").filter({ hasText: "11/1" })).toHaveAttribute("aria-selected", "true");
     await page.clock.setFixedTime(new Date(`${site.day1Date}T09:10:00+09:00`));
     await page.goto("/map/");
-    await expect(page.locator("[data-now-stage='MainStage']")).toContainText("開催中 · オープニング");
+    await expect(stage).toHaveAttribute("href", "/timetable/?tab=day1#stage-MainStage");
+    // ステージは地図下のエリア一覧には載せない。
+    await expect(page.locator(".map-area-list a[href^='/timetable/']")).toHaveCount(0);
   });
 
   test("狭い画面と中間幅でも地図の札が重ならない", async ({ page }) => {
