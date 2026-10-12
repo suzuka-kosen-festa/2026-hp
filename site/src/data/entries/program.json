@@ -138,6 +138,7 @@
   },
   {
     "id": "game-tournament",
+    "hidden": true,
     "category": "イベント",
     "categoryLabel": "ゲーム大会",
     "name": "高専祭ゲーム大会",

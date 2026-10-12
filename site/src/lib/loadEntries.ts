@@ -21,4 +21,7 @@ function normalize(entry: RawEntry): Entry {
   return { ...entry, occurrences: entry.occurrences ?? [] };
 }
 
-export const entries: Entry[] = ([...booth, ...department, ...program] as RawEntry[]).map(normalize);
+/** hidden の企画はここで落とす。消費側（booth / timetable / home / 記事ページ）は個別に判定しなくてよい */
+export const entries: Entry[] = ([...booth, ...department, ...program] as RawEntry[])
+  .filter((entry) => !entry.hidden)
+  .map(normalize);
