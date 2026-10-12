@@ -1,0 +1,58 @@
+{
+  "version": 1,
+  "checkedOn": "2026-10-07",
+  "scope": "plaza-route-only",
+  "source": {
+    "geometry": "ユーザーの手描き経路図。右下の青い丸はプラザ入口と確認済み。",
+    "fileKey": "USj2vcyNX2syrxtzulfnQ6",
+    "pageId": "0:1",
+    "componentId": "1415:2415",
+    "reviewFrameId": "1415:2445",
+    "directionBadgeId": "1415:2479",
+    "originalCompositionId": "1005:106",
+    "originalCompositionModified": false,
+    "visualFix": { "createdNodeIds": ["1418:2444"], "mutatedNodeIds": ["1415:2415", "1415:2440", "1415:2441", "1418:2444"], "reason": "出発の文字の背景を付け、入口の文字を入口の丸から離す。経路と建物の配置は変更しない。" },
+    "positionRefinement": {
+      "reason": "ユーザーがプラザの正確な位置を反映した後の整形。入口と建物中心を動かさず、道筋の終点・矢印・入口ラベル・建物名のはみ出しを修正。",
+      "entranceBoundsPreserved": [563, 306, 38, 38],
+      "plazaCenterXPreserved": 583,
+      "plazaTopYPreserved": 347,
+      "plazaLabelWidth": 164,
+      "routeEndAndEntranceCenter": [582, 325],
+      "otherBuildingsUnchanged": true,
+      "createdNodeIds": [],
+      "mutatedNodeIds": ["1415:2415", "1415:2434", "1415:2435", "1415:2436", "1415:2437", "1415:2438", "1415:2441", "1415:2442", "1415:2443", "1415:2444"]
+    },
+    "createdNodeIds": ["1415:2415", "1415:2416", "1415:2417", "1415:2418", "1415:2419", "1415:2420", "1415:2421", "1415:2422", "1415:2423", "1415:2424", "1415:2425", "1415:2426", "1415:2427", "1415:2428", "1415:2429", "1415:2430", "1415:2431", "1415:2432", "1415:2433", "1415:2434", "1415:2435", "1415:2436", "1415:2437", "1415:2438", "1415:2439", "1415:2440", "1415:2441", "1415:2442", "1415:2443", "1415:2444", "1415:2445", "1415:2446", "1415:2476", "1415:2477", "1415:2478", "1415:2479"]
+  },
+  "asset": { "path": "site/src/assets/map/figma/plaza-route.svg", "size": [670, 480], "bytes": 87291, "type": "figma-export-not-screenshot" },
+  "implementation": {
+    "route": "/map/innovation-plaza/",
+    "entryId": "workshop-drone",
+    "entryContentSource": "既存program.jsonを読み、名称・会場・開催時間のデータは変更しない。",
+    "mainMapLink": "図の下の右側に導線札を追加。通路上の座標は推測せず、既存配置を保つ。",
+    "figmaPlacement": "補助図と導線札は部品として素材欄の下に追加。既存会場図へ札を配置する作業は人間が行う。",
+    "ci": "既存PAGE_RULESのpages/map・components/map・assets/mapとmap.spec.tsで検査。公開状態は/map/を継承。"
+  },
+  "verification": {
+    "checkedOn": "2026-10-07",
+    "afterPositionRefinement": { "mapE2ePassed": 28, "mapE2eFailed": 0, "mapE2eSkipped": 0, "checkPassed": true, "visualWidths": [375, 1280], "consoleErrors": [], "overflow": false, "imageAspectRatioPreserved": true, "navigationAndBackPassed": true },
+    "tdd": "案内リンクがない状態でテスト失敗を確認してから実装。JS無効時のテスト用style読み込み待ちを、DOMへの同期挿入に修正した。",
+    "check": "npm run check 成功。対象TSX 15件。",
+    "e2e": { "passed": 133, "skipped": 1, "failed": 0, "skipReason": "既存の開発用ページ検査。本番ビルド時のみ有効になる条件付きスキップ。", "build": "E2EのwebServerで本番ビルド成功。" },
+    "browser": "Browserプラグインがないため、Playwrightとインストール済みChromeで確認。リポジトリのPlaywright設定は変更していない。",
+    "visualWidths": [375, 1280],
+    "overflowWidthsWithNoJsAndEnlargedRouteText": [320, 375, 768, 1280],
+    "navigation": "全体MAP→補助図→ドローン企画詳細→ブラウザで戻るを確認。補助図から全体MAPへ戻るリンクも確認。",
+    "consoleErrors": [],
+    "sourceHashesUnchanged": {
+      "site/src/data/entries/booth.json": "48A7CEF92826856B632CC1269FF10899332197AB50B30521654AC9A70FF09712",
+      "site/src/data/entries/program.json": "0401EA7FCA8E1965ECB357058218ED0C654B2102684AE88EBC50235E036E4E99",
+      "site/src/data/release.json": "BA31CE9E74B55E6386B4B195946DBC24485476D0D5D4B964BB5AC8417893F706"
+    },
+    "independentCodeReview": "要修正指摘なし。追加確認でfigcaptionをfigureの末尾に保ち、案内リンクはfigure外に置いた。",
+    "notChecked": ["現地での道順", "Safari", "実機", "スクリーンリーダー"]
+  },
+  "unknowns": ["距離・徒歩分数", "北の方角", "寮の男子・女子の区別", "入口から2Fの室までの屋内経路", "段差・車椅子で通れる経路"],
+  "policy": "未確認の距離・方角・バリアフリー対応や寮への立ち入りを案内しない。現地確認済みとは主張しない。"
+}

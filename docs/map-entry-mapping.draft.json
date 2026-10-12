@@ -1,0 +1,1580 @@
+{
+  "version": 1,
+  "checkedOn": "2026-10-07",
+  "status": "draft-not-for-publication",
+  "purpose": "Figmaの配置と既存Entry IDを対応させるための調査用下書き。サイトはこのファイルを読み込まない。以下の復元・件数・セル対応は初回調査時点の履歴。",
+  "currentStatus": {
+    "updatedOn": "2026-10-08",
+    "runtimeData": ["site/src/data/map.json", "site/src/data/map-indoor.json"],
+    "classroomAuthority": "Google Driveの教室配置2026.xlsx。全20企画を配置済み。棟の向き・位置関係はFigma。",
+    "boothCount": 41,
+    "sharedDataException": "food-basketballのみユーザー指示で削除。sourceDataRestorationはその前の復元記録。",
+    "remainingNameDifferences": 0,
+    "nameResolution": "名称9件は2026-10-08ユーザー回答で確定・MAP反映済み。共有の名称・団体名は変更なし。以下の比較欄は調査時点の記録。",
+    "ownerConfirmation": "docs/map-content-differences.md",
+    "optionalDeferred": "マルチメディア2区画とプラザ館内・段差経路は今回は触らない。"
+  },
+  "baselineCommit": "83cfb9afc115c6d7b4ca9fc5e68b46b4d639f72e",
+  "sourcePolicy": {
+    "confirmedOn": "2026-10-07",
+    "confirmationSource": "user",
+    "defaultAuthority": "Figma",
+    "referenceFileRole": "企画名・番号・会場の根拠。読み取り専用。",
+    "editableFileRole": "人間が決めた構成・配置の根拠。参照図の座標をそのまま移さない。",
+    "exceptions": "ユーザーの直接訂正を優先し、明示的に保留した事項は保留を維持する。",
+    "repositoryRole": "既存ID・データ構造の再利用と差分照合。共有JSONは変更・削除せず、必要な表示名・会場・対象除外の差分だけをMAP側で扱う。Figmaとの相違でJSONを自動的に優先しない。",
+    "questions": "Figmaで読める事実は再確認せず、資料にない情報や解消できない矛盾だけ確認する。",
+    "sourceDataUpdateStatus": "source-restored-map-only-policy"
+  },
+  "sourceDataRestoration": {
+    "restoredOn": "2026-10-07",
+    "reason": "ユーザー指示：削除しない。MAP以外の変更を極力避け、変更箇所を最小にする。",
+    "restoredFiles": [
+      "site/src/data/entries/booth.json",
+      "site/src/data/entries/program.json",
+      "site/tests/entry.spec.ts"
+    ],
+    "status": "restored-to-before-alignment",
+    "currentSourceHashesMatch": "sources",
+    "currentBoothCount": 42,
+    "mapTargetBoothCount": 41,
+    "cancelledEntryRemainsInSource": "food-basketball",
+    "mapOnlyPolicy": "掲載対象・番号・会場・必要な表示名の差分を既存IDに結び付け、MAP内だけで扱う。共有の一覧・詳細・日時・申込みは変更しない。"
+  },
+  "sourceDataAlignment": {
+    "completedOn": "2026-10-07",
+    "status": "reverted-history-not-current-data",
+    "sources": [
+      {
+        "path": "site/src/data/entries/booth.json",
+        "count": 41,
+        "sha256": "7AE42DF3B21407D144790402C4880906F91801A56580A8CE8C1DB771BBA12594"
+      },
+      {
+        "path": "site/src/data/entries/department.json",
+        "count": 41,
+        "sha256": "F6215D867149BF56EF164B643F7845DA233A6EEE6151D97193649FD042B211A0"
+      },
+      {
+        "path": "site/src/data/entries/program.json",
+        "count": 51,
+        "sha256": "D47927CFC9F3940BEDFE3292CC14A14B8DFCEF97988AF0AD5BAF147EB3DB6BE9"
+      }
+    ],
+    "sourceEntries": 133,
+    "booths": 41,
+    "boothsWithoutLocation": 0,
+    "excludedEntryIds": [
+      "food-basketball"
+    ],
+    "updatedVenueCount": 43,
+    "boothVenueCount": 41,
+    "programVenueEntryIds": [
+      "workshop-ai-sorting-robot",
+      "game-tournament"
+    ],
+    "renamedEntryIds": [
+      "food-5e",
+      "food-5m",
+      "food-volleyball",
+      "food-sado",
+      "rec-suiei",
+      "rec-douga",
+      "rec-5i",
+      "rec-2a",
+      "rec-procon",
+      "rec-gcon"
+    ],
+    "regroupedEntryIds": [
+      "rec-suiei",
+      "rec-douga",
+      "rec-5i"
+    ],
+    "preservedFields": [
+      "id",
+      "order-of-remaining-entries",
+      "description",
+      "occurrences",
+      "parts",
+      "application",
+      "audience",
+      "capacity",
+      "fee",
+      "notes",
+      "links"
+    ],
+    "snapshotPolicy": "この節は撤回した変更の履歴。現在はsourceDataRestorationを参照し、入力ファイルの件数・ハッシュは元のsourcesに一致する。",
+    "boundaries": "部屋番号・入口・区画座標は推測しない。Figma・release.json・*-hayatoは変更しない。保留事項は保留のまま。"
+  },
+  "sources": [
+    {
+      "path": "site/src/data/entries/booth.json",
+      "count": 42,
+      "sha256": "48A7CEF92826856B632CC1269FF10899332197AB50B30521654AC9A70FF09712"
+    },
+    {
+      "path": "site/src/data/entries/department.json",
+      "count": 41,
+      "sha256": "F6215D867149BF56EF164B643F7845DA233A6EEE6151D97193649FD042B211A0"
+    },
+    {
+      "path": "site/src/data/entries/program.json",
+      "count": 51,
+      "sha256": "0401EA7FCA8E1965ECB357058218ED0C654B2102684AE88EBC50235E036E4E99"
+    }
+  ],
+  "figma": {
+    "fileKey": "USj2vcyNX2syrxtzulfnQ6",
+    "pageId": "0:1",
+    "composition": {
+      "id": "1005:106",
+      "name": "MAP / 配置を試す",
+      "bounds": {
+        "x": 1940,
+        "y": 102,
+        "width": 1280,
+        "height": 1150
+      }
+    },
+    "placementArea": {
+      "id": "1005:110",
+      "name": "校内配置 / 部品をドラッグ",
+      "bounds": {
+        "x": 1988,
+        "y": 317,
+        "width": 1184,
+        "height": 720
+      }
+    },
+    "coordinatesAre": "read-only inspection snapshot, not approved production coordinates"
+  },
+  "rules": {
+    "slotIdentity": "category + displayCode",
+    "entryIdentity": "Entry.id",
+    "jsonOrderIsNotPlacementOrder": true,
+    "nullEntryIdMeans": "店舗と番号の対応が未確認。空き区画や出店取り消しを意味しない。",
+    "nullLocationMeans": "booth.jsonでは場所の入力が無い。屋外とは推定しない。"
+  },
+  "counts": {
+    "sourceEntries": 134,
+    "booths": 42,
+    "foodEntries": 12,
+    "sweetsEntries": 11,
+    "excludedBoothEntries": 1,
+    "mapTargetBoothEntries": 41,
+    "mapTargetSweetsEntries": 10,
+    "otherBoothEntries": 19,
+    "boothsWithoutLocation": 40,
+    "foodSlots": 12,
+    "sweetsSlots": 9,
+    "referenceMatchedStallEntryBindings": 21
+  },
+  "slots": [
+    {
+      "category": "food",
+      "displayCode": "0",
+      "slotKey": "food:0",
+      "entryId": "food-5e",
+      "bindingStatus": "reference-matched",
+      "figma": {
+        "stallId": "1285:2350",
+        "labelId": "1303:2371",
+        "groupId": "1303:2374",
+        "absoluteBounds": {
+          "x": 2144,
+          "y": 466,
+          "width": 85.80000305175781,
+          "height": 89.70000457763672
+        }
+      },
+      "reference": {
+        "fileKey": "yHxFTvhmA7nNsLEk4mGdIG",
+        "tableNodeId": "874:1848",
+        "textNodeId": "323:440",
+        "displayCode": "0",
+        "method": "visual number and row check; matched using menu + organization"
+      }
+    },
+    {
+      "category": "food",
+      "displayCode": "1",
+      "slotKey": "food:1",
+      "entryId": "food-5m",
+      "bindingStatus": "reference-matched",
+      "figma": {
+        "stallId": "1285:2337",
+        "labelId": "1303:2375",
+        "groupId": "1303:2378",
+        "absoluteBounds": {
+          "x": 2237,
+          "y": 471,
+          "width": 85.80000305175781,
+          "height": 89.70000457763672
+        }
+      },
+      "reference": {
+        "fileKey": "yHxFTvhmA7nNsLEk4mGdIG",
+        "tableNodeId": "874:1848",
+        "textNodeId": "798:1490",
+        "displayCode": "1",
+        "method": "visual number and row check; matched using menu + organization"
+      }
+    },
+    {
+      "category": "food",
+      "displayCode": "2",
+      "slotKey": "food:2",
+      "entryId": "food-5c",
+      "bindingStatus": "reference-matched",
+      "figma": {
+        "stallId": "1285:2324",
+        "labelId": "1303:2379",
+        "groupId": "1303:2382",
+        "absoluteBounds": {
+          "x": 2322,
+          "y": 468,
+          "width": 85.80000305175781,
+          "height": 89.70000457763672
+        }
+      },
+      "reference": {
+        "fileKey": "yHxFTvhmA7nNsLEk4mGdIG",
+        "tableNodeId": "874:1848",
+        "textNodeId": "798:1492",
+        "displayCode": "2",
+        "method": "visual number and row check; matched using menu + organization"
+      }
+    },
+    {
+      "category": "food",
+      "displayCode": "3",
+      "slotKey": "food:3",
+      "entryId": "food-takkyu",
+      "bindingStatus": "reference-matched",
+      "figma": {
+        "stallId": "1285:2311",
+        "labelId": "1303:2383",
+        "groupId": "1303:2386",
+        "absoluteBounds": {
+          "x": 2418,
+          "y": 463,
+          "width": 85.80000305175781,
+          "height": 89.70000457763672
+        }
+      },
+      "reference": {
+        "fileKey": "yHxFTvhmA7nNsLEk4mGdIG",
+        "tableNodeId": "874:1848",
+        "textNodeId": "798:1494",
+        "displayCode": "3",
+        "method": "visual number and row check; matched using menu + organization"
+      }
+    },
+    {
+      "category": "food",
+      "displayCode": "4",
+      "slotKey": "food:4",
+      "entryId": "food-baseball",
+      "bindingStatus": "reference-matched",
+      "figma": {
+        "stallId": "1285:2298",
+        "labelId": "1303:2387",
+        "groupId": "1303:2390",
+        "absoluteBounds": {
+          "x": 2521,
+          "y": 464,
+          "width": 85.80000305175781,
+          "height": 89.70000457763672
+        }
+      },
+      "reference": {
+        "fileKey": "yHxFTvhmA7nNsLEk4mGdIG",
+        "tableNodeId": "874:1848",
+        "textNodeId": "798:1496",
+        "displayCode": "4",
+        "method": "visual number and row check; matched using menu + organization"
+      }
+    },
+    {
+      "category": "food",
+      "displayCode": "5",
+      "slotKey": "food:5",
+      "entryId": "food-rugby",
+      "bindingStatus": "reference-matched",
+      "figma": {
+        "stallId": "1285:2389",
+        "labelId": "1303:2391",
+        "groupId": "1303:2394",
+        "absoluteBounds": {
+          "x": 2292,
+          "y": 571,
+          "width": 85.80000305175781,
+          "height": 89.70000457763672
+        }
+      },
+      "reference": {
+        "fileKey": "yHxFTvhmA7nNsLEk4mGdIG",
+        "tableNodeId": "874:1848",
+        "textNodeId": "799:1505",
+        "displayCode": "5",
+        "method": "visual number and row check; matched using menu + organization"
+      }
+    },
+    {
+      "category": "food",
+      "displayCode": "6",
+      "slotKey": "food:6",
+      "entryId": "food-ecocar",
+      "bindingStatus": "reference-matched",
+      "figma": {
+        "stallId": "1285:2376",
+        "labelId": "1303:2395",
+        "groupId": "1303:2398",
+        "absoluteBounds": {
+          "x": 2385,
+          "y": 570,
+          "width": 85.80000305175781,
+          "height": 89.70000457763672
+        }
+      },
+      "reference": {
+        "fileKey": "yHxFTvhmA7nNsLEk4mGdIG",
+        "tableNodeId": "874:1848",
+        "textNodeId": "476:2593",
+        "displayCode": "6",
+        "method": "visual number and row check; matched using menu + organization"
+      }
+    },
+    {
+      "category": "food",
+      "displayCode": "7",
+      "slotKey": "food:7",
+      "entryId": "food-soft-tennis",
+      "bindingStatus": "reference-matched",
+      "figma": {
+        "stallId": "1285:2363",
+        "labelId": "1303:2399",
+        "groupId": "1303:2402",
+        "absoluteBounds": {
+          "x": 2530,
+          "y": 577,
+          "width": 85.80000305175781,
+          "height": 89.70000457763672
+        }
+      },
+      "reference": {
+        "fileKey": "yHxFTvhmA7nNsLEk4mGdIG",
+        "tableNodeId": "874:1848",
+        "textNodeId": "798:1500",
+        "displayCode": "7",
+        "method": "visual number and row check; matched using menu + organization"
+      }
+    },
+    {
+      "category": "food",
+      "displayCode": "8",
+      "slotKey": "food:8",
+      "entryId": "food-karate",
+      "bindingStatus": "reference-matched",
+      "figma": {
+        "stallId": "1297:2480",
+        "labelId": "1303:2403",
+        "groupId": "1303:2406",
+        "absoluteBounds": {
+          "x": 2233,
+          "y": 969,
+          "width": 85.80000305175781,
+          "height": 89.70000457763672
+        }
+      },
+      "reference": {
+        "fileKey": "yHxFTvhmA7nNsLEk4mGdIG",
+        "tableNodeId": "874:1848",
+        "textNodeId": "798:1501",
+        "displayCode": "8",
+        "method": "visual number and row check; matched using menu + organization"
+      }
+    },
+    {
+      "category": "food",
+      "displayCode": "9",
+      "slotKey": "food:9",
+      "entryId": "food-koshiki-tennis",
+      "bindingStatus": "reference-matched",
+      "figma": {
+        "stallId": "1297:2467",
+        "labelId": "1303:2407",
+        "groupId": "1303:2410",
+        "absoluteBounds": {
+          "x": 2338,
+          "y": 970,
+          "width": 85.80000305175781,
+          "height": 89.70000457763672
+        }
+      },
+      "reference": {
+        "fileKey": "yHxFTvhmA7nNsLEk4mGdIG",
+        "tableNodeId": "874:1848",
+        "textNodeId": "875:1893",
+        "displayCode": "9",
+        "method": "visual number and row check; matched using menu + organization"
+      }
+    },
+    {
+      "category": "food",
+      "displayCode": "10",
+      "slotKey": "food:10",
+      "entryId": "food-ongaku",
+      "bindingStatus": "reference-matched",
+      "figma": {
+        "stallId": "1297:2493",
+        "labelId": "1303:2411",
+        "groupId": "1303:2414",
+        "absoluteBounds": {
+          "x": 2442,
+          "y": 970,
+          "width": 85.80000305175781,
+          "height": 89.70000457763672
+        }
+      },
+      "reference": {
+        "fileKey": "yHxFTvhmA7nNsLEk4mGdIG",
+        "tableNodeId": "874:1848",
+        "textNodeId": "798:1502",
+        "displayCode": "10",
+        "method": "visual number and row check; matched using menu + organization"
+      }
+    },
+    {
+      "category": "food",
+      "displayCode": "11",
+      "slotKey": "food:11",
+      "entryId": "food-yosakoi",
+      "bindingStatus": "reference-matched",
+      "figma": {
+        "stallId": "1297:2506",
+        "labelId": "1303:2415",
+        "groupId": "1303:2418",
+        "absoluteBounds": {
+          "x": 2540,
+          "y": 969,
+          "width": 85.80000305175781,
+          "height": 89.70000457763672
+        }
+      },
+      "reference": {
+        "fileKey": "yHxFTvhmA7nNsLEk4mGdIG",
+        "tableNodeId": "874:1848",
+        "textNodeId": "798:1503",
+        "displayCode": "11",
+        "method": "visual number and row check; matched using menu + organization"
+      }
+    },
+    {
+      "category": "sweets",
+      "displayCode": "0",
+      "slotKey": "sweets:0",
+      "entryId": "food-badminton",
+      "bindingStatus": "reference-matched",
+      "figma": {
+        "stallId": "1285:2402",
+        "labelId": "1303:2419",
+        "groupId": "1303:2422",
+        "absoluteBounds": {
+          "x": 2247,
+          "y": 789,
+          "width": 85.80000305175781,
+          "height": 89.70000457763672
+        }
+      },
+      "reference": {
+        "fileKey": "yHxFTvhmA7nNsLEk4mGdIG",
+        "tableNodeId": "874:1845",
+        "textNodeId": "799:1507",
+        "displayCode": "0",
+        "method": "visual number and row check; matched using menu + organization"
+      }
+    },
+    {
+      "category": "sweets",
+      "displayCode": "1",
+      "slotKey": "sweets:1",
+      "entryId": "food-handball",
+      "bindingStatus": "reference-matched",
+      "figma": {
+        "stallId": "1285:2415",
+        "labelId": "1303:2423",
+        "groupId": "1303:2426",
+        "absoluteBounds": {
+          "x": 2344,
+          "y": 797,
+          "width": 85.80000305175781,
+          "height": 89.70000457763672
+        }
+      },
+      "reference": {
+        "fileKey": "yHxFTvhmA7nNsLEk4mGdIG",
+        "tableNodeId": "874:1845",
+        "textNodeId": "799:1509",
+        "displayCode": "1",
+        "method": "visual number and row check; matched using menu + organization"
+      }
+    },
+    {
+      "category": "sweets",
+      "displayCode": "2",
+      "slotKey": "sweets:2",
+      "entryId": "food-kyudo",
+      "bindingStatus": "reference-matched",
+      "figma": {
+        "stallId": "1285:2428",
+        "labelId": "1303:2427",
+        "groupId": "1303:2430",
+        "absoluteBounds": {
+          "x": 2433,
+          "y": 790,
+          "width": 85.80000305175781,
+          "height": 89.70000457763672
+        }
+      },
+      "reference": {
+        "fileKey": "yHxFTvhmA7nNsLEk4mGdIG",
+        "tableNodeId": "874:1845",
+        "textNodeId": "799:1510",
+        "displayCode": "2",
+        "method": "visual number and row check; matched using menu + organization"
+      }
+    },
+    {
+      "category": "sweets",
+      "displayCode": "3",
+      "slotKey": "sweets:3",
+      "entryId": "food-shashin",
+      "bindingStatus": "reference-matched",
+      "figma": {
+        "stallId": "1285:2441",
+        "labelId": "1303:2431",
+        "groupId": "1303:2434",
+        "absoluteBounds": {
+          "x": 2534,
+          "y": 790,
+          "width": 85.80000305175781,
+          "height": 89.70000457763672
+        }
+      },
+      "reference": {
+        "fileKey": "yHxFTvhmA7nNsLEk4mGdIG",
+        "tableNodeId": "874:1845",
+        "textNodeId": "799:1511",
+        "displayCode": "3",
+        "method": "visual number and row check; matched using menu + organization"
+      }
+    },
+    {
+      "category": "sweets",
+      "displayCode": "4",
+      "slotKey": "sweets:4",
+      "entryId": "food-rikujo",
+      "bindingStatus": "reference-matched",
+      "figma": {
+        "stallId": "1285:2454",
+        "labelId": "1303:2435",
+        "groupId": "1303:2438",
+        "absoluteBounds": {
+          "x": 2636,
+          "y": 790,
+          "width": 85.80000305175781,
+          "height": 89.70000457763672
+        }
+      },
+      "reference": {
+        "fileKey": "yHxFTvhmA7nNsLEk4mGdIG",
+        "tableNodeId": "874:1845",
+        "textNodeId": "870:1738",
+        "displayCode": "4",
+        "method": "visual number and row check; matched using menu + organization"
+      }
+    },
+    {
+      "category": "sweets",
+      "displayCode": "5",
+      "slotKey": "sweets:5",
+      "entryId": "food-soccer",
+      "bindingStatus": "reference-matched",
+      "figma": {
+        "stallId": "1297:2519",
+        "labelId": "1303:2439",
+        "groupId": "1303:2442",
+        "absoluteBounds": {
+          "x": 2629,
+          "y": 970,
+          "width": 85.80000305175781,
+          "height": 89.70000457763672
+        }
+      },
+      "reference": {
+        "fileKey": "yHxFTvhmA7nNsLEk4mGdIG",
+        "tableNodeId": "874:1845",
+        "textNodeId": "799:1508",
+        "displayCode": "5",
+        "method": "visual number and row check; matched using menu + organization"
+      }
+    },
+    {
+      "category": "sweets",
+      "displayCode": "6",
+      "slotKey": "sweets:6",
+      "entryId": "food-procon",
+      "bindingStatus": "reference-matched",
+      "figma": {
+        "stallId": "1274:2082",
+        "labelId": "1303:2443",
+        "groupId": "1303:2446",
+        "absoluteBounds": {
+          "x": 2729,
+          "y": 757,
+          "width": 85.80000305175781,
+          "height": 89.70000457763672
+        }
+      },
+      "reference": {
+        "fileKey": "yHxFTvhmA7nNsLEk4mGdIG",
+        "tableNodeId": "874:1845",
+        "textNodeId": "799:1514",
+        "displayCode": "6",
+        "method": "visual number and row check; matched using menu + organization"
+      }
+    },
+    {
+      "category": "sweets",
+      "displayCode": "7",
+      "slotKey": "sweets:7",
+      "entryId": "food-kendo",
+      "bindingStatus": "reference-matched",
+      "figma": {
+        "stallId": "1274:2069",
+        "labelId": "1303:2447",
+        "groupId": "1303:2450",
+        "absoluteBounds": {
+          "x": 2816,
+          "y": 708,
+          "width": 85.80000305175781,
+          "height": 89.70000457763672
+        }
+      },
+      "reference": {
+        "fileKey": "yHxFTvhmA7nNsLEk4mGdIG",
+        "tableNodeId": "874:1845",
+        "textNodeId": "799:1515",
+        "displayCode": "7",
+        "method": "visual number and row check; matched using menu + organization"
+      }
+    },
+    {
+      "category": "sweets",
+      "displayCode": "8",
+      "slotKey": "sweets:8",
+      "entryId": "food-volleyball",
+      "bindingStatus": "reference-matched",
+      "figma": {
+        "stallId": "1274:2056",
+        "labelId": "1303:2451",
+        "groupId": "1303:2454",
+        "absoluteBounds": {
+          "x": 2916,
+          "y": 711,
+          "width": 85.80000305175781,
+          "height": 89.70000457763672
+        }
+      },
+      "reference": {
+        "fileKey": "yHxFTvhmA7nNsLEk4mGdIG",
+        "tableNodeId": "874:1845",
+        "textNodeId": "799:1516",
+        "displayCode": "8",
+        "method": "visual number and row check; matched using menu + organization"
+      }
+    }
+  ],
+  "boothEntries": [
+    {
+      "entryId": "food-kyudo",
+      "name": "シューアイス",
+      "group": "弓道部",
+      "tags": [
+        "飲食-スイーツ"
+      ],
+      "role": "sweets",
+      "sourceLocation": null,
+      "slotKey": "sweets:2",
+      "placementStatus": "reference-matched-not-published"
+    },
+    {
+      "entryId": "food-koshiki-tennis",
+      "name": "じゃがバター",
+      "group": "硬式テニス部",
+      "tags": [
+        "飲食-フード"
+      ],
+      "role": "food",
+      "sourceLocation": null,
+      "slotKey": "food:9",
+      "placementStatus": "reference-matched-not-published"
+    },
+    {
+      "entryId": "food-sado",
+      "name": "抹茶・栗きんとん",
+      "group": "茶道部",
+      "tags": [
+        "飲食-スイーツ"
+      ],
+      "role": "sweets",
+      "sourceLocation": "マルチメディア棟",
+      "slotKey": null,
+      "placementStatus": "venue-floor-and-shared-space-confirmed-partition-unconfirmed"
+    },
+    {
+      "entryId": "food-soft-tennis",
+      "name": "フライドポテト",
+      "group": "ソフトテニス部",
+      "tags": [
+        "飲食-フード"
+      ],
+      "role": "food",
+      "sourceLocation": null,
+      "slotKey": "food:7",
+      "placementStatus": "reference-matched-not-published"
+    },
+    {
+      "entryId": "food-kendo",
+      "name": "わらび餅",
+      "group": "剣道部",
+      "tags": [
+        "飲食-スイーツ"
+      ],
+      "role": "sweets",
+      "sourceLocation": null,
+      "slotKey": "sweets:7",
+      "placementStatus": "reference-matched-not-published"
+    },
+    {
+      "entryId": "food-procon",
+      "name": "ドリンク",
+      "group": "プロコン",
+      "tags": [
+        "飲食-スイーツ"
+      ],
+      "role": "sweets",
+      "sourceLocation": null,
+      "slotKey": "sweets:6",
+      "placementStatus": "reference-matched-not-published"
+    },
+    {
+      "entryId": "food-soccer",
+      "name": "チョコバナナ",
+      "group": "サッカー部",
+      "tags": [
+        "飲食-スイーツ"
+      ],
+      "role": "sweets",
+      "sourceLocation": null,
+      "slotKey": "sweets:5",
+      "placementStatus": "reference-matched-not-published"
+    },
+    {
+      "entryId": "food-rikujo",
+      "name": "たい焼き",
+      "group": "陸上部",
+      "tags": [
+        "飲食-スイーツ"
+      ],
+      "role": "sweets",
+      "sourceLocation": null,
+      "slotKey": "sweets:4",
+      "placementStatus": "reference-matched-not-published"
+    },
+    {
+      "entryId": "food-karate",
+      "name": "たこ焼き",
+      "group": "空手道部",
+      "tags": [
+        "飲食-フード"
+      ],
+      "role": "food",
+      "sourceLocation": null,
+      "slotKey": "food:8",
+      "placementStatus": "reference-matched-not-published"
+    },
+    {
+      "entryId": "food-basketball",
+      "name": "みたらし団子",
+      "group": "バスケ部",
+      "tags": [
+        "飲食-スイーツ"
+      ],
+      "role": "sweets",
+      "sourceLocation": null,
+      "slotKey": null,
+      "placementStatus": "excluded-not-participating-user-confirmed",
+      "includeInMap": false,
+      "confirmedOn": "2026-10-07"
+    },
+    {
+      "entryId": "food-yosakoi",
+      "name": "フランクフルト",
+      "group": "よさこい同好会",
+      "tags": [
+        "飲食-フード"
+      ],
+      "role": "food",
+      "sourceLocation": null,
+      "slotKey": "food:11",
+      "placementStatus": "reference-matched-not-published"
+    },
+    {
+      "entryId": "food-handball",
+      "name": "チュロス",
+      "group": "ハンドボール部",
+      "tags": [
+        "飲食-スイーツ"
+      ],
+      "role": "sweets",
+      "sourceLocation": null,
+      "slotKey": "sweets:1",
+      "placementStatus": "reference-matched-not-published"
+    },
+    {
+      "entryId": "food-volleyball",
+      "name": "焼きドーナッツ",
+      "group": "女子バレーボール部",
+      "tags": [
+        "飲食-スイーツ"
+      ],
+      "role": "sweets",
+      "sourceLocation": null,
+      "slotKey": "sweets:8",
+      "placementStatus": "reference-matched-not-published"
+    },
+    {
+      "entryId": "food-badminton",
+      "name": "ワッフル",
+      "group": "バドミントン部",
+      "tags": [
+        "飲食-スイーツ"
+      ],
+      "role": "sweets",
+      "sourceLocation": null,
+      "slotKey": "sweets:0",
+      "placementStatus": "reference-matched-not-published"
+    },
+    {
+      "entryId": "food-rugby",
+      "name": "牛串",
+      "group": "ラグビー部",
+      "tags": [
+        "飲食-フード"
+      ],
+      "role": "food",
+      "sourceLocation": null,
+      "slotKey": "food:5",
+      "placementStatus": "reference-matched-not-published"
+    },
+    {
+      "entryId": "food-ongaku",
+      "name": "五平餅",
+      "group": "音楽部",
+      "tags": [
+        "飲食-フード"
+      ],
+      "role": "food",
+      "sourceLocation": null,
+      "slotKey": "food:10",
+      "placementStatus": "reference-matched-not-published"
+    },
+    {
+      "entryId": "food-5c",
+      "name": "焼きうどん",
+      "group": "5C",
+      "tags": [
+        "飲食-フード"
+      ],
+      "role": "food",
+      "sourceLocation": null,
+      "slotKey": "food:2",
+      "placementStatus": "reference-matched-not-published"
+    },
+    {
+      "entryId": "food-baseball",
+      "name": "焼きそば",
+      "group": "野球部",
+      "tags": [
+        "飲食-フード"
+      ],
+      "role": "food",
+      "sourceLocation": null,
+      "slotKey": "food:4",
+      "placementStatus": "reference-matched-not-published"
+    },
+    {
+      "entryId": "food-5e",
+      "name": "ベーコンチーズ巻",
+      "group": "5E",
+      "tags": [
+        "飲食-フード"
+      ],
+      "role": "food",
+      "sourceLocation": null,
+      "slotKey": "food:0",
+      "placementStatus": "reference-matched-not-published"
+    },
+    {
+      "entryId": "food-5m",
+      "name": "焼き鳥",
+      "group": "5M",
+      "tags": [
+        "飲食-フード"
+      ],
+      "role": "food",
+      "sourceLocation": null,
+      "slotKey": "food:1",
+      "placementStatus": "reference-matched-not-published"
+    },
+    {
+      "entryId": "food-shashin",
+      "name": "ベビーカステラ",
+      "group": "写真部",
+      "tags": [
+        "飲食-スイーツ"
+      ],
+      "role": "sweets",
+      "sourceLocation": null,
+      "slotKey": "sweets:3",
+      "placementStatus": "reference-matched-not-published"
+    },
+    {
+      "entryId": "food-takkyu",
+      "name": "肉まん",
+      "group": "卓球部",
+      "tags": [
+        "飲食-フード"
+      ],
+      "role": "food",
+      "sourceLocation": null,
+      "slotKey": "food:3",
+      "placementStatus": "reference-matched-not-published"
+    },
+    {
+      "entryId": "food-ecocar",
+      "name": "餃子",
+      "group": "エコカー",
+      "tags": [
+        "飲食-フード"
+      ],
+      "role": "food",
+      "sourceLocation": null,
+      "slotKey": "food:6",
+      "placementStatus": "reference-matched-not-published"
+    },
+    {
+      "entryId": "rec-suiei",
+      "name": "水泳部",
+      "group": null,
+      "tags": [
+        "レク"
+      ],
+      "role": "recreation_exhibition",
+      "sourceLocation": null,
+      "slotKey": null,
+      "placementStatus": "unresolved"
+    },
+    {
+      "entryId": "rec-kagaku-magic",
+      "name": "化学マジック",
+      "group": null,
+      "tags": [
+        "レク"
+      ],
+      "role": "recreation_exhibition",
+      "sourceLocation": null,
+      "slotKey": null,
+      "placementStatus": "building-floor-and-room-confirmed-geometry-and-entrance-unconfirmed"
+    },
+    {
+      "entryId": "rec-bijutsu",
+      "name": "美術展",
+      "group": "美術部",
+      "tags": [
+        "展示",
+        "物販"
+      ],
+      "role": "recreation_exhibition",
+      "sourceLocation": null,
+      "slotKey": null,
+      "placementStatus": "unresolved"
+    },
+    {
+      "entryId": "rec-seibutsu",
+      "name": "生物同好会",
+      "group": null,
+      "tags": [
+        "物販",
+        "展示"
+      ],
+      "role": "recreation_exhibition",
+      "sourceLocation": null,
+      "slotKey": null,
+      "placementStatus": "unresolved"
+    },
+    {
+      "entryId": "rec-ongaku",
+      "name": "ぷよぷよボールすくい",
+      "group": "音楽部",
+      "tags": [
+        "レク"
+      ],
+      "role": "recreation_exhibition",
+      "sourceLocation": null,
+      "slotKey": null,
+      "placementStatus": "unresolved"
+    },
+    {
+      "entryId": "rec-douga",
+      "name": "動画同好会",
+      "group": null,
+      "tags": [
+        "物販",
+        "レク"
+      ],
+      "role": "recreation_exhibition",
+      "sourceLocation": null,
+      "slotKey": null,
+      "placementStatus": "unresolved"
+    },
+    {
+      "entryId": "rec-ecocar",
+      "name": "エコカープロジェクト",
+      "group": null,
+      "tags": [
+        "展示"
+      ],
+      "role": "recreation_exhibition",
+      "sourceLocation": null,
+      "slotKey": null,
+      "placementStatus": "user-confirmed-reference-symbol-building-floor-known-editable-map-binding-unconfirmed"
+    },
+    {
+      "entryId": "rec-kado",
+      "name": "華道同好会",
+      "group": null,
+      "tags": [
+        "展示"
+      ],
+      "role": "recreation_exhibition",
+      "sourceLocation": "マルチメディア棟",
+      "slotKey": null,
+      "placementStatus": "venue-floor-and-shared-space-confirmed-partition-unconfirmed"
+    },
+    {
+      "entryId": "rec-2a",
+      "name": "2Aベガスドリーム",
+      "group": null,
+      "tags": [
+        "レク"
+      ],
+      "role": "recreation_exhibition",
+      "sourceLocation": null,
+      "slotKey": null,
+      "placementStatus": "unresolved"
+    },
+    {
+      "entryId": "rec-procon",
+      "name": "プロコンプロジェクト",
+      "group": null,
+      "tags": [
+        "展示"
+      ],
+      "role": "recreation_exhibition",
+      "sourceLocation": null,
+      "slotKey": null,
+      "placementStatus": "figma-legend-matched-building-floor-known-editable-map-binding-unconfirmed"
+    },
+    {
+      "entryId": "rec-5i",
+      "name": "5I",
+      "group": null,
+      "tags": [
+        "物販"
+      ],
+      "role": "recreation_exhibition",
+      "sourceLocation": null,
+      "slotKey": null,
+      "placementStatus": "unresolved"
+    },
+    {
+      "entryId": "rec-gcon",
+      "name": "NEO縁日by@uzumeland",
+      "group": "GCON",
+      "tags": [
+        "レク"
+      ],
+      "role": "recreation_exhibition",
+      "sourceLocation": null,
+      "slotKey": null,
+      "placementStatus": "unresolved"
+    },
+    {
+      "entryId": "rec-wandervogel",
+      "name": "ワンダーフォーゲル部",
+      "group": null,
+      "tags": [
+        "展示"
+      ],
+      "role": "recreation_exhibition",
+      "sourceLocation": null,
+      "slotKey": null,
+      "placementStatus": "figma-legend-matched-building-floor-known-editable-map-binding-unconfirmed"
+    },
+    {
+      "entryId": "rec-shashin",
+      "name": "写真部",
+      "group": null,
+      "tags": [
+        "展示"
+      ],
+      "role": "recreation_exhibition",
+      "sourceLocation": null,
+      "slotKey": null,
+      "placementStatus": "figma-legend-matched-building-floor-known-editable-map-binding-unconfirmed"
+    },
+    {
+      "entryId": "rec-rigaku",
+      "name": "理学同好会",
+      "group": null,
+      "tags": [
+        "物販",
+        "展示"
+      ],
+      "role": "recreation_exhibition",
+      "sourceLocation": null,
+      "slotKey": null,
+      "placementStatus": "unresolved"
+    },
+    {
+      "entryId": "rec-kanko",
+      "name": "観光研究同好会",
+      "group": null,
+      "tags": [
+        "レク",
+        "物販"
+      ],
+      "role": "recreation_exhibition",
+      "sourceLocation": null,
+      "slotKey": null,
+      "placementStatus": "unresolved"
+    },
+    {
+      "entryId": "rec-kyokotsu-appaku",
+      "name": "課題研究（胸骨圧迫）",
+      "group": "伊藤明研究室",
+      "tags": [
+        "展示"
+      ],
+      "role": "recreation_exhibition",
+      "sourceLocation": null,
+      "slotKey": null,
+      "placementStatus": "figma-legend-matched-building-floor-known-editable-map-binding-unconfirmed"
+    },
+    {
+      "entryId": "rec-1a",
+      "name": "理科教材の開発",
+      "group": "1A",
+      "tags": [
+        "展示"
+      ],
+      "role": "recreation_exhibition",
+      "sourceLocation": null,
+      "slotKey": null,
+      "placementStatus": "figma-legend-matched-building-floor-known-editable-map-binding-unconfirmed"
+    },
+    {
+      "entryId": "rec-robocon",
+      "name": "ロボコンプロジェクト",
+      "group": null,
+      "tags": [
+        "展示",
+        "物販"
+      ],
+      "role": "recreation_exhibition",
+      "sourceLocation": null,
+      "slotKey": null,
+      "placementStatus": "unresolved"
+    }
+  ],
+  "venues": [
+    {
+      "venueKey": "multimedia",
+      "name": "マルチメディア棟",
+      "figmaNodeId": "1279:2196",
+      "venueBindingStatus": "source-location-match",
+      "entryIds": [
+        "food-sado",
+        "rec-kado"
+      ],
+      "floorOrRoom": "1F・入ってすぐ左側の開けたスペース（2区画）",
+      "floor": "1F",
+      "room": null,
+      "spaceType": "open-space-no-separate-room",
+      "entranceNote": "入ってすぐ左側",
+      "partitionCount": 2,
+      "partitionEntryAssignmentStatus": "unconfirmed",
+      "confirmedOn": "2026-10-07",
+      "confirmationSource": "user",
+      "unresolved": "各企画の区画割り当て、区画の形・寸法、入口の図上の位置。目印から詳細配置を推測しない。",
+      "completeness": "confirmed entries only; not guaranteed exhaustive",
+      "reference": {
+        "fileKey": "yHxFTvhmA7nNsLEk4mGdIG",
+        "displayCode": "9",
+        "category": "sweets",
+        "mapNodeId": "798:1426",
+        "textNodeId": "807:1576"
+      }
+    },
+    {
+      "venueKey": "advanced-course",
+      "name": "専攻科棟",
+      "figmaNodeId": "1297:2532",
+      "labelNodeId": "1303:2455",
+      "venueBindingStatus": "event-existence-confirmed-by-user-only",
+      "entryIds": [],
+      "floorOrRoom": null,
+      "unresolved": "今年の企画名・Entry ID・階・部屋。ユーザー指定で企画名の確認は保留。"
+    },
+    {
+      "venueKey": "headquarters",
+      "name": "本部",
+      "figmaNodeId": "1285:2266",
+      "venueBindingStatus": "user-confirmed",
+      "confirmedOn": "2026-10-07",
+      "entryIds": [
+        "main-warashibe"
+      ],
+      "candidateEntryIds": [],
+      "serviceForEntryIds": [
+        "mission-photo-rally"
+      ],
+      "floorOrRoom": null,
+      "bindingScope": "わらしべ長者の受付・交換ブースとフォトラリーのガチャガチャ。本部以外の活動場所や結果発表会場は既存企画データを保持。",
+      "unresolved": null
+    }
+  ],
+  "roomEntriesWithoutBuildingBinding": [
+    {
+      "entryId": "workshop-drone",
+      "name": "親子でドローン体験！ワークショップ",
+      "sourceLocation": "イノベーション交流プラザ2F サイエンス教育支援室",
+      "figmaNodeId": null,
+      "status": "room-name-known-building-binding-unconfirmed",
+      "confirmationStatus": "on-hold-by-user",
+      "heldOn": "2026-10-07",
+      "holdScope": "全体マップ上の建物との対応確認。既存の会場名は維持し、専攻科棟などへ推測で割り当てない。"
+    }
+  ],
+  "confirmedRoomVenues": [
+    {
+      "entryId": "rec-kagaku-magic",
+      "name": "化学マジック",
+      "sourceLocation": null,
+      "building": "C科棟",
+      "floor": "1F",
+      "room": "第三合併講義室",
+      "confirmedOn": "2026-10-07",
+      "confirmationSource": "user",
+      "figmaNodeId": null,
+      "sourceDataUpdateStatus": "source-unchanged-map-venue-only",
+      "status": "building-floor-and-room-confirmed-geometry-and-entrance-unconfirmed"
+    },
+    {
+      "entryId": "workshop-ai-sorting-robot",
+      "name": "親子で挑戦！AI×工作ワークショップ",
+      "sourceLocation": "電子情報工学実験室",
+      "building": "I科棟",
+      "floor": "2F",
+      "room": "電子情報工学実験室",
+      "confirmedOn": "2026-10-07",
+      "confirmationSource": "user",
+      "figmaNodeId": null,
+      "status": "building-floor-and-room-confirmed-geometry-and-entrance-unconfirmed"
+    },
+    {
+      "entryId": "game-tournament",
+      "name": "高専祭ゲーム大会",
+      "sourceLocation": "第二合併講義室",
+      "building": "C科棟",
+      "floor": "1F",
+      "room": "第二合併講義室",
+      "confirmedOn": "2026-10-07",
+      "confirmationSource": "user",
+      "figmaNodeId": null,
+      "status": "building-floor-and-room-confirmed-geometry-and-entrance-unconfirmed"
+    }
+  ],
+  "confirmedSymbolVenues": [
+    {
+      "entryId": "rec-ecocar",
+      "name": "エコカープロジェクト",
+      "sourceLocation": null,
+      "building": "C科棟",
+      "floor": "1F",
+      "room": null,
+      "figmaNodeId": null,
+      "confirmedOn": "2026-10-07",
+      "confirmationSource": "user-directed-figma-reference",
+      "userStatement": "figmaにある通り",
+      "reference": {
+        "fileKey": "yHxFTvhmA7nNsLEk4mGdIG",
+        "mapNodeId": "878:2026",
+        "floorNodeId": "878:2028",
+        "floorNodeName": "C科棟１F",
+        "symbolNodeId": "335:451",
+        "symbolTextVisuallyVerified": "ECO",
+        "positionNote": "参照図でロボコンの左側。編集用マップへの座標変換は未確認。"
+      },
+      "distinctFromEntryId": "food-ecocar",
+      "sourceDataUpdateStatus": "source-unchanged-map-venue-only",
+      "status": "reference-position-confirmed-room-entrance-and-editable-map-binding-unconfirmed"
+    }
+  ],
+  "exclusions": [
+    {
+      "entryId": "food-basketball",
+      "reason": "ユーザーがみたらし団子は出店しないと確認",
+      "confirmedOn": "2026-10-07",
+      "sourceEntryStillPresent": true,
+      "sourceDataUpdateStatus": "retained-in-source-excluded-from-map-only"
+    }
+  ],
+  "unresolved": [
+    {
+      "id": "indoor-placements",
+      "details": "展示・レク11件の棟・階はconfirmedIndoorAssignmentsに記録しユーザー確認済み。化学マジックはC科棟1F・第三合併講義室、エコカー展示はC科棟1FのECO表示と確認済み。残っていた5件の棟・階はfigmaResolvedIndoorAssignmentsに記録。部屋名・入口・編集用マップへの詳細配置の対応は未確認で、Figmaから分かる範囲を先に照合する。専攻科棟の企画名はユーザー指定で保留。マルチメディア棟の茶道部・華道同好会は1Fの入口すぐ左側の開けたスペースを2区画に分けて開催するとユーザー確認済み。個別区画の割り当て・形・寸法、ほかの企画の有無は未確認。"
+    },
+    {
+      "id": "room-building-bindings",
+      "details": "イノベーション交流プラザの建物の位置とFigma素材の対応。全体マップ上の建物との対応確認はユーザー指定で保留。電子情報工学実験室はI科棟2F、第二合併講義室はC科棟1Fとユーザー確認済み。2件とも詳細図の区画・入口・Figma素材の対応は未確認。"
+    },
+    {
+      "id": "requirements-alignment",
+      "details": "ステージへのリンクと未確定情報の扱いを整理する。2026-10-07に追加棟・本部は7エリアを維持した補足案内、ゲーム大会は/entry/game-tournament/への直接案内とする方針が承認済み。リンク実装は未完了。"
+    }
+  ],
+  "referenceFigma": {
+    "fileKey": "yHxFTvhmA7nNsLEk4mGdIG",
+    "pageId": "0:1",
+    "pamphletBackId": "878:2005",
+    "foodTableId": "874:1848",
+    "sweetsTableId": "874:1845",
+    "exhibitionTableId": "878:2025",
+    "usage": "default authority for map content, numbers and venues per user on 2026-10-07; direct user corrections override; read only; shared source JSON retained unchanged; differences applied only within MAP"
+  },
+  "discrepancies": [
+    {
+      "id": "sweets-basketball-missing-from-reference",
+      "entryId": "food-basketball",
+      "name": "みたらし団子",
+      "sourceJsonExists": true,
+      "referenceMenuExists": false,
+      "figmaSlotKey": null,
+      "disposition": "user confirmed not participating on 2026-10-07; retained in booth.json per later instruction; exclude only from MAP; no added map slot; shared list and detail unchanged"
+    },
+    {
+      "id": "multimedia-sado-not-outdoor-slot",
+      "entryId": "food-sado",
+      "referenceDisplayCode": "9",
+      "sourceLocation": "マルチメディア棟",
+      "figmaVenueNodeId": "1279:2196",
+      "disposition": "building-level binding, not a tenth outdoor slot"
+    },
+    {
+      "id": "wording-differences",
+      "details": "参照パンフの肉巻きチーズ/焼とり/焼きドーナツ/2Aペガサスドリーム等と共有JSONに表記差がある。共有JSONへ行った名称・団体の変更は撤回した。必要な表記差だけをMAP側で扱い、正式な団体名は略称へ縮めない。sourceDataAlignmentは撤回前の履歴、現在の状態はsourceDataRestorationに記録する。"
+    },
+    {
+      "id": "chemistry-magic-floor-user-correction",
+      "entryId": "rec-kagaku-magic",
+      "referenceFloorNodeId": "870:1746",
+      "referenceSymbolNodeId": "284:1079",
+      "referenceVenue": "C科棟3F",
+      "authoritativeVenue": "C科棟1F・第三合併講義室",
+      "disposition": "direct user correction overrides Figma; reference file not modified"
+    }
+  ],
+  "referenceIndoorAssignments": [
+    {
+      "category": "exhibition",
+      "displayCode": "0",
+      "entryId": "rec-bijutsu",
+      "building": "I科棟",
+      "floor": "1F",
+      "room": null,
+      "referenceNumberNodeId": "342:521",
+      "referenceFileKey": "yHxFTvhmA7nNsLEk4mGdIG",
+      "status": "reference-matched-building-label-and-room-not-confirmed-in-editable-map"
+    },
+    {
+      "category": "exhibition",
+      "displayCode": "1",
+      "entryId": "rec-robocon",
+      "building": "C科棟",
+      "floor": "1F",
+      "room": null,
+      "referenceNumberNodeId": "342:500",
+      "referenceFileKey": "yHxFTvhmA7nNsLEk4mGdIG",
+      "status": "reference-matched-building-label-and-room-not-confirmed-in-editable-map"
+    },
+    {
+      "category": "exhibition",
+      "displayCode": "2",
+      "entryId": "rec-ongaku",
+      "building": "C科棟",
+      "floor": "1F",
+      "room": null,
+      "referenceNumberNodeId": "342:522",
+      "referenceFileKey": "yHxFTvhmA7nNsLEk4mGdIG",
+      "status": "reference-matched-building-label-and-room-not-confirmed-in-editable-map"
+    },
+    {
+      "category": "exhibition",
+      "displayCode": "3",
+      "entryId": "rec-seibutsu",
+      "building": "C科棟",
+      "floor": "2F",
+      "room": null,
+      "referenceNumberNodeId": "342:523",
+      "referenceFileKey": "yHxFTvhmA7nNsLEk4mGdIG",
+      "status": "reference-matched-building-label-and-room-not-confirmed-in-editable-map"
+    },
+    {
+      "category": "exhibition",
+      "displayCode": "4",
+      "entryId": "rec-gcon",
+      "building": "C科棟",
+      "floor": "2F",
+      "room": null,
+      "referenceNumberNodeId": "342:524",
+      "referenceFileKey": "yHxFTvhmA7nNsLEk4mGdIG",
+      "status": "reference-matched-building-label-and-room-not-confirmed-in-editable-map"
+    },
+    {
+      "category": "exhibition",
+      "displayCode": "5",
+      "entryId": "rec-douga",
+      "building": "C科棟",
+      "floor": "3F",
+      "room": null,
+      "referenceNumberNodeId": "342:525",
+      "referenceFileKey": "yHxFTvhmA7nNsLEk4mGdIG",
+      "status": "reference-matched-building-label-and-room-not-confirmed-in-editable-map"
+    },
+    {
+      "category": "exhibition",
+      "displayCode": "6",
+      "entryId": "rec-5i",
+      "building": "C科棟",
+      "floor": "3F",
+      "room": null,
+      "referenceNumberNodeId": "342:526",
+      "referenceFileKey": "yHxFTvhmA7nNsLEk4mGdIG",
+      "status": "reference-matched-building-label-and-room-not-confirmed-in-editable-map"
+    },
+    {
+      "category": "exhibition",
+      "displayCode": "7",
+      "entryId": "rec-2a",
+      "building": "C科棟",
+      "floor": "3F",
+      "room": null,
+      "referenceNumberNodeId": "342:528",
+      "referenceFileKey": "yHxFTvhmA7nNsLEk4mGdIG",
+      "status": "reference-matched-building-label-and-room-not-confirmed-in-editable-map"
+    },
+    {
+      "category": "exhibition",
+      "displayCode": "8",
+      "entryId": "rec-suiei",
+      "building": "C科棟",
+      "floor": "3F",
+      "room": null,
+      "referenceNumberNodeId": "342:529",
+      "referenceFileKey": "yHxFTvhmA7nNsLEk4mGdIG",
+      "status": "reference-matched-building-label-and-room-not-confirmed-in-editable-map"
+    },
+    {
+      "category": "exhibition",
+      "displayCode": "9",
+      "entryId": "rec-rigaku",
+      "building": "C科棟",
+      "floor": "3F",
+      "room": null,
+      "referenceNumberNodeId": "342:530",
+      "referenceFileKey": "yHxFTvhmA7nNsLEk4mGdIG",
+      "status": "reference-matched-building-label-and-room-not-confirmed-in-editable-map"
+    },
+    {
+      "category": "exhibition",
+      "displayCode": "10",
+      "entryId": "rec-kanko",
+      "building": "C科棟",
+      "floor": "3F",
+      "room": null,
+      "referenceNumberNodeId": "476:2489",
+      "referenceFileKey": "yHxFTvhmA7nNsLEk4mGdIG",
+      "status": "reference-matched-building-label-and-room-not-confirmed-in-editable-map"
+    }
+  ],
+  "confirmedIndoorAssignments": {
+    "confirmedOn": "2026-10-07",
+    "confirmationSource": "user",
+    "scope": "今年の棟・階のみ。参照図の番号、部屋名・部屋番号、階内の区画位置、入口、Figma素材との対応は未確認。",
+    "status": "building-and-floor-confirmed-room-and-geometry-unconfirmed",
+    "entries": [
+      { "entryId": "rec-bijutsu", "building": "I科棟", "floor": "1F", "room": null, "figmaNodeId": null },
+      { "entryId": "rec-robocon", "building": "C科棟", "floor": "1F", "room": null, "figmaNodeId": null },
+      { "entryId": "rec-ongaku", "building": "C科棟", "floor": "1F", "room": null, "figmaNodeId": null },
+      { "entryId": "rec-seibutsu", "building": "C科棟", "floor": "2F", "room": null, "figmaNodeId": null },
+      { "entryId": "rec-gcon", "building": "C科棟", "floor": "2F", "room": null, "figmaNodeId": null },
+      { "entryId": "rec-douga", "building": "C科棟", "floor": "3F", "room": null, "figmaNodeId": null },
+      { "entryId": "rec-5i", "building": "C科棟", "floor": "3F", "room": null, "figmaNodeId": null },
+      { "entryId": "rec-2a", "building": "C科棟", "floor": "3F", "room": null, "figmaNodeId": null },
+      { "entryId": "rec-suiei", "building": "C科棟", "floor": "3F", "room": null, "figmaNodeId": null },
+      { "entryId": "rec-rigaku", "building": "C科棟", "floor": "3F", "room": null, "figmaNodeId": null },
+      { "entryId": "rec-kanko", "building": "C科棟", "floor": "3F", "room": null, "figmaNodeId": null }
+    ]
+  },
+  "figmaResolvedIndoorAssignments": {
+    "checkedOn": "2026-10-07",
+    "confirmationSource": "user-authorized-figma-authority-policy",
+    "referenceFileKey": "yHxFTvhmA7nNsLEk4mGdIG",
+    "referenceFrameId": "878:2005",
+    "method": "展示一覧の凡例と会場図の同じ記号・文字を画像とノード情報で照合。個別のユーザー確認ではない。",
+    "status": "building-floor-and-reference-symbol-matched-room-entrance-and-editable-map-binding-unconfirmed",
+    "entries": [
+      { "entryId": "rec-procon", "building": "C科棟", "floor": "2F", "room": null, "figmaNodeId": null, "referenceTextNodeId": "807:1572", "legendSymbolNodeId": "314:655", "referenceFloorNodeId": "870:1747", "referenceSymbolNodeId": "340:511", "symbol": "端末" },
+      { "entryId": "rec-wandervogel", "building": "C科棟", "floor": "2F", "room": null, "figmaNodeId": null, "referenceTextNodeId": "807:1566", "legendSymbolNodeId": "314:672", "referenceFloorNodeId": "870:1747", "referenceSymbolNodeId": "335:447", "symbol": "山" },
+      { "entryId": "rec-shashin", "building": "C科棟", "floor": "1F", "room": null, "figmaNodeId": null, "referenceTextNodeId": "807:1571", "legendSymbolNodeId": "314:674", "referenceFloorNodeId": "878:2028", "referenceSymbolNodeId": "335:453", "symbol": "カメラ" },
+      { "entryId": "rec-kyokotsu-appaku", "building": "C科棟", "floor": "2F", "room": null, "figmaNodeId": null, "referenceTextNodeId": "804:1538", "legendSymbolNodeId": "314:670", "referenceFloorNodeId": "870:1747", "referenceSymbolNodeId": "335:448", "symbol": "胸骨圧迫の記号" },
+      { "entryId": "rec-1a", "building": "I科棟", "floor": "2F", "room": null, "figmaNodeId": null, "referenceTextNodeId": "807:1568", "legendSymbolNodeId": "314:697", "referenceFloorNodeId": "870:1745", "referenceSymbolNodeId": "335:454", "symbol": "1A" }
+    ]
+  },
+  "verificationScope": {
+    "slotEntryBindings": "21 entries matched to reference menu numbers and existing editable-map category+code",
+    "venueBindings": "multimedia: food-sado and rec-kado in 1F open space immediately left after entering, two partitions; individual partition assignment unknown. Headquarters services confirmed by user; advanced-course entry names and drone map-building binding on hold.",
+    "indoorAssignments": "11 building-floor assignments and chemistry magic in C building 1F third combined lecture room confirmed by user; ECO matched in C building 1F by user direction. Remaining 5 building-floor assignments matched to Figma legend and map under user-authorized source policy. Unknown rooms, entrances and editable-map bindings remain unresolved. Original reference associations retained as provenance.",
+    "japaneseReview": "manual fallback; automated lint unavailable (sudachipy missing)",
+    "notVerified": [
+      "routes and entrances",
+      "mobile usability",
+      "production navigation",
+      "publication"
+    ]
+  }
+}

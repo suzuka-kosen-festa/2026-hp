@@ -1,0 +1,14 @@
+---
+import MapSubpage from "../../components/map/MapSubpage.astro";
+import MapEntryList from "../../components/map/MapEntryList.astro";
+import { venues } from "../../components/map/model";
+const venue = venues.find((item) => item.key === "headquarters")!;
+---
+
+<MapSubpage name={venue.name} description="第61回鈴鹿高専祭の本部テント。本部でできることをご案内します。">
+  <h2>ここでできること</h2>
+  <MapEntryList items={[
+    { href: "/entry/main-warashibe/", name: "わらしべ長者の受付・交換", sub: "結果発表はMainStageで行います。" },
+    { href: "/entry/mission-photo-rally/", name: "ミッションフォトラリーのガチャガチャ", sub: "ミッションは会場を巡って楽しむ企画です。" },
+  ]} />
+</MapSubpage>

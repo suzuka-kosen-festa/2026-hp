@@ -1,0 +1,19 @@
+---
+// 飲食バザーの番号札。フードとスイーツはどちらも0から始まるので、色だけでなく形（四角・丸）でも見分ける。
+// 図・凡例・一覧で同じ札を使い、どこを見ても対応が分かるようにする。
+interface Props {
+  group: "food" | "sweets";
+  code?: string;
+  decorative?: boolean;
+}
+
+const { group, code, decorative = false } = Astro.props;
+---
+
+<span class="stall-badge" data-group={group} aria-hidden={decorative ? "true" : undefined}><span class="visually-hidden">{group === "food" ? "フード" : "スイーツ"}</span>{code}</span>
+
+<style>
+  .stall-badge { display: inline-grid; place-items: center; flex-shrink: 0; width: var(--badge-size, 26px); height: var(--badge-size, 26px); border: 1.5px solid var(--ink); box-shadow: 1px 1px var(--ink); font-family: var(--font-num); font-size: calc(var(--badge-size, 26px) * 0.62); line-height: 1; font-synthesis: none; }
+  .stall-badge[data-group="food"] { background: var(--red); color: #fff; }
+  .stall-badge[data-group="sweets"] { background: var(--yellow); color: var(--ink); border-radius: 50%; }
+</style>

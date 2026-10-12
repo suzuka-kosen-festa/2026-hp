@@ -1,0 +1,1823 @@
+{
+  "version": 1,
+  "checkedOn": "2026-10-07",
+  "status": "asset-preparation-not-runtime-data",
+  "supplementalRouteExportPath": "docs/map-plaza-export.json",
+  "purpose": "Figmaから直接書き出したMAP用の透過素材と描画位置の記録。このファイルは調査スナップショットで、サイトは実行用データsite/src/data/map.jsonを読み込む。",
+  "implementation": {
+    "status": "runtime-implemented-preview-not-published",
+    "updatedOn": "2026-10-09",
+    "snapshotNote": "素材・座標と照合欄は書き出し時点の記録。現在の配置は実行用map.jsonとmap-indoor.jsonを参照する。",
+    "indoorRuntimeDataPath": "site/src/data/map-indoor.json",
+    "pagePath": "site/src/pages/map.astro",
+    "runtimeDataPath": "site/src/data/map.json",
+    "componentsPath": "site/src/components/map/",
+    "entryContentSource": "site/src/lib/loadEntries.ts",
+    "pendingNameOverridesApplied": true,
+    "nameResolution": "名称9件は2026-10-08のユーザー回答で確定。名称5件・団体名3件をMAP内だけで上書きし、4件は現在の共有データを維持。詳細はdocs/map-content-differences.md §2。以下の照合欄は調査時点の記録。",
+    "sharedEntryDataChanged": true,
+    "sharedEntryDataChange": "ユーザー指示によりbooth.jsonのfood-basketballのみ削除。ほかの企画・団体名・会場は変更なし。",
+    "releaseChanged": false,
+    "releasePreflight": {
+      "checkedOn": "2026-10-08",
+      "applyRelease": true,
+      "currentStateTestsPassed": 11,
+      "mapPublishedSimulationTestsPassed": 57,
+      "simulatedOutsideRepository": true,
+      "publicationPerformed": false,
+      "browser": "Chrome / Playwright (Browser plugin not available)",
+      "routeViewports": [375, 1280]
+    },
+    "uxPreflight": {
+      "checkedOn": "2026-10-09",
+      "status": "passed-in-chrome-not-real-device-or-field-validation",
+      "browser": "Installed Chrome / Playwright, simulated touch",
+      "mapRegressionTestsPassed": 44,
+      "mapRegressionTestsFailed": 0,
+      "mapRegressionTestsSkipped": 0,
+      "foodNumberDetailBackFlowsPassed": 21,
+      "indoorDetailBackFlowsPassed": 20,
+      "indoorFlowNote": "19 classroom-list links return to the selected floor; game-tournament is reached from the whole-map 05 label and returns to the overview.",
+      "supplementalDetailBackFlowsPassed": 4,
+      "supplementalFlowNote": "Plaza route and drone event, two multimedia events, and headquarters warashibe.",
+      "routeViewports": [375, 320, 1280],
+      "routeViewportChecksPassed": 24,
+      "horizontalOverflow": false,
+      "brokenImages": false,
+      "consoleErrors": 0,
+      "pageErrors": 0,
+      "httpErrors": 0,
+      "sixPageIdentityAndNoErrorOverlayVerified": true,
+      "consoleWarnings": 0,
+      "keyboardFloorNavigationVerified": true,
+      "noJavaScriptAllFloorsAnd19LinksVerified": true,
+      "sourceMatch": "Runtime sources and existing tests match the isolated copy; only the copy's release.json publishes MAP for simulation. Repository release.json is unchanged.",
+      "evidenceDirectory": "C:/Users/cadix/AppData/Local/Temp/map-ux-final-20261009",
+      "notVerified": ["Physical mobile devices and Safari", "Screen readers", "First-time visitor comprehension", "On-campus arrival and step-free route", "Design award readiness"]
+    },
+    "handoffReview": {
+      "checkedOn": "2026-10-09",
+      "status": "ready-for-human-review-now-list-only-approved",
+      "workingTreeReview": true,
+      "head": "83cfb9afc115c6d7b4ca9fc5e68b46b4d639f72e",
+      "critical": 0,
+      "important": 1,
+      "minor": 1,
+      "openImportant": 0,
+      "handoffPath": "docs/superpowers/plans/2026-10-07-map-only-implementation.md",
+      "prDraftPath": "docs/map-pr-draft.md",
+      "issueNumber": 9,
+      "issueUrl": "https://github.com/suzuka-kosen-festa/2026-hp/issues/9",
+      "issueStateWhenChecked": "open",
+      "importantFinding": "The original review found that the specification asked for current event titles on the map's three stage labels while implementation showed them only in the area list. Original review counts above are retained as history.",
+      "importantResolution": {
+        "checkedOn": "2026-10-09",
+        "status": "resolved-by-user-approved-specification",
+        "decision": "User approved showing NOW titles only in the map-page area list. Keep map labels for location, list for current event information. Requirements and handoff updated; no runtime or Figma change.",
+        "runtimeChanged": false
+      },
+      "minorDeferred": "MAP JSON rules are preempted by the existing broad shared-data CI rule. All-page testing is safe; shared CI optimization is outside this minimal change.",
+      "commitPerformed": false,
+      "prCreated": false,
+      "publicationPerformed": false
+    },
+    "figmaChanged": true,
+    "figmaSync": {
+      "checkedOn": "2026-10-08",
+      "status": "core-sp-review-frames-added-and-verified",
+      "fileKey": "USj2vcyNX2syrxtzulfnQ6",
+      "wrapperNodeId": "1442:2426",
+      "viewportWidth": 375,
+      "frames": {
+        "/map/": "1442:2427",
+        "/map/food/": "1443:3314",
+        "/map/exhibition/?floor=1F": "1444:3448",
+        "/map/exhibition/?floor=2F": "1444:3704",
+        "/map/exhibition/?floor=3F": "1444:3938"
+      },
+      "nativeTextNodes": 371,
+      "originalPlacementPreserved": true,
+      "historicalFramesPreserved": true,
+      "wholeScreenRaster": false,
+      "scope": "Current MAP content screens, not shared footer, other subpages or interactive Figma prototypes.",
+      "verification": "Compared rendered Chrome screens with Figma; fixed card wrapping, food 10/11, selected floor tabs and inline caption overlap. Material image fills remain confined to existing cut-paper artwork."
+    },
+    "browserChecks": "Chrome: 320,375,600,768,899,900,1024,1280px。素材31点・操作範囲・屋台番号の重なり・遷移・戻る・JSなし・開催中を検査。",
+    "completedDetails": "飲食21枠の番号リンクと一覧、校内20企画の配置・階切替・教室別一覧・階段記号統一は実装済み。独立デザインレビューを実施し、正式名称の札と教室文字の視認性を改善。名称9件の回答をMAP内に反映し、承認済み3件の団体名だけを併記。最終MAPテスト44件成功。受賞水準の認定ではない。",
+    "optionalDeferred": ["マルチメディア棟2区画の割り当て", "プラザ館内・段差経路"],
+    "stillPending": ["実機・初来場者・読み上げでの確認", "受賞水準と評価できるかの判断"]
+  },
+  "source": {
+    "fileKey": "USj2vcyNX2syrxtzulfnQ6",
+    "pageId": "0:1",
+    "compositionNodeId": "1005:106",
+    "placementAreaNodeId": "1005:110",
+    "excludedUnusedTrayNodeId": "1005:291",
+    "figmaModified": false
+  },
+  "rules": {
+    "sharedEntryDataChanged": false,
+    "releaseChanged": false,
+    "humanPlacementPreserved": true,
+    "contentNamesAwaitingOwnerConfirmation": true,
+    "readOnlyInspection": true,
+    "export": "node.exportAsync PNG, SCALE 2, contentsOnly true, useAbsoluteBounds false",
+    "rotation": "回転は画像に含まれている。sourceRotationをCSSで再適用しない。",
+    "sizing": "PNG固有寸法と2倍解像度のdisplaySizeを使い、sourceSizeで画像の縦横比を潰さない。",
+    "labelText": "番号・エリア名・店舗分類のラベルは画像にしない。後続の実装でHTMLの文字とする。本部素材の看板文字は絵に含まれるため、別途読める案内文を付ける。",
+    "unknowns": "03・05のラベル、未確認の校舎名、部屋・入口には推測の配置を与えない。"
+  },
+  "drawing": {
+    "coordinateSpace": "Figma canvas absolute",
+    "compositionBounds": [
+      1940,
+      102,
+      1280,
+      1150
+    ],
+    "placementBounds": [
+      1988,
+      317,
+      1184,
+      720
+    ],
+    "drawBounds": [
+      1928,
+      147.72811889648438,
+      1264,
+      911.9718856811523
+    ],
+    "origin": [
+      1928,
+      147.72811889648438
+    ],
+    "topLevelPaintOrder": [
+      "1005:111",
+      "1005:112",
+      "1005:113",
+      "1005:131",
+      "1005:134",
+      "1005:152",
+      "1005:224",
+      "1005:235",
+      "1005:249",
+      "1005:266",
+      "1005:269",
+      "1005:283",
+      "1005:286",
+      "1005:289",
+      "1005:290",
+      "1271:1961",
+      "1303:2454",
+      "1303:2450",
+      "1303:2446",
+      "1279:2196",
+      "1285:2266",
+      "1303:2390",
+      "1303:2386",
+      "1303:2382",
+      "1303:2378",
+      "1303:2374",
+      "1303:2402",
+      "1303:2398",
+      "1303:2394",
+      "1303:2422",
+      "1303:2442",
+      "1303:2426",
+      "1303:2430",
+      "1303:2434",
+      "1303:2438",
+      "1303:2410",
+      "1303:2406",
+      "1303:2414",
+      "1303:2418",
+      "1297:2532",
+      "1303:2455"
+    ],
+    "relativePositionRule": "absoluteRenderBounds.xy - drawing.origin。地図全体の平行移動だけで配置を維持する。",
+    "boundsPurpose": "未配置欄を除いた使用素材・ラベル・通り道の範囲。完成ページの余白やレイアウトを決めた値ではない。"
+  },
+  "assets": [
+    {
+      "key": "grass",
+      "path": "site/src/assets/map/figma/grass.png",
+      "sourceNodeId": "1271:1961",
+      "sourceMainComponentId": "1271:1961",
+      "exportScale": 2,
+      "file": "grass.png",
+      "width": 405,
+      "height": 207,
+      "bytes": 77545,
+      "transparentPixels": 5900,
+      "visiblePixels": 77935,
+      "sha256": "90d69e00a9eddc0d4cc24c5ff5b74165efb44a0df3035c7d89330f14fa744ee7",
+      "displaySize": [
+        202.5,
+        103.5
+      ],
+      "placementNodeIds": [
+        "1271:1961"
+      ]
+    },
+    {
+      "key": "gym-blue",
+      "path": "site/src/assets/map/figma/gym-blue.png",
+      "sourceNodeId": "1005:224",
+      "sourceMainComponentId": "1004:57",
+      "exportScale": 2,
+      "file": "gym-blue.png",
+      "width": 372,
+      "height": 332,
+      "bytes": 65074,
+      "transparentPixels": 36512,
+      "visiblePixels": 86992,
+      "sha256": "f388a681a5d01f1071fb82ef02a2b9a1455f83da573e95afae3930b440d2ea82",
+      "displaySize": [
+        186,
+        166
+      ],
+      "placementNodeIds": [
+        "1005:224"
+      ]
+    },
+    {
+      "key": "headquarters-yellow",
+      "path": "site/src/assets/map/figma/headquarters-yellow.png",
+      "sourceNodeId": "1285:2266",
+      "sourceMainComponentId": "1281:2105",
+      "exportScale": 2,
+      "file": "headquarters-yellow.png",
+      "width": 202,
+      "height": 207,
+      "bytes": 27159,
+      "transparentPixels": 11679,
+      "visiblePixels": 30135,
+      "sha256": "bde98db48d268450c5a7b98f790c8fbe03521f9811fa09e7044434a1073fc825",
+      "displaySize": [
+        101,
+        103.5
+      ],
+      "placementNodeIds": [
+        "1285:2266"
+      ]
+    },
+    {
+      "key": "multimedia-blue",
+      "path": "site/src/assets/map/figma/multimedia-blue.png",
+      "sourceNodeId": "1279:2196",
+      "sourceMainComponentId": "1276:2009",
+      "exportScale": 2,
+      "file": "multimedia-blue.png",
+      "width": 486,
+      "height": 320,
+      "bytes": 67600,
+      "transparentPixels": 33290,
+      "visiblePixels": 122230,
+      "sha256": "22149b11855d19410f2c8948dd75c530d039ffcc03003cc91be3443dc96b7915",
+      "displaySize": [
+        243,
+        160
+      ],
+      "placementNodeIds": [
+        "1279:2196"
+      ]
+    },
+    {
+      "key": "school-blue-vertical",
+      "path": "site/src/assets/map/figma/school-blue-vertical.png",
+      "sourceNodeId": "1005:134",
+      "sourceMainComponentId": "1004:2",
+      "exportScale": 2,
+      "file": "school-blue-vertical.png",
+      "width": 199,
+      "height": 463,
+      "bytes": 61701,
+      "transparentPixels": 20176,
+      "visiblePixels": 71961,
+      "sha256": "1cfdea318b31d225ad6a6767d998233963573891f4424d1070548748b011f374",
+      "displaySize": [
+        99.5,
+        231.5
+      ],
+      "placementNodeIds": [
+        "1005:134",
+        "1297:2532"
+      ]
+    },
+    {
+      "key": "school-blue",
+      "path": "site/src/assets/map/figma/school-blue.png",
+      "sourceNodeId": "1005:113",
+      "sourceMainComponentId": "1004:2",
+      "exportScale": 2,
+      "file": "school-blue.png",
+      "width": 1538,
+      "height": 664,
+      "bytes": 327735,
+      "transparentPixels": 215904,
+      "visiblePixels": 805328,
+      "sha256": "3968001e190cf03e6475358e4b856eeb4f8060aca7ceef40c4ed4c546843a566",
+      "displaySize": [
+        769,
+        332
+      ],
+      "placementNodeIds": [
+        "1005:113"
+      ]
+    },
+    {
+      "key": "school-red",
+      "path": "site/src/assets/map/figma/school-red.png",
+      "sourceNodeId": "1005:152",
+      "sourceMainComponentId": "1004:20",
+      "exportScale": 2,
+      "file": "school-red.png",
+      "width": 813,
+      "height": 351,
+      "bytes": 136153,
+      "transparentPixels": 60238,
+      "visiblePixels": 225125,
+      "sha256": "32f97cda936e841e7eef6cbc6ba826d5756978eb1884e44aa898eda229124ff2",
+      "displaySize": [
+        406.5,
+        175.5
+      ],
+      "placementNodeIds": [
+        "1005:152"
+      ]
+    },
+    {
+      "key": "stage-red",
+      "path": "site/src/assets/map/figma/stage-red.png",
+      "sourceNodeId": "1005:235",
+      "sourceMainComponentId": "1004:105",
+      "exportScale": 2,
+      "file": "stage-red.png",
+      "width": 300,
+      "height": 240,
+      "bytes": 49368,
+      "transparentPixels": 20127,
+      "visiblePixels": 51873,
+      "sha256": "1eba4bfb8170911cd94067615f076ea5a00c02ba2d33d13091fbd749fef00069",
+      "displaySize": [
+        150,
+        120
+      ],
+      "placementNodeIds": [
+        "1005:235"
+      ]
+    },
+    {
+      "key": "stage-yellow",
+      "path": "site/src/assets/map/figma/stage-yellow.png",
+      "sourceNodeId": "1005:269",
+      "sourceMainComponentId": "1004:133",
+      "exportScale": 2,
+      "file": "stage-yellow.png",
+      "width": 300,
+      "height": 240,
+      "bytes": 48782,
+      "transparentPixels": 20127,
+      "visiblePixels": 51873,
+      "sha256": "fe45987918c85dd235fdedea14993a8ee2f4e453bd3460803f89092a0b7d4f59",
+      "displaySize": [
+        150,
+        120
+      ],
+      "placementNodeIds": [
+        "1005:269"
+      ]
+    },
+    {
+      "key": "stall-red",
+      "path": "site/src/assets/map/figma/stall-red.png",
+      "sourceNodeId": "1285:2298",
+      "sourceMainComponentId": "1004:68",
+      "exportScale": 2,
+      "file": "stall-red.png",
+      "width": 175,
+      "height": 180,
+      "bytes": 20334,
+      "transparentPixels": 8654,
+      "visiblePixels": 22846,
+      "sha256": "a3694cc74537324d3f73046f9ef49922581fa0a27c3e0ffce8ce155acbc27120",
+      "displaySize": [
+        87.5,
+        90
+      ],
+      "placementNodeIds": [
+        "1274:2056",
+        "1274:2069",
+        "1274:2082",
+        "1285:2298",
+        "1285:2311",
+        "1285:2324",
+        "1285:2337",
+        "1285:2350",
+        "1285:2363",
+        "1285:2376",
+        "1285:2389",
+        "1285:2402",
+        "1297:2519",
+        "1285:2415",
+        "1285:2428",
+        "1285:2441",
+        "1285:2454",
+        "1297:2467",
+        "1297:2480",
+        "1297:2493",
+        "1297:2506"
+      ]
+    }
+  ],
+  "placements": [
+    {
+      "nodeId": "1005:113",
+      "assetKey": "school-blue",
+      "sourceParentId": "1005:110",
+      "sourceSize": [
+        769,
+        331.6312561035156
+      ],
+      "sourceRotation": 0,
+      "absoluteBounds": [
+        2107,
+        147.72811889648438,
+        769,
+        331.6312561035156
+      ],
+      "absoluteRenderBounds": [
+        2107,
+        147.72811889648438,
+        769,
+        331.6312561035156
+      ],
+      "imagePosition": [
+        179,
+        0
+      ],
+      "rotationBakedIntoAsset": true
+    },
+    {
+      "nodeId": "1005:134",
+      "assetKey": "school-blue-vertical",
+      "sourceParentId": "1005:110",
+      "sourceSize": [
+        230.40000915527344,
+        99.36000061035156
+      ],
+      "sourceRotation": 90,
+      "absoluteBounds": [
+        2055,
+        384.00001525878906,
+        99.36000061035156,
+        230.40000915527344
+      ],
+      "absoluteRenderBounds": [
+        2055,
+        384,
+        99.360107421875,
+        231.3402099609375
+      ],
+      "imagePosition": [
+        127,
+        236.27188110351562
+      ],
+      "rotationBakedIntoAsset": true
+    },
+    {
+      "nodeId": "1005:152",
+      "assetKey": "school-red",
+      "sourceParentId": "1005:110",
+      "sourceSize": [
+        406.3999938964844,
+        175.25999450683594
+      ],
+      "sourceRotation": 0,
+      "absoluteBounds": [
+        2304,
+        634,
+        406.3999938964844,
+        175.25999450683594
+      ],
+      "absoluteRenderBounds": [
+        2304,
+        634,
+        406.3999938964844,
+        175.260009765625
+      ],
+      "imagePosition": [
+        376,
+        486.2718811035156
+      ],
+      "rotationBakedIntoAsset": true
+    },
+    {
+      "nodeId": "1005:224",
+      "assetKey": "gym-blue",
+      "sourceParentId": "1005:110",
+      "sourceSize": [
+        186,
+        165.54000854492188
+      ],
+      "sourceRotation": 0,
+      "absoluteBounds": [
+        2995,
+        572,
+        186,
+        165.54000854492188
+      ],
+      "absoluteRenderBounds": [
+        2995,
+        572,
+        186,
+        165.5400390625
+      ],
+      "imagePosition": [
+        1067,
+        424.2718811035156
+      ],
+      "rotationBakedIntoAsset": true
+    },
+    {
+      "nodeId": "1005:235",
+      "assetKey": "stage-red",
+      "sourceParentId": "1005:110",
+      "sourceSize": [
+        149.60000610351562,
+        119.68000030517578
+      ],
+      "sourceRotation": 0,
+      "absoluteBounds": [
+        2839,
+        530,
+        149.60000610351562,
+        119.68000030517578
+      ],
+      "absoluteRenderBounds": [
+        2839,
+        530,
+        149.60009765625,
+        119.68000030517578
+      ],
+      "imagePosition": [
+        911,
+        382.2718811035156
+      ],
+      "rotationBakedIntoAsset": true
+    },
+    {
+      "nodeId": "1005:269",
+      "assetKey": "stage-yellow",
+      "sourceParentId": "1005:110",
+      "sourceSize": [
+        149.60000610351562,
+        119.68000030517578
+      ],
+      "sourceRotation": 0,
+      "absoluteBounds": [
+        1998,
+        819,
+        149.60000610351562,
+        119.68000030517578
+      ],
+      "absoluteRenderBounds": [
+        1998,
+        819,
+        149.60009765625,
+        119.68000030517578
+      ],
+      "imagePosition": [
+        70,
+        671.2718811035156
+      ],
+      "rotationBakedIntoAsset": true
+    },
+    {
+      "nodeId": "1274:2056",
+      "assetKey": "stall-red",
+      "sourceParentId": "1303:2454",
+      "sourceSize": [
+        85.80000305175781,
+        89.70000457763672
+      ],
+      "sourceRotation": 0,
+      "absoluteBounds": [
+        2916,
+        711,
+        85.80000305175781,
+        89.70000457763672
+      ],
+      "absoluteRenderBounds": [
+        2915.51806640625,
+        711,
+        87.412353515625,
+        89.70001220703125
+      ],
+      "imagePosition": [
+        987.51806640625,
+        563.2718811035156
+      ],
+      "rotationBakedIntoAsset": true
+    },
+    {
+      "nodeId": "1274:2069",
+      "assetKey": "stall-red",
+      "sourceParentId": "1303:2450",
+      "sourceSize": [
+        85.80000305175781,
+        89.70000457763672
+      ],
+      "sourceRotation": 0,
+      "absoluteBounds": [
+        2816,
+        708,
+        85.80000305175781,
+        89.70000457763672
+      ],
+      "absoluteRenderBounds": [
+        2815.51806640625,
+        708,
+        87.412353515625,
+        89.70001220703125
+      ],
+      "imagePosition": [
+        887.51806640625,
+        560.2718811035156
+      ],
+      "rotationBakedIntoAsset": true
+    },
+    {
+      "nodeId": "1274:2082",
+      "assetKey": "stall-red",
+      "sourceParentId": "1303:2446",
+      "sourceSize": [
+        85.80000305175781,
+        89.70000457763672
+      ],
+      "sourceRotation": 0,
+      "absoluteBounds": [
+        2729,
+        757,
+        85.80000305175781,
+        89.70000457763672
+      ],
+      "absoluteRenderBounds": [
+        2728.51806640625,
+        757,
+        87.412353515625,
+        89.70001220703125
+      ],
+      "imagePosition": [
+        800.51806640625,
+        609.2718811035156
+      ],
+      "rotationBakedIntoAsset": true
+    },
+    {
+      "nodeId": "1279:2196",
+      "assetKey": "multimedia-blue",
+      "sourceParentId": "1005:110",
+      "sourceSize": [
+        240,
+        160
+      ],
+      "sourceRotation": 0,
+      "absoluteBounds": [
+        2950,
+        304,
+        240,
+        160
+      ],
+      "absoluteRenderBounds": [
+        2949,
+        304,
+        243,
+        160
+      ],
+      "imagePosition": [
+        1021,
+        156.27188110351562
+      ],
+      "rotationBakedIntoAsset": true
+    },
+    {
+      "nodeId": "1285:2266",
+      "assetKey": "headquarters-yellow",
+      "sourceParentId": "1005:110",
+      "sourceSize": [
+        99,
+        103.5
+      ],
+      "sourceRotation": 0,
+      "absoluteBounds": [
+        2628,
+        454,
+        99,
+        103.5
+      ],
+      "absoluteRenderBounds": [
+        2627.44384765625,
+        454,
+        100.860595703125,
+        103.5
+      ],
+      "imagePosition": [
+        699.44384765625,
+        306.2718811035156
+      ],
+      "rotationBakedIntoAsset": true
+    },
+    {
+      "nodeId": "1285:2298",
+      "assetKey": "stall-red",
+      "sourceParentId": "1303:2390",
+      "sourceSize": [
+        85.80000305175781,
+        89.70000457763672
+      ],
+      "sourceRotation": 0,
+      "absoluteBounds": [
+        2521,
+        464,
+        85.80000305175781,
+        89.70000457763672
+      ],
+      "absoluteRenderBounds": [
+        2520.51806640625,
+        464,
+        87.412353515625,
+        89.70001220703125
+      ],
+      "imagePosition": [
+        592.51806640625,
+        316.2718811035156
+      ],
+      "rotationBakedIntoAsset": true
+    },
+    {
+      "nodeId": "1285:2311",
+      "assetKey": "stall-red",
+      "sourceParentId": "1303:2386",
+      "sourceSize": [
+        85.80000305175781,
+        89.70000457763672
+      ],
+      "sourceRotation": 0,
+      "absoluteBounds": [
+        2418,
+        463,
+        85.80000305175781,
+        89.70000457763672
+      ],
+      "absoluteRenderBounds": [
+        2417.51806640625,
+        463,
+        87.412353515625,
+        89.70001220703125
+      ],
+      "imagePosition": [
+        489.51806640625,
+        315.2718811035156
+      ],
+      "rotationBakedIntoAsset": true
+    },
+    {
+      "nodeId": "1285:2324",
+      "assetKey": "stall-red",
+      "sourceParentId": "1303:2382",
+      "sourceSize": [
+        85.80000305175781,
+        89.70000457763672
+      ],
+      "sourceRotation": 0,
+      "absoluteBounds": [
+        2322,
+        468,
+        85.80000305175781,
+        89.70000457763672
+      ],
+      "absoluteRenderBounds": [
+        2321.51806640625,
+        468,
+        87.412353515625,
+        89.70001220703125
+      ],
+      "imagePosition": [
+        393.51806640625,
+        320.2718811035156
+      ],
+      "rotationBakedIntoAsset": true
+    },
+    {
+      "nodeId": "1285:2337",
+      "assetKey": "stall-red",
+      "sourceParentId": "1303:2378",
+      "sourceSize": [
+        85.80000305175781,
+        89.70000457763672
+      ],
+      "sourceRotation": 0,
+      "absoluteBounds": [
+        2237,
+        471,
+        85.80000305175781,
+        89.70000457763672
+      ],
+      "absoluteRenderBounds": [
+        2236.51806640625,
+        471,
+        87.412353515625,
+        89.70001220703125
+      ],
+      "imagePosition": [
+        308.51806640625,
+        323.2718811035156
+      ],
+      "rotationBakedIntoAsset": true
+    },
+    {
+      "nodeId": "1285:2350",
+      "assetKey": "stall-red",
+      "sourceParentId": "1303:2374",
+      "sourceSize": [
+        85.80000305175781,
+        89.70000457763672
+      ],
+      "sourceRotation": 0,
+      "absoluteBounds": [
+        2144,
+        466,
+        85.80000305175781,
+        89.70000457763672
+      ],
+      "absoluteRenderBounds": [
+        2143.51806640625,
+        466,
+        87.412353515625,
+        89.70001220703125
+      ],
+      "imagePosition": [
+        215.51806640625,
+        318.2718811035156
+      ],
+      "rotationBakedIntoAsset": true
+    },
+    {
+      "nodeId": "1285:2363",
+      "assetKey": "stall-red",
+      "sourceParentId": "1303:2402",
+      "sourceSize": [
+        85.80000305175781,
+        89.70000457763672
+      ],
+      "sourceRotation": 0,
+      "absoluteBounds": [
+        2530,
+        577,
+        85.80000305175781,
+        89.70000457763672
+      ],
+      "absoluteRenderBounds": [
+        2529.51806640625,
+        577,
+        87.412353515625,
+        89.70001220703125
+      ],
+      "imagePosition": [
+        601.51806640625,
+        429.2718811035156
+      ],
+      "rotationBakedIntoAsset": true
+    },
+    {
+      "nodeId": "1285:2376",
+      "assetKey": "stall-red",
+      "sourceParentId": "1303:2398",
+      "sourceSize": [
+        85.80000305175781,
+        89.70000457763672
+      ],
+      "sourceRotation": 0,
+      "absoluteBounds": [
+        2385,
+        570,
+        85.80000305175781,
+        89.70000457763672
+      ],
+      "absoluteRenderBounds": [
+        2384.51806640625,
+        570,
+        87.412353515625,
+        89.70001220703125
+      ],
+      "imagePosition": [
+        456.51806640625,
+        422.2718811035156
+      ],
+      "rotationBakedIntoAsset": true
+    },
+    {
+      "nodeId": "1285:2389",
+      "assetKey": "stall-red",
+      "sourceParentId": "1303:2394",
+      "sourceSize": [
+        85.80000305175781,
+        89.70000457763672
+      ],
+      "sourceRotation": 0,
+      "absoluteBounds": [
+        2292,
+        571,
+        85.80000305175781,
+        89.70000457763672
+      ],
+      "absoluteRenderBounds": [
+        2291.51806640625,
+        571,
+        87.412353515625,
+        89.70001220703125
+      ],
+      "imagePosition": [
+        363.51806640625,
+        423.2718811035156
+      ],
+      "rotationBakedIntoAsset": true
+    },
+    {
+      "nodeId": "1285:2402",
+      "assetKey": "stall-red",
+      "sourceParentId": "1303:2422",
+      "sourceSize": [
+        85.80000305175781,
+        89.70000457763672
+      ],
+      "sourceRotation": 0,
+      "absoluteBounds": [
+        2247,
+        789,
+        85.80000305175781,
+        89.70000457763672
+      ],
+      "absoluteRenderBounds": [
+        2246.51806640625,
+        789,
+        87.412353515625,
+        89.70001220703125
+      ],
+      "imagePosition": [
+        318.51806640625,
+        641.2718811035156
+      ],
+      "rotationBakedIntoAsset": true
+    },
+    {
+      "nodeId": "1297:2519",
+      "assetKey": "stall-red",
+      "sourceParentId": "1303:2442",
+      "sourceSize": [
+        85.80000305175781,
+        89.70000457763672
+      ],
+      "sourceRotation": 0,
+      "absoluteBounds": [
+        2629,
+        970,
+        85.80000305175781,
+        89.70000457763672
+      ],
+      "absoluteRenderBounds": [
+        2628.51806640625,
+        970,
+        87.412353515625,
+        89.70000457763672
+      ],
+      "imagePosition": [
+        700.51806640625,
+        822.2718811035156
+      ],
+      "rotationBakedIntoAsset": true
+    },
+    {
+      "nodeId": "1285:2415",
+      "assetKey": "stall-red",
+      "sourceParentId": "1303:2426",
+      "sourceSize": [
+        85.80000305175781,
+        89.70000457763672
+      ],
+      "sourceRotation": 0,
+      "absoluteBounds": [
+        2344,
+        797,
+        85.80000305175781,
+        89.70000457763672
+      ],
+      "absoluteRenderBounds": [
+        2343.51806640625,
+        797,
+        87.412353515625,
+        89.70001220703125
+      ],
+      "imagePosition": [
+        415.51806640625,
+        649.2718811035156
+      ],
+      "rotationBakedIntoAsset": true
+    },
+    {
+      "nodeId": "1285:2428",
+      "assetKey": "stall-red",
+      "sourceParentId": "1303:2430",
+      "sourceSize": [
+        85.80000305175781,
+        89.70000457763672
+      ],
+      "sourceRotation": 0,
+      "absoluteBounds": [
+        2433,
+        790,
+        85.80000305175781,
+        89.70000457763672
+      ],
+      "absoluteRenderBounds": [
+        2432.51806640625,
+        790,
+        87.412353515625,
+        89.70001220703125
+      ],
+      "imagePosition": [
+        504.51806640625,
+        642.2718811035156
+      ],
+      "rotationBakedIntoAsset": true
+    },
+    {
+      "nodeId": "1285:2441",
+      "assetKey": "stall-red",
+      "sourceParentId": "1303:2434",
+      "sourceSize": [
+        85.80000305175781,
+        89.70000457763672
+      ],
+      "sourceRotation": 0,
+      "absoluteBounds": [
+        2534,
+        790,
+        85.80000305175781,
+        89.70000457763672
+      ],
+      "absoluteRenderBounds": [
+        2533.51806640625,
+        790,
+        87.412353515625,
+        89.70001220703125
+      ],
+      "imagePosition": [
+        605.51806640625,
+        642.2718811035156
+      ],
+      "rotationBakedIntoAsset": true
+    },
+    {
+      "nodeId": "1285:2454",
+      "assetKey": "stall-red",
+      "sourceParentId": "1303:2438",
+      "sourceSize": [
+        85.80000305175781,
+        89.70000457763672
+      ],
+      "sourceRotation": 0,
+      "absoluteBounds": [
+        2636,
+        790,
+        85.80000305175781,
+        89.70000457763672
+      ],
+      "absoluteRenderBounds": [
+        2635.51806640625,
+        790,
+        87.412353515625,
+        89.70001220703125
+      ],
+      "imagePosition": [
+        707.51806640625,
+        642.2718811035156
+      ],
+      "rotationBakedIntoAsset": true
+    },
+    {
+      "nodeId": "1297:2467",
+      "assetKey": "stall-red",
+      "sourceParentId": "1303:2410",
+      "sourceSize": [
+        85.80000305175781,
+        89.70000457763672
+      ],
+      "sourceRotation": 0,
+      "absoluteBounds": [
+        2338,
+        970,
+        85.80000305175781,
+        89.70000457763672
+      ],
+      "absoluteRenderBounds": [
+        2337.51806640625,
+        970,
+        87.412353515625,
+        89.70000457763672
+      ],
+      "imagePosition": [
+        409.51806640625,
+        822.2718811035156
+      ],
+      "rotationBakedIntoAsset": true
+    },
+    {
+      "nodeId": "1297:2480",
+      "assetKey": "stall-red",
+      "sourceParentId": "1303:2406",
+      "sourceSize": [
+        85.80000305175781,
+        89.70000457763672
+      ],
+      "sourceRotation": 0,
+      "absoluteBounds": [
+        2233,
+        969,
+        85.80000305175781,
+        89.70000457763672
+      ],
+      "absoluteRenderBounds": [
+        2232.51806640625,
+        969,
+        87.412353515625,
+        89.70000457763672
+      ],
+      "imagePosition": [
+        304.51806640625,
+        821.2718811035156
+      ],
+      "rotationBakedIntoAsset": true
+    },
+    {
+      "nodeId": "1297:2493",
+      "assetKey": "stall-red",
+      "sourceParentId": "1303:2414",
+      "sourceSize": [
+        85.80000305175781,
+        89.70000457763672
+      ],
+      "sourceRotation": 0,
+      "absoluteBounds": [
+        2442,
+        970,
+        85.80000305175781,
+        89.70000457763672
+      ],
+      "absoluteRenderBounds": [
+        2441.51806640625,
+        970,
+        87.412353515625,
+        89.70000457763672
+      ],
+      "imagePosition": [
+        513.51806640625,
+        822.2718811035156
+      ],
+      "rotationBakedIntoAsset": true
+    },
+    {
+      "nodeId": "1297:2506",
+      "assetKey": "stall-red",
+      "sourceParentId": "1303:2418",
+      "sourceSize": [
+        85.80000305175781,
+        89.70000457763672
+      ],
+      "sourceRotation": 0,
+      "absoluteBounds": [
+        2540,
+        969,
+        85.80000305175781,
+        89.70000457763672
+      ],
+      "absoluteRenderBounds": [
+        2539.51806640625,
+        969,
+        87.412353515625,
+        89.70000457763672
+      ],
+      "imagePosition": [
+        611.51806640625,
+        821.2718811035156
+      ],
+      "rotationBakedIntoAsset": true
+    },
+    {
+      "nodeId": "1297:2532",
+      "assetKey": "school-blue-vertical",
+      "sourceParentId": "1005:106",
+      "sourceSize": [
+        230.40000915527344,
+        99.36000061035156
+      ],
+      "sourceRotation": 90,
+      "absoluteBounds": [
+        1928,
+        513.0000152587891,
+        99.36000061035156,
+        230.40000915527344
+      ],
+      "absoluteRenderBounds": [
+        1928,
+        513,
+        99.36000061035156,
+        231.3402099609375
+      ],
+      "imagePosition": [
+        0,
+        365.2718811035156
+      ],
+      "rotationBakedIntoAsset": true
+    },
+    {
+      "nodeId": "1271:1961",
+      "assetKey": "grass",
+      "sourceParentId": "1005:110",
+      "sourceSize": [
+        200,
+        100
+      ],
+      "sourceRotation": 0,
+      "absoluteBounds": [
+        2816,
+        794,
+        200,
+        100
+      ],
+      "absoluteRenderBounds": [
+        2815.375,
+        794,
+        202.5,
+        103.125
+      ],
+      "imagePosition": [
+        887.375,
+        646.2718811035156
+      ],
+      "rotationBakedIntoAsset": true
+    }
+  ],
+  "nonRasterLayers": [
+    {
+      "id": "1005:111",
+      "type": "RECTANGLE",
+      "name": "通り道・上",
+      "bounds": [
+        1995,
+        590,
+        940,
+        52
+      ],
+      "renderBounds": [
+        1995,
+        590,
+        940,
+        52
+      ]
+    },
+    {
+      "id": "1005:112",
+      "type": "RECTANGLE",
+      "name": "通り道・中央",
+      "bounds": [
+        2283,
+        653,
+        860,
+        55
+      ],
+      "renderBounds": [
+        2283,
+        653,
+        860,
+        55
+      ]
+    },
+    {
+      "id": "1005:131",
+      "type": "INSTANCE",
+      "name": "MAP素材 / 番号付きラベル",
+      "bounds": [
+        2643,
+        253,
+        133.6999969482422,
+        41
+      ],
+      "renderBounds": [
+        2643,
+        253,
+        137.099853515625,
+        44.399993896484375
+      ]
+    },
+    {
+      "id": "1005:249",
+      "type": "INSTANCE",
+      "name": "MAP素材 / 番号付きラベル",
+      "bounds": [
+        2840,
+        647,
+        130.44000244140625,
+        39.400001525878906
+      ],
+      "renderBounds": [
+        2840,
+        647,
+        133.719970703125,
+        42.6800537109375
+      ]
+    },
+    {
+      "id": "1005:266",
+      "type": "INSTANCE",
+      "name": "MAP素材 / 番号付きラベル",
+      "bounds": [
+        3019,
+        727,
+        124.44000244140625,
+        39.400001525878906
+      ],
+      "renderBounds": [
+        3019,
+        727,
+        127.719970703125,
+        42.6800537109375
+      ]
+    },
+    {
+      "id": "1005:283",
+      "type": "INSTANCE",
+      "name": "MAP素材 / 番号付きラベル",
+      "bounds": [
+        1997,
+        937,
+        123.44000244140625,
+        39.400001525878906
+      ],
+      "renderBounds": [
+        1997,
+        937,
+        126.719970703125,
+        42.6800537109375
+      ]
+    },
+    {
+      "id": "1005:286",
+      "type": "INSTANCE",
+      "name": "MAP素材 / 番号付きラベル",
+      "bounds": [
+        1994,
+        751,
+        133.86000061035156,
+        39.599998474121094
+      ],
+      "renderBounds": [
+        1994,
+        751,
+        137.18017578125,
+        42.91998291015625
+      ]
+    },
+    {
+      "id": "1005:289",
+      "type": "TEXT",
+      "name": "入口",
+      "bounds": [
+        2725,
+        969,
+        48,
+        34
+      ],
+      "renderBounds": [
+        2725.64794921875,
+        976.9439697265625,
+        44.85595703125,
+        21.16802978515625
+      ]
+    },
+    {
+      "id": "1005:290",
+      "type": "TEXT",
+      "name": "↑",
+      "bounds": [
+        2740,
+        929,
+        32,
+        45
+      ],
+      "renderBounds": [
+        2748.384033203125,
+        936.9600219726562,
+        15.23193359375,
+        29.5999755859375
+      ]
+    },
+    {
+      "id": "1303:2455",
+      "type": "INSTANCE",
+      "name": "建物名 / 専攻科棟",
+      "bounds": [
+        1941,
+        706,
+        74.30000305175781,
+        31
+      ],
+      "renderBounds": [
+        1941,
+        706,
+        76.9000244140625,
+        33.5999755859375
+      ]
+    }
+  ],
+  "entryBindings": {
+    "status": "prepared-not-consumed-by-site",
+    "sourceEntriesUnchanged": true,
+    "sharedContentSource": "site/src/data/entries/",
+    "pendingNameConfirmationIds": [
+      "food-5e",
+      "food-5m",
+      "food-volleyball",
+      "food-sado",
+      "rec-suiei",
+      "rec-douga",
+      "rec-5i",
+      "rec-2a",
+      "rec-procon",
+      "rec-gcon"
+    ],
+    "displayNameOverrides": {},
+    "excludedFromMapOnlyEntryIds": [
+      "food-basketball"
+    ],
+    "outdoorStalls": [
+      {
+        "slotKey": "food:0",
+        "entryId": "food-5e",
+        "groupNodeId": "1303:2374",
+        "artNodeId": "1285:2350",
+        "labelNodeId": "1303:2371",
+        "assetKey": "stall-red"
+      },
+      {
+        "slotKey": "food:1",
+        "entryId": "food-5m",
+        "groupNodeId": "1303:2378",
+        "artNodeId": "1285:2337",
+        "labelNodeId": "1303:2375",
+        "assetKey": "stall-red"
+      },
+      {
+        "slotKey": "food:2",
+        "entryId": "food-5c",
+        "groupNodeId": "1303:2382",
+        "artNodeId": "1285:2324",
+        "labelNodeId": "1303:2379",
+        "assetKey": "stall-red"
+      },
+      {
+        "slotKey": "food:3",
+        "entryId": "food-takkyu",
+        "groupNodeId": "1303:2386",
+        "artNodeId": "1285:2311",
+        "labelNodeId": "1303:2383",
+        "assetKey": "stall-red"
+      },
+      {
+        "slotKey": "food:4",
+        "entryId": "food-baseball",
+        "groupNodeId": "1303:2390",
+        "artNodeId": "1285:2298",
+        "labelNodeId": "1303:2387",
+        "assetKey": "stall-red"
+      },
+      {
+        "slotKey": "food:5",
+        "entryId": "food-rugby",
+        "groupNodeId": "1303:2394",
+        "artNodeId": "1285:2389",
+        "labelNodeId": "1303:2391",
+        "assetKey": "stall-red"
+      },
+      {
+        "slotKey": "food:6",
+        "entryId": "food-ecocar",
+        "groupNodeId": "1303:2398",
+        "artNodeId": "1285:2376",
+        "labelNodeId": "1303:2395",
+        "assetKey": "stall-red"
+      },
+      {
+        "slotKey": "food:7",
+        "entryId": "food-soft-tennis",
+        "groupNodeId": "1303:2402",
+        "artNodeId": "1285:2363",
+        "labelNodeId": "1303:2399",
+        "assetKey": "stall-red"
+      },
+      {
+        "slotKey": "food:8",
+        "entryId": "food-karate",
+        "groupNodeId": "1303:2406",
+        "artNodeId": "1297:2480",
+        "labelNodeId": "1303:2403",
+        "assetKey": "stall-red"
+      },
+      {
+        "slotKey": "food:9",
+        "entryId": "food-koshiki-tennis",
+        "groupNodeId": "1303:2410",
+        "artNodeId": "1297:2467",
+        "labelNodeId": "1303:2407",
+        "assetKey": "stall-red"
+      },
+      {
+        "slotKey": "food:10",
+        "entryId": "food-ongaku",
+        "groupNodeId": "1303:2414",
+        "artNodeId": "1297:2493",
+        "labelNodeId": "1303:2411",
+        "assetKey": "stall-red"
+      },
+      {
+        "slotKey": "food:11",
+        "entryId": "food-yosakoi",
+        "groupNodeId": "1303:2418",
+        "artNodeId": "1297:2506",
+        "labelNodeId": "1303:2415",
+        "assetKey": "stall-red"
+      },
+      {
+        "slotKey": "sweets:0",
+        "entryId": "food-badminton",
+        "groupNodeId": "1303:2422",
+        "artNodeId": "1285:2402",
+        "labelNodeId": "1303:2419",
+        "assetKey": "stall-red"
+      },
+      {
+        "slotKey": "sweets:1",
+        "entryId": "food-handball",
+        "groupNodeId": "1303:2426",
+        "artNodeId": "1285:2415",
+        "labelNodeId": "1303:2423",
+        "assetKey": "stall-red"
+      },
+      {
+        "slotKey": "sweets:2",
+        "entryId": "food-kyudo",
+        "groupNodeId": "1303:2430",
+        "artNodeId": "1285:2428",
+        "labelNodeId": "1303:2427",
+        "assetKey": "stall-red"
+      },
+      {
+        "slotKey": "sweets:3",
+        "entryId": "food-shashin",
+        "groupNodeId": "1303:2434",
+        "artNodeId": "1285:2441",
+        "labelNodeId": "1303:2431",
+        "assetKey": "stall-red"
+      },
+      {
+        "slotKey": "sweets:4",
+        "entryId": "food-rikujo",
+        "groupNodeId": "1303:2438",
+        "artNodeId": "1285:2454",
+        "labelNodeId": "1303:2435",
+        "assetKey": "stall-red"
+      },
+      {
+        "slotKey": "sweets:5",
+        "entryId": "food-soccer",
+        "groupNodeId": "1303:2442",
+        "artNodeId": "1297:2519",
+        "labelNodeId": "1303:2439",
+        "assetKey": "stall-red"
+      },
+      {
+        "slotKey": "sweets:6",
+        "entryId": "food-procon",
+        "groupNodeId": "1303:2446",
+        "artNodeId": "1274:2082",
+        "labelNodeId": "1303:2443",
+        "assetKey": "stall-red"
+      },
+      {
+        "slotKey": "sweets:7",
+        "entryId": "food-kendo",
+        "groupNodeId": "1303:2450",
+        "artNodeId": "1274:2069",
+        "labelNodeId": "1303:2447",
+        "assetKey": "stall-red"
+      },
+      {
+        "slotKey": "sweets:8",
+        "entryId": "food-volleyball",
+        "groupNodeId": "1303:2454",
+        "artNodeId": "1274:2056",
+        "labelNodeId": "1303:2451",
+        "assetKey": "stall-red"
+      }
+    ],
+    "areas": [
+      {
+        "code": "01",
+        "key": "live-stage",
+        "name": "LiveStage",
+        "labelNodeId": "1005:266",
+        "artNodeIds": [
+          "1005:224"
+        ],
+        "placementStatus": "placed",
+        "action": {
+          "type": "timetable-stage",
+          "stage": "LiveStage",
+          "implementationStatus": "pending-stage-deep-link"
+        },
+        "mapAnchorStatus": "recorded-not-an-interaction-hitbox"
+      },
+      {
+        "code": "02",
+        "key": "main-stage",
+        "name": "MainStage",
+        "labelNodeId": "1005:249",
+        "artNodeIds": [
+          "1005:235"
+        ],
+        "placementStatus": "placed",
+        "action": {
+          "type": "timetable-stage",
+          "stage": "MainStage",
+          "implementationStatus": "pending-stage-deep-link"
+        },
+        "mapAnchorStatus": "recorded-not-an-interaction-hitbox"
+      },
+      {
+        "code": "03",
+        "key": "food-bazaar",
+        "name": "飲食バザー",
+        "labelNodeId": "1005:330",
+        "artNodeIds": [],
+        "placementStatus": "label-in-unplaced-tray",
+        "action": {
+          "type": "area-detail",
+          "area": "food-bazaar",
+          "implementationStatus": "pending"
+        },
+        "mapAnchorStatus": "unplaced"
+      },
+      {
+        "code": "04",
+        "key": "exhibition",
+        "name": "展示・レク",
+        "labelNodeId": "1005:131",
+        "artNodeIds": [
+          "1005:113"
+        ],
+        "placementStatus": "placed",
+        "action": {
+          "type": "area-detail",
+          "area": "exhibition",
+          "implementationStatus": "pending"
+        },
+        "mapAnchorStatus": "recorded-not-an-interaction-hitbox"
+      },
+      {
+        "code": "05",
+        "key": "game",
+        "name": "ゲームイベント",
+        "labelNodeId": "1005:333",
+        "artNodeIds": [],
+        "placementStatus": "label-in-unplaced-tray",
+        "action": {
+          "type": "entry",
+          "entryId": "game-tournament",
+          "href": "/entry/game-tournament/"
+        },
+        "mapAnchorStatus": "unplaced"
+      },
+      {
+        "code": "06",
+        "key": "sub-stage",
+        "name": "SubStage",
+        "labelNodeId": "1005:283",
+        "artNodeIds": [
+          "1005:269"
+        ],
+        "placementStatus": "placed",
+        "action": {
+          "type": "timetable-stage",
+          "stage": "SubStage",
+          "implementationStatus": "pending-stage-deep-link"
+        },
+        "mapAnchorStatus": "recorded-not-an-interaction-hitbox"
+      },
+      {
+        "code": "07",
+        "key": "department",
+        "name": "学科展示",
+        "labelNodeId": "1005:286",
+        "artNodeIds": [],
+        "placementStatus": "placed-direction-label-only",
+        "action": {
+          "type": "booth-tab",
+          "tab": "学科展示",
+          "implementationStatus": "pending-url-contract-verification"
+        },
+        "mapAnchorStatus": "recorded-not-an-interaction-hitbox"
+      }
+    ],
+    "supplementalVenues": [
+      {
+        "venueKey": "multimedia",
+        "artNodeId": "1279:2196",
+        "entryIds": [
+          "food-sado",
+          "rec-kado"
+        ],
+        "bindingStatus": "confirmed-building-and-open-space"
+      },
+      {
+        "venueKey": "advanced-course",
+        "artNodeId": "1297:2532",
+        "labelNodeId": "1303:2455",
+        "entryIds": [],
+        "bindingStatus": "event-names-on-hold"
+      },
+      {
+        "venueKey": "headquarters",
+        "artNodeId": "1285:2266",
+        "entryIds": [
+          "main-warashibe"
+        ],
+        "serviceForEntryIds": [
+          "mission-photo-rally"
+        ],
+        "bindingStatus": "confirmed-services-only"
+      }
+    ],
+    "indoorAssignmentSource": "docs/map-entry-mapping.draft.json",
+    "indoorCoordinates": "未確認の部屋・入口と、実名未確認の校舎への紐づけは含めない。",
+    "noFullEntryDuplication": true
+  },
+  "verification": {
+    "assetCount": 10,
+    "artPlacementCount": 31,
+    "totalBytes": 881451,
+    "allAssetsHaveVisibleAndTransparentPixels": true,
+    "allTenAssetsVisuallyInspected": true,
+    "stallReuse": {
+      "count": 21,
+      "referenceNodeId": "1285:2298",
+      "method": "同一元部品1004:68、色red、同じ寸法・回転、個別overridesなしを確認。",
+      "instanceIds": [
+        "1274:2056",
+        "1274:2069",
+        "1274:2082",
+        "1285:2298",
+        "1285:2311",
+        "1285:2324",
+        "1285:2337",
+        "1285:2350",
+        "1285:2363",
+        "1285:2376",
+        "1285:2389",
+        "1285:2402",
+        "1297:2519",
+        "1285:2415",
+        "1285:2428",
+        "1285:2441",
+        "1285:2454",
+        "1297:2467",
+        "1297:2480",
+        "1297:2493",
+        "1297:2506"
+      ]
+    },
+    "verticalSchoolReuse": {
+      "referenceNodeId": "1005:134",
+      "aliasNodeId": "1297:2532",
+      "method": "同一元部品1004:2、色blue、同じ寸法・回転、個別overridesなしを確認。"
+    },
+    "pngByteEquality": "再書き出しでは同じノードのPNGもバイト一致しないため、再利用可否の検査には採用しない。保存したファイルのSHA256はこのファイルを照合するための値。",
+    "alphaRegression": "download_assetsのPNGは10件とも透過画素0。直接exportAsyncしたPNGへ置き換え、10件とも透過画素と可視画素があることを確認。",
+    "notYetVerified": [
+      "375px・PC幅での実際のMAP表示",
+      "ラベルのHTML再現と44px以上の操作領域",
+      "最終ページでの全体レイアウト・ルート・操作",
+      "受賞水準の評価"
+    ]
+  }
+}

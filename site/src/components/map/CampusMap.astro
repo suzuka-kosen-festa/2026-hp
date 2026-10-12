@@ -1,0 +1,132 @@
+---
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+import { data, areas, stages, venues, placementStyle, anchorStyle } from "./model";
+const assets = import.meta.glob<{ default: ImageMetadata }>("../../assets/map/figma/*.png", { eager: true });
+const imageFor = (key: string) => assets[`../../assets/map/figma/${key}.png`].default;
+---
+<figure class="campus-figure" aria-describedby="map-caption">
+  <div class="campus-map" aria-label="会場全体の配置">
+    <div class="campus-art" aria-hidden="true">
+      {data.placements.map((piece) => <div class="art-piece" style={placementStyle(piece.bounds)} data-node-id={piece.nodeId}>
+        <Image src={imageFor(piece.asset)} alt="" format="webp" loading="eager" />
+      </div>)}
+      <span class="entrance"><span>↑</span>入口</span>
+    </div>
+    {/* ステージ・棟・本部は、本部の絵の看板と同じく建物に名札を重ねる。ステージはタイムテーブル、棟と本部は案内ページへ進む。 */}
+    {stages.map((stage) => <a class="stage-label" data-stage-name={stage.name} href={stage.href} style={anchorStyle([...stage.plate, 0, 0])} aria-label={`${stage.name}・${stage.location}。${stage.comingSoon ? "遷移先は準備中" : "ステージの時間を見る"}`}><span class="name-plate">{stage.name}</span></a>)}
+    {areas.map((area) => <a class="area-label" href={area.href} data-area={area.code} style={anchorStyle(area.label)} aria-label={`${area.code} ${area.name}・${area.location}。${area.comingSoon ? "遷移先は準備中" : area.actionLabel}`}><span class="label-paper"><b>{area.code}</b><span class="area-name">{area.name}{area.key === "department" ? " ←" : ""}</span></span></a>)}
+    {venues.map((venue) => <a class="venue-label" data-venue={venue.key} href={venue.href} style={anchorStyle([...venue.plate, 0, 0])} aria-label={`${venue.name}の案内を見る`}><span class="name-plate">{venue.name}</span></a>)}
+  </div>
+  <figcaption id="map-caption">番号や建物名の札から各案内へ。エリアは地図の下の一覧からも選べます。<span>建物の位置関係を示した案内図です。</span></figcaption>
+</figure>
+  <div class="outside-map-guide">
+    <p>この図の範囲外にある会場</p>
+    <a href="/map/innovation-plaza/" aria-label="イノベーション交流プラザへの行き方">
+      <strong>イノベーション交流プラザ</strong>
+      <span>行き方を見る <span aria-hidden="true">→</span></span>
+    </a>
+    <small>マルチメディア棟・LiveStage側から</small>
+  </div>
+<script>
+  import { DAY_DATES } from "../../lib/eventDate";
+  // ステージの名札から当日の日程のタイムテーブルへ着地させる。
+  function refreshStageLinks() {
+    const parts = new Intl.DateTimeFormat("en", { timeZone: "Asia/Tokyo", year: "numeric", month: "2-digit", day: "2-digit" }).formatToParts(new Date());
+    const date = ["year", "month", "day"].map((type) => parts.find((part) => part.type === type)?.value).join("-");
+    const tab = date === DAY_DATES.day2 ? "day2" : "day1";
+    document.querySelectorAll<HTMLAnchorElement>(".campus-map a[href^='/timetable/']").forEach((link) => {
+      const url = new URL(link.href);
+      url.searchParams.set("tab", tab);
+      link.setAttribute("href", `${url.pathname}${url.search}${url.hash}`);
+    });
+  }
+  refreshStageLinks();
+  window.setInterval(refreshStageLinks, 30_000);
+  document.addEventListener("visibilitychange", () => { if (!document.hidden) refreshStageLinks(); });
+</script>
+<style>
+  .campus-figure { --map-label-gap: 2px; --map-label-pad-y: 3px; --map-label-pad-x: 6px; --map-label-on-blue: #fff; margin: 24px 0 32px; container-type: inline-size; }
+  .campus-map { position: relative; width: 100%; aspect-ratio: 1264 / 911.972; isolation: isolate; }
+  .campus-art { position: absolute; inset: 0; pointer-events: none; }
+  .art-piece { position: absolute; }
+  .art-piece :global(img) { width: 100%; height: 100%; object-fit: fill; }
+  .area-label { position: absolute; left: clamp(22px, var(--x), calc(100% - 22px)); top: var(--y); transform: translate(-50%, -50%); display: flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; font-size: 12px; font-weight: 700; white-space: nowrap; }
+  .label-paper { display: flex; gap: 6px; align-items: center; background: var(--paper); border: 1.5px solid var(--ink); box-shadow: 2px 2px var(--ink); padding: var(--map-label-pad-y) var(--map-label-pad-x); }
+  .area-label .label-paper { flex-direction: column; gap: var(--map-label-gap); }
+  .area-label b { display: grid; place-items: center; min-width: 28px; height: 22px; background: var(--blue); color: var(--map-label-on-blue); font-family: var(--font-num); font-size: 20px; line-height: 1; }
+  .area-name { font-size: 12px; line-height: 1.2; }
+  .area-label:hover .label-paper, .area-label:active .label-paper, :is(.stage-label, .venue-label):is(:hover, :active) .name-plate { background: var(--yellow); }
+  .area-label:focus-visible, .stage-label:focus-visible, .venue-label:focus-visible { outline: 3px solid var(--blue); outline-offset: 4px; z-index: 3; }
+  /* 名札の中心は map.json の plate（建物の手前の下側）。右端の建物でも図からはみ出さないよう、名札の半幅（--half）だけ内側に寄せる。 */
+  .stage-label, .venue-label { --half: 36px; position: absolute; left: clamp(var(--half), var(--x), calc(100% - var(--half))); top: var(--y); transform: translate(-50%, -50%); }
+  .name-plate { padding: 1px 4px; background: var(--paper); border: 1.5px solid var(--ink); font-size: 12px; font-weight: 700; line-height: 1.2; white-space: nowrap; text-align: center; }
+  /* 名札はリンク。名札の周りまで44pxを押せる。 */
+  .stage-label, .venue-label { display: flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; }
+  .venue-label[data-venue="multimedia"] { --half: 68px; }
+  /* MainStageと体育館の名札は上下に隣り合うので、押せる範囲をMainStageは上へ、LiveStageは下へ伸ばして重ねない。--plate-h は名札の高さ。 */
+  .campus-map { --plate-h: 19.4px; }
+  /* SubStageは図の下端に近いので、押せる範囲を上へ伸ばして図からはみ出さない。 */
+  .stage-label:is([data-stage-name="MainStage"], [data-stage-name="SubStage"]) { top: calc(var(--y) + var(--plate-h) / 2); transform: translate(-50%, -100%); align-items: flex-end; }
+  .stage-label[data-stage-name="LiveStage"] { top: calc(var(--y) - var(--plate-h) / 2); transform: translate(-50%, 0); align-items: flex-start; }
+  /* 本部は絵に描かれた看板（絵の幅の83%＝図の幅の6.6%）と同じ幅で重ねる。 */
+  .venue-label[data-venue="headquarters"] .name-plate { min-width: 6.6cqw; }
+  .entrance { position: absolute; left: 64.7%; top: 85.7%; color: var(--blue); font-weight: 700; font-size: 12px; display: grid; text-align: center; transform: translate(-50%, 0); }
+  .entrance > span { font-size: 18px; line-height: 1; }
+  figcaption { font-size: 12px; line-height: 1.8; margin-top: 18px; }
+  figcaption > span { display: block; color: #555; }
+  .outside-map-guide { display: grid; justify-items: end; gap: 6px; margin-top: 18px; }
+  .outside-map-guide > p, .outside-map-guide > small { font-size: 12px; }
+  .outside-map-guide a { display: grid; gap: 4px; padding: 12px 14px; max-width: 100%; min-height: 44px; background: var(--yellow); border: 2px solid var(--ink); box-shadow: 3px 3px var(--ink); overflow-wrap: anywhere; }
+  .outside-map-guide strong { font-size: 18px; }
+  .outside-map-guide a > span { font-size: 14px; font-weight: 700; }
+  .outside-map-guide a:hover strong { text-decoration: underline; }
+  .outside-map-guide a:focus-visible { outline: 3px solid var(--blue); outline-offset: 4px; }
+  /* PC幅では地図が画面より大きくなるので、ノートPCの画面に全体が収まる幅にして中央に置く（2026-10-13ユーザー指示）。 */
+  @media (min-width: 900px) {
+    .campus-figure, .outside-map-guide { max-width: 860px; margin-inline: auto; }
+  }
+  @container (min-width: 760px) {
+    .area-label .label-paper { flex-direction: row; gap: 6px; }
+    .area-label b { min-width: 32px; height: 26px; font-size: 24px; }
+    .area-name { font-size: 14px; }
+    .name-plate { padding: 2px 8px; font-size: 14px; }
+    .campus-map { --plate-h: 23.8px; }
+    .label-paper { padding: 6px 10px; }
+    .entrance { font-size: 16px; }
+    .entrance > span { font-size: 28px; }
+  }
+  @container (max-width: 680px) {
+    /* 2026-10-09: ユーザー許可により札だけを調整。建物・屋台の座標と番号の対応は維持。 */
+    .area-label { left: clamp(38px, var(--x), calc(100% - 38px)); top: clamp(24px, var(--y), calc(100% - 24px)); }
+    /* 02・03の札は校舎からはみ出さないよう、上端を青い屋根の上端（図の高さの5.05%）にそろえ、左右は屋根の幅（図の幅の14.9〜72.0%）に収める（2026-10-12ユーザー指示）。 */
+    .area-label:is([data-area="02"], [data-area="03"]) { top: calc(5.05% + 2px); transform: none; align-items: flex-start; }
+    .area-label[data-area="03"] { left: calc(14.9% + 3px); }
+    .area-label[data-area="02"] { left: auto; right: calc(28% + 3px); }
+    .area-label[data-area="01"] { top: max(var(--y), calc(55.1% + 69.2px)); }
+    .area-label[data-area="04"] { top: 65%; }
+    /* 絵が小さいので名札も細くし、隣り合うMainStageと体育館の名札を上下にずらして重ねない。 */
+    .stage-label, .venue-label { --half: 30px; }
+    .campus-map { --plate-h: 14.1px; }
+    /* 入口の表示が右下の屋台に重なるので右へずらす（2026-10-13ユーザー指示）。飲食バザーの図も同じ位置。 */
+    .entrance { left: 68%; }
+    .name-plate { padding: 0 2px; border-width: 1px; font-size: 11px; line-height: 1.1; }
+    /* 棟の名札は建物より広いが、内側へ寄せずに建物の中心・下端（図の高さの33.42%）にそろえる（2026-10-12ユーザー決定）。はみ出しはページ余白に収まる。 */
+    .venue-label[data-venue="multimedia"] { --half: 0px; top: 33.42%; transform: translate(-50%, -100%); align-items: flex-end; }
+    /* 本部の看板は小さいので、幅は看板とそろえて文字だけ読める大きさにする。 */
+    .venue-label[data-venue="headquarters"] .name-plate { padding: 0; font-size: 10px; }
+  }
+  @container (max-width: 320px) {
+    /* 最狭幅でも札同士が接触しないよう、全エリア札の上下余白を同じ量だけ縮める。 */
+    .area-label { --map-label-pad-y: 2px; --map-label-pad-x: 3px; }
+    /* SubStageの名札の押せる範囲（上へ伸ばす）と重ならないよう、04の札を少し上げる。 */
+    .area-label[data-area="04"] { top: calc(65% - 8px); }
+  }
+  @container (max-width: 300px) {
+    /* 最狭幅では屋根の幅に02・03の2枚を並べるため、名称だけ1px小さくする。 */
+    .area-label:is([data-area="02"], [data-area="03"]) .area-name { font-size: 11px; }
+    /* 最狭幅ではMainStageの名札が左の本部の札に触れないよう、名札だけ1px小さくする。 */
+    .name-plate { font-size: 10px; }
+    .campus-map { --plate-h: 13px; }
+  }
+</style>

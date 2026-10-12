@@ -1,0 +1,29 @@
+---
+import { areas } from "./model";
+---
+<section aria-labelledby="area-heading">
+  <h2 id="area-heading">エリアを選ぶ</h2>
+  <ol class="map-area-list">
+    {areas.map((area) => <li><a href={area.href} data-area={area.code}>
+      <span class="area-number">{area.code}</span>
+      <span class="area-copy"><strong>{area.name}</strong><span>{area.location}</span><small>{area.comingSoon ? "リンク先は準備中" : area.actionLabel}</small></span><span class="action-arrow" aria-hidden="true">→</span>
+    </a></li>)}
+  </ol>
+</section>
+<style>
+  h2 { font-size: 20px; font-weight: 900; margin-bottom: 18px; }
+  .map-area-list { list-style: none; }
+  .map-area-list { display: grid; gap: 12px; }
+  .map-area-list > li > a { display: flex; align-items: center; gap: 14px; padding: 16px 14px; border: 1.5px solid var(--ink); background: var(--paper); box-shadow: 3px 3px var(--ink); }
+  .area-number { --map-label-on-blue: #fff; display: grid; place-items: center; font-family: var(--font-num); background: var(--blue); color: var(--map-label-on-blue); font-size: 24px; line-height: 1; flex: 0 0 1.5em; min-height: 1.5em; border: 1px solid var(--ink); box-shadow: 2px 2px var(--ink); }
+  .area-copy { display: grid; gap: 4px; flex: 1; min-width: 0; overflow-wrap: anywhere; }
+  .area-copy > strong { font-size: 18px; line-height: 1.4; }
+  .area-copy > span { font-size: 14px; line-height: 1.6; }
+  .area-copy > small { font-size: 14px; line-height: 1.6; color: #555; }
+  .action-arrow { font-size: 22px; flex-shrink: 0; color: var(--blue); }
+  a:hover strong, a:active strong { text-decoration: underline; }
+  a:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
+  @media (min-width: 900px) {
+    .map-area-list { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    }
+</style>
