@@ -10,13 +10,15 @@ interface Props {
   code?: string;
   location?: string;
   description: string;
+  /** 図と一覧をスマホ1画面に収める案内。見出しまわりの余白と番号表示を詰める */
+  compact?: boolean;
 }
 
-const { name, code, location, description } = Astro.props;
+const { name, code, location, description, compact = false } = Astro.props;
 ---
 
 <BaseLayout title={`${name} | MAP | ${site.eventName}`} description={description}>
-  <section class="map-subpage">
+  <section class:list={["map-subpage", { "is-compact": compact }]}>
     <MapReturn />
     <header>
       <span class="map-eyebrow num" aria-hidden="true">MAP{code && <span class="map-code"> {code}</span>}</span>
@@ -34,6 +36,9 @@ const { name, code, location, description } = Astro.props;
   .map-eyebrow { color: var(--blue); font-size: 28px; }
   h1 { font-size: 24px; font-weight: 900; margin-top: 4px; }
   .map-location { font-size: 13px; margin-top: 4px; }
+  .is-compact { padding-top: 8px; }
+  .is-compact header { margin-bottom: 8px; }
+  .is-compact .map-eyebrow { display: none; }
   .map-subpage :global(.preparing) { display: inline-block; background: var(--yellow); padding: 6px 10px; font-weight: 700; margin-bottom: 12px; }
   .map-subpage :global(.detail-note) { margin-bottom: 24px; }
   .map-subpage :global(h2) { font-size: 18px; font-weight: 900; margin: 28px 0 12px; }

@@ -7,7 +7,7 @@ const area = areaByKey("food-bazaar");
 const groups = [{ key: "food", label: "フード" }, { key: "sweets", label: "スイーツ" }] as const;
 ---
 
-<MapSubpage name={area.name} code={area.code} location={area.location} description="第61回鈴鹿高専祭の飲食バザー。屋外の屋台の番号と店舗をご案内します。">
+<MapSubpage compact name={area.name} code={area.code} location={area.location} description="第61回鈴鹿高専祭の飲食バザー。屋外の屋台の番号と店舗をご案内します。">
   <div class="bazaar-browser" data-bazaar-browser>
     <BazaarMap />
     <div class="stall-tabs" role="tablist" aria-label="屋台の種類" data-stall-tabs hidden>
@@ -80,9 +80,6 @@ const groups = [{ key: "food", label: "フード" }, { key: "sweets", label: "�
   .bazaar-browser :global(.bazaar-legend) { margin-bottom: 4px; }
   .bazaar-browser :global(.bazaar-map) { max-width: 270px; margin-inline: auto; }
   .bazaar-browser :global(figcaption) { margin-top: 4px; }
-  :global(.map-subpage:has(.bazaar-browser)) { padding-top: 8px; }
-  :global(.map-subpage:has(.bazaar-browser) > header) { margin-bottom: 8px; }
-  :global(.map-subpage:has(.bazaar-browser) .map-eyebrow) { display: none; }
   @media (min-width: 900px) {
     .bazaar-browser { display: grid; grid-template-columns: 1fr 1fr; gap: 0 24px; }
     .bazaar-browser :global(.bazaar-figure) { grid-row: 1 / 3; }

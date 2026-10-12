@@ -35,7 +35,7 @@ const description = buildings.map((building) => `${building.building}：${buildi
     <rect class={entryId ? "room game-key" : "room has-entry"} x="102" y="155" width="14" height="14" />
     <text class="legend-text" x="124" y="167">{entryId ? "ゲーム会場" : "掲載企画の教室"}</text>
   </svg>
-  <figcaption>教室配置図（縮尺なし）。{entryId ? "赤枠の②がゲーム会場です。押すと下の大会情報へ移動します。" : "黄色の教室を押すと、その教室の企画一覧へ移動します。"}灰色はトイレ・階段です。<svg class="stairs-legend" viewBox="-8 -4 16 8" aria-hidden="true"><path data-stairs-key class="stairs-symbol" d={stairsPath} /></svg>＝階段。{hasConnection && "C科棟とI科棟は通路でつながっています。I科棟の階段は接続通路の横です。"}</figcaption>
+  <figcaption>教室配置図（縮尺なし）。{entryId ? "赤枠の②がゲーム会場です。押すと下の大会情報へ移動します。" : "黄色の教室を押すと企画へ移動します。"}灰色はトイレ・階段です。<svg class="stairs-legend" viewBox="-8 -4 16 8" aria-hidden="true"><path data-stairs-key class="stairs-symbol" d={stairsPath} /></svg>＝階段。{hasConnection && "C科棟とI科棟は通路でつながっています。I科棟の階段は接続通路の横です。"}</figcaption>
 </figure>
 
 <style>

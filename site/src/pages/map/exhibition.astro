@@ -9,35 +9,42 @@ const floors = ["1F", "2F", "3F"];
 const buildingsOn = (floor: string) => indoorBuildings.filter((building) => building.floor === floor);
 ---
 
-<MapSubpage name={area.name} code={area.code} location={area.location} description="第61回鈴鹿高専祭の展示・レク。校内の棟・階ごとに企画をご案内します。">
-  <p class="detail-note">階を選び、黄色の教室を押すと企画一覧を確認できます。同じ教室で複数の企画を行う場合は、まとめて案内しています。</p>
+<MapSubpage compact name={area.name} code={area.code} location={area.location} description="第61回鈴鹿高専祭の展示・レク。校内の棟・階ごとに企画をご案内します。">
   <div class="floor-tabs" role="tablist" aria-label="階の選択" data-floor-tabs hidden>
     {floors.map((floor, index) => <button type="button" role="tab" id={`floor-tab-${floor}`} aria-controls={`floor-${floor}`} aria-selected={index === 0 ? "true" : "false"} tabindex={index === 0 ? 0 : -1} data-floor-tab={floor}>{floor}</button>)}
   </div>
   {floors.map((floor) => <section class="floor-panel" id={`floor-${floor}`} aria-labelledby={`floor-heading-${floor}`} data-floor-panel={floor}>
     <h2 id={`floor-heading-${floor}`}>{floor}</h2>
     <IndoorMap floor={floor} />
-    {buildingsOn(floor).map(({ building, rooms }) => <section data-building={building}>
-      <h3>{building}</h3>
-      {rooms.filter((room) => room.entries.length).map((room) => <section id={room.listId} tabindex="-1" data-room-list={room.key} class="room-list">
-        <h4>{room.room === "第三合併講義室" ? "③ " : room.room === "第二合併講義室" ? "② " : ""}{room.room}{room.entries.length > 1 && <span class="shared-room">共用</span>}</h4>
-        <MapEntryList items={room.entries.map((venue) => ({ href: `/entry/${venue.entryId}/`, name: venue.entry.name, sub: [venue.entryId in data.groupOverrides ? venue.entry.group : null, `${building} ${floor}・${room.room}`].filter(Boolean).join("／") }))} />
-        {room.note && <p class="room-key">{room.note}</p>}
-      </section>)}
-      {rooms.some((room) => room.note && !room.entries.length) && <dl class="room-uses">
-        {rooms.filter((room) => room.note && !room.entries.length).map((room) => <div>
-          <dt>{room.room === "第一合併講義室" ? "① " : room.room === "第二合併講義室" ? "② " : room.room === "第二講義室" ? "講 " : ""}{room.room}</dt>
+    <div class="floor-rooms">
+      {/* 棟は上の図で分かるので、一覧は棟の区切りを設けず1つの格子に並べて縦幅を抑える。
+          番号札は図の教室コードと同じ表記。棟・階・教室名は各リンクに読み上げ用に持たせ、リンク単体でも場所が分かるようにする */}
+      <ul class="room-menu">
+        {buildingsOn(floor).flatMap(({ building, rooms }) => rooms.filter((room) => room.entries.length).map((room) => <li id={room.listId} tabindex="-1" data-room-list={room.key} data-building={building} class="room-list">
+          <span class="room-badge" aria-hidden="true">{room.short}</span>
+          <ul>
+            {room.entries.map((venue) => <li><a href={`/entry/${venue.entryId}/`}>
+              <strong>{venue.entry.name}</strong>
+              <small>{venue.entryId in data.groupOverrides && venue.entry.group}<span class="visually-hidden">{venue.entryId in data.groupOverrides && "／"}{building} {floor}・{room.room}</span></small>
+            </a></li>)}
+          </ul>
+          {room.note && <p class="room-key">{room.note}</p>}
+        </li>))}
+      </ul>
+      {buildingsOn(floor).some(({ rooms }) => rooms.some((room) => room.note && !room.entries.length)) && <dl class="room-uses">
+        {buildingsOn(floor).flatMap(({ building, rooms }) => rooms.filter((room) => room.note && !room.entries.length).map((room) => <div>
+          <dt><span class="room-badge" aria-hidden="true">{room.short}</span><span class="visually-hidden">{building} {floor}・{room.room}</span></dt>
           <dd>{room.note}</dd>
-        </div>)}
+        </div>))}
       </dl>}
-    </section>)}
-    {unplacedIndoor.some((venue) => venue.floor === floor) && <section data-unplaced-entries>
-      <h3>教室の位置を確認中の企画</h3>
-      <p>以下は図に配置せず、現在確認できている会場を案内しています。</p>
-      {[...new Set(unplacedIndoor.filter((venue) => venue.floor === floor).map((venue) => venue.building))].map((building) => <div data-building={building}>
-        <MapEntryList items={unplacedIndoor.filter((venue) => venue.floor === floor && venue.building === building).map((venue) => ({ href: `/entry/${venue.entryId}/`, name: venue.entry.name, sub: `${venue.building} ${venue.floor}${venue.room ? `・${venue.room}` : ""}` }))} />
-      </div>)}
-    </section>}
+      {unplacedIndoor.some((venue) => venue.floor === floor) && <section data-unplaced-entries>
+        <h3>教室の位置を確認中の企画</h3>
+        <p>以下は図に配置せず、現在確認できている会場を案内しています。</p>
+        {[...new Set(unplacedIndoor.filter((venue) => venue.floor === floor).map((venue) => venue.building))].map((building) => <div data-building={building}>
+          <MapEntryList items={unplacedIndoor.filter((venue) => venue.floor === floor && venue.building === building).map((venue) => ({ href: `/entry/${venue.entryId}/`, name: venue.entry.name, sub: `${venue.building} ${venue.floor}${venue.room ? `・${venue.room}` : ""}` }))} />
+        </div>)}
+      </section>}
+    </div>
   </section>)}
 </MapSubpage>
 
@@ -110,21 +117,36 @@ const buildingsOn = (floor: string) => indoorBuildings.filter((building) => buil
 <style>
   /* 教室リンクは一覧を即座に表示する。JSなしでも移動中のスクロールを待たずに操作できる。 */
   :global(html:has(.floor-panel)) { scroll-behavior: auto; }
-  h4 { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 15px; margin: 18px 0 6px; }
-  .shared-room { background: var(--yellow); padding: 0 6px; font-size: 12px; }
-  .room-list { scroll-margin-top: calc(var(--header-height-pc) + 16px); }
-  .room-list:target, .room-list:focus { outline: 2px solid var(--blue); outline-offset: 4px; }
-  .room-key { margin: 12px 0; overflow-wrap: anywhere; }
-  .room-uses { margin: 18px 0; }
-  .room-uses > div { margin: 10px 0; }
-  .room-uses dt { font-weight: 700; }
+  /* 飲食バザーと同じく、スマホ1画面に階のタブ・図・その階の全企画を収める */
+  .floor-panel :global(.indoor-map) { margin: 4px 0 2px; }
+  .floor-panel :global(.indoor-map figcaption) { margin-top: 4px; font-size: 12px; line-height: 1.6; color: #555; }
+  .room-menu { border-top: 2px solid var(--ink); margin-top: 6px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 8px; list-style: none; }
+  .room-list { display: grid; grid-template-columns: auto minmax(0, 1fr); align-content: start; gap: 0 6px; padding: 2px 0; border-bottom: 1px dashed #aaa; scroll-margin-top: calc(var(--header-height-pc) + 16px); }
+  .room-list:target, .room-list:focus { outline: 2px solid var(--blue); outline-offset: 2px; }
+  .room-list ul { list-style: none; }
+  .room-list a { display: flex; flex-direction: column; justify-content: center; min-height: 44px; padding: 2px 0; }
+  .room-list li + li a { border-top: 1px dotted #ccc; }
+  .room-list strong { font-size: 12px; line-height: 1.4; overflow-wrap: anywhere; }
+  .room-list small { font-size: 11px; line-height: 1.4; }
+  .room-list a:hover strong, .room-list a:active strong { text-decoration: underline; }
+  .room-list a:focus-visible { outline: 3px solid var(--blue); outline-offset: -2px; }
+  /* 図の黄色い教室と同じ見た目の札。教室コードの長さに合わせて横に伸びる */
+  .room-badge { display: inline-grid; place-items: center; min-width: 26px; height: 26px; margin-top: 9px; padding: 0 3px; background: var(--yellow); border: 1.5px solid var(--ink); box-shadow: 1px 1px var(--ink); font-family: var(--font-num), var(--font-body); font-size: 14px; line-height: 1; font-synthesis: none; white-space: nowrap; }
+  .room-key { grid-column: 2; font-size: 11px; line-height: 1.4; overflow-wrap: anywhere; }
+  .room-uses { display: flex; flex-wrap: wrap; gap: 4px 12px; margin: 6px 0 0; font-size: 12px; line-height: 1.4; }
+  .room-uses > div { display: flex; align-items: center; gap: 6px; }
+  .room-uses .room-badge { margin: 0; min-width: 22px; height: 22px; font-size: 12px; background: var(--paper); box-shadow: none; }
   .room-uses dd { margin: 0; overflow-wrap: anywhere; }
   /* 他ページのタブ（駐車場・タイムテーブル）と同じく、選択中は赤い下線で示す */
-  .floor-tabs:not([hidden]) { display: flex; gap: 6px; border-bottom: 2px solid var(--ink); margin-bottom: 8px; }
-  .floor-tabs button { min-width: 64px; min-height: 44px; padding: 8px 16px; font-family: "Bebas Neue", var(--font-body); font-size: 20px; font-synthesis: none; color: var(--ink); background: transparent; border: 0; border-bottom: 3px solid transparent; cursor: pointer; }
+  .floor-tabs:not([hidden]) { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; border-bottom: 2px solid var(--ink); }
+  .floor-tabs button { min-height: 44px; padding: 4px 16px; font-family: "Bebas Neue", var(--font-body); font-size: 20px; font-synthesis: none; color: var(--ink); background: transparent; border: 0; border-bottom: 3px solid transparent; cursor: pointer; }
   .floor-tabs button[aria-selected="true"] { border-bottom-color: var(--red); color: var(--blue); }
-  .floor-tabs button:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+  .floor-tabs button:focus-visible { outline: 3px solid var(--blue); outline-offset: -2px; }
   .floor-panel:focus-visible { outline: 3px solid var(--blue); outline-offset: 4px; }
   /* タブ表示中は選択中の階がタブで分かるので、階の見出しは読み上げ用に残して見た目だけ隠す */
   :global(.is-floor-tabbed) .floor-panel > h2 { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  @media (min-width: 900px) {
+    .floor-panel:not([hidden]) { display: grid; grid-template-columns: 1fr 1fr; gap: 0 24px; align-items: start; }
+    .floor-panel > h2 { grid-column: 1 / -1; }
+  }
 </style>

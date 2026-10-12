@@ -363,7 +363,7 @@ test.describe("MAP案内", () => {
     const researchRoom = second.locator("[data-room-list='C:2F:1S']");
     await expect(researchRoom.locator("a[href='/entry/rec-wandervogel/']")).toBeVisible();
     await expect(researchRoom.locator("a[href='/entry/rec-kyokotsu-appaku/']")).toContainText("C科棟 2F・1S");
-    await expect(researchRoom.locator(".shared-room")).toBeVisible();
+    await expect(researchRoom.locator("a")).toHaveCount(2);
     await expect(researchRoom).not.toContainText("確認中");
     await expect(second.locator("[data-room-list='I:2F:5I'] a[href='/entry/rec-1a/']")).toContainText("I科棟 2F・5I");
     await expect(second.locator("[data-room-list='I:2F:5I']")).toContainText("専攻科展示");
