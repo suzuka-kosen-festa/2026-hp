@@ -8,8 +8,8 @@ import { data, stalls, placementStyle, anchorStyle } from "./model";
 const assets = import.meta.glob<{ default: ImageMetadata }>("../../assets/map/figma/*.png", { eager: true });
 const imageFor = (key: string) => assets[`../../assets/map/figma/${key}.png`].default;
 
-// 屋台の素材（x 215〜1075、y 315〜912）と下段の操作範囲が切れない余白。
-const view = [195, 300, 900, 630] as const;
+// 屋台の素材（x 215〜1075、y 315〜912）と下段の操作範囲が切れない余白（番号札を足元へ下げた分も含む）。
+const view = [195, 300, 900, 650] as const;
 const inView = (b: number[]) => b[0] < view[0] + view[2] && b[0] + b[2] > view[0] && b[1] < view[1] + view[3] && b[1] + b[3] > view[1];
 // 全体MAPの入口表示と同じ位置
 const entrance = [data.size[0] * 0.647, data.size[1] * 0.857, 0, 0];
@@ -34,11 +34,12 @@ const entrance = [data.size[0] * 0.647, data.size[1] * 0.857, 0, 0];
   .bazaar-legend { display: flex; gap: 20px; font-size: 13px; font-weight: 700; margin-bottom: 12px; --badge-size: 20px; }
   .bazaar-legend > span { display: inline-flex; align-items: center; gap: 6px; }
   /* 図全体を画面幅に収め、番号と操作範囲は図幅に合わせて調整する。 */
-  .bazaar-map { position: relative; width: 100%; container-type: inline-size; overflow: hidden; border: 1.5px solid var(--ink); background: var(--paper); --badge-size: clamp(22px, 6cqw, 30px); }
+  /* 番号札は屋台より十分小さくし、屋台の足元に寄せてテントを隠さない（2026-10-12ユーザー指示）。 */
+  .bazaar-map { position: relative; width: 100%; container-type: inline-size; overflow: hidden; border: 1.5px solid var(--ink); background: var(--paper); --badge-size: clamp(16px, 5cqw, 24px); }
   .bazaar-art { position: absolute; inset: 0; }
   .art-piece { position: absolute; }
   .art-piece :global(img) { width: 100%; height: 100%; object-fit: fill; }
-  .badge-pin { position: absolute; left: var(--x); top: var(--y); transform: translate(-50%, -50%); display: grid; place-items: center; width: clamp(24px, 8cqw, 44px); height: clamp(24px, 8cqw, 44px); touch-action: manipulation; }
+  .badge-pin { position: absolute; left: var(--x); top: calc(var(--y) + 1.8cqw); transform: translate(-50%, -50%); display: grid; place-items: center; width: clamp(24px, 8cqw, 44px); height: clamp(24px, 8cqw, 44px); touch-action: manipulation; }
   .badge-pin:hover :global(.stall-badge), .badge-pin:active :global(.stall-badge) { box-shadow: 2px 2px var(--ink); }
   .badge-pin:focus-visible { outline: 3px solid var(--blue); outline-offset: -2px; border-radius: 4px; }
   .entrance { position: absolute; left: var(--x); top: var(--y); transform: translate(-50%, 0); display: grid; text-align: center; color: var(--blue); font-weight: 700; font-size: 12px; line-height: 1.2; }
