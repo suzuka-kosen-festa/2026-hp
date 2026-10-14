@@ -36,8 +36,4 @@ magick '_originals/<原本>' \
 magick <出力名>.png -format '%[pixel:p{0,0}]' info:
 ```
 
-## 未着
-
-- 内田鍛工株式会社（`sponsors.json` は `uchida-tanko.png` を参照済み。ファイルを置けば自動で出る）
-
 ロゴが無い協賛は `logo: null` のままでよい。企業名だけのスロットになる。
