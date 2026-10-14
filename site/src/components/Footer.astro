@@ -1,6 +1,6 @@
 ---
 import site from "../data/site.json";
-import { sponsors } from "../lib/sponsors";
+import { sponsors, specialSponsors, getSponsorLogo, withUtm } from "../lib/sponsors";
 import Tape from "./ui/Tape.astro";
 
 import { Image } from "astro:assets";
@@ -28,11 +28,42 @@ const featuredLogos = sponsors
   .filter((s) => s.type === "corporate" && s.featured)
   .map((s) => ({ ...s, image: getImage(s.logo) }))
   .filter((s) => s.image);
+
+/* 特別協賛は会社ロゴだけを出す。プロダクトロゴまで並べると
+   全ページ共通のフッターが縦に伸びるので、それは /sponsors と home に任せる */
+const specialLogos = specialSponsors
+  .map((s) => ({ ...s, image: getSponsorLogo(s.logo) }))
+  .filter((s) => s.image);
 ---
 
 <footer class="site-footer">
   <div class="inner">
     <Tape color="yellow" rotate={-1.5} as="p" class="footer-title">{site.eventNameEn}</Tape>
+
+    {specialLogos.length > 0 && (
+      <div class="sponsors-line">
+        <h4>特別協賛</h4>
+
+        <ul class="grid">
+          {specialLogos.map((s) => (
+            <li>
+              <a
+                href={withUtm(s.url, "footer")}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="special-link"
+              >
+                <span class="slot slot-special">
+                  <Image src={s.image!} alt={s.name} />
+                </span>
+                {/* ロゴだけだと押せることが伝わらないので、行き先を文字で添える */}
+                <span class="special-more">サイトを見る <span aria-hidden="true">↗</span></span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
 
     {/* ロゴ画像が1枚も無いあいだは「主要協賛」の見出しだけが空のリストの上に
         残ってしまうので、ブロックごと出さない（フッターは全ページ共通） */}
@@ -163,11 +194,38 @@ const featuredLogos = sponsors
   object-fit: contain;
 }
 
+.special-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.special-more {
+  font-size: 11.5px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* 主要協賛より一段上の枠であることを幅で見せる。ロゴが横長（約7:1）なので
+   高さは主要協賛と揃え、左右に余白を取って文字を潰さない */
+.slot-special {
+  width: 220px;
+  height: 64px;
+  padding: 8px 14px;
+}
+
   @media (min-width: 900px) {
     .slot {
       width: 100px;
       height: 80px;
       font-size: 12px;
+    }
+
+    .slot-special {
+      width: 300px;
+      height: 84px;
+      padding: 10px 20px;
     }
   }
 

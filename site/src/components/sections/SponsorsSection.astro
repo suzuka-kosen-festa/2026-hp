@@ -6,6 +6,8 @@ import { Image } from "astro:assets";
 import { sponsors } from "../../lib/sponsors";
 import Button from "../ui/Button.astro";
 import site from "../../data/site.json";
+import SpecialSponsor from "../sponsors/SpecialSponsor.astro";
+import SponsorName from "../sponsors/SponsorName.astro";
 
 /* 協賛ロゴはフッターと同じ置き場から拾う */
 const logoFiles = import.meta.glob("../../assets/sponsors/*.{png,jpg,jpeg,webp}", {
@@ -65,6 +67,11 @@ const individuals = ordered("individual");
   <Reveal client:visible rotate={0}>
   <Tape color="black" rotate={-1.2} as="h2" class="sec-title">SPONSORS</Tape>
 
+  {/* 特別協賛は法人協賛の一覧に混ぜず、先頭に別枠で出す */}
+  <div class="sponsor-group special-group">
+    <SpecialSponsor placement="sponsors" />
+  </div>
+
   <div class="sponsor-group">
     <h3>法人協賛</h3>
     <ul class="grid">
@@ -76,11 +83,11 @@ const individuals = ordered("individual");
           const body = (
             <>
               {logo && <Image src={logo} alt="" class="slot-logo" />}
-              <span class="slot-name">{s.name}</span>
+              <SponsorName name={s.name} />
             </>
           );
           return (
-            <li class:list={["slot", { "is-featured": s.featured }]}>
+            <li class:list={["slot", { "is-featured": s.featured, "is-name-only": !logo }]}>
               {/* リンクを持たない協賛もあるので、url があるときだけリンクにする */}
               {s.url ? (
                 <a href={s.url} target="_blank" rel="noopener noreferrer">
@@ -120,13 +127,13 @@ const individuals = ordered("individual");
       individuals.length > 0 ? (
         <ul class="grid">
           {individuals.map((s) => (
-            <li class="slot">
+            <li class="slot is-name-only">
               {s.url ? (
                 <a href={s.url} target="_blank" rel="noopener noreferrer">
-                  <span class="slot-name">{s.name}</span>
+                  <SponsorName name={s.name} />
                 </a>
               ) : (
-                <span class="slot-name">{s.name}</span>
+                <SponsorName name={s.name} />
               )}
             </li>
           ))}
@@ -231,7 +238,9 @@ const individuals = ordered("individual");
   .slot {
     background: #fff;
     border: 2px solid var(--ink);
-    padding: 18px 10px;
+    /* 左右は詰めておく。SPの2列だと幅が160px程度しかなく、
+       長いかたまり（シンフォニアテクノロジー等）が途中で割れるため */
+    padding: 18px 6px;
     text-align: center;
     font-size: 12px;
     font-weight: 700;
@@ -268,14 +277,21 @@ const individuals = ordered("individual");
     object-fit: contain;
   }
 
-  .slot-name {
-    line-height: 1.4;
+  /* ロゴの無い枠は名前だけで高さを埋めるので、ロゴありより一回り大きくする */
+  .slot.is-name-only {
+    font-size: 14px;
   }
 
   .sponsor-group {
     position: relative;
     z-index: 1;
     margin-bottom: 32px;
+  }
+
+  /* ラベルのテープがカードの上にはみ出すぶんを空けておく */
+  .special-group {
+    padding-top: 14px;
+    margin-bottom: 44px;
   }
 
   /* お知らせからアンカーで飛んでくるので、見出しがヘッダーに隠れないよう逃がす。

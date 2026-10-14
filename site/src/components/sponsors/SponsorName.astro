@@ -1,0 +1,24 @@
+---
+import { splitSponsorName } from "../../lib/sponsors";
+
+/**
+ * 協賛名を「株式会社」やスペースの位置で折り返す。
+ * 各かたまりを inline-block にして、かたまりの途中では割れないようにする。
+ * かたまり自体が枠より長いときだけ、その中で折り返す（はみ出させない）
+ */
+interface Props {
+  name: string;
+}
+const { name } = Astro.props;
+---
+
+<span class="slot-name">{splitSponsorName(name).map((t) => (t.isSpace ? " " : <span class="chunk">{t.text}</span>))}</span>
+
+<style>
+  .slot-name {
+    line-height: 1.4;
+  }
+  .chunk {
+    display: inline-block;
+  }
+</style>

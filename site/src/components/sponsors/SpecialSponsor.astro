@@ -1,0 +1,194 @@
+---
+import { Image } from "astro:assets";
+import Tape from "../ui/Tape.astro";
+import Button from "../ui/Button.astro";
+import { specialSponsors, getSponsorLogo, withUtm } from "../../lib/sponsors";
+
+/**
+ * 特別協賛のカード。/sponsors の先頭と home の SPECIAL SPONSOR セクションの両方で使う。
+ * パンフレットと同じく「会社ロゴを大きく → その下にプロダクト」の順。
+ *
+ * ロゴだけでは看板に見えて押せることが伝わらないので、会社にはサイト共通の
+ * 「押せる部品」であるボタンを付ける。プロダクトは一行説明つきの小カードも
+ * 試したが、見た目が重くなるためロゴを並べるだけに戻した。
+ * 特設ページは作らず、各リンクは先方のサイトへ飛ばす。
+ */
+interface Props {
+  /** UTM の utm_content。どの枠から来たかを先方の解析で分けるため */
+  placement: "sponsors" | "home";
+  class?: string;
+}
+const { placement, class: className } = Astro.props;
+---
+
+{
+  specialSponsors.map((s) => {
+    const logo = getSponsorLogo(s.logo);
+    const corpHref = withUtm(s.url, placement);
+    return (
+      <div class:list={["special-card", className]}>
+        <Tape color="yellow" rotate={-3} class="special-label">
+          特別協賛
+        </Tape>
+
+        {/* ロゴの中身が社名そのものなので、alt に社名を入れて文字は重ねない */}
+        <a href={corpHref} class="corp" target="_blank" rel="noopener noreferrer">
+          {logo ? (
+            <Image src={logo} alt={s.name} class="corp-logo" />
+          ) : (
+            <span class="corp-name">{s.name}</span>
+          )}
+        </a>
+
+        <Button href={corpHref} class="corp-cta" target="_blank" rel="noopener noreferrer" rotate={-1}>
+          {s.name.replace(/株式会社$/, "")}について <span aria-hidden="true">↗</span>
+        </Button>
+
+        {s.products.length > 0 && (
+          <ul class="products">
+            {s.products.map((p) => {
+              const plogo = getSponsorLogo(p.logo);
+              return (
+                <li>
+                  <a href={withUtm(p.url, placement)} target="_blank" rel="noopener noreferrer">
+                    {plogo ? (
+                      <Image src={plogo} alt={p.name} class="product-logo" />
+                    ) : (
+                      <span class="product-name">{p.name}</span>
+                    )}
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        )}
+      </div>
+    );
+  })
+}
+
+<style>
+  /* ハードシャドウカード（design-system.md）。他の協賛スロットより一段格上に見せる */
+  .special-card {
+    position: relative;
+    z-index: 1;
+    background: #fff;
+    border: 2px solid var(--ink);
+    box-shadow: 5px 5px 0 var(--ink);
+    transform: rotate(-0.8deg);
+    padding: 34px 20px 24px;
+    text-align: center;
+  }
+
+  /* Tape/Buttonにpropsで渡したclassは子コンポーネント側のスコープになるため :global() が要る */
+  .special-card :global(.special-label) {
+    position: absolute;
+    top: -14px;
+    left: 14px;
+    font-size: 13px;
+    padding: 4px 16px;
+  }
+
+  .corp {
+    display: block;
+    color: inherit;
+  }
+
+  .corp-logo {
+    display: block;
+    width: 100%;
+    max-width: 420px;
+    height: auto;
+    margin: 0 auto;
+  }
+
+  .corp-name {
+    font-size: 22px;
+    font-weight: 800;
+  }
+
+  .special-card :global(.corp-cta) {
+    margin-top: 16px;
+    font-size: 13px;
+    padding: 10px 26px;
+  }
+
+  /* SPは横3つだと1つあたり100px弱になり、横長のロゴが読めない高さまで縮む。
+     縦積みにして高さを揃える */
+  .products {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    margin-top: 22px;
+    padding-top: 20px;
+    border-top: 2px dashed var(--ink);
+  }
+
+  .products li {
+    width: 100%;
+    max-width: 240px;
+  }
+
+  .products a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: inherit;
+  }
+
+  /* 幅と高さの両方を上限で縛り、縦横比を保ったまま枠に収める
+     （置き場の幅は /sponsors と home で違うため固定サイズにしない） */
+  .product-logo {
+    display: block;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 30px;
+  }
+
+  .product-name {
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .corp,
+  .products a {
+    transition: transform 0.15s ease;
+  }
+  @media (hover: hover) {
+    .corp:hover,
+    .products a:hover {
+      transform: scale(1.03);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .corp,
+    .products a {
+      transition: none;
+    }
+  }
+
+  @media (min-width: 900px) {
+    .special-card {
+      padding: 44px 40px 30px;
+    }
+    .corp-logo {
+      max-width: 520px;
+    }
+    .products {
+      flex-direction: row;
+      justify-content: center;
+      gap: 32px;
+    }
+    .products li {
+      flex: 1 1 0;
+      min-width: 0;
+      max-width: 280px;
+    }
+    .product-logo {
+      max-height: 36px;
+    }
+  }
+</style>
