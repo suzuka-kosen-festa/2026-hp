@@ -48,6 +48,11 @@ const PAGE_RULES = [
   { pattern: /^site\/src\/pages\/index\.astro$/, page: "home" },
   // sections/ は現状すべて home の構成要素。他ページ専用のsectionを足すときはここを分ける
   { pattern: /^site\/src\/components\/sections\//, page: "home" },
+  // SponsorsSection は /sponsors の本体なので sponsors も走らせる（home扱いだけだと素通りしていた）
+  { pattern: /^site\/src\/components\/sections\/SponsorsSection\.astro$/, page: "sponsors" },
+  // 特別協賛カードは /sponsors と home の両方に出る
+  { pattern: /^site\/src\/components\/sponsors\//, page: "sponsors" },
+  { pattern: /^site\/src\/components\/sponsors\//, page: "home" },
   { pattern: /^site\/src\/pages\/gallery\.astro$/, page: "gallery" },
   { pattern: /^site\/src\/pages\/404\.astro$/, page: "404" },
   { pattern: /^site\/src\/pages\/holding\.astro$/, page: "holding" },

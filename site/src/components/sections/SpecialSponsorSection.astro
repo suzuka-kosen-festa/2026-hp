@@ -1,0 +1,54 @@
+---
+import Reveal from "../motion/Reveal";
+import Tape from "../ui/Tape.astro";
+import Button from "../ui/Button.astro";
+import SpecialSponsor from "../sponsors/SpecialSponsor.astro";
+import { specialSponsors } from "../../lib/sponsors";
+import { isComingSoon } from "../../lib/release";
+
+// 特別協賛は home にも専用枠で出す（他の協賛は /sponsors とフッターのみ）
+const showAll = !isComingSoon("/sponsors/");
+---
+
+{
+  specialSponsors.length > 0 && (
+    <section class="special-sponsor">
+      <Reveal client:visible rotate={0}>
+        <Tape color="black" rotate={-1.2} as="h2" class="sec-title">
+          SPECIAL SPONSOR
+        </Tape>
+        <SpecialSponsor placement="home" />
+        {showAll && (
+          <Button href="/sponsors/" class="view-all">
+            協賛企業一覧 →
+          </Button>
+        )}
+      </Reveal>
+    </section>
+  )
+}
+
+<style>
+  .special-sponsor {
+    max-width: var(--content-sp);
+    margin: 0 auto;
+    padding: 32px 20px;
+  }
+
+  /* Tape/Buttonにpropsで渡したclassは子コンポーネント側のスコープになるため :global() が要る。
+     見出しの下はカードのラベルテープがはみ出すぶん（14px）を足して空ける */
+  .special-sponsor :global(.sec-title) {
+    margin-bottom: 34px;
+    font-size: 17px;
+  }
+
+  .special-sponsor :global(.view-all) {
+    margin-top: 30px;
+  }
+
+  @media (min-width: 900px) {
+    .special-sponsor {
+      max-width: var(--content-narrow);
+    }
+  }
+</style>

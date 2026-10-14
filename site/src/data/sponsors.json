@@ -1,4 +1,9 @@
 [
+  {"name":"弁護士ドットコム株式会社","type":"special","featured":false,"logo":"bengo4-corporate.png","url":"https://www.bengo4.com/corporate/","products":[
+    {"name":"弁護士ドットコム","logo":"bengo4.png","url":"https://www.bengo4.com/"},
+    {"name":"クラウドサイン","logo":"cloudsign.png","url":"https://www.cloudsign.jp/"},
+    {"name":"LegalBrain エージェント","logo":"legalbrain-agent.png","url":"https://legalbrain.com/"}
+  ]},
   {"name":"ダイソウ工業株式会社","type":"corporate","featured":true,"logo":"daiso-kogyo.png"},
   {"name":"住友電装株式会社","type":"corporate","featured":true,"logo":"sumitomo-densou.png"},
   {"name":"シンフォニアテクノロジー株式会社","type":"corporate","featured":false,"logo":"sinfonia-technology.png"},
