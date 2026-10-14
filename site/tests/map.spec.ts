@@ -119,6 +119,19 @@ test.describe("MAP案内", () => {
     await page.getByRole("link", { name: "← MAPに戻る", exact: true }).click();
     await expect(page.locator("#game-info")).toBeInViewport();
   });
+  test("スマホで教室を押しても図は動かず、一覧の教室に枠が付く", async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 812 });
+    await page.goto("/map/exhibition/?floor=1F");
+    const diagram = page.locator("#floor-1F .indoor-map");
+    const before = await page.evaluate(() => scrollY);
+    await diagram.getByRole("link", { name: "C科棟 1F・1Eの企画を見る", exact: true }).click();
+    const list = page.locator("[data-room-list='C:1F:1E']");
+    await expect(list).toHaveAttribute("data-selected-room", "true");
+    await expect(list).toBeFocused();
+    await expect(page).toHaveURL(/#room-C-1F-/);
+    expect(await page.evaluate(() => scrollY)).toBe(before);
+    await expect(diagram.getByRole("group", { name: "1Fの教室配置図" })).toBeInViewport({ ratio: 1 });
+  });
   test("教室を選んだ後に階を変えて再読み込みしても新しい階を開く", async ({ page }) => {
     await page.goto("/map/exhibition/?floor=2F");
     await page.locator("#floor-2F .indoor-map").getByRole("link", { name: "C科棟 2F・2Iの企画を見る", exact: true }).click();

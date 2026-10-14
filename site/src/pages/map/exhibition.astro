@@ -92,7 +92,7 @@ const buildingsOn = (floor: string) => indoorBuildings.filter((building) => buil
     });
     const requested = new URL(location.href).searchParams.get("floor");
     selectFloor(tabs.some((tab) => tab.dataset.floorTab === requested) ? requested! : tabs[0].dataset.floorTab!);
-    function showRoom() {
+    function showRoom({ scroll = true } = {}) {
       const id = location.hash.slice(1);
       const target = document.getElementById(id);
       const panel = target?.closest<HTMLElement>("[data-floor-panel]");
@@ -100,11 +100,26 @@ const buildingsOn = (floor: string) => indoorBuildings.filter((building) => buil
         if (room.dataset.roomTarget === id) room.dataset.selectedRoom = "true";
         else delete room.dataset.selectedRoom;
       });
+      document.querySelectorAll<HTMLElement>("[data-room-list]").forEach((room) => {
+        if (room.id === id) room.dataset.selectedRoom = "true";
+        else delete room.dataset.selectedRoom;
+      });
       if (!panel || !target) return;
       selectFloor(panel.dataset.floorPanel!, { remember: true });
-      requestAnimationFrame(() => target.focus());
+      requestAnimationFrame(() => target.focus({ preventScroll: !scroll }));
     }
     showRoom();
+    // 図の教室を押したときは一覧へスクロールせず、枠で示すだけにする。図と一覧が同じ画面にあり、移動すると図が見えなくなるため。
+    document.querySelectorAll<HTMLAnchorElement>("a[data-room-target]").forEach((room) => {
+      room.addEventListener("click", (event) => {
+        event.preventDefault();
+        const oldURL = location.href;
+        history.pushState(null, "", `#${room.dataset.roomTarget}`);
+        // pushState は hashchange を出さない。MAPに戻るボタンがページ内の移動を知れるよう、ふつうのリンクと同じく知らせる。
+        window.dispatchEvent(new HashChangeEvent("hashchange", { oldURL, newURL: location.href }));
+        showRoom({ scroll: false });
+      });
+    });
     // ページ内リンクでも popstate が発火する。hashchange も聞くと focus が二重に走り、Tab で進んだ直後に教室へ引き戻されるため popstate だけで扱う。
     window.addEventListener("popstate", () => {
       const requested = new URL(location.href).searchParams.get("floor");
@@ -122,7 +137,7 @@ const buildingsOn = (floor: string) => indoorBuildings.filter((building) => buil
   .floor-panel :global(.indoor-map figcaption) { margin-top: 4px; font-size: 12px; line-height: 1.6; color: #555; }
   .room-menu { border-top: 2px solid var(--ink); margin-top: 6px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 8px; list-style: none; }
   .room-list { display: grid; grid-template-columns: auto minmax(0, 1fr); align-content: start; gap: 0 6px; padding: 2px 0; border-bottom: 1px dashed #aaa; scroll-margin-top: calc(var(--header-height-pc) + 16px); }
-  .room-list:target, .room-list:focus { outline: 2px solid var(--blue); outline-offset: 2px; }
+  .room-list:target, .room-list:focus, .room-list[data-selected-room] { outline: 2px solid var(--blue); outline-offset: 2px; }
   .room-list ul { list-style: none; }
   .room-list a { display: flex; flex-direction: column; justify-content: center; min-height: 44px; padding: 2px 0; }
   .room-list li + li a { border-top: 1px dotted #ccc; }
