@@ -132,6 +132,19 @@ export interface Entry {
   /** image から作った最適化済みの写真。ページ側（withEntryPhotos）が付ける。JSONには書かない */
   photo?: EntryPhoto;
   /**
+   * バナー画像（PC用、"/entries/xxx.webp"。置き場所は image と同じ）。
+   * これがある企画は、booth / timetable の常設枠で横長カードの代わりにバナー1枚で出し、
+   * 押すと link（無ければ詳細ページ）へ直接飛ぶ。ミッションフォトラリーのように
+   * 記事を読ませるよりアプリを開いてほしい企画用。link の linkOpens は見ないので、
+   * 公開日のある導線には付けない
+   */
+  banner?: string | null;
+  /** スマホ用のバナー画像。文字を大きく組んだ版。省略時は banner をそのまま使う */
+  bannerSp?: string | null;
+  /** banner / bannerSp から作った最適化済みの画像。ページ側（withEntryPhotos）が付ける。JSONには書かない */
+  bannerPhoto?: EntryPhoto;
+  bannerSpPhoto?: EntryPhoto;
+  /**
    * 開催の実体。1件 = 1回。
    * - 単発イベント: 1件
    * - 両日開催: 2件（day1 / day2）

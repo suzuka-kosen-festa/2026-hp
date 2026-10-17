@@ -220,6 +220,54 @@ test("申込が要る企画にだけ「事前申込制」を付ける", async ({
 });
 
 /**
+ * 常設企画のバナー（ミッションフォトラリー等）を PICK UP の直前に出す。
+ *
+ * バナーはアプリを開いてほしい企画のためのものなので、画像は link へ直接つなぎ、
+ * 遊び方・景品の説明は記事（/entry/<id>/）へのリンクで補う（EntryBanner）。
+ * 期待値はデータから引くので、banner を持つ企画が無ければ自動で飛ばし、入れば自動で有効になる。
+ */
+const bannerEntries = ["booth", "department", "program"]
+  .flatMap((name) =>
+    JSON.parse(readFileSync(fileURLToPath(new URL(`../src/data/entries/${name}.json`, import.meta.url)), "utf8")),
+  )
+  .filter((entry: { banner?: string | null; hidden?: boolean }) => entry.banner && !entry.hidden) as {
+  id: string;
+  link?: string | null;
+}[];
+
+test("常設企画のバナーが PICK UP の直前に出て、アプリと記事へつながる", async ({ page }) => {
+  test.skip(bannerEntries.length === 0, "バナーを持つ企画が無いため");
+  await page.addInitScript(() => sessionStorage.setItem("op-seen", "1"));
+  await page.goto("/");
+
+  const banners = page.locator(".entry-banners .entry-banner");
+  await expect(banners).toHaveCount(bannerEntries.length);
+
+  for (const [i, entry] of bannerEntries.entries()) {
+    const banner = banners.nth(i);
+    const detail = `/entry/${entry.id}/`;
+    // link が無い企画はバナー自体が記事へのリンクになる（EntryBanner）
+    await expect(banner.locator(".entry-banner-link")).toHaveAttribute("href", entry.link ?? detail);
+    if (entry.link) {
+      await expect(banner.locator(".entry-banner-detail")).toHaveAttribute("href", detail);
+    }
+  }
+
+  // PICK UP は featured が無いと出ないので、あるときだけ並び順を見る
+  const pickup = page.locator("#pickup");
+  if ((await pickup.count()) > 0) {
+    const before = await page.evaluate(() => {
+      const banner = document.querySelector(".entry-banners");
+      const pickupEl = document.querySelector("#pickup");
+      return Boolean(
+        banner && pickupEl && banner.compareDocumentPosition(pickupEl) & Node.DOCUMENT_POSITION_FOLLOWING,
+      );
+    });
+    expect(before, "バナーが PICK UP より後ろにあります").toBe(true);
+  }
+});
+
+/**
  * お知らせから PICK UP へ着地する（Issue #104）。
  *
  * 見出しは Reveal で下から持ち上がるので、scroll-margin が足りないと

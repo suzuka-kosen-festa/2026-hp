@@ -1,0 +1,46 @@
+---
+// home の常設企画バナー枠（ミッションフォトラリー等）。PICK UP の直前に置く。
+// バナーは featured とは別の扱いで、banner を持つ企画を全件そのまま並べる。
+// 見た目とリンクの組み方は booth / timetable と同じ EntryBanner を使う。
+// 操作する部品ではないので client: は付けず、静的なHTMLとして出す
+import EntryBanner from "../EntryBanner";
+import { entries } from "../../lib/loadEntries";
+import { withEntryPhotos } from "../../lib/entryPhotos";
+
+// 画像の最適化は banner を持つ企画だけにかける（全件に掛けるとビルドが遅くなる）
+const banners = (await withEntryPhotos(entries.filter((entry) => entry.banner))).filter(
+  (entry) => entry.bannerPhoto,
+);
+---
+
+{
+  banners.length > 0 && (
+    <section class="entry-banners" aria-label="常設企画">
+      {banners.map((entry) => (
+        <EntryBanner entry={entry} />
+      ))}
+    </section>
+  )
+}
+
+<style>
+  /* 幅は直後の PICK UP（FeaturedPromos）と揃える。
+     上下は ContentsCards・PICK UP 側の padding（SP 32px / PC 40px・32px）に足し込む形にし、
+     バナー前後の間隔がどちらも40px前後になるようにする。
+     紙片の回転とハードシャドウ（5px）がはみ出すぶんもこの余白で受ける */
+  .entry-banners {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    max-width: var(--content-sp);
+    margin: 0 auto;
+    padding: 8px 20px;
+  }
+
+  @media (min-width: 900px) {
+    .entry-banners {
+      max-width: var(--content-narrow);
+      padding: 0 20px 8px;
+    }
+  }
+</style>
