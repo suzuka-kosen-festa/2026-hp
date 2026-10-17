@@ -24,9 +24,10 @@ const SHARED = [
   /^site\/src\/layouts\//,
   /^site\/src\/components\/(ui|motion|filter)\//,
   /^site\/src\/components\/(Header|Footer|SvgDefs)\.astro$/,
-  // components 直下に置いた複数ページ共有の部品（EntryPhotoImg・EntryLinkCta）。
-  // ここを拾わないと、booth と timetable の両方で使う部品を直してもE2Eが1つも走らない
-  /^site\/src\/components\/[\w-]+\.tsx$/,
+  // components 直下に置いた複数ページ共有の部品（EntryPhotoImg・EntryLinkCta・EntryBanner）。
+  // ここを拾わないと、booth と timetable の両方で使う部品を直してもE2Eが1つも走らない。
+  // EntryBanner.css のように見た目だけを直すこともあるので、css も拾う
+  /^site\/src\/components\/[\w-]+\.(tsx|css)$/,
   /^site\/src\/styles\//,
   /^site\/src\/(lib|types)\//,
   // 公開制御。全ページの表示可否が変わるので全ページ検査する
@@ -70,6 +71,9 @@ const PAGE_RULES = [
   { pattern: /^site\/src\/pages\/timetable/, page: "timetable" },
   { pattern: /^site\/src\/pages\/map/, page: "map" },
   { pattern: /^site\/src\/(pages\/map\/game\.astro|components\/map\/)/, page: "map-game" },
+  // 説明文のリンク部品（InlineLinks）は entry だけでなく /map/game でも使っている。
+  // components/entry/ は entry 扱いなので、ここを足さないとゲーム大会の説明文が壊れても map-game が走らない
+  { pattern: /^site\/src\/components\/entry\/InlineLinks\.astro$/, page: "map-game" },
   { pattern: /^site\/src\/pages\/access/, page: "access" },
   { pattern: /^site\/src\/pages\/sponsors/, page: "sponsors" },
 ];
