@@ -383,3 +383,36 @@ test("投票導線には公開日（linkOpens）が入っている", () => {
     "公開日(linkOpens)の無い投票ボタンがあります。開催前から投票できてしまいます",
   ).toEqual([]);
 });
+
+/**
+ * 説明文（description）に `[テキスト](URL)` で書いたリンク（lib/inlineLinks.ts）。
+ *
+ * 非エンジニアがJSONに書いた記法がそのまま地の文に出てしまうと、読み手には
+ * 壊れた文字列にしか見えない。データから記法を含む企画を拾い、記事ページで
+ * リンクになっていること・記法の "](" が見えていないことを確かめる。
+ * 対象が0件だと検査が静かに消えるので、0件はそれ自体を失敗にする。
+ */
+const LINK_IN_DESCRIPTION = /\[([^\]\n]+)\]\(((?:https?:\/\/|\/)[^)\s]*)\)/g;
+const entriesWithDescriptionLinks = (entries as { id: string; description?: string | null }[])
+  .map((entry) => ({ id: entry.id, links: [...(entry.description ?? "").matchAll(LINK_IN_DESCRIPTION)].map(([, text, href]) => ({ text, href })) }))
+  .filter((entry) => entry.links.length > 0);
+
+test("説明文にリンクを書いた企画がある（ミッションフォトラリー）", () => {
+  const rally = entriesWithDescriptionLinks.find((entry) => entry.id === "mission-photo-rally");
+  expect(rally, "ミッションフォトラリーの説明文からアプリへのリンクが消えています").toBeTruthy();
+  expect(rally!.links).toContainEqual({ text: "こちら↗", href: "https://collage-camera.vercel.app/" });
+});
+
+for (const entry of entriesWithDescriptionLinks) {
+  test(`説明文のリンクを記法のまま出さない（${entry.id}）`, async ({ page }) => {
+    await page.goto(`/entry/${entry.id}/`, { waitUntil: "domcontentloaded" });
+    const desc = page.locator(".desc");
+
+    for (const link of entry.links) {
+      const anchor = desc.getByRole("link", { name: link.text, exact: true });
+      await expect(anchor, `「${link.text}」がリンクになっていません`).toBeVisible();
+      await expect(anchor).toHaveAttribute("href", link.href);
+    }
+    await expect(desc, "リンクの記法がそのまま見えています").not.toContainText("](");
+  });
+}

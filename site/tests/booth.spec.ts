@@ -12,6 +12,8 @@ type RawEntry = {
   hideFromBooth?: boolean;
   linkFromBooth?: boolean;
   hidden?: boolean;
+  banner?: string | null;
+  link?: string | null;
 };
 // hidden の企画はサイトに出ないので、検査対象から外す（lib/loadEntries.ts と同じ扱い）
 const entries = ["booth", "department", "program"]
@@ -169,4 +171,21 @@ test("linkFromBooth の企画はカードから詳細ページへ飛べる", asy
   const card = page.locator(`a[href="/entry/${linked!.id}/"]`);
   await expect(card).toHaveCount(1);
   await expect(card).toContainText("view more");
+});
+
+/**
+ * バナーのある常設企画（ミッションフォトラリー）は、カードではなくバナーで出し、押すと
+ * 記事ではなくアプリ（link）へ直接飛ぶ。遊び方は記事にしか無いので、詳細ページへのリンクも添える
+ */
+test("バナーのある常設企画はアプリへ直接飛ぶバナーで出す", async ({ page }) => {
+  const bannered = entries.find((entry) => entry.isPermanent && entry.banner && entry.link);
+  test.skip(boothHidden || !bannered, "/booth/ が準備中、またはバナーのある常設企画が無いため");
+
+  await page.goto("/booth/", { waitUntil: "networkidle" });
+  const banner = page.locator(".entry-banner");
+  await expect(banner.locator(".entry-banner-link")).toHaveAttribute("href", bannered!.link!);
+  await expect(banner.locator("img")).toHaveAttribute("alt", new RegExp(bannered!.name));
+  await expect(banner.locator(".entry-banner-detail")).toHaveAttribute("href", `/entry/${bannered!.id}/`);
+  // カードと二重に出さない
+  await expect(page.locator(".bl-permanent-card", { hasText: bannered!.name })).toHaveCount(0);
 });

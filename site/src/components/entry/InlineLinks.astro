@@ -1,0 +1,30 @@
+---
+// 説明文の中の `[テキスト](URL)` をリンクにして出す（書き方は lib/inlineLinks.ts）。
+// 改行の扱い（white-space: pre-line）は置き場所の <p> 側に任せ、ここでは文字とリンクだけを並べる。
+// 「やってみる →」ボタンと同じく、外部アプリでも同じタブで開く
+import { parseInlineLinks } from "../../lib/inlineLinks";
+
+interface Props {
+  text: string;
+}
+
+const segments = parseInlineLinks(Astro.props.text);
+---
+
+{segments.map((segment) => (segment.type === "link" ? <a class="inline-link" href={segment.href}>{segment.text}</a> : segment.text))}
+
+<style>
+  /* 本文中のリンクだと分かるよう、下線と青で地の文と見分ける */
+  .inline-link {
+    color: var(--blue);
+    font-weight: 700;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 3px;
+  }
+
+  .inline-link:focus-visible {
+    outline: 3px solid var(--blue);
+    outline-offset: 2px;
+  }
+</style>

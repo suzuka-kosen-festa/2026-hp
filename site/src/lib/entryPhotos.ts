@@ -24,20 +24,22 @@ const byDataPath = new Map(
 
 /** 作る幅。元画像より大きい幅は作らない（拡大しても綺麗にならず容量だけ増える） */
 const WIDTHS = [400, 800, 1200];
+/** バナーはPCで本文幅いっぱいに出すので、写真より大きい版まで作る */
+const BANNER_WIDTHS = [600, 1200, 1800];
 
 /**
  * データの image パスから最適化済みの写真を作る。
  * ファイルが無いときはビルドを止める。パスの書き間違いを本番で「写真が出ない」まま
  * 見逃さないため
  */
-export async function optimizeEntryPhoto(path: string): Promise<EntryPhoto> {
+export async function optimizeEntryPhoto(path: string, sizes: number[] = WIDTHS): Promise<EntryPhoto> {
   const meta = byDataPath.get(path);
   if (!meta) {
     throw new Error(
       `[entryPhotos] 画像 "${path}" が見つかりません。src/assets/entries/ にファイルを置き、image には "/entries/ファイル名" と書いてください`,
     );
   }
-  const widths = WIDTHS.filter((w) => w < meta.width).concat(Math.min(meta.width, WIDTHS[WIDTHS.length - 1]));
+  const widths = sizes.filter((w) => w < meta.width).concat(Math.min(meta.width, sizes[sizes.length - 1]));
   const image = await getImage({ src: meta, widths, format: "webp" });
   return {
     src: image.src,
@@ -47,9 +49,14 @@ export async function optimizeEntryPhoto(path: string): Promise<EntryPhoto> {
   };
 }
 
-/** Reactアイランドに渡す前に、各エントリへ最適化済みの写真（photo）を付ける */
+/** Reactアイランドに渡す前に、各エントリへ最適化済みの写真（photo）とバナー（bannerPhoto 等）を付ける */
 export async function withEntryPhotos(entries: Entry[]): Promise<Entry[]> {
   return Promise.all(
-    entries.map(async (entry) => (entry.image ? { ...entry, photo: await optimizeEntryPhoto(entry.image) } : entry)),
+    entries.map(async (entry) => ({
+      ...entry,
+      ...(entry.image && { photo: await optimizeEntryPhoto(entry.image) }),
+      ...(entry.banner && { bannerPhoto: await optimizeEntryPhoto(entry.banner, BANNER_WIDTHS) }),
+      ...(entry.bannerSp && { bannerSpPhoto: await optimizeEntryPhoto(entry.bannerSp, BANNER_WIDTHS) }),
+    })),
   );
 }

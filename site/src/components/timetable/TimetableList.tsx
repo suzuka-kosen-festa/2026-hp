@@ -1,6 +1,7 @@
 import { type CSSProperties, type ReactNode, useEffect, useRef, useState } from "react";
 import "./TimetableList.css";
 import EntryPhotoImg from "../EntryPhotoImg";
+import EntryBanner from "../EntryBanner";
 import EntryLinkCta from "../EntryLinkCta";
 import TabTagFilter, { type TabConfig } from "../filter/TabTagFilter";
 import {
@@ -178,7 +179,11 @@ export default function TimetableList({ entries }: Props) {
     target?.scrollIntoView({ block: "start", inline: "nearest", behavior: "instant" });
   }, [activeTab, isDesktop]);
 
-  const permanentEntries = getOngoingEntries(entries);
+  const ongoingEntries = getOngoingEntries(entries);
+  // バナーのある企画（ミッションフォトラリー）は、常設の一覧の上に広告のように大きく出す。
+  // 残り（ゲーム大会・バザーグランプリ等）は一覧に小さめのカードで並べる
+  const bannerEntries = ongoingEntries.filter((entry) => entry.bannerPhoto);
+  const permanentEntries = ongoingEntries.filter((entry) => !entry.bannerPhoto);
   const tab = TABS.find((t) => t.id === activeTab) ?? TABS[0];
   const isChuyasai = tab.id === "chuyasai";
   const slots = (isChuyasai ? getChuyasaiSlots(entries) : getScheduledSlots(entries, tab.id as Day)).filter((slot) =>
@@ -336,6 +341,15 @@ export default function TimetableList({ entries }: Props) {
       </div>
 
       {/* 常設・期間中の企画はグリッドの下に置く。当日まず見たいのは時刻の表なので */}
+      {bannerEntries.length > 0 && (
+        <ul className="tl-banners">
+          {bannerEntries.map((entry) => (
+            <li key={entry.id}>
+              <EntryBanner entry={entry} />
+            </li>
+          ))}
+        </ul>
+      )}
       {permanentEntries.length > 0 && (
         <div className="tl-permanent">
           <h2 className="tl-permanent-title">常設</h2>
@@ -345,7 +359,7 @@ export default function TimetableList({ entries }: Props) {
                 {/* 写真が無い企画は写真枠ごと出さない（boothのカード・詳細ページと同じ方針） */}
                 {entry.image && (
                   <div className="tl-permanent-photo">
-                    <EntryPhotoImg entry={entry} sizes="110px" />
+                    <EntryPhotoImg entry={entry} sizes="80px" />
                   </div>
                 )}
                 <div className="tl-permanent-body">

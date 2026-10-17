@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import "./BoothList.css";
 import EntryPhotoImg from "../EntryPhotoImg";
+import EntryBanner from "../EntryBanner";
 import EntryLinkCta from "../EntryLinkCta";
 import TabTagFilter, { type TabConfig } from "../filter/TabTagFilter";
 import PromoCard from "../motion/PromoCard";
@@ -8,6 +9,7 @@ import { getByCategory, getPermanentEntries } from "../../lib/entries";
 import { buildFilterUrl, parseFilterParams } from "../../lib/deepLink";
 import { dayColorClass, formatDayLabel } from "../../lib/eventDate";
 import { displayTags, matchesTag, tagColor, tagLabel } from "../../lib/tags";
+import { stripInlineLinks } from "../../lib/inlineLinks";
 import type { Category, Day, Entry, Occurrence } from "../../types/content";
 
 interface Props {
@@ -134,17 +136,24 @@ export default function BoothList({ entries }: Props) {
               読み上げ用には残す */}
           <h2 className="visually-hidden">常設</h2>
           <ul className="bl-permanent-list">
-            {permanentEntries.map((entry) => (
-              <li key={entry.id} className="bl-permanent-card">
-                {/* home の PICK UP と同じカード（PromoCard）を使う（Issue #60） */}
-                <a className="bl-permanent-link" href={`/entry/${entry.id}/`}>
-                  <PromoCard entry={entry} more />
-                </a>
-                {/* カードの外に出す。中に入れるとリンクの入れ子になる。
-                    公開日の出し分けは timetable と共通（EntryLinkCta） */}
-                <EntryLinkCta entry={entry} className="bl-permanent-cta" />
-              </li>
-            ))}
+            {permanentEntries.map((entry) =>
+              // バナーのある企画（ミッションフォトラリー）は、カードの代わりにアプリへ直接飛ぶバナーで出す
+              entry.bannerPhoto ? (
+                <li key={entry.id}>
+                  <EntryBanner entry={entry} />
+                </li>
+              ) : (
+                <li key={entry.id} className="bl-permanent-card">
+                  {/* home の PICK UP と同じカード（PromoCard）を使う（Issue #60） */}
+                  <a className="bl-permanent-link" href={`/entry/${entry.id}/`}>
+                    <PromoCard entry={entry} more />
+                  </a>
+                  {/* カードの外に出す。中に入れるとリンクの入れ子になる。
+                      公開日の出し分けは timetable と共通（EntryLinkCta） */}
+                  <EntryLinkCta entry={entry} className="bl-permanent-cta" />
+                </li>
+              ),
+            )}
           </ul>
         </div>
       )}
@@ -163,7 +172,8 @@ export default function BoothList({ entries }: Props) {
           // 紹介文も省略しないで出す。場内マップができたら、ここから場所へ飛ばしたい。
           // バンドは紹介文の代わりに本人の一言（comment）を出す
           const linked = hasDetailPage(entry);
-          const summary = entry.summary ?? entry.description ?? entry.comment;
+          // カード全体がリンクになる場合があり、入れ子の <a> は作れないので、説明文のリンクは文字だけにする
+          const summary = stripInlineLinks(entry.summary ?? entry.description ?? entry.comment);
           const card = (
             <div className="bl-card" style={{ transform: `rotate(${i % 2 === 0 ? -0.8 : 0.9}deg)` }}>
               {/* 写真が無い企画（学科展示など）は写真枠ごと出さず、文字だけのカードにする。
