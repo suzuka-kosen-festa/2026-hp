@@ -49,7 +49,7 @@
 | `site/src/components/EntryBanner.tsx` / `.css` | 新規。booth と timetable で共有するバナー部品 |
 | `site/src/components/booth/BoothList.tsx` | 常設枠で、`bannerPhoto` のある企画はカードの代わりにバナーを出す |
 | `site/src/components/timetable/TimetableList.tsx` / `.css` | バナーを常設一覧の上に分けて出し、残りのカードを小さくした |
-| `site/scripts/affected-pages.mjs` | `components/` 直下の `.css` も共通部品として扱うようにした（`EntryBanner.css` だけ直したときにE2Eが走らないのを防ぐ）。`components/entry/InlineLinks.astro` を変えたら `map-game` のE2Eも走るようにした（`map/game.astro` でも使っているため） |
+| `site/scripts/affected-pages.mjs` | 変更なし（main の #138 で import の依存関係から検査対象を決める方式になったため、このブランチで足した規則は捨てた）。`EntryBanner.css` は `EntryBanner.tsx` 経由で booth・timetable・home に、`InlineLinks.astro` は `entry/[id].astro` と `map/game.astro` 経由で entry・map・map-game に自動で当たることを確認済み |
 | `site/tests/booth.spec.ts` | テスト追加:「バナーのある常設企画はアプリへ直接飛ぶバナーで出す」 |
 | `site/src/components/sections/EntryBanners.astro` | 新規。home の PICK UP の手前に、`banner` のある企画をすべて `EntryBanner` で並べるセクション（静的HTML。画像の最適化は `banner` のある企画だけにかける） |
 | `site/src/pages/index.astro` | `EntryBanners` を `ContentsCards` と `FeaturedPromos`（PICK UP）の間に追加 |
@@ -97,7 +97,7 @@
 - TypeScript の型検査はしていない。`astro check` に必要な `@astrojs/check` が入っていないため。
 - home のバナーは、ヘッドレスの Chromium で 375px幅と1280px幅だけ確認した。実機の iOS Safari では見ていない。
 - timetable のバナーにはE2Eテストが無い（バナーのテストは booth と home だけ）。timetable 側の表示は目視でしか確かめていない。
-- 未確認: 実機（iPhone / Android）での見え方。（`types` / `lib` / `data` を変えたので、CIでは全ページのE2Eが走る）
+- 未確認: 実機（iPhone / Android）での見え方。（CIで走るE2Eは import の依存関係から決まり、このブランチでは booth・entry・gallery・home・map・map-game・news・timetable）
 
 ## 残っている作業
 

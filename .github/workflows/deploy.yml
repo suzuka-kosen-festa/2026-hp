@@ -92,7 +92,9 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       # プレビューで配信されるものとテストが見るものを揃える。
-      # 別モードで検査すると「テストが実物を見ていない」状態になる
+      # 別モードで検査すると「テストが実物を見ていない」状態になる。
+      # CI では playwright.config.ts が上の Build で作った dist をそのまま配信する（作り直さない）。
+      # Build とこのステップの間に dist を書き換えるステップを挟まないこと
       - name: E2E
         if: steps.affected.outputs.specs != ''
         run: npx playwright test ${{ steps.affected.outputs.specs }}
