@@ -286,6 +286,9 @@ test("SPメニューの閉じるボタンは1つだけで、押すと閉じる",
   await page.setViewportSize({ width: 375, height: 812 });
   await page.goto("/");
 
+  // HamburgerMenu は client:idle なので、ハイドレーション前のボタンは押しても何も起きない。
+  // CPUが混んでいると idle が遅れて取りこぼすので、astro-island の ssr 属性が外れる（=ハイドレーション済み）まで待つ
+  await expect(page.locator('astro-island[component-url*="HamburgerMenu"]')).not.toHaveAttribute("ssr");
   await page.getByRole("button", { name: "メニューを開く" }).click();
   const menu = page.getByRole("navigation", { name: "メインナビゲーション" });
   await expect(menu).toBeVisible();
