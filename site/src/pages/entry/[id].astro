@@ -17,11 +17,13 @@ import EntryResources from "../../components/entry/EntryResources.astro";
 import EntryPartSection from "../../components/entry/EntryPartSection.astro";
 import EntryRelated from "../../components/entry/EntryRelated.astro";
 import EntryNeighbors from "../../components/entry/EntryNeighbors.astro";
+import InlineLinks from "../../components/entry/InlineLinks.astro";
 import { entries } from "../../lib/loadEntries";
 import { getStageNeighbors } from "../../lib/entries";
 import { optimizeEntryPhoto } from "../../lib/entryPhotos";
 import { dayColorClass, formatDayLabel } from "../../lib/eventDate";
 import { isLinkOpen, linkOpensAt } from "../../lib/entryLink";
+import { stripInlineLinks } from "../../lib/inlineLinks";
 import { displayTags as toDisplayTags, tagColor, tagLabel } from "../../lib/tags";
 import type { Entry } from "../../types/content";
 import site from "../../data/site.json";
@@ -69,7 +71,7 @@ const linkOpensAtMs = entry.linkOpens ? linkOpensAt(entry.linkOpens) : null;
 const linkHiddenAtBuild = !isLinkOpen(entry.linkOpens, Date.now());
 ---
 
-<BaseLayout title={`${entry.name} | ${site.eventName}`} description={entry.summary ?? entry.description ?? entry.comment ?? undefined}>
+<BaseLayout title={`${entry.name} | ${site.eventName}`} description={stripInlineLinks(entry.summary ?? entry.description ?? entry.comment) ?? undefined}>
   <article class="entry">
     {/* 履歴が無いときはトップへ。一覧の /booth/ は準備中のことがあるため（MTG 2026-09-06） */}
     <BackLink fallback="/" />
@@ -124,7 +126,7 @@ const linkHiddenAtBuild = !isLinkOpen(entry.linkOpens, Date.now());
       )
     }
 
-    {entry.description && <p class="desc">{entry.description}</p>}
+    {entry.description && <p class="desc"><InlineLinks text={entry.description} /></p>}
 
     <EntryRelated entries={related} />
 

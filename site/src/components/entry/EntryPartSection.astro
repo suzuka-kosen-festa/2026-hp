@@ -7,6 +7,7 @@ import EntryFacts from "./EntryFacts.astro";
 import EntryNotes from "./EntryNotes.astro";
 import EntryApply from "./EntryApply.astro";
 import EntryResources from "./EntryResources.astro";
+import InlineLinks from "./InlineLinks.astro";
 import type { EntryPart } from "../../types/content";
 
 interface Props {
@@ -26,7 +27,7 @@ const { part, rotate = -1.2 } = Astro.props;
     application={part.application}
     extraFacts={part.extraFacts}
   />
-  {part.description && <p class="part-desc">{part.description}</p>}
+  {part.description && <p class="part-desc"><InlineLinks text={part.description} /></p>}
   <EntryNotes notes={part.notes} />
   {part.application && <EntryApply application={part.application} occurrences={part.occurrences} />}
   <EntryResources resources={part.resources} />

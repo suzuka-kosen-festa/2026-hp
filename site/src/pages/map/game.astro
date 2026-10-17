@@ -2,6 +2,7 @@
 import MapSubpage from "../../components/map/MapSubpage.astro";
 import IndoorMap from "../../components/map/IndoorMap.astro";
 import EntryFacts from "../../components/entry/EntryFacts.astro";
+import InlineLinks from "../../components/entry/InlineLinks.astro";
 import { areaByKey, isHiddenEntry, mapEntry } from "../../components/map/model";
 const area = areaByKey("game");
 // 企画が hidden の間は大会情報を出さず、準備中だけを案内する。
@@ -12,7 +13,7 @@ const entry = isHiddenEntry("game-tournament") ? null : mapEntry("game-tournamen
   <IndoorMap floor="1F" entryId={entry.id} />
   <section id="game-info" tabindex="-1" aria-labelledby="game-title">
     <h2 id="game-title">{entry.name}</h2>
-    <p class="game-description">{entry.description}</p>
+    <p class="game-description">{entry.description && <InlineLinks text={entry.description} />}</p>
     {entry.audience && <p class="audience">対象：{entry.audience}</p>}
     {(entry.parts ?? []).map((part) => <section class="game-part" data-game-part={part.id}>
       <h3>{part.name}</h3>
