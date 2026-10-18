@@ -78,7 +78,7 @@
         {"range":"C5","room":"","short":"","kind":"room","entryIds":[],"note":""},
         {"range":"D5:E5","room":"2C","short":"2C","kind":"room","entryIds":["rec-douga"],"note":""},
         {"range":"F5:G5","room":"2S","short":"2S","kind":"room","entryIds":["rec-5i","rec-2a"],"note":""},
-        {"range":"H5:I5","room":"5S","short":"5S","kind":"room","entryIds":[],"note":"中勢自動車"},
+        {"range":"H5:I5","room":"5S","short":"5S","kind":"room","entryIds":[],"note":"中勢自動車学校"},
         {"range":"J5","room":"","short":"","kind":"room","entryIds":[],"note":""}
       ]
     },
