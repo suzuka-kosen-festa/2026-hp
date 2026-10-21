@@ -41,6 +41,7 @@ const ogImage = new URL("/ogp.png", Astro.site);
     <link rel="icon" href="/favicon-96.png" type="image/png" sizes="96x96" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="description" content={description} />
+    <meta name="rating" content="general" />
     <link rel="canonical" href={canonical} />
     {(noindex || !published) && <meta name="robots" content="noindex, nofollow" />}
 
