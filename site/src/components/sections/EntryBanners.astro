@@ -31,7 +31,7 @@ const banners = (await withEntryPhotos(entries.filter((entry) => entry.banner)))
   .entry-banners {
     display: flex;
     flex-direction: column;
-    gap: 28px;
+    gap: 16px;
     max-width: var(--content-sp);
     margin: 0 auto;
     padding: 8px 20px;
@@ -41,6 +41,17 @@ const banners = (await withEntryPhotos(entries.filter((entry) => entry.banner)))
     .entry-banners {
       max-width: var(--content-narrow);
       padding: 0 20px 8px;
+      /* PCは2枚を横に並べる（縦に並べると高さが500pxを超える）。1枚だけなら中央 */
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 28px;
+    }
+    .entry-banners > :global(.entry-banner) {
+      flex: 0 1 calc((100% - 28px) / 2);
+      max-width: 480px;
+      margin-inline: 0;
+      min-width: 0;
     }
   }
 </style>

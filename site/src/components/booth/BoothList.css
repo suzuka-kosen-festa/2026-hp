@@ -29,6 +29,30 @@
   flex-direction: column;
   gap: 16px;
 }
+/* バナーはカードとは別の ul。PCは横に2枚、1枚だけなら中央 */
+.bl-banners {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.bl-banners + .bl-permanent-list {
+  margin-top: 16px;
+}
+.bl-banners li {
+  min-width: 0;
+}
+@media (min-width: 900px) {
+  .bl-banners {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 32px;
+  }
+  .bl-banners li {
+    flex: 0 1 480px;
+  }
+}
 /* カード本体は PromoCard（home の PICK UP と共通）。ここが持つのは
    並べ方と、カードの外に置くCTAの位置だけ */
 .bl-permanent-card {

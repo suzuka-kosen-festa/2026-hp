@@ -37,6 +37,15 @@
   text-decoration: underline;
   text-underline-offset: 3px;
 }
+@media (max-width: 899px) {
+  /* SPは縦幅を節約するため詳細リンクを出さない（display:none で読み上げ・タブ移動からも外れる） */
+  .entry-banner-detail {
+    display: none;
+  }
+  .entry-banner {
+    gap: 0;
+  }
+}
 @media (prefers-reduced-motion: reduce) {
   .entry-banner-link {
     transition: none;

@@ -105,3 +105,14 @@ for (const entry of gatedLinks) {
     });
   });
 }
+
+test("timetable に SNCT Games のバナーが出て、アプリへ直接つながる", async ({ page }) => {
+  test.skip(!showsContent("/timetable/"), "timetable が準備中のため");
+  await page.goto("/timetable/", { waitUntil: "networkidle" });
+
+  const banner = page.locator(".tl-banners .entry-banner", {
+    has: page.locator('a[href="https://snct-games.vercel.app"]'),
+  });
+  await expect(banner).toHaveCount(1);
+  await expect(banner.locator(".entry-banner-detail")).toHaveAttribute("href", "/entry/snct-games/");
+});

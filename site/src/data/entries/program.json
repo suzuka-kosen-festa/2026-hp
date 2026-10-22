@@ -22,6 +22,29 @@
     "linkLabel": "アプリを開く →"
   },
   {
+    "id": "snct-games",
+    "category": "イベント",
+    "categoryLabel": "ゲーム",
+    "name": "SNCT Games",
+    "group": "実行委員会",
+    "summary": "高専祭オリジナルのゲームで遊ぼう！",
+    "description": "高専祭オリジナルのゲームで遊ぼう！\nスマホのブラウザですぐに遊べて、アプリのインストールはいりません。\n\n【遊べるゲーム】\n■ 高専ダッシュ！\n鈴鹿高専の5学科をテーマにしたタイムアタックです。選んだ学科によって、ステージの仕掛けがガラリと変わります。最速タイムを出して、学科別ランキングの上位を目指そう！\n\n■ SNCT SHOOTER\n指1本のドラッグで自機を動かす縦スクロールシューティングです。武器を強化しながらステージを攻略して、ハイスコアを狙おう！腕に自信がある人は高難度のEXTRAモードにも挑戦して、スコアランキングの上位を目指してください。\n\n【遊び方】\n1. [こちら↗](https://snct-games.vercel.app)からSNCT Gamesを開く\n2. 遊びたいゲームの「あそぶ ▶」を押す\n3. ランキングの上位を目指してプレイ！\n\nパンフレットに載っているQRコードからも開けます。",
+    "tags": [
+      "常設",
+      "当日参加OK"
+    ],
+    "location": "どこでも遊べます（スマートフォンやパソコンのブラウザから）",
+    "image": "/entries/snct-games.webp",
+    "banner": "/entries/snct-games-banner.webp",
+    "occurrences": [],
+    "isPermanent": true,
+    "participation": "申込不要・無料。スマートフォンかパソコンが必要です",
+    "featured": false,
+    "link": "https://snct-games.vercel.app",
+    "linkLabel": "ゲームを開く →",
+    "bannerDetailLabel": "遊び方を見る →"
+  },
+  {
     "id": "workshop-ai-sorting-robot",
     "category": "イベント",
     "categoryLabel": "ワークショップ",

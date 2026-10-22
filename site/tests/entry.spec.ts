@@ -80,7 +80,8 @@ test.describe("entry の戻る導線", () => {
     test.skip(!showsContent("/booth/"), "/booth/ が準備中のため");
 
     await page.goto("/booth/");
-    await page.locator('a[href^="/entry/"]').first().click();
+    // SPではバナー下の詳細リンクが非表示なので、見えているリンクから選ぶ
+    await page.locator('a[href^="/entry/"]:visible').first().click();
     await expect(page).toHaveURL(/\/entry\//);
 
     await page.locator("a[data-back]").click();
@@ -97,7 +98,8 @@ test.describe("entry の戻る導線", () => {
 
     await page.goto("/booth/");
     await page.route("**/_astro/*.js", (route) => route.abort());
-    await page.locator('a[href^="/entry/"]').first().click();
+    // SPではバナー下の詳細リンクが非表示なので、見えているリンクから選ぶ
+    await page.locator('a[href^="/entry/"]:visible').first().click();
     await expect(page).toHaveURL(/\/entry\//);
 
     await page.locator("a[data-back]").click();

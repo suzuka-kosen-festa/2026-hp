@@ -120,8 +120,13 @@ export default function BoothList({ entries }: Props) {
   const permanentEntries = getPermanentEntries(entries)
     .slice()
     .sort((a, b) => Number(!!b.featured) - Number(!!a.featured));
+  const bannerEntries = permanentEntries.filter((entry) => entry.bannerPhoto);
+  const cardEntries = permanentEntries.filter((entry) => !entry.bannerPhoto);
   // 常設は上の別枠に出す。hideFromBooth は timetable の表にだけ載せる枠（紹介枠等）
-  const regularEntries = tabEntries.filter((entry) => !entry.isPermanent && !entry.hideFromBooth);
+  // ただしバナー付きの常設企画は、SPで詳細リンクを外したので、通常一覧にもカードを出して詳細ページへの導線にする
+  const regularEntries = tabEntries.filter(
+    (entry) => (!entry.isPermanent || entry.bannerPhoto) && !entry.hideFromBooth,
+  );
   const filtered =
     selectedTags.length === 0
       ? regularEntries
@@ -135,14 +140,20 @@ export default function BoothList({ entries }: Props) {
               見出しは出さない。ただし見出し階層とセクションの区切りは要るので、
               読み上げ用には残す */}
           <h2 className="visually-hidden">常設</h2>
-          <ul className="bl-permanent-list">
-            {permanentEntries.map((entry) =>
-              // バナーのある企画（ミッションフォトラリー）は、カードの代わりにアプリへ直接飛ぶバナーで出す
-              entry.bannerPhoto ? (
+          {bannerEntries.length > 0 && (
+            // バナーのある企画（ミッションフォトラリー等）は、カードの代わりにアプリへ直接飛ぶバナーで出す。
+            // カードの並びに影響しないよう別の ul にまとめ、PCでは横に2枚並べる
+            <ul className="bl-banners">
+              {bannerEntries.map((entry) => (
                 <li key={entry.id}>
                   <EntryBanner entry={entry} />
                 </li>
-              ) : (
+              ))}
+            </ul>
+          )}
+          {cardEntries.length > 0 && (
+            <ul className="bl-permanent-list">
+              {cardEntries.map((entry) => (
                 <li key={entry.id} className="bl-permanent-card">
                   {/* home の PICK UP と同じカード（PromoCard）を使う（Issue #60） */}
                   <a className="bl-permanent-link" href={`/entry/${entry.id}/`}>
@@ -152,9 +163,9 @@ export default function BoothList({ entries }: Props) {
                       公開日の出し分けは timetable と共通（EntryLinkCta） */}
                   <EntryLinkCta entry={entry} className="bl-permanent-cta" />
                 </li>
-              ),
-            )}
-          </ul>
+              ))}
+            </ul>
+          )}
         </div>
       )}
 
