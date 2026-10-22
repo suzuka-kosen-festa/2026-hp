@@ -433,3 +433,15 @@ test("候補2は学科柄と黄色いワイプからロゴへ切り替わる", a
   await expect(hero).toHaveCSS("opacity", "1");
   await expect(splash).toHaveCount(0, { timeout: 6500 });
 });
+
+test("SNCT Games のバナーが出て、アプリへ直接つながる", async ({ page }) => {
+  test.skip(!bannerEntries.some((e) => e.id === "snct-games"), "SNCT Games のバナーが無いため");
+  await page.addInitScript(() => sessionStorage.setItem("op-seen", "1"));
+  await page.goto("/");
+
+  const banner = page.locator(".entry-banners .entry-banner", {
+    has: page.locator('a[href="https://snct-games.vercel.app"]'),
+  });
+  await expect(banner).toHaveCount(1);
+  await expect(banner.locator(".entry-banner-detail")).toHaveAttribute("href", "/entry/snct-games/");
+});

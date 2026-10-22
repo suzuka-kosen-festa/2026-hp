@@ -141,6 +141,8 @@ export interface Entry {
   banner?: string | null;
   /** スマホ用のバナー画像。文字を大きく組んだ版。省略時は banner をそのまま使う */
   bannerSp?: string | null;
+  /** バナーの下の詳細ページへのリンク文言。省略時は「遊び方・景品を見る →」 */
+  bannerDetailLabel?: string | null;
   /** banner / bannerSp から作った最適化済みの画像。ページ側（withEntryPhotos）が付ける。JSONには書かない */
   bannerPhoto?: EntryPhoto;
   bannerSpPhoto?: EntryPhoto;

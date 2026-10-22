@@ -22,8 +22,8 @@ export default function EntryBanner({ entry }: Props) {
     <div className="entry-banner">
       <a className="entry-banner-link" href={entry.link ?? detail}>
         <picture>
-          {/* PCは最大760px（EntryBanner.css）、SPは画面幅いっぱい（本文幅の上限520px） */}
-          <source media="(min-width: 900px)" srcSet={pc.srcset} sizes="760px" width={pc.width} height={pc.height} />
+          {/* PCは2列で1枚あたり最大480px、SPは画面幅いっぱい（本文幅の上限520px） */}
+          <source media="(min-width: 900px)" srcSet={pc.srcset} sizes="480px" width={pc.width} height={pc.height} />
           <img
             src={sp.src}
             srcSet={sp.srcset}
@@ -39,7 +39,7 @@ export default function EntryBanner({ entry }: Props) {
       </a>
       {entry.link && (
         <a className="entry-banner-detail" href={detail}>
-          遊び方・景品を見る →
+          {entry.bannerDetailLabel ?? "遊び方・景品を見る →"}
         </a>
       )}
     </div>

@@ -178,14 +178,77 @@ test("linkFromBooth の企画はカードから詳細ページへ飛べる", asy
  * 記事ではなくアプリ（link）へ直接飛ぶ。遊び方は記事にしか無いので、詳細ページへのリンクも添える
  */
 test("バナーのある常設企画はアプリへ直接飛ぶバナーで出す", async ({ page }) => {
-  const bannered = entries.find((entry) => entry.isPermanent && entry.banner && entry.link);
-  test.skip(boothHidden || !bannered, "/booth/ が準備中、またはバナーのある常設企画が無いため");
+  const banneredAll = entries.filter((entry) => entry.isPermanent && entry.banner && entry.link);
+  test.skip(boothHidden || banneredAll.length === 0, "/booth/ が準備中、またはバナーのある常設企画が無いため");
 
   await page.goto("/booth/", { waitUntil: "networkidle" });
-  const banner = page.locator(".entry-banner");
-  await expect(banner.locator(".entry-banner-link")).toHaveAttribute("href", bannered!.link!);
-  await expect(banner.locator("img")).toHaveAttribute("alt", new RegExp(bannered!.name));
-  await expect(banner.locator(".entry-banner-detail")).toHaveAttribute("href", `/entry/${bannered!.id}/`);
-  // カードと二重に出さない
-  await expect(page.locator(".bl-permanent-card", { hasText: bannered!.name })).toHaveCount(0);
+  // 複数あるときは上下に並べる。順番はデータ（program.json）の並びどおり
+  await expect(page.locator(".entry-banner")).toHaveCount(banneredAll.length);
+  for (const [i, bannered] of banneredAll.entries()) {
+    const banner = page.locator(".entry-banner").nth(i);
+    await expect(banner.locator(".entry-banner-link")).toHaveAttribute("href", bannered.link!);
+    await expect(banner.locator("img")).toHaveAttribute("alt", new RegExp(bannered.name));
+    await expect(banner.locator(".entry-banner-detail")).toHaveAttribute("href", `/entry/${bannered.id}/`);
+    // バナー専用枠のカード（bl-permanent-card）には出さない
+    await expect(page.locator(".bl-permanent-card", { hasText: bannered.name })).toHaveCount(0);
+  }
+  // 上部バナーに加え、イベントタブの通常一覧にもカードが出て詳細ページへリンクする
+  await page.goto("/booth/?tab=%E3%82%A4%E3%83%99%E3%83%B3%E3%83%88", { waitUntil: "networkidle" });
+  for (const bannered of banneredAll) {
+    const card = page.locator(`.bl-grid a[href="/entry/${bannered.id}/"]`);
+    await expect(card).toHaveCount(1);
+    await expect(card).toContainText(bannered.name);
+  }
+});
+
+/** SNCT Games のバナーはフォトラリーの下に並び、アプリ（snct-games.vercel.app）へ飛ぶ。景品が無いので詳細リンクの文言も変える */
+test("SNCT Games のバナーがフォトラリーの下に出る", async ({ page }) => {
+  const rally = entries.findIndex((e) => e.id === "mission-photo-rally");
+  const games = entries.findIndex((e) => e.id === "snct-games");
+  test.skip(boothHidden || games < 0, "/booth/ が準備中、または SNCT Games が無いため");
+
+  await page.goto("/booth/", { waitUntil: "networkidle" });
+  const banner = page.locator(".entry-banner", { has: page.locator('a[href="https://snct-games.vercel.app"]') });
+  await expect(banner).toHaveCount(1);
+  await expect(banner.locator(".entry-banner-detail")).toHaveText("遊び方を見る →");
+  await expect(banner.locator(".entry-banner-detail")).toHaveAttribute("href", "/entry/snct-games/");
+  if (rally >= 0) {
+    const names = await page.locator(".entry-banner img").evaluateAll((els) => els.map((el) => el.getAttribute("alt")));
+    expect(names.findIndex((n) => n?.startsWith("ミッションフォトラリー"))).toBeLessThan(
+      names.findIndex((n) => n?.startsWith("SNCT Games")),
+    );
+  }
+});
+
+/** PC幅ではバナーを横に2枚並べる（縦に並べると大きすぎるため）。SP は縦のまま */
+test("PC幅ではバナーが横に並び、SP幅では縦に並ぶ", async ({ page }) => {
+  const bannered = entries.filter((entry) => entry.isPermanent && entry.banner && entry.link);
+  test.skip(boothHidden || bannered.length < 2, "/booth/ が準備中、またはバナーが2枚未満のため");
+
+  const boxes = async () => {
+    const list = page.locator(".entry-banner-link");
+    await expect(list).toHaveCount(bannered.length);
+    const a = (await list.nth(0).boundingBox())!;
+    const b = (await list.nth(1).boundingBox())!;
+    return { a, b };
+  };
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto("/booth/", { waitUntil: "networkidle" });
+  let { a, b } = await boxes();
+  expect(Math.abs(a.y - b.y)).toBeLessThan(2);
+  expect(b.x).toBeGreaterThan(a.x + a.width);
+
+  await page.setViewportSize({ width: 375, height: 800 });
+  ({ a, b } = await boxes());
+  expect(b.y).toBeGreaterThan(a.y + a.height);
+});
+
+/** SPは縦幅節約のため詳細リンクを出さない（読み上げ・タブ移動からも外れる）。PCでは見える */
+test("バナーの詳細リンクはSPで非表示、PCで表示", async ({ page }) => {
+  test.skip(boothHidden || !entries.some((e) => e.banner), "/booth/ が準備中、またはバナーが無いため");
+  await page.goto("/booth/", { waitUntil: "networkidle" });
+  const detail = page.locator(".entry-banner-detail").first();
+  await expect(detail).toBeHidden();
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await expect(detail).toBeVisible();
 });

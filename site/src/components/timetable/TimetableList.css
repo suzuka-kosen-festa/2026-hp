@@ -6,9 +6,24 @@
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
   margin-top: 40px;
   padding: 0 10px;
+}
+.tl-banners li {
+  min-width: 0;
+}
+@media (min-width: 900px) {
+  /* PCは横に2枚。1枚だけなら中央。gap は紙片の回転とシャドウが隣と重ならない幅 */
+  .tl-banners {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 32px;
+  }
+  .tl-banners li {
+    flex: 0 1 480px;
+  }
 }
 .tl-permanent {
   margin-top: 40px;
