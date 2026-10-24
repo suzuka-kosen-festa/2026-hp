@@ -586,7 +586,10 @@
     "occurrences": [],
     "isPermanent": true,
     "participation": "本部テントで購入できます（現金のみ）",
-    "featured": false
+    "featured": false,
+    "link": "/news/honbu-goods/",
+    "linkLabel": "グッズの紹介を見る →",
+    "bannerDetailLabel": "企画ページを見る →"
   },
   {
     "id": "main-suzu-league",
