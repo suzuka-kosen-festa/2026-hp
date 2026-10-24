@@ -60,7 +60,13 @@ const bodyLines = item.body?.split("\n") ?? [];
     <div class="markdown-body">
       {
         bodyLines.map((line) => {
-        
+
+          // 画像: ![説明文](/news/xxx.webp)。画像は public/news/ に置く（差し替えは同名でファイルを置き換えるだけ）
+          const image = line.match(/^!\[([^\]]*)\]\((\/[^)\s]+)\)$/);
+          if (image && !image[2].startsWith("//")) {
+            return <img class="news-image" src={image[2]} alt={image[1]} loading="lazy" />;
+          }
+
           if (line.startsWith("#### ")) {
            return <h5>{line.slice(5)}</h5>;
           }
@@ -172,6 +178,15 @@ const bodyLines = item.body?.split("\n") ?? [];
   font-weight: 700;
 }
 
+
+/* 画像（本文の幅に収める） */
+.markdown-body .news-image {
+  display: block;
+  width: 100%;
+  max-width: 480px;
+  height: auto;
+  margin: 0 auto 1em;
+}
 
 /* 空行 */
 
