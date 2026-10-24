@@ -600,6 +600,31 @@
     "featured": false
   },
   {
+    "id": "honbu-goods-booth",
+    "category": "出店",
+    "name": "本部グッズ販売",
+    "group": "実行委員会",
+    "description": "高専祭オリジナルのタオル（¥1,500）、ラバーバンド・缶バッジ・アクリルキーホルダー（各¥300）、ステッカー・ボディシール（各¥150）を販売！ペットボトルドリンク（100円）もあります。お支払いは現金のみ、なくなり次第終了です。",
+    "tags": [
+      "物販"
+    ],
+    "location": "本部テント",
+    "image": "/entries/honbu-goods.webp",
+    "occurrences": [
+      {
+        "day": "day1",
+        "start_time": "09:00",
+        "end_time": "15:00"
+      },
+      {
+        "day": "day2",
+        "start_time": "09:00",
+        "end_time": "15:00"
+      }
+    ],
+    "featured": false
+  },
+  {
     "id": "rec-bijutsu",
     "category": "出店",
     "name": "美術展",
