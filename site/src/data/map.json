@@ -10,6 +10,11 @@
   ],
   "placements": [
     {
+      "nodeId": "1531:3647",
+      "asset": "blood-donation",
+      "bounds": [-40, 259.272, 150, 111.555]
+    },
+    {
       "nodeId": "1005:113",
       "asset": "school-blue",
       "bounds": [
@@ -752,6 +757,12 @@
       "building": "C科棟",
       "floor": "1F",
       "room": "第二合併講義室"
+    }
+  ],
+  "landmarks": [
+    {
+      "name": "献血",
+      "plate": [35, 379]
     }
   ],
   "venues": [

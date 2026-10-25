@@ -424,7 +424,7 @@ test.describe("MAP案内", () => {
   test("人間が配置した4つのエリア札を図と一覧で同じ案内につなぐ", async ({ page }) => {
     await page.goto("/map/");
     await expect(page.getByRole("heading", { name: "会場マップ", exact: true })).toBeVisible();
-    await expect(page.locator(".campus-art img")).toHaveCount(30);
+    await expect(page.locator(".campus-art img")).toHaveCount(31);
     await expect.poll(() => page.locator(".campus-art img").evaluateAll((els) => els.every((el) => (el as HTMLImageElement).complete && (el as HTMLImageElement).naturalWidth > 0))).toBe(true);
     await expect(page.locator(".map-area-list > li")).toHaveCount(4);
     await expect(page.locator(".campus-map .area-label")).toHaveCount(4);
