@@ -4,26 +4,44 @@ on:
   push:
     branches: [main]
   pull_request:
+  # 毎晩 3:30 JST に main の全ページE2Eを回す（cron はUTCなので 18:30）。
+  # PRではデータ（src/data/）だけの変更にE2Eを走らせないので、その取りこぼしをここで拾う。
+  # 夜間はE2Eだけ。デプロイ・PRコメント・ポスター差し替えはしない（deploy ジョブの if 参照）
+  schedule:
+    - cron: "30 18 * * *"
+  # 夜間と同じものを手動で回す用（Actions タブの Run workflow）。main で使う想定
+  workflow_dispatch:
 
 # ランナーの既定はUTC。サイトの日付は全部日本の暦（news.json の date、
 # NEW バッジの7日判定）なので、ビルドもJSTで判定させる。
 # UTCのままだと、日本時間の朝9時より前にビルドした場合に「まだ前日」と
 # 判定され、その日付のお知らせが出ない。
+# （コンテナで動かす e2e ジョブにもこの env は渡る）
 env:
   TZ: Asia/Tokyo
 
+# ジョブは build → e2e → deploy の3つに分けている。
+#   build  … ビルドと「どのページを検査するか」の判定。dist を artifact に上げる
+#   e2e    … 検査するページがあるときだけ。Playwright 公式コンテナで動かす
+#   deploy … e2e が通ったとき（または検査対象が無くて飛ばしたとき）だけ。夜間・手動実行では動かない
+# 以前は1ジョブで `playwright install --with-deps chromium` をしていたが、apt-get が遅く
+# 25秒〜10分とばらついた。ブラウザと依存ライブラリ入りのコンテナなら pull だけで済む。
+# コンテナはジョブ単位でしか指定できないので、E2Eだけ別ジョブにした。
+# データだけのPRでは e2e ジョブごと飛ぶので、イメージの pull 時間も払わない
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      deployments: write
-      pull-requests: write
-      # プレビューURLをコミットステータスとして出すため
-      statuses: write
     defaults:
       run:
         working-directory: site
+    outputs:
+      apply: ${{ steps.release.outputs.apply }}
+      changed: ${{ steps.release.outputs.changed }}
+      mode: ${{ steps.release.outputs.mode }}
+      specs: ${{ steps.affected.outputs.specs }}
+      playwright: ${{ steps.playwright.outputs.version }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -48,6 +66,7 @@ jobs:
       #   通常のPR              … 適用しない。実装中のページをプレビューで確認する必要がある
       #   release.json を触るPR … 適用する。マージ後の本番を事前に確認できる
       #   本番(mainへpush)      … 適用する
+      #   夜間・手動実行        … 適用する。本番と同じものを検査する
       # 判定は affected-pages.mjs と同じく、ベースとの差分から行う（fetch-depth: 0 が要る）
       - name: 公開制御を適用するか判定
         id: release
@@ -55,6 +74,8 @@ jobs:
           BASE: ${{ github.base_ref }}
         run: |
           if [ "${{ github.event_name }}" = "push" ] && [ "${{ github.ref }}" = "refs/heads/main" ]; then
+            apply=1
+          elif [ "${{ github.event_name }}" = "schedule" ] || [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             apply=1
           elif git diff --name-only "origin/${BASE:-main}...HEAD" | grep -q '^site/src/data/release\.json$'; then
             apply=1
@@ -72,42 +93,144 @@ jobs:
 
       # ページ単位で分担しているので、触ったページのE2Eだけを走らせる。
       # 共通部品を触った場合は affected-pages.mjs が全ページを返す。
-      # ジョブ自体は常に実行する（paths フィルタで丸ごと止めると、
-      # 必須チェックにしたときにPRが「待ち」のまま進まなくなるため）
+      # データ（src/data/）だけの変更は空を返す＝E2Eを飛ばしてビルドだけにする（夜間に全ページ検査する）。
+      # 夜間・手動実行は全ページ。
+      # e2e ジョブは if で飛ばす（paths フィルタでワークフローごと止めると、
+      # 必須チェックにしたときにPRが「待ち」のまま進まなくなる。if で飛ばしたジョブは成功扱いになる）
       - name: 検査対象のページを判定
         id: affected
         env:
           BASE: ${{ github.base_ref }}
-        run: echo "specs=$(node scripts/affected-pages.mjs "origin/${BASE:-main}")" >> "$GITHUB_OUTPUT"
+        run: |
+          if [ "${{ github.event_name }}" = "schedule" ] || [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "specs=$(node scripts/affected-pages.mjs --all)" >> "$GITHUB_OUTPUT"
+          else
+            echo "specs=$(node scripts/affected-pages.mjs "origin/${BASE:-main}")" >> "$GITHUB_OUTPUT"
+          fi
 
-      - name: Cache Playwright browser
-        if: steps.affected.outputs.specs != ''
-        uses: actions/cache@v4
+      # e2e ジョブのコンテナイメージ（mcr.microsoft.com/playwright:v<版>-noble）の版をロックファイルから決める。
+      # イメージに入っているブラウザは、その版の Playwright 専用。手で版を書くと
+      # 依存を上げたときにズレて「ブラウザが見つからない」で落ちるので、同じ情報源から作る。
+      # ブラウザの版を実際に決めるのは playwright-core なので、@playwright/test と食い違っていたら止める
+      - name: Playwright の版を読む
+        id: playwright
+        run: |
+          test=$(node -p "require('./package-lock.json').packages['node_modules/@playwright/test']?.version ?? ''")
+          core=$(node -p "require('./package-lock.json').packages['node_modules/playwright-core']?.version ?? ''")
+          if [ -z "$test" ] || [ "$test" != "$core" ]; then
+            echo "::error::package-lock.json の @playwright/test（${test:-なし}）と playwright-core（${core:-なし}）の版が一致しません。npm ci で入れ直してロックファイルを確認してください"
+            exit 1
+          fi
+          echo "Playwright $test → mcr.microsoft.com/playwright:v$test-noble"
+          echo "version=$test" >> "$GITHUB_OUTPUT"
+
+      # E2E とデプロイは、ここで作った dist をそのまま使う（作り直さない）。
+      # 別ジョブなので artifact で受け渡す。. で始まるファイルも落とさない（public/.well-known 等）
+      - name: Upload dist
+        uses: actions/upload-artifact@v4
         with:
-          path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ hashFiles('site/package-lock.json') }}
+          name: dist
+          path: site/dist/
+          include-hidden-files: true
+          retention-days: 1
+          # 「Re-run all jobs」で同じ名前を上げ直しても失敗しないように
+          overwrite: true
 
-      - name: Install Playwright browser
-        if: steps.affected.outputs.specs != ''
-        run: npx playwright install --with-deps chromium
+  e2e:
+    needs: build
+    if: needs.build.outputs.specs != ''
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    # 版は build ジョブがロックファイルから読んだもの（上の「Playwright の版を読む」）。
+    # 依存を上げた直後でイメージがまだ公開されていないと、ここで pull に失敗して止まる。
+    # --user 1001 はランナーと同じユーザーで動かすため（作業ディレクトリの所有者を揃える。Playwright 公式の推奨）
+    container:
+      image: mcr.microsoft.com/playwright:v${{ needs.build.outputs.playwright }}-noble
+      options: --user 1001 --ipc=host
+    defaults:
+      run:
+        working-directory: site
+    steps:
+      - uses: actions/checkout@v4
+
+      # イメージにも Node は入っているが、版を .node-version に揃える（engine-strict で弾かれないように）
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+
+      # @playwright/test と、playwright.config.ts が配信に使う astro preview のため
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Download dist
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: site/dist/
 
       # プレビューで配信されるものとテストが見るものを揃える。
       # 別モードで検査すると「テストが実物を見ていない」状態になる。
-      # CI では playwright.config.ts が上の Build で作った dist をそのまま配信する（作り直さない）。
-      # Build とこのステップの間に dist を書き換えるステップを挟まないこと
+      # CI では playwright.config.ts が build ジョブで作った dist をそのまま配信する（作り直さない）。
+      # build ジョブの Build と Upload dist のあいだ、およびこのジョブの Download dist とこのステップのあいだに
+      # dist を書き換えるステップを挟まないこと
       - name: E2E
-        if: steps.affected.outputs.specs != ''
-        run: npx playwright test ${{ steps.affected.outputs.specs }}
+        run: npx playwright test ${{ needs.build.outputs.specs }}
         env:
-          APPLY_RELEASE: ${{ steps.release.outputs.apply }}
+          APPLY_RELEASE: ${{ needs.build.outputs.apply }}
 
       - name: Upload Playwright report
-        if: failure() && steps.affected.outputs.specs != ''
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: playwright-report
           path: site/playwright-report/
           retention-days: 7
+          overwrite: true
+
+  # E2E が落ちたらデプロイしない。検査対象が無くて e2e を飛ばしたとき（データだけのPR、mainへのpush）はデプロイする。
+  # needs に飛ばしたジョブがあると既定では後続も飛ぶので、!cancelled() で明示的に判定する
+  deploy:
+    needs: [build, e2e]
+    if: >-
+      !cancelled()
+      && (github.event_name == 'push' || github.event_name == 'pull_request')
+      && needs.build.result == 'success'
+      && (needs.e2e.result == 'success' || needs.e2e.result == 'skipped')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+      pull-requests: write
+      # プレビューURLをコミットステータスとして出すため
+      statuses: write
+    defaults:
+      run:
+        working-directory: site
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # 公開状態の変化をコメントするとき、ベースブランチの release.json を読むため
+          fetch-depth: 0
+
+      # wrangler-action は site/ に wrangler を npm i で足す。依存が入っていないとロックファイルの
+      # 全依存を入れ直すことになり、engine-strict で Node 24 も要るので、build ジョブと同じ手順で入れておく
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Download dist
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: site/dist/
 
       # 【暫定公開】v1公開までは本番だけポスター1枚にする。
       # プレビュー(PR)はこのステップを通らないので、各自のページの動作確認は
@@ -117,7 +240,7 @@ jobs:
       # 消えたURLには Cloudflare Pages が index.html を返すので、結果として
       # 全URLがポスターになる。ページが増えても自動で対象になり、追記漏れが起きない。
       - name: 本番だけポスター表示に差し替える
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && steps.release.outputs.mode == 'holding'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.build.outputs.mode == 'holding'
         run: |
           # 消す対象に自分自身が含まれるので、先に退避する
           poster=$(mktemp)
@@ -166,7 +289,7 @@ jobs:
       # release.json を触るPRには、公開状態がどう変わるかを表で出す。
       # 差分をそのまま読むより、変化を名指しするほうが足し忘れに気づける
       - name: 公開状態の変化をコメントする
-        if: github.event_name == 'pull_request' && steps.release.outputs.changed == '1'
+        if: github.event_name == 'pull_request' && needs.build.outputs.changed == '1'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BASE: ${{ github.base_ref }}

@@ -29,7 +29,7 @@
 - テープ・チップは**不透明**（半透明は色が薄くなるためNG — フィードバック済み）
 - コンテンツ（booth / news / timetable / sponsors）はデータファイルに分離し、非エンジニアでも更新できる形にする
 - **ページの公開/非公開は `site/src/data/release.json` だけで決める**。`published` にパスを1行足せば公開、外せば「準備中」表示になる。コードは触らない。`mode` を `"open"` にすると本番のポスター差し替えが止まる（v1公開）。詳細は docs/requirements.md §4
-- **ページを追加したら `site/tests/<ページ名>.spec.ts`（2行）を足す**。CIは `affected-pages.mjs` が import をたどって「変更の影響を受けるページ」のE2Eだけを走らせるので、specが無いページは一生検査されない。spec名は `src/pages/` のパスで決まる（`pages/foo.astro`・`pages/foo/**` → `foo`、`pages/foo/bar.astro` → `foo-bar` と `foo`、`pages/index.astro` → `home`）。コンポーネントやデータの登録は不要（import と `import.meta.glob` から自動で判定される）
+- **ページを追加したら `site/tests/<ページ名>.spec.ts`（2行）を足す**。CIは `affected-pages.mjs` が import をたどって「変更の影響を受けるページ」のE2Eだけを走らせるので、specが無いページは一生検査されない。spec名は `src/pages/` のパスで決まる（`pages/foo.astro`・`pages/foo/**` → `foo`、`pages/foo/bar.astro` → `foo-bar` と `foo`、`pages/index.astro` → `home`）。コンポーネントやデータの登録は不要（import と `import.meta.glob` から自動で判定される）。`src/data/` だけを変えたPR（`release.json` を除く）はE2Eを走らせずビルドのみで、全ページのE2Eは毎晩3:30 JSTに main で回る
 - **テストを `skip` にしたら、それが恒久的に skip され続けないか確認する**。CIのレポーターは失敗しか注釈しないので、**skipは緑のチェックに埋もれて見えない**。データ待ちで skip するテストは、データが入れば自動で有効になる書き方にすること
 - **アニメーションを追加したら `npm run check` を通す**（CIでも自動実行）。`useReducedMotion()` をマークアップに影響する形で使うと、低減設定の端末で要素が丸ごと不可視になる事故が起きる。詳細は docs/design-system.md §7
 - コミットはユーザーの指示があったときのみ
