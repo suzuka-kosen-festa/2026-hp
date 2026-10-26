@@ -13,6 +13,7 @@ const imageFor = (key: string) => assets[`../../assets/map/figma/${key}.png`].de
       </div>)}
       <span class="entrance"><span>↑</span>入口</span>
     </div>
+    {data.landmarks.map((landmark) => <span class="landmark-label" style={anchorStyle([...landmark.plate, 0, 0])}><span class="name-plate">{landmark.name}</span></span>)}
     {/* ステージ・棟・本部は、本部の絵の看板と同じく建物に名札を重ねる。ステージはタイムテーブル、棟と本部は案内ページへ進む。 */}
     {stages.map((stage) => <a class="stage-label" data-stage-name={stage.name} href={stage.href} style={anchorStyle([...stage.plate, 0, 0])} aria-label={`${stage.name}・${stage.location}。${stage.comingSoon ? "遷移先は準備中" : "ステージの時間を見る"}`}><span class="name-plate">{stage.name}</span></a>)}
     {areas.map((area) => <a class="area-label" href={area.href} data-area={area.code} style={anchorStyle(area.label)} aria-label={`${area.code} ${area.name}・${area.location}。${area.comingSoon ? "遷移先は準備中" : area.actionLabel}`}><span class="label-paper"><b>{area.code}</b><span class="area-name">{area.name}{area.key === "department" ? " ←" : ""}</span></span></a>)}
@@ -61,6 +62,8 @@ const imageFor = (key: string) => assets[`../../assets/map/figma/${key}.png`].de
   /* 名札の中心は map.json の plate（建物の手前の下側）。右端の建物でも図からはみ出さないよう、名札の半幅（--half）だけ内側に寄せる。 */
   .stage-label, .venue-label { --half: 36px; position: absolute; left: clamp(var(--half), var(--x), calc(100% - var(--half))); top: var(--y); transform: translate(-50%, -50%); }
   .name-plate { padding: 1px 4px; background: var(--paper); border: 1.5px solid var(--ink); font-size: 12px; font-weight: 700; line-height: 1.2; white-space: nowrap; text-align: center; }
+  /* 献血は承認済みFigmaの左側の位置。図外の部分はページ余白に収め、名称は小画面でもHTMLで読める大きさを保つ。 */
+  .landmark-label { position: absolute; left: var(--x); top: var(--y); transform: translate(-50%, 0); display: flex; }
   /* 名札はリンク。名札の周りまで44pxを押せる。 */
   .stage-label, .venue-label { display: flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; }
   .venue-label[data-venue="multimedia"] { --half: 68px; }
