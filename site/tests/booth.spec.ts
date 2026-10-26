@@ -175,10 +175,11 @@ test("linkFromBooth の企画はカードから詳細ページへ飛べる", asy
 
 /**
  * バナーのある常設企画（ミッションフォトラリー）は、カードではなくバナーで出し、押すと
- * 記事ではなくアプリ（link）へ直接飛ぶ。遊び方は記事にしか無いので、詳細ページへのリンクも添える
+ * 記事ではなくアプリ（link）へ直接飛ぶ。遊び方は記事にしか無いので、詳細ページへのリンクも添える。
+ * link の無い企画（本部グッズ販売）は、バナー自体が詳細ページへのリンクになり、添えるリンクは出さない
  */
 test("バナーのある常設企画はアプリへ直接飛ぶバナーで出す", async ({ page }) => {
-  const banneredAll = entries.filter((entry) => entry.isPermanent && entry.banner && entry.link);
+  const banneredAll = entries.filter((entry) => entry.isPermanent && entry.banner);
   test.skip(boothHidden || banneredAll.length === 0, "/booth/ が準備中、またはバナーのある常設企画が無いため");
 
   await page.goto("/booth/", { waitUntil: "networkidle" });
@@ -186,9 +187,13 @@ test("バナーのある常設企画はアプリへ直接飛ぶバナーで出�
   await expect(page.locator(".entry-banner")).toHaveCount(banneredAll.length);
   for (const [i, bannered] of banneredAll.entries()) {
     const banner = page.locator(".entry-banner").nth(i);
-    await expect(banner.locator(".entry-banner-link")).toHaveAttribute("href", bannered.link!);
+    await expect(banner.locator(".entry-banner-link")).toHaveAttribute("href", bannered.link ?? `/entry/${bannered.id}/`);
     await expect(banner.locator("img")).toHaveAttribute("alt", new RegExp(bannered.name));
-    await expect(banner.locator(".entry-banner-detail")).toHaveAttribute("href", `/entry/${bannered.id}/`);
+    if (bannered.link) {
+      await expect(banner.locator(".entry-banner-detail")).toHaveAttribute("href", `/entry/${bannered.id}/`);
+    } else {
+      await expect(banner.locator(".entry-banner-detail")).toHaveCount(0);
+    }
     // バナー専用枠のカード（bl-permanent-card）には出さない
     await expect(page.locator(".bl-permanent-card", { hasText: bannered.name })).toHaveCount(0);
   }
@@ -222,7 +227,7 @@ test("SNCT Games のバナーがフォトラリーの下に出る", async ({ pag
 
 /** PC幅ではバナーを横に2枚並べる（縦に並べると大きすぎるため）。SP は縦のまま */
 test("PC幅ではバナーが横に並び、SP幅では縦に並ぶ", async ({ page }) => {
-  const bannered = entries.filter((entry) => entry.isPermanent && entry.banner && entry.link);
+  const bannered = entries.filter((entry) => entry.isPermanent && entry.banner);
   test.skip(boothHidden || bannered.length < 2, "/booth/ が準備中、またはバナーが2枚未満のため");
 
   const boxes = async () => {
