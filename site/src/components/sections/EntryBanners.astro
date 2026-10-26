@@ -1,8 +1,10 @@
 ---
-// home の常設企画バナー枠（ミッションフォトラリー等）。PICK UP の直前に置く。
-// バナーは featured とは別の扱いで、banner を持つ企画を全件そのまま並べる。
+// home の PICK UP 枠。banner を持つ常設企画（ミッションフォトラリー等）のバナーを全件そのまま並べる。
+// 以前は featured の PromoList がここだったが、載っていた事前応募制の企画が締切済みになり撤去した。
 // 見た目とリンクの組み方は booth / timetable と同じ EntryBanner を使う。
-// 操作する部品ではないので client: は付けず、静的なHTMLとして出す
+// バナーは操作する部品ではないので client: は付けず、静的なHTMLとして出す
+import Reveal from "../motion/Reveal";
+import Tape from "../ui/Tape.astro";
 import EntryBanner from "../EntryBanner";
 import { entries } from "../../lib/loadEntries";
 import { withEntryPhotos } from "../../lib/entryPhotos";
@@ -15,39 +17,60 @@ const banners = (await withEntryPhotos(entries.filter((entry) => entry.banner)))
 
 {
   banners.length > 0 && (
-    <section class="entry-banners" aria-label="常設企画">
-      {banners.map((entry) => (
-        <EntryBanner entry={entry} />
-      ))}
+    <section class="entry-banners" id="pickup">
+      <Reveal client:visible rotate={-1.2}>
+        <Tape color="red" rotate={-1.2} as="h2" class="sec-title">
+          PICK UP
+        </Tape>
+      </Reveal>
+      <div class="banner-list">
+        {banners.map((entry) => (
+          <EntryBanner entry={entry} />
+        ))}
+      </div>
     </section>
   )
 }
 
 <style>
-  /* 幅は直後の PICK UP（FeaturedPromos）と揃える。
-     上下は ContentsCards・PICK UP 側の padding（SP 32px / PC 40px・32px）に足し込む形にし、
-     バナー前後の間隔がどちらも40px前後になるようにする。
+  /* 上下は他のセクション（NewsPreview 等）と同じ 32px。
      紙片の回転とハードシャドウ（5px）がはみ出すぶんもこの余白で受ける */
   .entry-banners {
+    max-width: var(--content-sp);
+    margin: 0 auto;
+    padding: 32px 20px;
+  }
+
+  /* 見出しがヘッダーに隠れないよう逃がす（SponsorsSection の #individual と同じ考え方）。
+     Reveal の登場前（y: 24px 下）の位置でスクロールするので、そのぶんも見込む */
+  #pickup {
+    scroll-margin-top: calc(var(--header-offset-sp) + 24px);
+  }
+
+  /* Tapeにpropsで渡したclassは子コンポーネント側のスコープになるため :global() が要る */
+  .entry-banners :global(.sec-title) {
+    margin-bottom: 22px;
+    font-size: 17px;
+  }
+
+  .banner-list {
     display: flex;
     flex-direction: column;
     gap: 16px;
-    max-width: var(--content-sp);
-    margin: 0 auto;
-    padding: 8px 20px;
   }
 
   @media (min-width: 900px) {
     .entry-banners {
       max-width: var(--content-narrow);
-      padding: 0 20px 8px;
-      /* PCは2枚を横に並べる（縦に並べると高さが500pxを超える）。1枚だけなら中央 */
+    }
+    /* PCは2枚を横に並べる（縦に並べると高さが500pxを超える）。1枚だけなら中央 */
+    .banner-list {
       flex-direction: row;
       flex-wrap: wrap;
       justify-content: center;
       gap: 28px;
     }
-    .entry-banners > :global(.entry-banner) {
+    .banner-list > :global(.entry-banner) {
       flex: 0 1 calc((100% - 28px) / 2);
       max-width: 480px;
       margin-inline: 0;

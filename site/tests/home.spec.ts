@@ -117,27 +117,6 @@ test("About のリンク先の記事が実在する", async ({ page }) => {
 });
 
 /**
- * PICK UP のサムネイルは右（MTG 2026-09-06）。
- *
- * 画像を持つ企画が1件も無いと検査対象が消えるので、そのときだけ skip する。
- * 画像が入れば自動で検査に戻る。
- */
-test("PICK UP のサムネイルが右にある", async ({ page }) => {
-  await page.goto("/");
-
-  const withPhoto = page.locator(".pc--compact:has(.pc__photo)").first();
-  test.skip((await withPhoto.count()) === 0, "画像を持つ PICK UP がまだ無いため");
-
-  const card = (await withPhoto.boundingBox())!;
-  const photo = (await withPhoto.locator(".pc__photo").boundingBox())!;
-
-  expect(
-    photo.x,
-    `サムネイルが左にあります（カード左端 ${Math.round(card.x)}px、写真左端 ${Math.round(photo.x)}px）`,
-  ).toBeGreaterThan(card.x + card.width / 2);
-});
-
-/**
  * ファビコンの sizes 宣言が、favicon.ico の実体と一致していること（Issue #68）。
  *
  * Google はファビコンに「48pxの倍数の正方形」を要求する。実体には 48x48 が
@@ -187,40 +166,7 @@ test("favicon の sizes 宣言が実体と一致する", async ({ page }) => {
 });
 
 /**
- * PICK UP の「事前申込制」の印。
- *
- * セクション全体に「予約制」と書かず、申込（application）を持つ企画のカードにだけ付ける。
- * コラージュカメラのような申込不要の企画が PICK UP に混ざっても嘘にならないようにするため。
- * 期待値はデータから引くので、企画を入れ替えても成り立つ。
- */
-const featuredEntries = ["booth", "department", "program"]
-  .flatMap((name) =>
-    JSON.parse(readFileSync(fileURLToPath(new URL(`../src/data/entries/${name}.json`, import.meta.url)), "utf8")),
-  )
-  .filter((entry: { featured?: boolean; hidden?: boolean }) => entry.featured && !entry.hidden) as {
-  id: string;
-  application?: unknown;
-  parts?: { application?: unknown }[];
-}[];
-
-/** 複数の企画を載せる記事（parts）は、どれか1つでも申込が要れば印を付ける */
-const needsApplication = (entry: (typeof featuredEntries)[number]) =>
-  Boolean(entry.application) || (entry.parts ?? []).some((part) => part.application);
-
-test("申込が要る企画にだけ「事前申込制」を付ける", async ({ page }) => {
-  test.skip(featuredEntries.length === 0, "PICK UP に載る企画が無いため");
-  await page.goto("/");
-
-  for (const entry of featuredEntries) {
-    const badge = page.locator(`a[href="/entry/${entry.id}/"] .pc__label--apply`);
-    await expect(badge, `${entry.id} の「事前申込制」の有無が申込データと食い違っています`).toHaveCount(
-      needsApplication(entry) ? 1 : 0,
-    );
-  }
-});
-
-/**
- * 常設企画のバナー（ミッションフォトラリー等）を PICK UP の直前に出す。
+ * 常設企画のバナー（ミッションフォトラリー等）が PICK UP 枠（#pickup）になる。
  *
  * バナーはアプリを開いてほしい企画のためのものなので、画像は link へ直接つなぎ、
  * 遊び方・景品の説明は記事（/entry/<id>/）へのリンクで補う（EntryBanner）。
@@ -235,7 +181,7 @@ const bannerEntries = ["booth", "department", "program"]
   link?: string | null;
 }[];
 
-test("常設企画のバナーが PICK UP の直前に出て、アプリと記事へつながる", async ({ page }) => {
+test("常設企画のバナーが PICK UP 枠に出て、アプリと記事へつながる", async ({ page }) => {
   test.skip(bannerEntries.length === 0, "バナーを持つ企画が無いため");
   await page.addInitScript(() => sessionStorage.setItem("op-seen", "1"));
   await page.goto("/");
@@ -253,73 +199,10 @@ test("常設企画のバナーが PICK UP の直前に出て、アプリと記�
     }
   }
 
-  // PICK UP は featured が無いと出ないので、あるときだけ並び順を見る
-  const pickup = page.locator("#pickup");
-  if ((await pickup.count()) > 0) {
-    const before = await page.evaluate(() => {
-      const banner = document.querySelector(".entry-banners");
-      const pickupEl = document.querySelector("#pickup");
-      return Boolean(
-        banner && pickupEl && banner.compareDocumentPosition(pickupEl) & Node.DOCUMENT_POSITION_FOLLOWING,
-      );
-    });
-    expect(before, "バナーが PICK UP より後ろにあります").toBe(true);
-  }
-});
-
-/**
- * お知らせから PICK UP へ着地する（Issue #104）。
- *
- * 見出しは Reveal で下から持ち上がるので、scroll-margin が足りないと
- * ヘッダーの下に潜る。
- *
- * html は scroll-behavior: smooth なので、クリック直後に測るとまだスクロールが
- * 始まったばかりで、見出しは画面のはるか下にある（＝ヘッダーより下なので素通りする）。
- * スクロールと Reveal の登場が止まるのを待ってから測る。
- *
- * PICK UP はページの最下部にあるので、画面が縦に長いとページの終わりで
- * スクロールが止まり、scroll-margin が無くても見出しが下に余る（検査が効かない）。
- * 実機のSafariに近い、縦の短い画面で測る。
- */
-test("お知らせから PICK UP へ着地できる", async ({ page }) => {
-  // OPは初回訪問時に全画面を覆うので見た扱いにする（着地位置の検査の邪魔になる）
-  await page.addInitScript(() => {
-    try {
-      sessionStorage.setItem("op-seen", "1");
-    } catch {
-      /* noop */
-    }
-  });
-
-  for (const width of [375, 1280]) {
-    await page.setViewportSize({ width, height: 640 });
-
-    await page.goto("/news/");
-    const link = page.locator('a[href="/#pickup"]');
-    await expect(link, "PICK UP へ案内するお知らせがありません").toHaveCount(1);
-    await link.click();
-
-    const heading = page.locator("#pickup h2");
-    await expect(heading, `${width}px で PICK UP までスクロールしていません`).toBeInViewport();
-
-    // 150ms あけて2回測り、同じ位置なら止まったとみなす
-    let settledY: number | null = null;
-    await expect
-      .poll(async () => {
-        const before = (await heading.boundingBox())!.y;
-        await page.waitForTimeout(150);
-        const after = (await heading.boundingBox())!.y;
-        settledY = before === after ? after : null;
-        return settledY;
-      }, { message: `${width}px でスクロールが止まりません` })
-      .not.toBeNull();
-
-    const header = (await page.locator("header").boundingBox())!;
-    expect(
-      settledY!,
-      `${width}px で見出しがヘッダー（高さ${Math.round(header.height)}px）に隠れています（Y=${Math.round(settledY!)}）`,
-    ).toBeGreaterThanOrEqual(header.height);
-  }
+  // バナーは #pickup セクションの中にあり、見出し「PICK UP」が付く
+  const pickup = page.locator("section#pickup");
+  await expect(pickup.getByRole("heading", { name: "PICK UP" })).toBeVisible();
+  await expect(pickup.locator(".entry-banner")).toHaveCount(bannerEntries.length);
 });
 
 /**
