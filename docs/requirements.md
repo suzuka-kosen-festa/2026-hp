@@ -42,7 +42,7 @@
 4. About — テーマ紹介文:
    > 今年のテーマは「collage(コラージュ)」。個性も、アイデアも、技術も、想いも、全部重なってひとつの"最高"を作る。
 5. contents カード4枚（timetable / map / booth / access への導線）
-6. PICK UP — 注目企画（`featured: true`）の一覧（詳細は3.9）
+6. PICK UP — `banner` を持つ常設企画のバナー枠（詳細は3.9）。~~注目企画（`featured: true`）の一覧~~ は 2026-10-27 に撤去
 7. フッター: SNS（Instagram・X）、電話番号、主要協賛企業
 
 ### 3.2 booth の構成（タブ）
@@ -92,7 +92,7 @@
   - `banner`（任意。PC用のバナー画像。`"/entries/xxx.webp"` の形で、置き場所は `image` と同じ `site/src/assets/entries/`。ビルド時に `withEntryPhotos` が幅600/1200/1800pxの版を作る）。これがある企画は**常設枠で横長カードの代わりにバナー1枚で出し、押すと `link`（無ければ詳細ページ）へ直接飛ぶ**。`link` があるときはバナーの下に詳細ページへのテキストリンクを添える。部品は `components/EntryBanner.tsx`（booth・timetable・home で共有）。出る場所:
     - `/booth/` の常設枠: `isPermanent` の企画のみ（`getPermanentEntries`）
     - `/timetable/` の常設枠: `isPermanent` / `period` / `listInTimetable` の企画（`getOngoingEntries`）
-    - home の PICK UP の手前: `banner` のある企画すべて
+    - home の PICK UP: `banner` のある企画すべて（~~PICK UP の手前~~ → 2026-10-27 からバナー自体が PICK UP 枠）
     - **`link` の `linkOpens`（公開日）は見ない**ので、公開日のある導線（当日まで押させたくない投票など）には付けない
   - `bannerSp`（任意。スマホ用のバナー画像。狭い幅でも読めるよう文字を大きく組んだ版。省略時はスマホでも `banner` を使う。画面幅900px以上でPC用に切り替わる）
 - 並び順: ソートロジックなし。JSON配列の記載順をそのまま表示順とする（委員会側が意図的な掲載順を制御できるようにするため）
@@ -105,7 +105,7 @@
 - 概要: お題で指定された物・場所の写真を複数枚撮影し、1枚のフォトコラージュを作るWebアプリ企画。会場内どこでも各自のスマホからアクセス可能（物理スポットに紐づかない）
 - テーマ「collage」を体現する目玉企画のため、他の常設企画と同列ではなく**特別扱い**とする:
   - `/booth` 常設セクションの最上部に固定表示。~~カードは home の PICK UP と同じ `PromoCard` を使い、Webアプリへのリンクボタンだけをカードの外に置く~~ → 2026-10-16 から**バナー（`banner` / `bannerSp`）で出し、押すとアプリへ直接飛ぶ**形に変更（上の `banner` 参照）。記事を読ませるよりアプリを開いてほしい企画のため。お題の内容はサイト側に出さず、アプリ内で見せる
-  - home の「PICK UP」枠にも掲載される（3.9参照）。ただし当初想定した「コラージュカメラ専用の横長バナー」ではなく、`featured: true` の企画を並べる汎用枠に一般化した（I科ワークショップなど2件目以降が出たため）
+  - home の「PICK UP」枠にも掲載される（3.9参照）。~~`featured: true` の企画を並べる汎用枠~~ → 2026-10-27 から、`banner` を持つ常設企画のバナー枠になった
 - `entries/program.json`に`category: "イベント"` / `tags: ["常設"]` / `location: null` / `occurrences: []` / `isPermanent: true` / `featured: true`の1エントリとして登録する。他のエントリと型が同じなので、home側もboothの特別カードも同じデータを参照するだけでよく、専用のハードコードは不要
 
 ### 3.4 map 詳細仕様（booth連携含む）
@@ -282,13 +282,15 @@
 
 ### 3.9 home「PICK UP」枠 詳細仕様
 
-`featured: true` のエントリを**全件そのまま縦に並べる**。当初は「コラージュカメラ(仮)専用の横長バナー1枚」だったが、I科ワークショップが2件目のfeaturedになったため汎用枠に一般化した。
+**2026-10-27 に仕様変更**: PICK UP は `banner` を持つ常設企画のバナー枠（`components/sections/EntryBanners.astro`、`id="pickup"`、PCは2枚横並び）になった。~~featured の PromoList 枠~~ は、載っていた事前応募制の企画（ワークショップ2件・ゲーム大会）が締切済みになったため撤去した（3件の `featured` は false）。`PromoList` / `getFeaturedEntries` は `/gallery` と将来の再利用のために残す。以下は撤去前の仕様の記録。
+
+~~`featured: true` のエントリを**全件そのまま縦に並べる**。~~ 当初は「コラージュカメラ(仮)専用の横長バナー1枚」だったが、I科ワークショップが2件目のfeaturedになったため汎用枠に一般化した。
 
 **見せ方**
 - 1行 = 1企画の横長カード（写真小 + ラベル + 企画名 + `summary` + 場所 + `view more →`）
 - **行全体が `/entry/[id]` へのリンク**。カード内にCTAリンクを別途置かないので、リンクの入れ子にならずタップ領域が行の全面になる
 - カード内の説明は `summary`（40字目安）の1行だけに留め、詳しい内容は詳細ページ `/entry/[id]`（§3.3）に送る
-- 実装: `components/sections/FeaturedPromos.astro` + `components/motion/PromoList.tsx`
+- 実装: ~~`components/sections/FeaturedPromos.astro`~~ + `components/motion/PromoList.tsx`
 
 **切り替えUIを持たない理由**
 広告が複数になった際、スタックして切り替える方式（覗いた端をタップ／テープタブ／Apple Wallet型／カルーセル）を4案作って `/gallery` で比較した。結論として**広告は多くても4件程度**であり、畳む必要がないと判断した。畳まないことで「切り替えに2手かかる」「展開すると畳んだ状態より1件あたりの情報が減る」という欠点が両方消える。

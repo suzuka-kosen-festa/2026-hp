@@ -11,11 +11,14 @@ import Divider from "../components/ui/Divider.astro";
 import Star from "../components/ui/Star.astro";
 import Reveal from "../components/motion/Reveal";
 import PromoList from "../components/motion/PromoList";
-import { getFeaturedEntries } from "../lib/entries";
 import { entries } from "../lib/loadEntries";
 import { withEntryPhotos } from "../lib/entryPhotos";
 
-const featured = await withEntryPhotos(getFeaturedEntries(entries));
+// PromoList の見本。home の PICK UP は撤去済み（バナー枠になった）なので、事前申込制のワークショップ等を id で拾う
+const sampleIds = ["workshop-ai-sorting-robot", "workshop-drone", "game-tournament"];
+const featured = await withEntryPhotos(
+  sampleIds.flatMap((id) => entries.filter((entry) => entry.id === id)),
+);
 
 // 画像あり／なしの見え方を並べて比べるための見本。featured の1件目に、実在する企画写真を差した複製を作る
 // （写真は src/assets/entries/ の最適化済みのものが要るので、写真を持つ企画から借りる）
@@ -132,7 +135,7 @@ const featuredWithImage = featured
     <div class="part">
       <h2>広告一覧（PromoList）</h2>
       <p class="sub">
-        featured企画の一覧。home の PICK UP 枠で使用。行全体が詳細ページへのリンクで、タップ領域は行の全面。
+        企画カードの一覧（見本は事前申込制の3企画）。以前は home の PICK UP 枠で使用していたが、現在は撤去済み。行全体が詳細ページへのリンクで、タップ領域は行の全面。
         <strong>home専用ではなくエントリ配列を受け取るだけなので、他ページの広告枠にも流用できる</strong>。
         <strong>「タップ領域を表示」を押すと押せる範囲が赤破線で出ます</strong>。
         参考値: WCAG 2.5.8(AA)の最小は24×24px、Apple HIGの推奨は44×44px。
