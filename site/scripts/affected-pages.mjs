@@ -21,7 +21,19 @@
  *   5. 他のページを page.goto で開いて検査している spec も1段だけ足す
  *      （map.spec は /timetable/ の「MAPに戻る」を、sponsors.spec は /news/ のリンクを見ている）
  *   6. tests/_shared.ts は全specが import するので、宣言（関数）単位でつなぐ。
- *      gatedLinkEntries が読む entries/*.json を変えても、それを import した spec だけが走る
+ *      gatedLinkEntries が読む entries/*.json を経由する変更（下の public/ の画像など）は、
+ *      それを import した spec だけが走る
+ *
+ * src/data/ のファイル（entries/*.json も含む）を変えただけなら、どのページも検査しない（ビルドだけ）。
+ * 協賛の名前を1行足すようなPRで、ブラウザの用意を含めて数分〜十数分待たされていたため。
+ * JSONの書き損じ・型や import の壊れは Build で落ちるので、PRではそれで足りるとした。
+ * 中身の取りこぼし（存在しない画像のURLを書いた、等）は、毎晩 main で回す全ページE2Eで拾う（deploy.yml）。
+ *   - release.json は例外で、今までどおり全ページ（SHARED）。表示可否そのものが変わるため
+ *   - データ以外のファイルも一緒に変えたPRは、データ以外のファイルから今までどおりたどる
+ *   - public/ の画像の差し替えは対象外にしない。データJSONにURLを書いている画像でも、
+ *     public/ → data/*.json → ページ とたどって検査する（消した・改名した画像の404は
+ *     コンソールエラーとしてE2Eでしか落ちないため）。データを素通りするのは「変更の起点」が
+ *     src/data/ のときだけで、たどる途中の中継点としては今までどおり使う
  *
  * spec 名は src/pages/ のパスから決まるので、ページを足しても登録は要らない（spec を置くだけ）。
  * たどれないものは安全側に倒して全ページにする（取りこぼすより走らせすぎるほうが安全）。
@@ -29,8 +41,10 @@
  *
  * 使い方:
  *   node scripts/affected-pages.mjs origin/main
- *   node scripts/affected-pages.mjs --files site/src/data/news.json,site/public/ogp.png
+ *   node scripts/affected-pages.mjs --files site/src/pages/news.astro,site/public/ogp.png
  *   → "tests/home.spec.ts tests/news.spec.ts" のように出力（無ければ空）
+ *   node scripts/affected-pages.mjs --all
+ *   → 全ページの spec（夜間の全ページE2E用）
  *   パスはリポジトリ直下からの相対（git diff --name-only と同じ形）
  */
 import { execFileSync } from "node:child_process";
@@ -67,6 +81,13 @@ const SHARED = [
   // テストの共通部分（_shared.ts 等）。個別の <page>.spec.ts はそのページ扱いにする
   /^site\/tests\/(?![\w-]+\.spec\.ts$)/,
 ];
+
+/**
+ * 変更の起点になっても検査しないファイル（データのみの変更はビルドだけで済ませる）。
+ * SHARED の判定が先なので、release.json はここに当たらず全ページになる。
+ * 理由は冒頭のコメントを参照
+ */
+const DATA_ONLY = /^site\/src\/data\//;
 
 /**
  * import をたどった先がここに着いたら全ページ。
@@ -328,11 +349,7 @@ function specNamesForPage(file) {
 export function affectedSpecs(changed, { site = DEFAULT_SITE, log = () => {} } = {}) {
   const specFor = (page) => `tests/${page}.spec.ts`;
   const hasSpec = (page) => existsSync(path.join(site, specFor(page)));
-  const allSpecs = () =>
-    readdirSync(path.join(site, "tests"))
-      .filter((f) => /^[\w-]+\.spec\.ts$/.test(f))
-      .sort()
-      .map((f) => `tests/${f}`);
+  const allSpecs = () => listAllSpecs(site);
 
   const short = (f) => f.replace(/^site\/src\//, "").replace(/^site\//, "");
   let graph;
@@ -350,6 +367,11 @@ export function affectedSpecs(changed, { site = DEFAULT_SITE, log = () => {} } =
   const run = () => {
     for (const file of changed) {
       if (SHARED.some((re) => re.test(file))) return all(file, "共通部分");
+
+      if (DATA_ONLY.test(file)) {
+        log(`${file} → なし（データのみの変更のためE2E対象外。壊れはBuildで、中身は夜間の全ページE2Eで検査）`);
+        continue;
+      }
 
       const spec = /^site\/tests\/([\w-]+)\.spec\.ts$/.exec(file);
       if (spec) {
@@ -443,6 +465,14 @@ export function affectedSpecs(changed, { site = DEFAULT_SITE, log = () => {} } =
   return [...new Set([...pages, ...specEdits])].filter(hasSpec).sort().map(specFor);
 }
 
+/** tests/ にある全 spec（"tests/<page>.spec.ts" の配列） */
+export function listAllSpecs(site = DEFAULT_SITE) {
+  return readdirSync(path.join(site, "tests"))
+    .filter((f) => /^[\w-]+\.spec\.ts$/.test(f))
+    .sort()
+    .map((f) => `tests/${f}`);
+}
+
 /** spec 名 → その spec が page.goto で開くページ名の集合 */
 function specVisits(site) {
   const out = new Map();
@@ -492,7 +522,10 @@ if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.ar
   const log = (msg) => process.stderr.write(`[affected-pages] ${msg}\n`);
   let changed;
   const fi = args.indexOf("--files");
-  if (fi !== -1) {
+  if (args.includes("--all")) {
+    log("--all → 全ページ");
+    process.stdout.write(listAllSpecs().join(" "));
+  } else if (fi !== -1) {
     changed = (args[fi + 1] ?? "").split(",").map((s) => s.trim()).filter(Boolean);
   } else {
     const base = args[0] ?? "origin/main";
@@ -505,5 +538,5 @@ if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.ar
       changed = ["site/src/styles/global.css"];
     }
   }
-  process.stdout.write(affectedSpecs(changed, { log }).join(" "));
+  if (changed) process.stdout.write(affectedSpecs(changed, { log }).join(" "));
 }
