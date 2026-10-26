@@ -568,6 +568,30 @@
     "featured": false
   },
   {
+    "id": "honbu-goods",
+    "category": "イベント",
+    "name": "本部グッズ販売",
+    "group": "実行委員会",
+    "summary": "高専祭オリジナルのタオルや缶バッジなどを本部テントで販売！",
+    "description": "高専祭オリジナルグッズを本部テントで販売します。タオル（¥1,500）、ラバーバンド・缶バッジ・アクリルキーホルダー（各¥300）、ステッカー・ボディシール（各¥150）。すべて種類を選んで購入できます。\n\n本部テントでは、ペットボトルドリンク（100円）も販売しています。\n\nお支払いは現金のみです。なくなり次第終了します。\n\nグッズの詳しい紹介は[お知らせ↗](/news/honbu-goods/)をご覧ください。",
+    "tags": [
+      "day1",
+      "day2",
+      "常設",
+      "当日参加OK"
+    ],
+    "location": "本部テント",
+    "image": "/entries/honbu-goods.webp",
+    "banner": "/entries/honbu-goods-banner.webp",
+    "occurrences": [],
+    "isPermanent": true,
+    "participation": "本部テントで購入できます（現金のみ）",
+    "featured": false,
+    "link": "/news/honbu-goods/",
+    "linkLabel": "グッズの紹介を見る →",
+    "bannerDetailLabel": "企画ページを見る →"
+  },
+  {
     "id": "main-suzu-league",
     "category": "イベント",
     "name": "スズリーグ",
