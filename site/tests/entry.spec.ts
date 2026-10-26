@@ -13,12 +13,22 @@ describePage("entry", "/entry/workshop-ai-sorting-robot/");
  */
 const entriesDir = new URL("../src/data/entries/", import.meta.url);
 // hidden の企画は記事ページが作られないので、検査対象から外す（lib/loadEntries.ts と同じ扱い）
-const entries: { id: string; image?: string; categoryLabel?: string; hidden?: boolean }[] = ["booth", "department", "program"]
+const entries: { id: string; name: string; image?: string; categoryLabel?: string; hidden?: boolean }[] = [
+  "booth",
+  "department",
+  "program",
+]
   .flatMap((name) => JSON.parse(readFileSync(fileURLToPath(new URL(`${name}.json`, entriesDir)), "utf8")))
   .filter((entry: { hidden?: boolean }) => !entry.hidden);
 
 const withoutImage = entries.find((entry) => !entry.image);
 const withImage = entries.find((entry) => entry.image);
+
+test("C科の学科展示タイトル変更が反映されている", () => {
+  const target = entries.find((entry) => entry.id === "dept-c-06");
+  expect(target, "dept-c-06 がデータに見つかりません").toBeTruthy();
+  expect(target!.name).toBe("水電解カタリスト");
+});
 
 /**
  * 画像ありも画像なしも見つからないと両方の describe が skip になり、
