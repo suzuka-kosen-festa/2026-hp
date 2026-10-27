@@ -4,6 +4,12 @@ import type { ImageMetadata } from "astro";
 import { data, areas, stages, venues, placementStyle, anchorStyle } from "./model";
 const assets = import.meta.glob<{ default: ImageMetadata }>("../../assets/map/figma/*.png", { eager: true });
 const imageFor = (key: string) => assets[`../../assets/map/figma/${key}.png`].default;
+// 名札と建物を同じリンクにする。画像の配置データから建物の操作範囲も求める。
+const landmarkStyle = (landmark: typeof data.landmarks[number]) => {
+  const bounds = data.placements.find((piece) => piece.asset === landmark.asset)!.bounds;
+  const cqw = (value: number) => `${value / data.size[0] * 100}cqw`;
+  return `${anchorStyle([...landmark.plate, 0, 0])};--label-x:${cqw(landmark.plate[0])};--building-left:${cqw(bounds[0])};--building-offset-y:${cqw(bounds[1] - landmark.plate[1])};--building-width:${cqw(bounds[2])};--building-height:${cqw(bounds[3])}`;
+};
 ---
 <figure class="campus-figure" aria-describedby="map-caption">
   <div class="campus-map" aria-label="会場全体の配置">
@@ -13,7 +19,7 @@ const imageFor = (key: string) => assets[`../../assets/map/figma/${key}.png`].de
       </div>)}
       <span class="entrance"><span>↑</span>入口</span>
     </div>
-    {data.landmarks.map((landmark) => <span class="landmark-label" style={anchorStyle([...landmark.plate, 0, 0])}><span class="name-plate">{landmark.name}</span></span>)}
+    {data.landmarks.map((landmark) => <a class="landmark-label" href={landmark.href} aria-label={`${landmark.name}の案内を見る`} style={landmarkStyle(landmark)}><span class="name-plate">{landmark.name}</span></a>)}
     {/* ステージ・棟・本部は、本部の絵の看板と同じく建物に名札を重ねる。ステージはタイムテーブル、棟と本部は案内ページへ進む。 */}
     {stages.map((stage) => <a class="stage-label" data-stage-name={stage.name} href={stage.href} style={anchorStyle([...stage.plate, 0, 0])} aria-label={`${stage.name}・${stage.location}。${stage.comingSoon ? "遷移先は準備中" : "ステージの時間を見る"}`}><span class="name-plate">{stage.name}</span></a>)}
     {areas.map((area) => <a class="area-label" href={area.href} data-area={area.code} style={anchorStyle(area.label)} aria-label={`${area.code} ${area.name}・${area.location}。${area.comingSoon ? "遷移先は準備中" : area.actionLabel}`}><span class="label-paper"><b>{area.code}</b><span class="area-name">{area.name}{area.key === "department" ? " ←" : ""}</span></span></a>)}
@@ -57,13 +63,15 @@ const imageFor = (key: string) => assets[`../../assets/map/figma/${key}.png`].de
   .area-label .label-paper { flex-direction: column; gap: var(--map-label-gap); }
   .area-label b { display: grid; place-items: center; min-width: 28px; height: 22px; background: var(--blue); color: var(--map-label-on-blue); font-family: var(--font-num); font-size: 20px; line-height: 1; }
   .area-name { font-size: 12px; line-height: 1.2; }
-  .area-label:hover .label-paper, .area-label:active .label-paper, :is(.stage-label, .venue-label):is(:hover, :active) .name-plate { background: var(--yellow); }
-  .area-label:focus-visible, .stage-label:focus-visible, .venue-label:focus-visible { outline: 3px solid var(--blue); outline-offset: 4px; z-index: 3; }
+  .area-label:hover .label-paper, .area-label:active .label-paper, :is(.stage-label, .venue-label, .landmark-label):is(:hover, :active) .name-plate { background: var(--yellow); }
+  .area-label:focus-visible, .stage-label:focus-visible, .venue-label:focus-visible, .landmark-label:focus-visible { outline: 3px solid var(--blue); outline-offset: 4px; z-index: 3; }
   /* 名札の中心は map.json の plate（建物の手前の下側）。右端の建物でも図からはみ出さないよう、名札の半幅（--half）だけ内側に寄せる。 */
   .stage-label, .venue-label { --half: 36px; position: absolute; left: clamp(var(--half), var(--x), calc(100% - var(--half))); top: var(--y); transform: translate(-50%, -50%); }
   .name-plate { padding: 1px 4px; background: var(--paper); border: 1.5px solid var(--ink); font-size: 12px; font-weight: 700; line-height: 1.2; white-space: nowrap; text-align: center; }
   /* 献血は承認済みFigmaの左側の位置。図外の部分はページ余白に収め、名称は小画面でもHTMLで読める大きさを保つ。 */
-  .landmark-label { position: absolute; left: var(--x); top: var(--y); transform: translate(-50%, 0); display: flex; }
+  /* 操作領域は名札の上へ伸ばし、下にある04の札と重ねない。左端も図内に収める。 */
+  .landmark-label { position: absolute; left: max(22px, var(--x)); top: calc(var(--y) + var(--plate-h)); transform: translate(-50%, -100%); display: flex; align-items: flex-end; justify-content: center; min-width: 44px; min-height: 44px; }
+  .landmark-label::before { content: ""; position: absolute; left: calc(var(--building-left) - max(22px, var(--label-x)) + 50%); top: calc(var(--building-offset-y) - var(--plate-h) + 100%); width: var(--building-width); height: var(--building-height); cursor: pointer; }
   /* 名札はリンク。名札の周りまで44pxを押せる。 */
   .stage-label, .venue-label { display: flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; }
   .venue-label[data-venue="multimedia"] { --half: 68px; }

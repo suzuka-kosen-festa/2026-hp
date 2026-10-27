@@ -762,6 +762,8 @@
   "landmarks": [
     {
       "name": "献血",
+      "asset": "blood-donation",
+      "href": "/map/blood-donation/",
       "plate": [35, 379]
     }
   ],

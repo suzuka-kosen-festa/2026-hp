@@ -1,0 +1,42 @@
+---
+import MapSubpage from "../../components/map/MapSubpage.astro";
+import donation from "../../data/blood-donation.json";
+---
+
+<MapSubpage name={donation.name} location={donation.location} description={donation.description}>
+  <div class="donation-content">
+  <p>{donation.description}</p>
+  <dl class="reception">
+    <div><dt>実施日</dt><dd><time datetime={donation.date}>{donation.dateLabel}</time></dd></div>
+    <div><dt>受付時間</dt><dd>{donation.reception.map((time) => <span>{time}</span>)}</dd></div>
+    <div><dt>受付場所</dt><dd>{donation.location}</dd></div>
+  </dl>
+
+  <h2>献血前にお願いしたいこと</h2>
+  <ul>{donation.preparation.map((item) => <li>{item}</li>)}</ul>
+
+  <h2>献血にご協力いただける方</h2>
+  <p>{donation.age}</p>
+  <h3>以下に該当する方は献血をご遠慮いただいています</h3>
+  <ul>{donation.restrictions.map((item) => <li>{item}</li>)}</ul>
+  <p class="criteria-note">{donation.note}</p>
+
+  <h2>献血に関するお問い合わせ</h2>
+  <p>{donation.contact.organization}<br /><a class="text-link phone" href={`tel:${donation.contact.tel}`}>{donation.contact.phone}</a></p>
+  </div>
+</MapSubpage>
+
+<style>
+  .donation-content { color: #111; font-size: 16px; line-height: 1.9; }
+  .donation-content h3 { font-size: 16px; }
+  .reception { margin: 24px 0; padding: 20px; background: #fff; color: #111; border: 2px solid var(--ink); }
+  .reception > div + div { margin-top: 12px; }
+  dt { font-size: 16px; font-weight: 700; }
+  dd { margin-top: 4px; font-size: 22px; font-weight: 700; line-height: 1.6; }
+  dd span { display: block; }
+  ul { padding-left: 1.5em; }
+  li + li { margin-top: 8px; }
+  .criteria-note { margin-top: 16px; }
+  .phone { display: inline-flex; align-items: center; min-height: 44px; }
+  a:focus-visible { outline: 3px solid var(--blue); outline-offset: 4px; }
+</style>
