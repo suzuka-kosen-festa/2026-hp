@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import themeLogoUrl from "../../assets/logo/theme-logo.png";
 import "./OpSplash.css";
 import "./OpSplash.initial.css";
-import { OP_COUNTDOWN_END, OP_DURATIONS, selectOpVariant, type OpVariant } from "./opVariants";
+import { OP_DURATIONS, selectOpVariant, type OpVariant } from "./opVariants";
+import FestivalPhotoStage from "./FestivalPhotoStage";
+import { createFestivalTiles, FESTIVAL_ATLAS, FESTIVAL_OP_DURATION, FESTIVAL_SESSION_KEY, opPeriod } from "./festivalOp";
 import OpCandidate1 from "./OpCandidate1";
 import OpCandidate2 from "./OpCandidate2";
 
@@ -46,11 +48,12 @@ function makeClips() {
 }
 const CLIPS = makeClips();
 
-function preloadOpAssets(variant: OpVariant) {
-  const digits = variant === "candidate1" ? "/op/candidate1-digits.png" : "/op/countdown-digits.png";
-  return Promise.all([digits, themeLogoUrl.src].map((src) => new Promise<void>((resolve) => {
+function preloadOpAssets(variant: OpVariant | "festival") {
+  const digits = variant === "festival" ? FESTIVAL_ATLAS.src : variant === "candidate1" ? "/op/candidate1-digits.png" : "/op/countdown-digits.png";
+  return Promise.all([digits, themeLogoUrl.src].map((src) => new Promise<void>((resolve, reject) => {
     const image = new Image();
-    image.onload = image.onerror = () => resolve();
+    image.onload = () => resolve();
+    image.onerror = () => reject(new Error("OP image unavailable"));
     image.src = src;
   })));
 }
@@ -116,17 +119,27 @@ function CountdownStage({ day }: { day: string }) {
   </div>;
 }
 
-export default function OpSplash() {
-  const reduceMotion = useReducedMotion();
+export default function OpSplash({ previewFestival = false }: { previewFestival?: boolean }) {
   const [visible, setVisible] = useState(false), [run, setRun] = useState(0);
-  const [variant, setVariant] = useState<OpVariant>("current");
+  const [variant, setVariant] = useState<OpVariant | "festival">("current");
+  const [tiles, setTiles] = useState<ReturnType<typeof createFestivalTiles>>([]);
   const selectedVariant = useRef<OpVariant | null>(null);
+  const request = useRef(0);
+  const sessionKey = useRef(SESSION_KEY);
+  const loadTimer = useRef<number | null>(null);
   const closed = useRef(false), endTimer = useRef<number | null>(null);
-  const clearTimer = () => { if (endTimer.current !== null) window.clearTimeout(endTimer.current); endTimer.current = null; };
+  const clearTimer = () => {
+    if (endTimer.current !== null) window.clearTimeout(endTimer.current);
+    if (loadTimer.current !== null) window.clearTimeout(loadTimer.current);
+    endTimer.current = null; loadTimer.current = null;
+  };
   const close = () => {
     if (closed.current) return;
-    closed.current = true; clearTimer();
-    try { sessionStorage.setItem(SESSION_KEY, "1"); } catch { /* unavailable storage */ }
+    closed.current = true; request.current++; clearTimer();
+    document.getElementById("op-cover")?.remove();
+    if (!previewFestival) {
+      try { sessionStorage.setItem(sessionKey.current, "1"); } catch { /* unavailable storage */ }
+    }
     setVisible(false);
   };
   const chooseVariant = () => {
@@ -138,46 +151,57 @@ export default function OpSplash() {
     }
     return selectedVariant.current;
   };
-  const show = () => {
-    if (Date.now() >= OP_COUNTDOWN_END) {
+  const show = async () => {
+    const period = previewFestival ? "festival" : opPeriod();
+    if (period === "finished") {
       document.getElementById("op-cover")?.remove();
       close();
       return;
     }
-    const chosen = chooseVariant();
-    setVariant(chosen);
-    clearTimer(); closed.current = false; setRun(value => value + 1); setVisible(true);
-    document.getElementById("op-cover")?.remove(); endTimer.current = window.setTimeout(close, OP_DURATIONS[chosen]);
+    const chosen = period === "festival" ? "festival" : chooseVariant();
+    sessionKey.current = period === "festival" ? FESTIVAL_SESSION_KEY : SESSION_KEY;
+    clearTimer(); closed.current = false;
+    const currentRequest = ++request.current;
+    loadTimer.current = window.setTimeout(close, LOAD_FAILSAFE_MS);
+    try {
+      await preloadOpAssets(chosen);
+      if (currentRequest !== request.current || closed.current) return;
+      // 読み込み中に日付が変わったら、その期間のOPを選び直す。
+      if (!previewFestival && opPeriod() !== period) { void show(); return; }
+      clearTimer();
+      setVariant(chosen);
+      if (chosen === "festival") setTiles(createFestivalTiles());
+      setRun(value => value + 1); setVisible(true);
+      document.getElementById("op-cover")?.remove();
+      endTimer.current = window.setTimeout(close, chosen === "festival" ? FESTIVAL_OP_DURATION : OP_DURATIONS[chosen]);
+    } catch {
+      if (currentRequest === request.current) close();
+    }
   };
   useEffect(() => {
-    if (Date.now() >= OP_COUNTDOWN_END) {
+    const period = opPeriod();
+    if (!previewFestival && period === "finished") {
       document.getElementById("op-cover")?.remove();
       return;
     }
-    let cancelled = false;
+    sessionKey.current = period === "festival" ? FESTIVAL_SESSION_KEY : SESSION_KEY;
     let seen = false;
-    try { seen = !!sessionStorage.getItem(SESSION_KEY); } catch { /* unavailable storage */ }
-    if (seen || reduceMotion || isSlowNetwork()) {
+    try { seen = !!sessionStorage.getItem(sessionKey.current); } catch { /* unavailable storage */ }
+    if (previewFestival || seen || window.matchMedia("(prefers-reduced-motion: reduce)").matches || isSlowNetwork()) {
       closed.current = true;
       document.getElementById("op-cover")?.remove();
     } else {
-      const failsafe = window.setTimeout(() => { if (!cancelled && !visible) close(); }, LOAD_FAILSAFE_MS);
-      preloadOpAssets(chooseVariant()).then(() => {
-        window.clearTimeout(failsafe);
-        if (!cancelled && !closed.current) show();
-      });
+      void show();
     }
-    const replay = () => {
-      if (Date.now() >= OP_COUNTDOWN_END) return;
-      preloadOpAssets(chooseVariant()).then(() => { if (!cancelled) show(); });
-    };
+    const replay = () => { void show(); };
     window.addEventListener(OP_REPLAY_EVENT, replay);
-    return () => { cancelled = true; clearTimer(); window.removeEventListener(OP_REPLAY_EVENT, replay); };
+    return () => { request.current++; clearTimer(); window.removeEventListener(OP_REPLAY_EVENT, replay); };
     // The replay event deliberately owns subsequent runs.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [previewFestival]);
   return <AnimatePresence>{visible ? <motion.div className="op-splash" data-op-variant={variant} exit={{ opacity: 0 }} transition={{ duration: .3, ease: "easeOut" }}>
-    {variant === "candidate1" ? <OpCandidate1 day={daysToFestival()} key={run} /> :
+    {variant === "festival" ? <FestivalPhotoStage tiles={tiles} key={run} /> :
+      variant === "candidate1" ? <OpCandidate1 day={daysToFestival()} key={run} /> :
       variant === "candidate2" ? <OpCandidate2 day={daysToFestival()} key={run} /> :
         <CountdownStage day={daysToFestival()} key={run} />}
     <button type="button" className="op-skip" aria-label="SKIP" onClick={close}>SKIP ↗</button>

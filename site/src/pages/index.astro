@@ -9,6 +9,7 @@ import SpecialSponsorSection from "../components/sections/SpecialSponsorSection.
 import Divider from "../components/ui/Divider.astro";
 import OpSplash from "../components/motion/OpSplash";
 import { OP_COUNTDOWN_END } from "../components/motion/opVariants";
+import { FESTIVAL_OP_END, FESTIVAL_SESSION_KEY } from "../components/motion/festivalOp";
 
 // 検索結果に出る説明文。BaseLayout の既定（サイト名だけ）だとGoogleが本文から勝手に抜き出し、
 // PICK UP の企画紹介が出てしまっていたので、開催日・場所とテーマ（ABOUTの文言）を明示する
@@ -18,16 +19,16 @@ const description =
 
 <BaseLayout title="collage 2026 | 第61回鈴鹿高専祭" description={description}>
   <div id="op-cover" aria-hidden="true"></div>
-  <script define:vars={{ countdownEnd: OP_COUNTDOWN_END }}>
+  <script define:vars={{ countdownEnd: OP_COUNTDOWN_END, festivalEnd: FESTIVAL_OP_END, festivalSession: FESTIVAL_SESSION_KEY }}>
     // 再訪問者はOpSplash(Reactアイランド)を待たずに即カバーを外す。
     // 初回訪問者はOpSplashのマウント時に自分でこのカバーを外す
     (function () {
-      if (Date.now() >= countdownEnd) {
+      if (Date.now() >= festivalEnd || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
         document.getElementById("op-cover")?.remove();
         return;
       }
       try {
-        if (sessionStorage.getItem("op-seen")) {
+        if (sessionStorage.getItem(Date.now() >= countdownEnd ? festivalSession : "op-seen")) {
           document.getElementById("op-cover")?.remove();
         }
       } catch (e) {

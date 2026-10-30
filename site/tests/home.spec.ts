@@ -10,7 +10,7 @@ test.beforeEach(async ({ page }) => {
   await page.clock.setFixedTime(new Date("2026-10-30T23:59:59+09:00"));
 });
 
-for (const date of ["2026-10-31T00:00:00+09:00", "2026-11-01T12:00:00+09:00", "2026-11-02T00:00:00+09:00"]) {
+for (const date of ["2026-11-02T00:00:00+09:00"]) {
   test(`${date} は初回もロゴからの再生もOPを出さない`, async ({ page }) => {
     await page.clock.setFixedTime(new Date(date));
     await page.goto("/");
@@ -22,6 +22,68 @@ for (const date of ["2026-10-31T00:00:00+09:00", "2026-11-01T12:00:00+09:00", "2
     await expect(page.getByLabel("開催まであと1日")).toHaveCount(0);
   });
 }
+
+for (const date of ["2026-10-31T00:00:00+09:00", "2026-11-01T23:59:59+09:00"]) {
+  test(`${date} は開催前の既読でも当日写真OPを表示する`, async ({ page }) => {
+    await page.clock.setFixedTime(new Date(date));
+    await page.addInitScript(() => sessionStorage.setItem("op-seen", "1"));
+    await page.goto("/");
+    await expect(page.locator(".festival-photo-stage")).toBeVisible();
+    await expect(page.locator(".festival-photo-tile")).toHaveCount(55);
+    await expect(page.getByLabel("開催まであと1日")).toHaveCount(0);
+    await page.getByRole("button", { name: "SKIP" }).click();
+    await expect(page.locator(".op-splash")).toHaveCount(0);
+    await page.reload();
+    await expect(page.locator("astro-island[component-url*='OpSplash']")).not.toHaveAttribute("ssr", "");
+    await expect(page.locator(".op-splash")).toHaveCount(0);
+    await page.locator("#hero-logo-replay").click();
+    await expect(page.locator(".festival-photo-stage")).toBeVisible();
+  });
+}
+
+test("当日写真OPは選別した55件だけを使い再生ごとに配置を変える", async ({ page }) => {
+  await page.clock.setFixedTime(new Date("2026-10-31T12:00:00+09:00"));
+  await page.goto("/");
+  const tiles = page.locator(".festival-photo-tile");
+  await expect(tiles).toHaveCount(55);
+  const ids = () => tiles.evaluateAll(elements => elements.map(el => Number(el.getAttribute("data-photo-number"))));
+  const first = await ids();
+  expect(new Set(first).size).toBe(55);
+  for (const excluded of [7, 2, 5, 11, 24, 23, 30, 35, 36, 37, 38, 39, 42, 44, 48]) expect(first).not.toContain(excluded);
+  await page.getByRole("button", { name: "SKIP" }).click();
+  await expect(page.locator(".op-splash")).toHaveCount(0);
+  await page.locator("#hero-logo-replay").click();
+  await expect(tiles).toHaveCount(55);
+  expect(await ids()).not.toEqual(first);
+});
+
+test("当日写真OPの画像失敗では白いカバーを外しトップを表示する", async ({ page }) => {
+  await page.clock.setFixedTime(new Date("2026-10-31T12:00:00+09:00"));
+  await page.route("**/op/festival-photos.webp", route => route.abort());
+  await page.goto("/");
+  await expect(page.locator("#op-cover")).toHaveCount(0);
+  await expect(page.locator(".op-splash")).toHaveCount(0);
+  await expect(page.locator("#hero-logo-replay")).toBeVisible();
+});
+
+test("当日写真OPは勢いよく貼った55枚がずり落ち、5秒で終わる", async ({ page }) => {
+  await page.clock.setFixedTime(new Date("2026-10-31T12:00:00+09:00"));
+  await page.goto("/");
+  await expect(page.locator(".festival-photo-stage")).toBeVisible();
+  await expect(page.locator(".festival-photo-tile")).toHaveCount(55);
+  await expect(page.locator(".festival-photo-pile")).toHaveCSS("mask-image", "none");
+  await page.locator(".festival-photo-stage").evaluate(stage => {
+    for (const animation of stage.getAnimations({ subtree: true })) { animation.pause(); animation.currentTime = 1600; }
+  });
+  await expect(page.locator(".festival-photo-tile").first()).toHaveCSS("opacity", "1");
+  await page.locator(".festival-photo-stage").evaluate(stage => {
+    for (const animation of stage.getAnimations({ subtree: true })) { animation.pause(); animation.currentTime = 4200; }
+  });
+  const allFallen = await page.locator(".festival-photo-tile").evaluateAll(tiles => tiles.every(tile => tile.getBoundingClientRect().top > innerHeight));
+  expect(allFallen).toBe(true);
+  await expect(page.locator(".festival-photo-artwork")).toHaveCSS("opacity", "1");
+  await expect(page.locator(".op-splash")).toHaveCount(0, { timeout: 7000 });
+});
 
 // 画像が無い企画は写真枠ごと省く（詳細ページと揃える。Issue #60）。
 // 実データに画像が入っても成り立つ検査なので、データ待ちで無効化されることはない。
