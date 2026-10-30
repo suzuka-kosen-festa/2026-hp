@@ -3,7 +3,7 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import themeLogoUrl from "../../assets/logo/theme-logo.png";
 import "./OpSplash.css";
 import "./OpSplash.initial.css";
-import { OP_DURATIONS, selectOpVariant, type OpVariant } from "./opVariants";
+import { OP_COUNTDOWN_END, OP_DURATIONS, selectOpVariant, type OpVariant } from "./opVariants";
 import OpCandidate1 from "./OpCandidate1";
 import OpCandidate2 from "./OpCandidate2";
 
@@ -139,12 +139,21 @@ export default function OpSplash() {
     return selectedVariant.current;
   };
   const show = () => {
+    if (Date.now() >= OP_COUNTDOWN_END) {
+      document.getElementById("op-cover")?.remove();
+      close();
+      return;
+    }
     const chosen = chooseVariant();
     setVariant(chosen);
     clearTimer(); closed.current = false; setRun(value => value + 1); setVisible(true);
     document.getElementById("op-cover")?.remove(); endTimer.current = window.setTimeout(close, OP_DURATIONS[chosen]);
   };
   useEffect(() => {
+    if (Date.now() >= OP_COUNTDOWN_END) {
+      document.getElementById("op-cover")?.remove();
+      return;
+    }
     let cancelled = false;
     let seen = false;
     try { seen = !!sessionStorage.getItem(SESSION_KEY); } catch { /* unavailable storage */ }
@@ -158,7 +167,10 @@ export default function OpSplash() {
         if (!cancelled && !closed.current) show();
       });
     }
-    const replay = () => { preloadOpAssets(chooseVariant()).then(() => { if (!cancelled) show(); }); };
+    const replay = () => {
+      if (Date.now() >= OP_COUNTDOWN_END) return;
+      preloadOpAssets(chooseVariant()).then(() => { if (!cancelled) show(); });
+    };
     window.addEventListener(OP_REPLAY_EVENT, replay);
     return () => { cancelled = true; clearTimer(); window.removeEventListener(OP_REPLAY_EVENT, replay); };
     // The replay event deliberately owns subsequent runs.

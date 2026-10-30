@@ -5,6 +5,24 @@ import { describePage } from "./_shared";
 
 describePage("home", "/");
 
+// OPの検査は実行日に依存させない。当日以降は個別のテストで時計を進める。
+test.beforeEach(async ({ page }) => {
+  await page.clock.setFixedTime(new Date("2026-10-30T23:59:59+09:00"));
+});
+
+for (const date of ["2026-10-31T00:00:00+09:00", "2026-11-01T12:00:00+09:00", "2026-11-02T00:00:00+09:00"]) {
+  test(`${date} は初回もロゴからの再生もOPを出さない`, async ({ page }) => {
+    await page.clock.setFixedTime(new Date(date));
+    await page.goto("/");
+    await expect(page.locator("astro-island[component-export='default'][component-url*='OpSplash']")).not.toHaveAttribute("ssr", "");
+    await expect(page.locator("#op-cover")).toHaveCount(0);
+    await page.locator("#hero-logo-replay").click();
+    await page.waitForTimeout(500);
+    await expect(page.locator(".op-splash")).toHaveCount(0);
+    await expect(page.getByLabel("開催まであと1日")).toHaveCount(0);
+  });
+}
+
 // 画像が無い企画は写真枠ごと省く（詳細ページと揃える。Issue #60）。
 // 実データに画像が入っても成り立つ検査なので、データ待ちで無効化されることはない。
 test("PICK UP に NO IMAGE のプレースホルダーが出ない", async ({ page }) => {
