@@ -15,7 +15,7 @@ export default function FestivalPhotoStage({ tiles }: { tiles: ReturnType<typeof
       if (element) animations.push(element.animate(frames, { delay, duration, fill: "both", easing }));
     };
     const { width, height } = stage.getBoundingClientRect();
-    const flightX = Math.max(240, width * .7), flightY = Math.max(360, height * .65);
+    const flightX = Math.max(310, width * .9), flightY = Math.max(470, height * .85);
     stage.querySelectorAll<HTMLElement>(".festival-photo-tile").forEach((tile, index) => {
       const { order, tilt, fallOrder } = tiles[index];
       const sign = tilt < 0 ? -1 : 1;
@@ -25,8 +25,8 @@ export default function FestivalPhotoStage({ tiles }: { tiles: ReturnType<typeof
       // 着地と落下を同じ時間軸に置き、transformの競合を防ぐ。
       const frame = (time: number, transform: string, opacity = 1, easing = "linear"): Keyframe => ({ offset: (time - start) / duration, transform, opacity, easing });
       animate(tile, [
-        frame(start, pose(sign * flightX, -flightY, tilt + sign * 36, "3.2"), 0),
-        frame(start + 30, pose(sign * flightX * .86, -flightY * .86, tilt + sign * 30, "2.8"), 1, "cubic-bezier(.55,0,.95,.55)"),
+        frame(start, pose(sign * flightX, -flightY, tilt + sign * 36, "3.8"), 0),
+        frame(start + 30, pose(sign * flightX * .86, -flightY * .86, tilt + sign * 30, "3.3"), 1, "cubic-bezier(.55,0,.95,.55)"),
         frame(start + 360, pose(0, 3, tilt - sign * 4, "1.07,.91"), 1, "cubic-bezier(.1,.8,.2,1)"),
         frame(start + 500, pose(0, 0, tilt)),
         frame(slip, pose(0, 0, tilt), 1, "ease-in"),
