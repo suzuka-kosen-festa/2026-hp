@@ -10,6 +10,7 @@ import NewsItem from "../components/ui/NewsItem.astro";
 import Divider from "../components/ui/Divider.astro";
 import Star from "../components/ui/Star.astro";
 import Reveal from "../components/motion/Reveal";
+import OpSplash from "../components/motion/OpSplash";
 import PromoList from "../components/motion/PromoList";
 import { entries } from "../lib/loadEntries";
 import { withEntryPhotos } from "../lib/entryPhotos";
@@ -32,6 +33,16 @@ const featuredWithImage = featured
   <section class="gallery">
     <h1 class="page-title">部品ギャラリー</h1>
     <p class="note">実装済みコンポーネントの一覧です。デザイン確認・調整用（本番導線には含まれません）。</p>
+
+    <div class="part">
+      <h2>当日オープニング</h2>
+      <p>選別済み55件の写真を貼り、ずり落ちるとロゴが現れる6秒の演出。全体を引いた構図で見せます。</p>
+      <button type="button" id="gallery-festival-op" class="hit-toggle">当日OPを再生 ↗</button>
+      <OpSplash client:load previewFestival />
+    </div>
+    <script>
+      document.getElementById("gallery-festival-op")?.addEventListener("click", () => window.dispatchEvent(new Event("op:replay")));
+    </script>
 
     <div class="part">
       <h2>Tape</h2>

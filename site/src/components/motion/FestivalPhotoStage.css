@@ -1,0 +1,9 @@
+.festival-photo-stage { position:absolute; inset:0; overflow:hidden; display:grid; place-items:center; background:#faf9f5; isolation:isolate; }
+.festival-photo-scene { position:absolute; inset:0; display:grid; place-items:center; transform:scale(.72); transform-origin:center; }
+.festival-photo-camera { position:relative; width:min(94%,1100px); aspect-ratio:1306 / 654; }
+.festival-photo-artwork { width:100%; height:100%; object-fit:contain; opacity:0; }
+.festival-photo-pile { position:absolute; inset:0; z-index:1; pointer-events:none; }
+.festival-photo-tile { position:absolute; width:clamp(110px,22vw,260px); aspect-ratio:160 / 284; padding:5px; background:#fffdf6; box-shadow:4px 7px 0 #16171945; transform:translate(-50%,-50%) rotate(var(--photo-angle)); transform-origin:45% 8%; opacity:0; will-change:transform; }
+.festival-photo-face { width:100%; height:100%; background-image:var(--festival-atlas); background-size:1100% 500%; background-repeat:no-repeat; }
+@media (orientation:landscape) and (max-height:600px) { .festival-photo-camera { width:min(94%,calc(80dvh * 1306 / 654)); } }
+@media (prefers-reduced-motion:reduce) { .festival-photo-pile { display:none; } .festival-photo-artwork { opacity:1; } }
