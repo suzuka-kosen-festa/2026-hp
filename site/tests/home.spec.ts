@@ -66,18 +66,18 @@ test("当日写真OPの画像失敗では白いカバーを外しトップを表
   await expect(page.locator("#hero-logo-replay")).toBeVisible();
 });
 
-test("当日写真OPは勢いよく貼った55枚がずり落ち、5秒で終わる", async ({ page }) => {
+test("当日写真OPはゆっくり貼った55枚がずり落ち、6秒で終わる", async ({ page }) => {
   await page.clock.setFixedTime(new Date("2026-10-31T12:00:00+09:00"));
   await page.goto("/");
   await expect(page.locator(".festival-photo-stage")).toBeVisible();
   await expect(page.locator(".festival-photo-tile")).toHaveCount(55);
   await expect(page.locator(".festival-photo-pile")).toHaveCSS("mask-image", "none");
   await page.locator(".festival-photo-stage").evaluate(stage => {
-    for (const animation of stage.getAnimations({ subtree: true })) { animation.pause(); animation.currentTime = 1600; }
+    for (const animation of stage.getAnimations({ subtree: true })) { animation.pause(); animation.currentTime = 2700; }
   });
   await expect(page.locator(".festival-photo-tile").first()).toHaveCSS("opacity", "1");
   await page.locator(".festival-photo-stage").evaluate(stage => {
-    for (const animation of stage.getAnimations({ subtree: true })) { animation.pause(); animation.currentTime = 4200; }
+    for (const animation of stage.getAnimations({ subtree: true })) { animation.pause(); animation.currentTime = 5200; }
   });
   const allFallen = await page.locator(".festival-photo-tile").evaluateAll(tiles => tiles.every(tile => tile.getBoundingClientRect().top > innerHeight));
   expect(allFallen).toBe(true);

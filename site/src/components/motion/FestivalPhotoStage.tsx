@@ -19,7 +19,7 @@ export default function FestivalPhotoStage({ tiles }: { tiles: ReturnType<typeof
     stage.querySelectorAll<HTMLElement>(".festival-photo-tile").forEach((tile, index) => {
       const { order, tilt, fallOrder } = tiles[index];
       const sign = tilt < 0 ? -1 : 1;
-      const start = order * 22, slip = 2100 + fallOrder * 12, end = slip + 900;
+      const start = order * 38, slip = 3100 + fallOrder * 12, end = slip + 900;
       const duration = end - start;
       const pose = (x: number, y: number, angle: number, scale = "1") => `translate(-50%,-50%) translate(${x}px,${y}px) rotate(${angle}deg) scale(${scale})`;
       // 着地と落下を同じ時間軸に置き、transformの競合を防ぐ。
@@ -27,8 +27,8 @@ export default function FestivalPhotoStage({ tiles }: { tiles: ReturnType<typeof
       animate(tile, [
         frame(start, pose(sign * flightX, -flightY, tilt + sign * 36, "3.2"), 0),
         frame(start + 30, pose(sign * flightX * .86, -flightY * .86, tilt + sign * 30, "2.8"), 1, "cubic-bezier(.55,0,.95,.55)"),
-        frame(start + 240, pose(0, 3, tilt - sign * 4, "1.07,.91"), 1, "cubic-bezier(.1,.8,.2,1)"),
-        frame(start + 350, pose(0, 0, tilt)),
+        frame(start + 360, pose(0, 3, tilt - sign * 4, "1.07,.91"), 1, "cubic-bezier(.1,.8,.2,1)"),
+        frame(start + 500, pose(0, 0, tilt)),
         frame(slip, pose(0, 0, tilt), 1, "ease-in"),
         frame(slip + 120, pose(sign * 4, 14, tilt + sign * 8), 1, "ease-in-out"),
         frame(slip + 240, pose(sign * 9, 32, tilt + sign * 16), 1, "ease-in-out"),
@@ -40,7 +40,7 @@ export default function FestivalPhotoStage({ tiles }: { tiles: ReturnType<typeof
       { opacity: 0, transform: "scale(.94) rotate(-2deg)" },
       { opacity: 1, transform: "scale(1.025) rotate(.6deg)", offset: .65 },
       { opacity: 1, transform: "none" },
-    ], 1900, 420);
+    ], 2900, 420);
     return () => animations.forEach(animation => animation.cancel());
   }, [tiles]);
   return <div ref={ref} className="festival-photo-stage" aria-label="実行委員の写真を貼り、ずり落ちるとcollageロゴが現れるオープニング" style={{ "--festival-atlas": `url("${FESTIVAL_ATLAS.src}")` } as CSSProperties}>

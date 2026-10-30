@@ -2,7 +2,7 @@ import selection from "../../data/festival-op.json";
 
 export const FESTIVAL_OP_START = Date.parse("2026-10-31T00:00:00+09:00");
 export const FESTIVAL_OP_END = Date.parse("2026-11-02T00:00:00+09:00");
-export const FESTIVAL_OP_DURATION = 5000;
+export const FESTIVAL_OP_DURATION = 6000;
 export const FESTIVAL_SESSION_KEY = "op-seen-festival";
 export const FESTIVAL_ATLAS = selection.atlas;
 export type OpPeriod = "countdown" | "festival" | "finished";
