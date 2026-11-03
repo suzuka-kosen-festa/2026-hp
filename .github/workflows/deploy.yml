@@ -232,20 +232,22 @@ jobs:
           name: dist
           path: site/dist/
 
-      # 本番だけ全URLを1枚のページにする（src/data/release.json の mode）。
+      # 本番と release.json を触るPRだけ、全URLを1枚のページにする（src/data/release.json の mode）。
       #   holding … v1公開前。ポスター（holding.astro）
       #   closed  … 閉幕後。お礼ページ（thanks.astro）
       #   open    … 何もしない
-      # プレビュー(PR)はこのステップを通らないので、各自のページの動作確認は
-      # 今までどおりできる。mode を open に戻せば元の公開状態に戻る。
+      # 通常のPRはこのステップを通らないので、各自のページの動作確認は今までどおりできる。
+      # release.json を触るPRは、公開制御の適用（apply）と同じくマージ後の本番をそのまま見せる。
+      # mode を open に戻せば元の公開状態に戻る。
       #
       # ページを名指しでリダイレクトするのではなく、トップ以外のHTMLを消す。
       # 消えたURLには Cloudflare Pages が 404.html を返す（ここで1枚のページに差し替える）ので、
       # 結果として全URLがそのページになる。ページが増えても自動で対象になり、追記漏れが起きない。
       # 旧URL（/booth/ など）は 404 ステータスで返るので、検索結果からは順に外れる
-      - name: 本番だけ1枚のページに差し替える
+      - name: 本番と公開制御のPRだけ1枚のページに差し替える
         if: >-
-          github.event_name == 'push' && github.ref == 'refs/heads/main'
+          ((github.event_name == 'push' && github.ref == 'refs/heads/main')
+            || (github.event_name == 'pull_request' && needs.build.outputs.changed == '1'))
           && (needs.build.outputs.mode == 'holding' || needs.build.outputs.mode == 'closed')
         env:
           MODE: ${{ needs.build.outputs.mode }}

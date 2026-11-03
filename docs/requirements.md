@@ -347,13 +347,13 @@
 - 存在しないURLは `404.astro`（「ページが見つかりません」）を返す。ホールディング中だけはCIがポスターに差し替える
 - **sitemap は「本番に実在するURL」だけを載せる**。ホールディング中は実在するのがポスター1枚だけなので `/` のみになる。実体の無いURLを申告し続けると、検索エンジンがクロールしてインデックスに残り、消えたあとも検索結果から飛ばれ続ける（実際に `/booth/` で発生し、5日以上前のキャッシュが表示された）
 - 検査は `site/tests/release.spec.ts`。navの7項目が404にならないこと、公開状態と表示が一致すること、sitemapに未公開ページが載らないことを見る
-- **閉幕後は `mode` を `"closed"` にする**（2026-11 追加）。本番だけ全URLがお礼ページ（`site/src/pages/thanks.astro`）1枚になる。仕組みは holding と同じで、`deploy.yml` が main への push のときだけトップ以外のHTMLを消し、`index.html` と `404.html` をお礼ページで上書きする
+- **閉幕後は `mode` を `"closed"` にする**（2026-11 追加）。本番だけ全URLがお礼ページ（`site/src/pages/thanks.astro`）1枚になる。仕組みは holding と同じで、`deploy.yml` が main への push と release.json を触るPRのときだけトップ以外のHTMLを消し、`index.html` と `404.html` をお礼ページで上書きする
   - `/` は 200、旧URL（`/booth/` など）は **404 ステータスでお礼ページ**を返す。来た人には終了の案内が見え、検索エンジンからは旧URLが順に外れる
   - お礼ページは canonical を `https://www.snct-fes.info/` に寄せ、**noindex は付けない**（「鈴鹿高専祭」で検索した人に、終了したことが検索結果の時点で伝わるように）。sitemap は `/` のみ
   - お礼ページは Header/Footer を使わず、サイト内リンクを持たない（本番では他ページが全部お礼ページになるため）
-  - PRプレビューは素通しなので、各ページは今までどおり `/booth/` などで見られる。お礼ページ自体はどのビルドでも `/thanks/` で見られる
+  - release.json を触るPRのプレビューは本番と同じく全URLがお礼ページになる（マージ後の本番を事前に確認するため）。それ以外のPRプレビューは素通しなので、各ページは今までどおり `/booth/` などで見られる
   - **元に戻すときは `mode` を `"open"` に戻すだけ**。`published` は閉幕時のまま残してあるので、そのまま元の公開状態に戻る
-  - 手元で本番相当を見る: `site/` で `npm run build:release` → `deploy.yml` の「本番だけ1枚のページに差し替える」と同じ処理を `dist/` に掛ける → `npx astro preview`
+  - 手元で本番相当を見る: `site/` で `npm run build:release` → `deploy.yml` の「本番と公開制御のPRだけ1枚のページに差し替える」と同じ処理を `dist/` に掛ける → `npx astro preview`
 - （検討中）SP画面下固定のクイックバー（map / timetable / booth）— 当日利用のショートカット
 
 ## 5. OPアニメーション（スプラッシュ型）

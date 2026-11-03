@@ -7,8 +7,8 @@ import release from "../data/release.json";
  *                 "holding" … v1公開前。本番は全URLがポスター1枚（holding.astro）
  *                 "open"    … 通常の公開状態。published どおり
  *                 "closed"  … 閉幕後。本番は全URLがお礼ページ1枚（thanks.astro）
- *                 差し替えは .github/workflows/deploy.yml が本番デプロイ時にだけ行う。
- *                 PRプレビューは素通しなので、どのモードでも各ページは今までどおり見られる。
+ *                 差し替えは .github/workflows/deploy.yml が本番デプロイと release.json を触るPRでだけ行う。
+ *                 通常のPRプレビューは素通しなので、どのモードでも各ページは今までどおり見られる。
  *                 "closed" を "open" に戻せば、published どおりの公開状態にそのまま戻る
  *   published … 公開する静的ページ。ここに無いページは実装済みでも「準備中」を出す
  *

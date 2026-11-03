@@ -2,9 +2,9 @@
 // 【閉幕後】高専祭が終わったあと、本番だけこのページを見せる（お礼ページ）。
 //
 // holding.astro と同じ方式。このファイル自体はどのデプロイにも含まれるが（/thanks/ で見られる）、
-// 全URLがこのページになるのは本番だけ。release.json の mode が "closed" のとき、
-// .github/workflows/deploy.yml が main への push でだけ dist/index.html と 404.html を
-// このページで上書きし、それ以外のHTMLを消す。PRプレビューは素通しなので各ページは今までどおり見られる。
+// 全URLがこのページになるのは本番と release.json を触るPRのプレビューだけ。mode が "closed" のとき、
+// .github/workflows/deploy.yml が dist/index.html と 404.html をこのページで上書きし、
+// それ以外のHTMLを消す。通常のPRプレビューは素通しなので各ページは今までどおり見られる。
 //
 // 元の公開状態に戻すときは release.json の mode を "open" に戻すだけでよい（このファイルは残してよい）。
 //
