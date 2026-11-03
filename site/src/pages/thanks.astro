@@ -1,0 +1,349 @@
+---
+// 【閉幕後】高専祭が終わったあと、本番だけこのページを見せる（お礼ページ）。
+//
+// holding.astro と同じ方式。このファイル自体はどのデプロイにも含まれるが（/thanks/ で見られる）、
+// 全URLがこのページになるのは本番だけ。release.json の mode が "closed" のとき、
+// .github/workflows/deploy.yml が main への push でだけ dist/index.html と 404.html を
+// このページで上書きし、それ以外のHTMLを消す。PRプレビューは素通しなので各ページは今までどおり見られる。
+//
+// 元の公開状態に戻すときは release.json の mode を "open" に戻すだけでよい（このファイルは残してよい）。
+//
+// Header/Footer は他ページへのリンクを持つ。本番では他ページが全部このページになるので、
+// 押しても同じページに戻るだけのリンクになる。holding と同じく BaseLayout を使わず、
+// サイト内リンクを1本も持たない形にする（外に出るのは問い合わせの mailto だけ）。
+import { Image } from "astro:assets";
+import SvgDefs from "../components/SvgDefs.astro";
+import Tape from "../components/ui/Tape.astro";
+import Star from "../components/ui/Star.astro";
+import SponsorName from "../components/sponsors/SponsorName.astro";
+import themeLogo from "../assets/logo/theme-logo.png";
+import site from "../data/site.json";
+import { sponsors } from "../lib/sponsors";
+import "../styles/global.css";
+
+/** "2026-10-31" → "2026年10月31日（土）"。タイムゾーンでずれないよう UTC で曜日を求める（lib/eventDate.ts と同じ理由） */
+const WEEKDAY_JA = ["日", "月", "火", "水", "木", "金", "土"];
+function formatJa(iso: string, withYear: boolean) {
+  const [y, m, d] = iso.split("-").map(Number);
+  const w = WEEKDAY_JA[new Date(Date.UTC(y, m - 1, d)).getUTCDay()];
+  return `${withYear ? `${y}年` : ""}${m}月${d}日（${w}）`;
+}
+const day1Ja = formatJa(site.day1Date, true);
+const day2Ja = formatJa(site.day2Date, false);
+const dateJa = `${day1Ja}・${day2Ja}`;
+
+/** 協賛は種別ごとに名前だけを並べる。順番は sponsors.json の行順（/sponsors と同じく金額の高い順） */
+const groups = [
+  { label: "特別協賛", items: sponsors.filter((s) => s.type === "special") },
+  { label: "法人協賛", items: sponsors.filter((s) => s.type === "corporate") },
+  { label: "個人協賛", items: sponsors.filter((s) => s.type === "individual") },
+].filter((g) => g.items.length > 0);
+
+const title = `${site.eventName}「${site.theme}」は終了しました`;
+const description = `${site.eventName}「${site.theme}」（${dateJa}）は終了しました。ご来場いただいた皆さま、ご協力いただいた皆さまに心より御礼申し上げます。`;
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <!-- 本番では全URLがこのページを返すため、評価をトップに寄せる。
+         noindex は付けない。閉幕後に「鈴鹿高専祭」で検索した人に、終了したことが検索結果の時点で伝わるようにするため。
+         旧URL（/booth/ など）は本番では 404 ステータスでこのページを返すので、検索結果からは順に外れていく -->
+    <link rel="canonical" href="https://www.snct-fes.info/" />
+    <link rel="icon" href="/favicon.ico" sizes="48x48 32x32 16x16" />
+    <link rel="icon" href="/favicon-96.png" type="image/png" sizes="96x96" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="第61回鈴鹿高専祭「collage」" />
+    <meta property="og:locale" content="ja_JP" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content="ご来場ありがとうございました。" />
+    <meta property="og:url" content="https://www.snct-fes.info/" />
+    <meta property="og:image" content="https://www.snct-fes.info/ogp.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="第61回鈴鹿高専祭 テーマロゴ「collage 2026」" />
+    <meta name="twitter:card" content="summary_large_image" />
+  </head>
+  <body>
+    <SvgDefs />
+    <main class="thanks">
+      <!-- 散らし装飾。sponsors セクションと同じ語彙（破れ紙のパターン＋星） -->
+      <div class="deco" aria-hidden="true">
+        <svg class="swatch s1" width="78" height="58"><rect width="78" height="58" fill="url(#check-blue)" filter="url(#torn-edge)"></rect></svg>
+        <svg class="swatch s2" width="56" height="84"><rect width="56" height="84" fill="url(#stripe-red)" filter="url(#torn-edge)"></rect></svg>
+        <Star class="st1" color="var(--yellow)" size="28px" rotate={-12} />
+        <Star class="st2" color="var(--red)" size="22px" rotate={14} />
+      </div>
+
+      <section class="hero">
+        <Tape color="red" rotate={-2} class="label">THANK YOU!</Tape>
+        <Image
+          src={themeLogo}
+          alt={`${site.eventName} テーマロゴ「${site.theme} 2026」`}
+          widths={[400, 800, 1200]}
+          sizes="(min-width: 900px) 520px, calc(100vw - 40px)"
+          loading="eager"
+          class="logo"
+        />
+        <p class="date num">{site.dateLabel}</p>
+      </section>
+
+      <section class="message" aria-labelledby="thanks-heading">
+        <div class="paper">
+          <span class="corner-tape" aria-hidden="true"></span>
+          <h1 id="thanks-heading">ご来場<br class="sp-only" />ありがとうございました</h1>
+          <p>
+            {site.eventName}「{site.theme}」は、<span class="nowrap">{day1Ja}</span>・<span class="nowrap">{day2Ja}</span>の<span class="nowrap">2日間</span>の開催を終え、閉幕いたしました。
+          </p>
+          <p>
+            ご来場いただいた皆さま、企画・出展に参加してくださった皆さま、そして開催にご協力いただいたすべての皆さまに、心より御礼申し上げます。
+          </p>
+        </div>
+      </section>
+
+      {
+        groups.length > 0 && (
+          <section class="sponsors" aria-labelledby="sponsors-heading">
+            <Tape color="black" rotate={-1.2} as="h2" class="sec-title">
+              <span id="sponsors-heading">SPECIAL THANKS</span>
+            </Tape>
+            <p class="sponsors-lead">
+              本祭の開催にあたり、多くの企業・団体・個人の皆さまにご協賛を賜りました。厚く御礼申し上げます。
+            </p>
+            {groups.map((g) => (
+              <div class="group">
+                <h3>{g.label}</h3>
+                <ul>
+                  {g.items.map((s) => (
+                    <li>
+                      <SponsorName name={s.name} />
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </section>
+        )
+      }
+    </main>
+
+    <footer class="thanks-footer">
+      <Tape color="yellow" rotate={-1.5} as="p" class="footer-title">{site.eventNameEn}</Tape>
+      <p class="contact">
+        お問い合わせ: <a href={`mailto:${site.contactEmail}`}>{site.contactEmail}</a>
+      </p>
+      <p class="copyright">{site.eventName}「{site.theme}」実行委員会</p>
+    </footer>
+  </body>
+</html>
+
+<style>
+  .thanks {
+    position: relative;
+    max-width: var(--content-sp);
+    margin: 0 auto;
+    padding: 48px 20px 56px;
+    /* 回転したテープ・装飾のはみ出しを横スクロールにしない（hidden ではなく clip。design-system.md §4） */
+    overflow-x: clip;
+  }
+
+  .deco {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+  .deco .swatch {
+    position: absolute;
+    filter: drop-shadow(3px 3px 0 var(--ink));
+  }
+  .deco .s1 {
+    top: 18px;
+    right: -14px;
+    transform: rotate(8deg);
+  }
+  .deco .s2 {
+    top: 0;
+    left: -22px;
+    transform: rotate(-7deg);
+  }
+  .deco :global(.st1) {
+    position: absolute;
+    top: 96px;
+    right: 22px;
+  }
+  .deco :global(.st2) {
+    position: absolute;
+    top: 268px;
+    left: 30px;
+  }
+
+  .hero,
+  .message,
+  .sponsors {
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero {
+    text-align: center;
+  }
+  .hero :global(.label) {
+    font-family: var(--font-num);
+    font-size: 22px;
+    letter-spacing: 0.08em;
+  }
+  .hero :global(.logo) {
+    width: 100%;
+    height: auto;
+    margin: 20px auto 4px;
+  }
+  .date {
+    font-size: 24px;
+    letter-spacing: 0.04em;
+  }
+
+  .message {
+    margin-top: 36px;
+  }
+  /* 貼り付けた紙片（ハードシャドウカード + 角のテープ）。ui/Card と同じ見た目 */
+  .paper {
+    position: relative;
+    background: #fff;
+    border: 2px solid var(--ink);
+    box-shadow: 5px 5px 0 var(--ink);
+    padding: 30px 20px 22px;
+    transform: rotate(-0.8deg);
+  }
+  .corner-tape {
+    position: absolute;
+    top: -10px;
+    left: 14px;
+    width: 74px;
+    height: 20px;
+    background: var(--yellow);
+    transform: rotate(-4deg);
+    filter: url(#tape-edge);
+  }
+  h1 {
+    font-size: 22px;
+    font-weight: 900;
+    line-height: 1.5;
+    text-align: center;
+    margin-bottom: 18px;
+  }
+  .paper p {
+    font-size: 14.5px;
+    line-height: 1.95;
+  }
+  /* 日付を「10/月31日」のように数字の途中で折り返さない */
+  .nowrap {
+    white-space: nowrap;
+  }
+  .paper p + p {
+    margin-top: 12px;
+  }
+
+  .sponsors {
+    margin-top: 56px;
+    text-align: center;
+  }
+  .sponsors :global(.sec-title) {
+    font-family: var(--font-num);
+    font-size: 20px;
+    letter-spacing: 0.06em;
+    margin-bottom: 18px;
+  }
+  .sponsors-lead {
+    font-size: 13.5px;
+    line-height: 1.9;
+    text-align: left;
+    margin-bottom: 8px;
+  }
+  .group {
+    margin-top: 24px;
+  }
+  .group h3 {
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 2px;
+    margin-bottom: 12px;
+  }
+  .group ul {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px 16px;
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .thanks-footer {
+    background: var(--ink);
+    color: #fff;
+    text-align: center;
+    padding: 36px 20px calc(28px + env(safe-area-inset-bottom, 0px));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+  .thanks-footer :global(.footer-title) {
+    font-size: 14px;
+    letter-spacing: 0.08em;
+  }
+  .contact {
+    font-size: 12.5px;
+  }
+  .contact a {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .copyright {
+    font-size: 11px;
+    opacity: 0.6;
+  }
+
+  @media (min-width: 900px) {
+    .thanks {
+      max-width: var(--content-narrow);
+      padding: 72px 20px 80px;
+    }
+    .hero :global(.logo) {
+      max-width: 520px;
+    }
+    .date {
+      font-size: 30px;
+    }
+    .paper {
+      padding: 40px 48px 32px;
+    }
+    h1 {
+      font-size: 28px;
+    }
+    .paper p {
+      font-size: 15.5px;
+    }
+    .sp-only {
+      display: none;
+    }
+    .deco .s1 {
+      right: 0;
+    }
+    .deco .s2 {
+      left: 0;
+    }
+    .group ul {
+      font-size: 14px;
+    }
+  }
+</style>

@@ -232,23 +232,36 @@ jobs:
           name: dist
           path: site/dist/
 
-      # 【暫定公開】v1公開までは本番だけポスター1枚にする。
+      # 本番だけ全URLを1枚のページにする（src/data/release.json の mode）。
+      #   holding … v1公開前。ポスター（holding.astro）
+      #   closed  … 閉幕後。お礼ページ（thanks.astro）
+      #   open    … 何もしない
       # プレビュー(PR)はこのステップを通らないので、各自のページの動作確認は
-      # 今までどおりできる。v1公開時はこのステップと holding.astro を消せば戻る。
+      # 今までどおりできる。mode を open に戻せば元の公開状態に戻る。
       #
       # ページを名指しでリダイレクトするのではなく、トップ以外のHTMLを消す。
-      # 消えたURLには Cloudflare Pages が index.html を返すので、結果として
-      # 全URLがポスターになる。ページが増えても自動で対象になり、追記漏れが起きない。
-      - name: 本番だけポスター表示に差し替える
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.build.outputs.mode == 'holding'
+      # 消えたURLには Cloudflare Pages が 404.html を返す（ここで1枚のページに差し替える）ので、
+      # 結果として全URLがそのページになる。ページが増えても自動で対象になり、追記漏れが起きない。
+      # 旧URL（/booth/ など）は 404 ステータスで返るので、検索結果からは順に外れる
+      - name: 本番だけ1枚のページに差し替える
+        if: >-
+          github.event_name == 'push' && github.ref == 'refs/heads/main'
+          && (needs.build.outputs.mode == 'holding' || needs.build.outputs.mode == 'closed')
+        env:
+          MODE: ${{ needs.build.outputs.mode }}
         run: |
+          case "$MODE" in
+            holding) src=dist/holding/index.html ;;
+            closed) src=dist/thanks/index.html ;;
+          esac
+          if [ ! -f "$src" ]; then echo "::error::$src がありません（mode=$MODE）"; exit 1; fi
           # 消す対象に自分自身が含まれるので、先に退避する
-          poster=$(mktemp)
-          cp dist/holding/index.html "$poster"
+          single=$(mktemp)
+          cp "$src" "$single"
           find dist -mindepth 2 -name '*.html' -delete
-          cp "$poster" dist/index.html
-          # 404.html があるとそちらが返ってしまうので、これもポスターにする
-          if [ -f dist/404.html ]; then cp "$poster" dist/404.html; fi
+          cp "$single" dist/index.html
+          # 404.html があるとそちらが返ってしまうので、これも同じページにする
+          if [ -f dist/404.html ]; then cp "$single" dist/404.html; fi
           echo "残ったHTML:"; find dist -name '*.html'
 
       - name: Ensure Cloudflare Pages project exists
