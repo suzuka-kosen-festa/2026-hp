@@ -56,7 +56,7 @@ console.log(
   head.mode === "holding"
     ? "> [!NOTE]\n> `mode` は `holding` のままなので、**本番は引き続きポスター1枚**です。sitemap も `/` のみになります。"
     : head.mode === "closed"
-      ? "> [!WARNING]\n> `mode` が `closed` です。マージすると**本番の全URLがお礼ページ1枚になります**（旧URLは404ステータスでお礼ページを返す）。sitemap も `/` のみになります。`published` の各ページの動作はプレビューでは今までどおり確認できますが、本番には出ません。"
+      ? "> [!WARNING]\n> `mode` が `closed` です。マージすると**本番の全URLがお礼ページ1枚になります**（旧URLは404ステータスでお礼ページを返す）。sitemap も `/` のみになります。このPRのプレビューも本番と同じく全URLがお礼ページです。"
       : "> [!WARNING]\n> `mode` が `open` です。マージすると**本番が実サイトに切り替わります**。",
 );
 console.log("");
