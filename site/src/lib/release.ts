@@ -3,12 +3,22 @@ import release from "../data/release.json";
 /**
  * 公開状態の唯一の情報源は src/data/release.json。
  *
- *   mode      … "holding" のあいだ本番は全URLがポスター1枚。v1公開時に "open"
+ *   mode      … 本番の全URLを1枚のページに差し替えるかどうか
+ *                 "holding" … v1公開前。本番は全URLがポスター1枚（holding.astro）
+ *                 "open"    … 通常の公開状態。published どおり
+ *                 "closed"  … 閉幕後。本番は全URLがお礼ページ1枚（thanks.astro）
+ *                 差し替えは .github/workflows/deploy.yml が本番デプロイと release.json を触るPRでだけ行う。
+ *                 通常のPRプレビューは素通しなので、どのモードでも各ページは今までどおり見られる。
+ *                 "closed" を "open" に戻せば、published どおりの公開状態にそのまま戻る
  *   published … 公開する静的ページ。ここに無いページは実装済みでも「準備中」を出す
  *
  * ページを公開したくなったら published に1行足すだけでよい。コードは触らない。
  */
 export const isHolding = release.mode === "holding";
+export const isClosed = release.mode === "closed";
+
+/** 本番が1枚のページだけになるモードか（holding / closed） */
+const isSinglePage = isHolding || isClosed;
 
 /**
  * published を適用するかどうか。
@@ -30,12 +40,13 @@ export const APPLY_RELEASE = process.env.APPLY_RELEASE === "1";
  *
  * gallery … 開発用。本番導線に無く、いつでも見られてよい
  * holding … mode 専用のポスターページ。published とは無関係
+ * thanks  … mode が closed のときに本番の全URLが返すお礼ページ。published とは無関係
  * 404     … 常に必要
  *
  * これらを published に入れる運用にすると「書き忘れて準備中になった」が起きるため、
  * 判定そのものを通さない。
  */
-const EXEMPT = ["/gallery/", "/holding/", "/404"];
+const EXEMPT = ["/gallery/", "/holding/", "/thanks/", "/404"];
 
 /** 末尾スラッシュを1つに正規化する（"/news" と "/news/" を同じものとして扱う） */
 function normalize(pathname: string) {
@@ -73,13 +84,14 @@ export function isPublished(pathname: string) {
  * 検索エンジンがクロールし、インデックスに残り、消えたあとも検索結果から
  * 飛ばれ続ける（実際に /booth/ で起きた）。
  *
- * ホールディング中は本番に実在するのがポスター1枚だけなので、"/" のみ。
+ * ホールディング中・閉幕後は本番に実在するのがポスター／お礼ページ1枚だけなので、"/" のみ。
+ * （閉幕後に旧URLを申告し続けると、検索結果から旧ページが消えるのが遅れる）
  */
 export function isInSitemap(pathname: string) {
   const path = normalize(pathname);
   if (EXEMPT.some((exempt) => path.startsWith(exempt))) return false;
   if (!APPLY_RELEASE) return isPublishedPath(path);
-  if (isHolding) return path === "/";
+  if (isSinglePage) return path === "/";
   return isPublishedPath(path);
 }
 
